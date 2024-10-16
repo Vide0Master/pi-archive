@@ -209,3 +209,23 @@ main{
         }
     }
 }
+
+.dangerous-options{
+    background-color: #19304e;
+    border: 0.25em solid #f2ff00;
+    border-radius: 0.5em;
+    padding: 0.5em;
+    
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+
+    .label{
+        font-size: 1.5em;
+        color: #f2ff00;
+    }
+
+    .server-stop-btn{
+        border: 0.2em solid red;
+    }
+}

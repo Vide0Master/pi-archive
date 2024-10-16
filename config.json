@@ -25,7 +25,7 @@
             "updateTags": 1,
             "deletePost": 1,
             "updatePostDesc": 1,
-            "controlPostComments":1,
+            "controlPostComments": 1,
             "registerTempKey": 1,
             "sendMessage": 1,
             "controlUserDM": 1,
@@ -37,7 +37,8 @@
             "authTGUser": 0,
             "TGSendPostDM": 1,
             "getAdminRequests": 3,
-            "userConfirmation": 3
+            "userConfirmation": 3,
+            "stopAPP": 3
         },
         "pages": {
             "welcome": 0,
