@@ -1,2 +1,3 @@
 config-PRIVATE.json
 /storage
+/node_modules
