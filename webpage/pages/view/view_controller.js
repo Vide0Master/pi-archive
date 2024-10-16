@@ -404,9 +404,9 @@ let post_data;
 
             const response = await fetch(file_link);
             const contentType = response.headers.get('Content-Type').split('/')[0];
-
-            fetchAndDisplayFile(file_link, contentType)
+            process_LDF()
             createComments()
+            fetchAndDisplayFile(file_link, contentType)
         } catch (error) {
             console.error(error);
         }
@@ -511,4 +511,136 @@ async function createComments() {
     }
 
     fetchComments()
+}
+
+//region L D F
+async function process_LDF() {
+    const container = document.querySelector('.score-n-fav')
+
+    const userdata = await request('controlScoreAndFavs', { type: 'getUserInfo' })
+
+    const vote_up = createButton('▲', container)
+
+    if (userdata.likes.includes(post_data.id)) {
+        vote_up.classList.add('liked')
+    }
+
+    const score = createDiv('score', container)
+
+    const vote_down = createButton('▼', container)
+    if (userdata.dislikes.includes(post_data.id)) {
+        vote_down.classList.add('disliked')
+    }
+
+    const favourite = createDiv('fav', container)
+    if(userdata.favs.includes(post_data.id)){
+        favourite.classList.add('faved')
+    }
+
+
+    const fav_counter = createDiv('fav-counter', favourite)
+
+    const bmark = document.createElement('img')
+    favourite.appendChild(bmark)
+    bmark.src = 'fav.svg'
+    bmark.className = 'bookmark-img'
+
+    async function updateFavs() {
+        const post_stats = await request('controlScoreAndFavs', { type: 'getPostScore', postID: post_data.id })
+        if (post_stats.scores.favs != 0) {
+            fav_counter.innerHTML = post_stats.scores.favs
+            fav_counter.style.display='block'
+        }else{
+            fav_counter.style.display='none'
+        }
+    }
+    updateFavs()
+
+    favourite.addEventListener('click', async () => {
+        if (favourite.classList.contains('faved')) {
+            const favResult = await request('controlScoreAndFavs', { type: 'removeFavourite', postID: post_data.id })
+            if (favResult.rslt == 'e') {
+                alert(favResult.rslt + '/' + favResult.msg)
+                return
+            }
+            favourite.classList.remove('faved')
+        } else {
+            const unfavResult = await request('controlScoreAndFavs', { type: 'addFavourite', postID: post_data.id })
+            if (unfavResult.rslt == 'e') {
+                alert(unfavResult.rslt + '/' + unfavResult.msg)
+                return
+            }
+            favourite.classList.add('faved')
+        }
+        updateFavs()
+    })
+
+    async function updateScore() {
+        const post_stats = await request('controlScoreAndFavs', { type: 'getPostScore', postID: post_data.id })
+        const rating = post_stats.scores.likes - post_stats.scores.dislikes
+        score.innerHTML = Math.abs(rating)
+        switch (true) {
+            case rating < 0: {
+                score.innerHTML = '▼' + score.innerHTML
+            }; break;
+            case rating > 0: {
+                score.innerHTML = '▲' + score.innerHTML
+            }; break;
+        }
+    }
+
+    updateScore()
+    vote_up.addEventListener('click', async () => {
+        if (vote_up.classList.contains('liked')) {
+            const likeResult = await request('controlScoreAndFavs', { type: 'removeLike', postID: post_data.id })
+            if (likeResult.rslt == 'e') {
+                alert(likeResult.rslt + '/' + likeResult.msg)
+                return
+            }
+            vote_up.classList.remove('liked')
+        } else {
+            const likeResult = await request('controlScoreAndFavs', { type: 'setLike', postID: post_data.id })
+            if (likeResult.rslt == 'e') {
+                alert(likeResult.rslt + '/' + likeResult.msg)
+                return
+            }
+            vote_up.classList.add('liked')
+            if (vote_down.classList.contains('disliked')) {
+                const unlikeResult = await request('controlScoreAndFavs', { type: 'removeDislike', postID: post_data.id })
+                if (unlikeResult.rslt == 'e') {
+                    alert(unlikeResult.rslt + '/' + unlikeResult.msg)
+                    return
+                }
+                vote_down.classList.remove('disliked')
+            }
+        }
+        updateScore()
+    })
+
+    vote_down.addEventListener('click', async () => {
+        if (vote_down.classList.contains('disliked')) {
+            const unlikeResult = await request('controlScoreAndFavs', { type: 'removeDislike', postID: post_data.id })
+            if (unlikeResult.rslt == 'e') {
+                alert(unlikeResult.rslt + '/' + unlikeResult.msg)
+                return
+            }
+            vote_down.classList.remove('disliked')
+        } else {
+            const unlikeResult = await request('controlScoreAndFavs', { type: 'setDislike', postID: post_data.id })
+            if (unlikeResult.rslt == 'e') {
+                alert(unlikeResult.rslt + '/' + unlikeResult.msg)
+                return
+            }
+            vote_down.classList.add('disliked')
+            if (vote_up.classList.contains('liked')) {
+                const likeResult = await request('controlScoreAndFavs', { type: 'removeLike', postID: post_data.id })
+                if (likeResult.rslt == 'e') {
+                    alert(likeResult.rslt + '/' + likeResult.msg)
+                    return
+                }
+                vote_up.classList.remove('liked')
+            }
+        }
+        updateScore()
+    })
 }

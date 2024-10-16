@@ -6,7 +6,7 @@ module.exports = (request, userData) => {
         const tags = request.taglist
         const limit = request.tagcount
         const DBtags = await SysController.dbinteract.getTagList(limit)
-        const userblacklist = JSON.parse(userData.blacklist)
+        const userblacklist = userData.blacklist
         let tag_array = []
         if (tags) {
             for (const tag of DBtags) {

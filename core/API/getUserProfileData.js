@@ -45,7 +45,7 @@ module.exports = (request, userByKey) => {
             + currentdate.getSeconds();
 
         user.creationdate = datetime
-        user.favs = JSON.parse(user.favs)
+        user.favs = user.favs
         user.trueUserStatus = user.status
 
         if (!isOwner) {
@@ -55,10 +55,6 @@ module.exports = (request, userByKey) => {
             delete user.blacklist
             delete user.usersettings
         } else {
-            user.likes = JSON.parse(user.likes)
-            user.dislikes = JSON.parse(user.dislikes)
-            user.blacklist = JSON.parse(user.blacklist)
-            user.usersettings = JSON.parse(user.usersettings)
             user.acc_level = SysController.config.static.user_status[user.status]
         }
 

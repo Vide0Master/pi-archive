@@ -9,7 +9,16 @@ module.exports = (db, key) => {
                     resolve({ rslt: 'e', msg: err })
                     consoleLogger(`e/Ошибка получения пользователя по ключу: ${err}`)
                 } else {
-                    resolve(row)
+                    if(row){
+                        row.favs=JSON.parse(row.favs)
+                        row.likes=JSON.parse(row.likes)
+                        row.dislikes=JSON.parse(row.dislikes)
+                        row.blacklist=JSON.parse(row.blacklist)
+                        row.usersettings=JSON.parse(row.usersettings)
+                        resolve(row)
+                    }else{
+                        resolve(null)
+                    }
                 }
             })
     })

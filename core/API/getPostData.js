@@ -34,6 +34,10 @@ module.exports = (request) => {
 
         data.post.commentCount = postComments.comments.length
 
+        const postRatings = await SysController.dbinteract.getPostLikesDislikesFavs(request.id)
+
+        data.post.postRating = postRatings.scores
+
         resolve(data)
     })
 }

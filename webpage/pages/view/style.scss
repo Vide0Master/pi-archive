@@ -31,6 +31,75 @@ main {
         align-items: flex-start;
         gap: 1em;
 
+        .score-n-fav {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5em;
+
+            background-color: #00365d;
+            border: 0.2em solid #006cb9;
+            width: fit-content;
+            padding: 0.5em;
+            border-radius: 0.5em;
+
+            .score {
+                color: #fff;
+            }
+
+            .liked {
+                background-color: rgb(0, 200, 0);
+
+                &:hover {
+                    background-color: rgb(0, 100, 0);
+                }
+            }
+
+            .disliked {
+                background-color: rgb(200, 0, 0);
+
+                &:hover {
+                    background-color: rgb(100, 0, 0);
+                }
+            }
+
+            .fav {
+                padding: 0.3em;
+                background-color: #006cb9;
+                border-radius: 0.1em;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 0.25em;
+
+                &:hover {
+                    background-color: #005999;
+                }
+
+                &:active {
+                    background-color: #00365d;
+                }
+
+                .bookmark-img {
+                    height: 1em;
+                    filter: invert(1);
+                }
+            }
+
+            .faved {
+                background-color: rgb(200, 200, 0);
+
+                &:hover {
+                    background-color: rgb(100, 100, 0);
+                }
+
+                &:active {
+                    background-color: rgb(50, 50, 0);
+                }
+            }
+        }
+
         .desc {
             box-sizing: border-box;
             color: #fff;

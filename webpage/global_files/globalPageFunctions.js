@@ -55,6 +55,39 @@ function createPostCard(postData) {
     postCard.appendChild(info_row)
     info_row.className = 'info-row'
 
+    const postScore = createDiv('', info_row)
+    postScore.title = 'Рейтинг'
+
+    function updateScore() {
+        const post_stats = postData.postRating
+        const rating = post_stats.likes - post_stats.dislikes
+        postScore.innerHTML = Math.abs(rating)
+        switch (true) {
+            case rating < 0: {
+                postScore.innerHTML = '▼' + postScore.innerHTML
+                postScore.style.color = 'rgb(200, 0, 0)'
+            }; break;
+            case rating > 0: {
+                postScore.innerHTML = '▲' + postScore.innerHTML
+                postScore.style.color = 'rgb(0, 200, 0)'
+            }; break;
+        }
+    }
+    updateScore()
+
+    async function setFav() {
+        if((await request('controlScoreAndFavs', { type: 'getUserInfo' })).favs.includes(postData.id)){
+            const fav = createDiv('fav')
+            fav.title='Находится в избранных'
+            info_row.prepend(fav)
+
+            const favImg = document.createElement('img')
+            fav.appendChild(favImg)
+            favImg.src='fav.svg'
+        }
+    }
+    setFav()
+
     const postID = createDiv('', info_row)
     postID.innerHTML = `ID:${postData.id}`
     postID.title = 'Идентификатор поста'

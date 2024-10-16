@@ -42,11 +42,35 @@
                 font-size: 1.4em;
             }
 
-            .avatar-block{
-                img{
+            .avatar-block {
+                img {
                     cursor: pointer;
                 }
             }
         }
     }
+
+    .favs-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0.5em;
+        background-color: #234c82;
+        border: 0.25em solid #00365d;
+        border-radius: 0.5em;
+        width: fit-content;
+        gap: 0.3em;
+
+        .label {
+            font-size: 1.4em;
+        }
+
+        .favs-block {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 0.3em;
+        }
+    }
+
 }
