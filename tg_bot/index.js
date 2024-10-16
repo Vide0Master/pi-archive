@@ -183,7 +183,7 @@ async function handleMessage(msg, userId, chatId, bot, token, file_storage_locat
                         const wait_msg = await sendMessage('Ожидайте...', chatId)
 
                         const record = await API('getPostData', userId, { id: postID });
-                        if (!record) {
+                        if (!record.post) {
                             sendMessage(`Поста ${postID} не существует!`, chatId, msg.message_id);
                             continue
                         }

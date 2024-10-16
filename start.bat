@@ -1,5 +1,7 @@
 @echo off
+
 :START
+
 echo Attempt to update PI-Archive...
 git pull
 
@@ -9,4 +11,5 @@ call npm install || pause
 echo Starting service...
 node index.js
 goto START
+
 pause
