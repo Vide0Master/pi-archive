@@ -19,11 +19,14 @@ async function processPage(userData, isActiveUser) {
     }
 
     if (userData.rslt == 'e') {
-        alert('w/'+userData.msg, 0)
+        alert('w/' + userData.msg, 0)
     } else {
         showWelcomeText(userData.data.login, userData.isOwner)
         showUserData(userData)
         showActions(userData, activeUser)
+    }
+    if (activeUser.isOwner) {
+        if (activeUser.data.favs.length > 0) getFavs(activeUser.data.favs)
     }
 }
 
@@ -279,5 +282,19 @@ function showActions(userData, activeUser) {
         } else {
 
         }
+    }
+}
+
+async function getFavs(favs) {
+    const favs_container = createDiv('favs-container', document.querySelector('.user-page-container'))
+
+    const fav_label = createDiv('label', favs_container)
+    fav_label.innerHTML='Избранное'
+
+    const favs_zone = createDiv('favs-zone', favs_container)
+
+    for (const favID of favs) {
+        const pcard = createPostCard((await request('getPostData', { id: favID })).post)
+        favs_zone.appendChild(pcard)
     }
 }

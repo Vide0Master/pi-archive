@@ -17,6 +17,7 @@
             "getUserProfileData": 1,
             "changeUserName": 1,
             "changeUserPassword": 1,
+            "controlScoreAndFavs": 1,
             "getPageCount": 1,
             "updateBlacklist": 1,
             "getPosts": 1,

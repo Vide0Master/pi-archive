@@ -32,6 +32,14 @@
         align-items: center;
         justify-content: center;
         gap: 0.25em;
+
+        .fav {
+            filter: invert(1);
+
+            img {
+                height: 1em;
+            }
+        }
     }
 
     .preview-container {
@@ -188,7 +196,7 @@
 
             text-align: center;
 
-            >div{
+            >div {
                 padding: 0.1em 0;
             }
 
