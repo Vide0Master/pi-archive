@@ -1,0 +1,261 @@
+main {
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+
+    @media (max-width:600px) {
+        flex-direction: column-reverse;
+    }
+}
+
+.view-container {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 1em;
+
+    .file {
+        max-height: 700px;
+        width: auto;
+
+        img,
+        video {
+            max-width: 100%;
+            max-height: 700px;
+        }
+    }
+
+    .special-data {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1em;
+
+        .desc {
+            box-sizing: border-box;
+            color: #fff;
+            background-color: #00365d;
+            border: 0.2em solid #006cb9;
+            width: fit-content;
+            padding: 0.5em;
+            border-radius: 0.5em;
+        }
+
+        .comments-section-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: baseline;
+            gap: 1em;
+
+            box-sizing: border-box;
+            color: #fff;
+            width: fit-content;
+
+            @media (min-width:600px) {
+                flex-grow: 1;
+            }
+
+            .new-comment-container {
+
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5em;
+
+                background-color: #00365d;
+                border: 0.2em solid #006cb9;
+                padding: 0.5em;
+                border-radius: 0.5em;
+
+                width: 100%;
+
+                box-sizing: border-box;
+            }
+
+            .comments-list {
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.5em;
+
+                .comment-container {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    gap: 0.5em;
+
+                    background-color: #00365d;
+                    border: 0.2em solid #006cb9;
+                    padding: 0.5em;
+                    border-radius: 0.5em;
+
+                    width: 100%;
+                    box-sizing: border-box;
+
+                    .user-data-container {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: flex-start;
+                        gap: 0.5em;
+
+                        padding: 0.5em;
+
+                        img {
+                            max-width: 200px;
+                            max-height: 200px;
+                            cursor: pointer;
+                        }
+
+                        .creation-date {
+                            color: #FFF;
+                        }
+                    }
+
+                    .comment-data-container {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: flex-start;
+                        justify-content: stretch;
+                        gap: 0.5em;
+                        height: 100%;
+
+                        .comment-text-container {
+
+                            flex: 1;
+
+                            .comment-text {
+                                padding: 0.5em;
+                                background-color: #fff;
+                                color: #000;
+                                border-radius: 1em;
+                                border-top-left-radius: 0;
+                                width: fit-content;
+                                word-break: break-all;
+                                text-wrap: wrap;
+                            }
+                        }
+
+                        .comment-actions {
+                            padding: 0.5em;
+
+                            display: flex;
+                            flex-direction: row;
+                            align-items: center;
+                            gap: 1em;
+
+                            .delete-button {
+                                &:hover {
+                                    color: #cb4700;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.search-data-act {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+
+    .search-col {
+        background-color: #00365d;
+        color: #fff;
+        padding: 0.3em;
+        border-radius: 0.3em;
+
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5em;
+
+        .search-row {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.25em;
+            width: 100%;
+
+            input[type=text] {
+                width: 7em;
+            }
+        }
+
+        .tags {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5em;
+
+            .tag-group {
+                display: flex;
+                flex-direction: column;
+                gap: 0.25em;
+
+                .label {
+                    font-size: 1.3em;
+                }
+
+                .tagline {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    gap: 0.25em;
+
+                    a {
+                        text-decoration: none;
+                    }
+
+                    .tag-quantity {
+                        color: #808080;
+                    }
+                }
+            }
+        }
+    }
+
+    .post-info {
+        background-color: #00365d;
+        color: #fff;
+        padding: 0.3em;
+        border-radius: 0.3em;
+
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5em;
+
+        .label {
+            font-weight: bolder;
+            font-size: 1.25em;
+        }
+
+        .audio-warning {
+            display: inline;
+            color: #ff0000;
+            cursor: pointer;
+        }
+    }
+
+    .post-actions {
+        background-color: #00365d;
+        color: #fff;
+        padding: 0.3em;
+        border-radius: 0.3em;
+
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5em;
+
+        .label {
+            font-weight: bolder;
+            font-size: 1.25em;
+        }
+    }
+}

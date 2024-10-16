@@ -1,0 +1,86 @@
+html {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.register-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+
+    box-shadow: 0 0 20px #000;
+    border-radius: 0.5em;
+    padding: 1em;
+
+    .register-label {
+        color: #fff;
+        font-size: 3em;
+    }
+
+    .userdata {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3em;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .input-container {
+            width: max-content;
+            position: relative;
+
+            textarea {
+                width: 250px;
+                height: 100px;
+            }
+
+            textarea,
+            input {
+                position: relative;
+                z-index: 2;
+            }
+
+            &:focus-within {
+                .stupid-overlay {
+                    opacity: 1;
+                }
+            }
+
+            .stupid-overlay {
+                z-index: 3;
+                pointer-events: none;
+                box-sizing: border-box;
+                position: absolute;
+                top: 0;
+                animation: 0.5s stpd-over-out forwards;
+                padding: 0.25em;
+                background-color: #000;
+                border: 0.1em solid yellow;
+                width: fit-content;
+                color: #fff;
+
+                width: max-content;
+
+                opacity: 0;
+
+                left: calc(100% + 5px);
+
+                display: flex;
+                flex-direction: column;
+                align-items: start;
+            }
+        }
+    }
+
+    .info {
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+}

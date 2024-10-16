@@ -1,0 +1,41 @@
+html {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+
+    box-shadow: 0 0 20px #000;
+    border-radius: 0.5em;
+    padding: 2em;
+
+    .label {
+        color: #fff;
+        font-size: 3em;
+    }
+
+    .user-data {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5em;
+
+        .checkbox{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3em;
+            div{
+                color: #fff;
+            }
+        }
+    }
+}

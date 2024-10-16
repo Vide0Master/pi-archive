@@ -1,0 +1,177 @@
+{
+    "DEVMODE": false,
+    "AUDITCONTROL": "MOVE",
+    "user_status": {
+        "unconfirmed": 0,
+        "user": 1,
+        "moderator": 2,
+        "admin": 3,
+        "owner": 4
+    },
+    "restrictions": {
+        "api": {
+            "AuthyPageAccessCheck": 0,
+            "register": 0,
+            "login": 0,
+            "getWelcomeText": 1,
+            "getUserProfileData": 1,
+            "changeUserName": 1,
+            "changeUserPassword": 1,
+            "getPageCount": 1,
+            "updateBlacklist": 1,
+            "getPosts": 1,
+            "getPostData": 1,
+            "getTagList": 1,
+            "updateTags": 1,
+            "deletePost": 1,
+            "updatePostDesc": 1,
+            "controlPostComments":1,
+            "registerTempKey": 1,
+            "sendMessage": 1,
+            "controlUserDM": 1,
+            "getUserMessageCount": 1,
+            "deleteMessage": 1,
+            "setPostAsUserAvatar": 1,
+            "controlGroup": 1,
+            "controlTagGroups": 2,
+            "authTGUser": 0,
+            "TGSendPostDM": 1,
+            "getAdminRequests": 3,
+            "userConfirmation": 3
+        },
+        "pages": {
+            "welcome": 0,
+            "register": 0,
+            "login": 0,
+            "search": 1,
+            "profile": 1,
+            "messages": 1,
+            "post": 1,
+            "view": 1,
+            "collection": 1,
+            "admin": 2
+        },
+        "post_limits": {
+            "max_tags": 50,
+            "max_desc_length": 5000
+        }
+    },
+    "standartUserSettings": {
+        "posts_per_page": 50
+    },
+    "user_status_translation": {
+        "unconfirmed": "неподтверждён",
+        "user": "пользователь",
+        "moderator": "модератор",
+        "admin": "администратор",
+        "owner": "владелец"
+    },
+    "telegram_bot": {
+        "batchDownloadLimit": 10
+    },
+    "web_app": {
+        "port": 3000,
+        "welcome_messages": [
+            {
+                "lang": "Привет по-украински",
+                "text": "Привіт"
+            },
+            {
+                "lang": "Привет по-русски",
+                "text": "Привет"
+            },
+            {
+                "lang": "Привет по-английски",
+                "text": "Hello"
+            },
+            {
+                "lang": "Привет по-испански",
+                "text": "Hola"
+            },
+            {
+                "lang": "Привет по-французски",
+                "text": "Bonjour"
+            },
+            {
+                "lang": "Привет по-немецки",
+                "text": "Hallo"
+            },
+            {
+                "lang": "Привет по-итальянски",
+                "text": "Ciao"
+            },
+            {
+                "lang": "Привет по-португальски",
+                "text": "Olá"
+            },
+            {
+                "lang": "Привет по-китайски (мандарин)",
+                "text": "你好 (Nǐ hǎo)"
+            },
+            {
+                "lang": "Привет по-японски",
+                "text": "こんにちは (Konnichiwa)"
+            },
+            {
+                "lang": "Привет по-корейски",
+                "text": "안녕하세요 (Annyeonghaseyo)"
+            },
+            {
+                "lang": "Привет по-арабски",
+                "text": "مرحبا (Marhaban)"
+            },
+            {
+                "lang": "Привет по-голландски",
+                "text": "Hallo"
+            },
+            {
+                "lang": "Привет по-шведски",
+                "text": "Hej"
+            },
+            {
+                "lang": "Привет по-норвежски",
+                "text": "Hei"
+            },
+            {
+                "lang": "Привет по-фински",
+                "text": "Hei"
+            },
+            {
+                "lang": "Привет по-датски",
+                "text": "Hej"
+            },
+            {
+                "lang": "Привет по-турецки",
+                "text": "Merhaba"
+            },
+            {
+                "lang": "Привет по-гречески",
+                "text": "Γειά σου (Yia sou)"
+            },
+            {
+                "lang": "Привет по-ивриту",
+                "text": "שלום (Shalom)"
+            },
+            {
+                "lang": "Привет по-польски",
+                "text": "Cześć"
+            },
+            {
+                "lang": "Привет по-чешски",
+                "text": "Ahoj"
+            },
+            {
+                "lang": "Привет по-словацки",
+                "text": "Ahoj"
+            },
+            {
+                "lang": "Привет по-венгерски",
+                "text": "Szia"
+            },
+            {
+                "lang": "Привет по-румынски",
+                "text": "Salut"
+            }
+        ]
+    }
+}
