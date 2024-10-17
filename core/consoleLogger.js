@@ -34,6 +34,9 @@ module.exports = function (text) {
         case "w": {
             result = `${datetime}\x1b[43m\x1b[37m WARNING \x1b[0m ${line}`
         }; break;
+        case "msm": {
+            result = `${datetime}\x1b[43m\x1b[37m ! MISMATCH ! \x1b[0m ${line}`
+        }; break;
         case "i": {
             result = `${datetime}\x1b[44m\x1b[37m INFO \x1b[0m ${line}`
         }; break;

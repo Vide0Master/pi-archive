@@ -1,11 +1,6 @@
 const cmd = require('./core/consoleLogger.js')
-cmd('i/Starting health check!')
-const health_stats = {
-    isStorageFolderMissing: false,
-    isPostsFolderMissing: false,
-    isMissingDatabase: false,
-    isMissingVideoThumbnails: false
-}
+cmd('w/Starting health check!')
+let healthCheckErrors = 0
 const fs = require('fs')
 const path = require('path')
 function FSExist(name) {
@@ -13,23 +8,38 @@ function FSExist(name) {
 }
 if (!FSExist('/storage')) {
     cmd('ce/Storage folder is missing!')
-    health_stats.isStorageFolderMissing = true
-}
-if (!FSExist('/storage/file_storage')) {
-    cmd('ce/Posts folder is missing!')
-    health_stats.isPostsFolderMissing = true
+    fs.mkdirSync(path.join(__dirname, '/storage'))
+    healthCheckErrors++
 }
 if (!FSExist('/storage/data.db')) {
     cmd('ce/Database is missing!')
-    health_stats.isMissingDatabase = true
+    fs.copyFileSync('./core/emptyData.db', './storage/data.db')
+    healthCheckErrors++
+}
+if (!FSExist('/storage/file_storage')) {
+    cmd('ce/Posts folder is missing!')
+    fs.mkdirSync(path.join(__dirname, '/storage/file_storage'))
+    healthCheckErrors++
 }
 if (!FSExist('/storage/video_thumbnails')) {
     cmd('e/Video thumbnails folder is missing!')
-    health_stats.isMissingVideoThumbnails = true 
+    fs.mkdirSync(path.join(__dirname, '/storage/video_thumbnails'))
+    healthCheckErrors++
+}
+if (!FSExist('/storage/UNLINKED')) {
+    cmd('e/unlinked files folder is missing!')
+    fs.mkdirSync(path.join(__dirname, '/storage/UNLINKED'))
+    healthCheckErrors++
+}
+cmd('i/End of health check!')
+if (healthCheckErrors > 0) {
+    cmd(`w/Fixed ${healthCheckErrors} issues`)
+}else{
+    cmd(`s/No issues detected`)
 }
 
-//запуск веб-системы
+//starting web service
 require('./webpage/index.js')
 
-//запуск телеграм бота
+//starting tg bot
 require('./tg_bot/index.js')
