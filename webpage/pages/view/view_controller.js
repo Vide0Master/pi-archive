@@ -169,9 +169,9 @@ let post_data;
                     alert(`${updateResult.rslt}/${updateResult.msg}`, 5000)
                     if (updateResult.rslt == 's') {
                         document.querySelector('.view-container .desc').innerText = newDesc
+                        post_data.description = newDesc
                     }
                 }
-
             })
 
             if (post_data.postGroupData) {
@@ -407,6 +407,7 @@ let post_data;
             process_LDF()
             createComments()
             fetchAndDisplayFile(file_link, contentType)
+            if (contentType == 'image') addOpenFullScreenView(file_link)
         } catch (error) {
             console.error(error);
         }
@@ -533,7 +534,7 @@ async function process_LDF() {
     }
 
     const favourite = createDiv('fav', container)
-    if(userdata.favs.includes(post_data.id)){
+    if (userdata.favs.includes(post_data.id)) {
         favourite.classList.add('faved')
     }
 
@@ -549,9 +550,9 @@ async function process_LDF() {
         const post_stats = await request('controlScoreAndFavs', { type: 'getPostScore', postID: post_data.id })
         if (post_stats.scores.favs != 0) {
             fav_counter.innerHTML = post_stats.scores.favs
-            fav_counter.style.display='block'
-        }else{
-            fav_counter.style.display='none'
+            fav_counter.style.display = 'block'
+        } else {
+            fav_counter.style.display = 'none'
         }
     }
     updateFavs()
@@ -644,3 +645,131 @@ async function process_LDF() {
         updateScore()
     })
 }
+
+//region F S V
+function addOpenFullScreenView(file_link) {
+    const fileContainer = document.querySelector('.file')
+
+    const openFullScrView = createDiv('full-scree-view-button', fileContainer)
+
+    const img = document.createElement('img')
+    openFullScrView.appendChild(img)
+    img.src = 'full-screen-view.svg'
+
+    openFullScrView.addEventListener('click', () => {
+        document.querySelector('html').style.overflow = 'hidden'
+
+        const overlay = createBlurOverlay()
+
+        function closeOverlay() {
+            document.querySelector('html').removeAttribute('style')
+            overlay.remove()
+        }
+
+        document.addEventListener(
+            "keyup",
+            (event) => {
+                if (event.code == 'Escape') closeOverlay()
+            }
+        );
+
+        const image = document.createElement('img')
+        overlay.appendChild(image)
+        image.src = file_link
+
+        image.classList.add('movable-image')
+        image.setAttribute('draggable', 'false')
+
+        const closeBtn = createDiv('close-btn', overlay)
+        closeBtn.addEventListener('click', closeOverlay)
+        const clsBtnTxt = createDiv('label', closeBtn)
+        clsBtnTxt.innerHTML = 'Закрыть'
+
+        const baseX = image.getBoundingClientRect().width
+        const baseY = image.getBoundingClientRect().height
+
+        let isDragging = false;
+        let startX, startY, initialX, initialY, scale = 1;
+
+        // Функция для начала перетаскивания
+        function startDrag(e) {
+            isDragging = true;
+            image.style.cursor = 'grabbing';
+
+            // Определяем начальные координаты мыши или пальца
+            startX = e.type === 'mousedown' ? e.clientX : e.touches[0].clientX;
+            startY = e.type === 'mousedown' ? e.clientY : e.touches[0].clientY;
+
+            // Запоминаем текущие позиции изображения
+            const style = window.getComputedStyle(image);
+            const matrix = new DOMMatrixReadOnly(style.transform);
+            initialX = matrix.m41; // текущая позиция по X
+            initialY = matrix.m42; // текущая позиция по Y
+
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', stopDrag);
+            document.addEventListener('touchmove', drag);
+            document.addEventListener('touchend', stopDrag);
+        }
+
+        // Функция для перетаскивания
+        function drag(e) {
+            if (!isDragging) return;
+
+            const currentX = e.type === 'mousemove' ? e.clientX : e.touches[0].clientX;
+            const currentY = e.type === 'mousemove' ? e.clientY : e.touches[0].clientY;
+
+            const dx = currentX - startX;
+            const dy = currentY - startY;
+
+            image.style.transform = `translate(${initialX + dx}px, ${initialY + dy}px) scale(${scale})`;
+        }
+
+        // Функция для остановки перетаскивания
+        function stopDrag() {
+            isDragging = false;
+            image.style.cursor = 'grab';
+
+            document.removeEventListener('mousemove', drag);
+            document.removeEventListener('mouseup', stopDrag);
+            document.removeEventListener('touchmove', drag);
+            document.removeEventListener('touchend', stopDrag);
+        }
+
+        // Функция для масштабирования колесиком или на сенсорных устройствах
+        function zoom(e) {
+            e.preventDefault();
+
+            // Определяем координаты точки зума (курсора мыши или пальца)
+            const rect = image.getBoundingClientRect();
+            const mouseX = e.type === 'wheel' ? e.clientX : e.touches[0].clientX;
+            const mouseY = e.type === 'wheel' ? e.clientY : e.touches[0].clientY;
+
+            const offsetX = (mouseX - rect.left) / rect.width;
+            const offsetY = (mouseY - rect.top) / rect.height;
+
+            // Определяем, увеличиваем или уменьшаем масштаб
+            const zoomIntensity = 0.1;
+            const previousScale = scale;
+            scale += e.deltaY > 0 ? -zoomIntensity : zoomIntensity;
+            scale = Math.min(Math.max(0.5, scale), 3); // Ограничение масштаба от 0.5 до 3
+
+            // Рассчитываем смещение относительно точки зума
+            const dx = (offsetX - 0.5) * baseX * (scale - previousScale);
+            const dy = (offsetY - 0.5) * baseY * (scale - previousScale);
+
+            const style = window.getComputedStyle(image);
+            const matrix = new DOMMatrixReadOnly(style.transform);
+            const currentX = matrix.m41;
+            const currentY = matrix.m42;
+
+            image.style.transform = `translate(${currentX - dx}px, ${currentY - dy}px) scale(${scale})`;
+        }
+
+        // Слушаем события для мыши и сенсорных устройств
+        image.addEventListener('mousedown', startDrag);
+        image.addEventListener('touchstart', startDrag);
+        image.addEventListener('wheel', zoom);
+    })
+}
+

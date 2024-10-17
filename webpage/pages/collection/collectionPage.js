@@ -220,7 +220,5 @@ async function processCollection(id) {
     await setActions()
 }
 
-
-
 const params = new URLSearchParams(window.location.search)
 processCollection(params.get('id'))
