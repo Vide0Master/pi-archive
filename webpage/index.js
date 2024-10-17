@@ -236,4 +236,4 @@ app.listen(sysController.config.static.web_app.port, () => {
     sysController.log('s/Веб страница запущена успешно')
 });
 
-sysController.dbinteract.AUDITPosts()
+//sysController.dbinteract.AUDITPosts()

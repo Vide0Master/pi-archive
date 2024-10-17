@@ -25,11 +25,17 @@ module.exports = function (text) {
         case "e": {
             result = `${datetime}\x1b[41m\x1b[37m ERROR \x1b[0m ${line}`
         }; break;
+        case "ce": {
+            result = `${datetime}\x1b[41m\x1b[37m !!! CRITICAL ERROR !!! \x1b[0m ${line}`
+        }; break;
         case "s": {
             result = `${datetime}\x1b[42m\x1b[37m SUCCES \x1b[0m ${line}`
         }; break;
         case "w": {
             result = `${datetime}\x1b[43m\x1b[37m WARNING \x1b[0m ${line}`
+        }; break;
+        case "msm": {
+            result = `${datetime}\x1b[43m\x1b[37m ! MISMATCH ! \x1b[0m ${line}`
         }; break;
         case "i": {
             result = `${datetime}\x1b[44m\x1b[37m INFO \x1b[0m ${line}`

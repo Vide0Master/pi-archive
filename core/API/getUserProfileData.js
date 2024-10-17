@@ -12,6 +12,7 @@ module.exports = (request, userByKey) => {
                 return
             } else {
                 userByLogin = userByLoginResult.user
+                userByLogin.favs = JSON.parse(userByLogin.favs)
             }
         }
 
@@ -23,7 +24,7 @@ module.exports = (request, userByKey) => {
         let isOwner = false
         if (request.login) {
             isOwner = (userByLogin.login == userByKey.login)
-        }else{
+        } else {
             isOwner = true
         }
 
@@ -45,7 +46,6 @@ module.exports = (request, userByKey) => {
             + currentdate.getSeconds();
 
         user.creationdate = datetime
-        user.favs = user.favs
         user.trueUserStatus = user.status
 
         if (!isOwner) {

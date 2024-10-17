@@ -25,9 +25,7 @@ async function processPage(userData, isActiveUser) {
         showUserData(userData)
         showActions(userData, activeUser)
     }
-    if (activeUser.isOwner) {
-        if (activeUser.data.favs.length > 0) getFavs(activeUser.data.favs)
-    }
+    if (userData.data.favs.length > 0) getFavs(userData.data.favs, !isActiveUser)
 }
 
 //region welcome txt
@@ -285,11 +283,14 @@ function showActions(userData, activeUser) {
     }
 }
 
-async function getFavs(favs) {
+async function getFavs(favs, isActiveUser) {
     const favs_container = createDiv('favs-container', document.querySelector('.user-page-container'))
 
     const fav_label = createDiv('label', favs_container)
-    fav_label.innerHTML='Избранное'
+    fav_label.innerHTML = 'Избранное'
+
+    if(isActiveUser) fav_label.innerHTML += ' пользователя'
+
 
     const favs_zone = createDiv('favs-zone', favs_container)
 
