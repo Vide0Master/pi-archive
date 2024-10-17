@@ -25,6 +25,9 @@ module.exports = function (text) {
         case "e": {
             result = `${datetime}\x1b[41m\x1b[37m ERROR \x1b[0m ${line}`
         }; break;
+        case "ce": {
+            result = `${datetime}\x1b[41m\x1b[37m !!! CRITICAL ERROR !!! \x1b[0m ${line}`
+        }; break;
         case "s": {
             result = `${datetime}\x1b[42m\x1b[37m SUCCES \x1b[0m ${line}`
         }; break;
