@@ -17,11 +17,38 @@ main {
     .file {
         max-height: 700px;
         width: auto;
+        position: relative;
 
         img,
         video {
             max-width: 100%;
             max-height: 700px;
+        }
+
+        &:hover {
+            .full-scree-view-button {
+                opacity: 0.2;
+            }
+        }
+
+        .full-scree-view-button {
+            position: absolute;
+            background-color: #000;
+            padding: 0.5em;
+            right: 0;
+            top: 0;
+            border-bottom-left-radius: 0.5em;
+            opacity: 0;
+            transition: 0.3s;
+            cursor: pointer;
+
+            &:hover {
+                opacity: 0.9;
+            }
+
+            img {
+                height: 2em;
+            }
         }
     }
 
@@ -327,6 +354,36 @@ main {
         .label {
             font-weight: bolder;
             font-size: 1.25em;
+        }
+    }
+}
+
+.blurry-overlay {
+    .movable-image {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        user-select: none;
+    }
+    .close-btn{
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 1em;
+        border-bottom-right-radius: 1em;
+        background-color: #000;
+        color: #fff;
+        z-index: 5;
+        font-size: 1.2em;
+        opacity: 0.4;
+        transition: 0.3s;
+
+        cursor: pointer;
+        user-select: none;
+
+        &:hover{
+            opacity: 0.9;
         }
     }
 }
