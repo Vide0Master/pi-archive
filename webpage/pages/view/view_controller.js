@@ -489,7 +489,7 @@ async function createComments() {
             comment_text.innerHTML = comment.message
 
             const comment_actions_row = createDiv('comment-actions', comment_data_container)
-            if ((await ownerVerify(post_data.author)) || (await adminVerify())) {
+            if ((await ownerVerify(comment.from)) || (await adminVerify())) {
                 const comment_remove = createAction('Удалить', comment_actions_row, async () => {
                     if (!confirm('Вы точно хотите удалить комментарий?')) {
                         return

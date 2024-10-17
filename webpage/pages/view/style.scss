@@ -366,6 +366,7 @@ main {
         transform: translate(-50%, -50%);
         user-select: none;
     }
+
     .close-btn{
         position: absolute;
         top: 0;
@@ -374,10 +375,10 @@ main {
         border-bottom-right-radius: 1em;
         background-color: #000;
         color: #fff;
-        z-index: 5;
         font-size: 1.2em;
         opacity: 0.4;
         transition: 0.3s;
+        overflow: hidden;
 
         cursor: pointer;
         user-select: none;
