@@ -48,8 +48,8 @@ module.exports = (db, tags = [], blacklist = [], from, posts) => {
         // Выполнение запроса
         db.all(query, params, (err, rows) => {
             if (err) {
-                resolve({ rslt: 'e', msg: `e/Ошибка запроса базы данных [getPosts]: ${err}` });
-                consoleLogger(`e/Ошибка запроса базы данных [getPosts]: ${err}`);
+                resolve({ rslt: 'e', msg: `e/DB query error [getPosts]: ${err}` });
+                consoleLogger(`e/DB query error [getPosts]: ${err}`);
                 console.log(err)
             } else {
                 resolve(rows);

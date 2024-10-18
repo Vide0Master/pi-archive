@@ -1,0 +1,22 @@
+{
+    "name":"English",
+    "active":true,
+    "lang":{
+        "S":{
+            "API":{
+                "GPD":{
+                    "PM":"No such post"
+                }
+            },
+            "DB":{
+
+            }
+        },
+        "W":{
+
+        },
+        "TB":{
+            
+        }
+    }
+}

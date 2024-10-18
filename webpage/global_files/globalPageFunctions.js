@@ -76,14 +76,14 @@ function createPostCard(postData) {
     updateScore()
 
     async function setFav() {
-        if((await request('controlScoreAndFavs', { type: 'getUserInfo' })).favs.includes(postData.id)){
+        if ((await request('controlScoreAndFavs', { type: 'getUserInfo' })).favs.includes(postData.id)) {
             const fav = createDiv('fav')
-            fav.title='Находится в избранных'
+            fav.title = 'Находится в избранных'
             info_row.prepend(fav)
 
             const favImg = document.createElement('img')
             fav.appendChild(favImg)
-            favImg.src='fav.svg'
+            favImg.src = 'fav.svg'
         }
     }
     setFav()
@@ -737,15 +737,19 @@ function createImgLoadOverlay(parent) {
 }
 
 //region parse tmst
-function parseTimestmap(timestamp) {
+function parseTimestamp(timestamp) {
     let currentdate = new Date(Math.floor(timestamp));
-    let datetime = currentdate.getDate() + "/"
-        + (currentdate.getMonth() + 1) + "/"
+
+    const padZero = (num) => num.toString().padStart(2, '0');
+
+    let datetime = padZero(currentdate.getDate()) + "."
+        + padZero(currentdate.getMonth() + 1) + "."
         + currentdate.getFullYear() + " "
-        + currentdate.getHours() + ":"
-        + currentdate.getMinutes() + ":"
-        + currentdate.getSeconds();
-    return datetime
+        + padZero(currentdate.getHours()) + ":"
+        + padZero(currentdate.getMinutes()) + ":"
+        + padZero(currentdate.getSeconds());
+
+    return datetime;
 }
 
 //region elem vis obs

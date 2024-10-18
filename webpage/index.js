@@ -45,7 +45,7 @@ const path = require('path');
 const fs = require('fs')
 
 // Модуль веб-страницы
-sysController.log('i/Запуск веб страницы')
+sysController.log('i/Starting WEB server...')
 
 const app = express();
 
@@ -233,7 +233,7 @@ app.get('/file', async (req, res) => {
 
 //Запуск слушателя на порту из config.json
 app.listen(sysController.config.static.web_app.port, () => {
-    sysController.log('s/Веб страница запущена успешно')
+    sysController.log('s/WEB server started succesfully!')
 });
 
-//sysController.dbinteract.AUDITPosts()
+sysController.dbinteract.AUDITPosts()

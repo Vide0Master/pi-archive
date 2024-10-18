@@ -11,14 +11,13 @@
 
     min-height: 150px;
 
-    max-height: 200px;
+    max-height: 220px;
 
     @media (max-width:600px) {
         .preview-image {
             max-height: 150px;
         }
     }
-
 
     .info-row {
         color: #fff;

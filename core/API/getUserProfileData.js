@@ -37,15 +37,7 @@ module.exports = (request, userByKey) => {
 
         delete user.password
         delete user.auth_key
-        let currentdate = new Date(Math.floor(user.creationdate));
-        let datetime = currentdate.getDate() + "/"
-            + (currentdate.getMonth() + 1) + "/"
-            + currentdate.getFullYear() + " "
-            + currentdate.getHours() + ":"
-            + currentdate.getMinutes() + ":"
-            + currentdate.getSeconds();
-
-        user.creationdate = datetime
+        
         user.trueUserStatus = user.status
 
         if (!isOwner) {

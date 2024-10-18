@@ -60,7 +60,7 @@ async function getMessages() {
             parseUserLogin(msg.from, userName)
 
             const time_info = createDiv('msg-gray-text', message_header)
-            time_info.innerHTML = parseTimestmap(msg.timestamp)
+            time_info.innerHTML = parseTimestamp(msg.timestamp)
 
             const read_status = createDiv('msg-gray-text', message_header)
             read_status.innerHTML = msg.read == 0 ? "Не прочитано" : "Прочитано"
