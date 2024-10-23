@@ -5,16 +5,22 @@ const dbinteract = require('../systemController.js').dbinteract
 const APIrestrictions = require('../systemController.js').config.static.restrictions.api
 const consoleLogger = require('../consoleLogger.js')
 const LanguageManager = require('../lang/langController.js')
+const config = require('../systemController.js').config
 
 module.exports = async (action, user, request) => {
     return new Promise(async resolve => {
-        let user_data;
+        let user_data = null;
         let user_permission = 0
 
-        // console.log(action)
-        // console.log(user)
-        // console.log(request)
-        
+
+        if (user) {
+            const userRslt = await dbinteract.getUserBySessionData(user.type, user.key)
+            if (userRslt.rslt == "s") {
+                user_data = userRslt.user
+                user_permission = config.static.user_status[user_data.status]
+            }
+        }
+
         let userLanguage
         if (!user_data || !user_data.usersettings || !user_data.usersettings.lang) userLanguage = 'ENG'
         if (user_permission >= APIrestrictions[action]) {
@@ -26,7 +32,7 @@ module.exports = async (action, user, request) => {
                 resolve(rqst_rslt)
             } catch (err) {
                 resolve({ rslt: 'e', msg: err.message })
-                consoleLogger(`e/[${action}]: ${err.message}`, [{ txt: 'API', txtc: "blue", txtb: "white" },{ txt: action, txtc: "white", txtb: "blue" }])
+                consoleLogger(`e/[${action}]: ${err.message}`, [{ txt: 'API', txtc: "blue", txtb: "white" }, { txt: action, txtc: "white", txtb: "blue" }])
             }
         } else {
             resolve({ result: 'access_rejection', action })

@@ -45,6 +45,7 @@ module.exports = (db, tags = [], blacklist = [], from, posts) => {
         params.push(posts, from);
 
         db.all(query, params, (err, rows) => {
+            console.log(err)
             resolve(new SysController.createResponse(
                 's',
                 '{{S_DB_GPSTS_S}}',

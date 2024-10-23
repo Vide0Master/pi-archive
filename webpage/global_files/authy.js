@@ -25,7 +25,7 @@ class Authy {
     }
 
     static async pageAccesCheck() {
-        const rslt = await request('AuthyPageAccessCheck', { page: window.location.pathname.replace(/\//g, ''), userKey: userKey })
+        const rslt = await request('AuthyPageAccessCheck', { page: window.location.pathname.replace(/\//g, '')})
         if (rslt.result != 's') {
             await this.unlogin()
         }

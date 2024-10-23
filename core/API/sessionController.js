@@ -28,7 +28,8 @@ module.exports = (request) => {
 
             }; break;
             case 'getUserBySessionData': {
-
+                const user = await syscontroller.dbinteract.getUserBySessionData(request.type,request.key)
+                resolve(user)
             }; break;
         }
     })
