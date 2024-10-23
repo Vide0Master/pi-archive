@@ -1,7 +1,5 @@
-//импорт
 const syscontroller = require('../systemController.js')
 
-//экспорт функции
 module.exports = (request, userData) => {
     return new Promise(async resolve => {
         let msgrslt

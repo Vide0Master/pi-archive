@@ -1,4 +1,3 @@
-//API запрос для получения всех запросов к админам
 
 const SysController = require('../systemController.js')
 

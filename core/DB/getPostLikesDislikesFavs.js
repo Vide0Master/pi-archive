@@ -7,7 +7,7 @@ module.exports = (db, postID) => {
                 if (err) {
                     resolve(new sysController.createResponse(
                         'e',
-                        `Ошибка полученния данных поста ${postID}`
+                        `{{S_DB_GPLDF_EGPD}} ${postID}`
                     ))
                     return
                 }
@@ -31,14 +31,15 @@ module.exports = (db, postID) => {
                     }
                     resolve(new sysController.createResponse(
                         's',
-                        `Успешно получены данные поста ${postID}`,
+                        `{{S_DB_GPLDF_SGPD}} ${postID}`,
                         { scores: scores }
                     ))
                 } else {
                     resolve(new sysController.createResponse(
                         'e',
-                        `Что...?`,
+                        `{{S_DB_GPLDF_ZUE}}`,
                     ))
+                    sysController.log('ce/NO USERS IN DB, WHAT!?!?!?!?!?!?')
                 }
             })
     })

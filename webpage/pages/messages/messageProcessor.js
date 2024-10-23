@@ -4,7 +4,7 @@ async function getMessages() {
     const DMs = await request('controlUserDM', { type: 'getUserDMs' })
 
     const chat_column = document.querySelector('.chat-column')
-    for (const dm of DMs) {
+    for (const dm of DMs.loginsList) {
         const user_dm_opener = createDiv('user-db-link', chat_column)
 
         const comment_author = createAction('', user_dm_opener)

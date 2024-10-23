@@ -19,7 +19,7 @@ module.exports = (request) => {
                     return
                 }
 
-                resolve(new SysController.createResponse('s',`Пользователь ${request.login} был подтверждён.`))
+                resolve(new SysController.createResponse('s',`{{S_API_UC_C_F}} ${request.login} {{S_API_UC_C_S}}`))
             }; break;
             case 'reject': {
                 const user_delition_status = await SysController.dbinteract.deleteUser(request.login)
@@ -36,7 +36,7 @@ module.exports = (request) => {
                     return
                 }
 
-                resolve(new SysController.createResponse('w',`Пользователю ${request.login} было отказано, профиль удалён.`))
+                resolve(new SysController.createResponse('w',`{{S_API_UC_R_F}} ${request.login} {{S_API_UC_R_S}}`))
             }; break;
         }
     })

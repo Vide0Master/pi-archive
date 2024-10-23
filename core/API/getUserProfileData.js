@@ -1,7 +1,5 @@
-//импорт
 const SysController = require('../systemController.js')
 
-//экспорт функции
 module.exports = (request, userByKey) => {
     return new Promise(async resolve => {
         let userByLogin
@@ -55,7 +53,7 @@ module.exports = (request, userByKey) => {
 
         resolve(new SysController.createResponse(
             's',
-            `Успешно получены данные пользователя ${user.login}`,
+            `{{S_API_GUPD_S}} ${user.login}`,
             { data: user, isOwner }
         ))
     })

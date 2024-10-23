@@ -8,17 +8,21 @@ module.exports = (db, id) => {
                 if (!row) {
                     resolve(new sysController.createResponse(
                         'e',
-                        `Группы постов ID:${id} нету в базе данных!`,
+                        `{{S_DB_GPGID_NG_F}}:${id} {{S_DB_GPGID_NG_S}}!`,
                     ))
                 } else {
                     row.group = JSON.parse(row.group)
-                    resolve(new sysController.createResponse(
+                    const rsp = new sysController.createResponse(
                         's',
-                        `Успешно получена группа постов по ID:${id}`,
+                        `{{S_DB_GPGID_S}}:${id}`,
                         { group: row },
                         err,
-                        `Ошибка получения группы постов по ID:${id}`
-                    ))
+                        `{{S_DB_GPGID_E}}:${id}`
+                    )
+                    resolve(rsp)
+                    if (rsp.isErr()) {
+                        sysController.log(rsp.rslt + '/' + rsp.msg)
+                    }
                 }
             })
     })

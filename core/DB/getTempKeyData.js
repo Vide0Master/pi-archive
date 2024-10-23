@@ -7,10 +7,10 @@ module.exports = (db, key) => {
             (err, row) => {
                 resolve(new sysController.createResponse(
                     's',
-                    `Успешно получен временный ключ`,
+                    `Got temp key`,
                     { data: row },
                     err,
-                    `Ошибка получения временного ключа`
+                    `Error getting temp key`
                 ))
             })
     })

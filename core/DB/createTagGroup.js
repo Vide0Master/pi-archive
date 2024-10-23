@@ -8,10 +8,10 @@ module.exports = (db, groupname) => {
             err => {
                 resolve(new sysController.createResponse(
                     's',
-                    `Успешно создана новая группа тегов "${groupname}"`,
+                    `{{S_DB_CRTG_S}} "${groupname}"`,
                     {},
                     err,
-                    `Ошибка создания новой группы тегов "${groupname}"`
+                    `{{S_DB_CRTG_S}} "${groupname}"`
                 ))
             })
     })

@@ -7,10 +7,10 @@ module.exports = (db, messageID, status) => {
             (err) => {
                 resolve(new SysController.createResponse(
                     's',
-                    `Успешно отмечено как ${status == 0 ? "не прочитано" : "прочитано"}!`,
+                    `{{S_DB_UMRS_M_SM}} ${status == 0 ? "{{S_DB_UMRS_M_U}}" : "{{S_DB_UMRS_M_R}}"}!`,
                     {},
                     err,
-                    `Ошибка отметки статуса сообщения [${messageID}]:`
+                    `{{S_DB_UMRS_E}} [${messageID}]:`
                 ))
             })
     })

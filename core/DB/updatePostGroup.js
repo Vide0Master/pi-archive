@@ -7,10 +7,10 @@ module.exports = (db, postGroupID, data) => {
             err => {
                 resolve(new sysController.createResponse(
                     's',
-                    `Успешно обновлена группа постов ID:${postGroupID}`,
+                    `{{S_DB_UPG_S}} ID:${postGroupID}`,
                     {},
                     err,
-                    `Ошибка обновления группы постов ID:${postGroupID}`
+                    `{{S_DB_UPG_S}} ID:${postGroupID}`
                 ))
             })
     })

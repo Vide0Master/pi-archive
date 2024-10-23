@@ -1,7 +1,4 @@
 
-//Authy проверка доступа к странице
-//не используется для TG бота
-
 const SysController = require('../systemController.js')
 const pageRestrictions = SysController.config.static.restrictions.pages
 

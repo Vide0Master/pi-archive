@@ -7,7 +7,7 @@ module.exports = (request) => {
         const welcome_messages = SysController.config.static.web_app.welcome_messages
         resolve(new SysController.createResponse(
             's',
-            'Получен текст приветствия',
+            '{{S_API_GWT}}',
             {welcomeText:welcome_messages[Math.floor(Math.random()*welcome_messages.length)]}
         ))
     })

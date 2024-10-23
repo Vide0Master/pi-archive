@@ -16,7 +16,7 @@ module.exports = (request, user_data) => {
         if (!isOwner && !isAdmin) {
             resolve(new sysController.createResponse(
                 'e',
-                'Отказано в доступе.<br>Вы должны быть вледльцем или модератором и выше для редактирования тегов.'
+                '{{S_API_UPT_AR}}'
             ))
             return
         }
@@ -26,7 +26,7 @@ module.exports = (request, user_data) => {
         if (request.newTags.length > max_tags_length) {
             resolve(new sysController.createResponse(
                 'e',
-                `Слишком много тегов, максимум ${max_tags_length} шт.`
+                `{{S_API_UPT_TMT_F}} ${max_tags_length} {{S_API_UPT_TMT_S}}`
             ))
             return
         }

@@ -1,9 +1,15 @@
 const sysController = require('../systemController.js')
 
-//экспорт функции
 module.exports = (request, user_data) => {
     return new Promise(async resolve => {
-        const messages = await sysController.dbinteract.getUserMessages(user_data.login)
+        let messages = await sysController.dbinteract.getUserMessages(user_data.login)
+
+        if (messages.rslt != 's') {
+            resolve(messages)
+            return
+        }
+
+        messages = messages.messages
 
         let info = { outUnread: 0, inUnread: 0, requiredAction: false }
 

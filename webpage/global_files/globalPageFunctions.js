@@ -170,8 +170,18 @@ setFooterText()
 
 //region footer text
 function setFooterText() {
-    const text = `Разработка VideoMaster'а. Система с ограниченными доступом. Распространение внутренней информации - запрещено. Любые решения администрации - неоспоримы.`
-    document.querySelector('footer').innerText = text
+    const footer = document.querySelector('footer')
+    footer.innerHTML=''
+
+    const main_text = createDiv('main-text', footer)
+    main_text.innerHTML = `Разработка VideoMaster'а. Система с ограниченными доступом. Распространение внутренней информации - запрещено. Любые решения администрации - неоспоримы.`
+
+    const actions = createDiv('actions-row', footer)
+
+    const github = createAction('Github', actions, () => {
+        window.open('https://t.me/pi_archive_bot', '_blank').focus();
+    })
+    github.title='Здесь можно просмотреть код проекта и сообщить о ошибке'
 }
 
 PInav()

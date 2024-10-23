@@ -144,9 +144,9 @@ function showActions(userData, activeUser) {
                 const rslt = await request('changeUserName', { userKey: localStorage.getItem('userKey') || sessionStorage.getItem('userKey'), newName: new_name })
 
                 if (rslt.rslt == 's') {
-                    window.location.href = `/profile?alert=s/Имя+пользователя+изменено+успешно!/5000`
+                    window.location.href = `/profile?alert=${rslt.rslt}/${rslt.msg.split(' ').join('+')}/5000`
                 } else {
-                    alert(rslt.msg, 5000)
+                    alert(rslt.rslt + '/' + rslt.msg, 5000)
                 }
             }
         })
@@ -156,7 +156,7 @@ function showActions(userData, activeUser) {
             const new_pasas = prompt('Введите новый пароль:')
             if (new_pasas) {
                 const rslt = await request('changeUserPassword', { userKey: localStorage.getItem('userKey') || sessionStorage.getItem('userKey'), newPassword: CryptoJS.SHA256(new_pasas).toString() })
-                alert(rslt.msg, 5000)
+                alert(rslt.rslt + '/' + rslt.msg, 5000)
             }
         })
 

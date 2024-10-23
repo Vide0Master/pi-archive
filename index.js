@@ -1,4 +1,12 @@
 const cmd = require('./core/consoleLogger.js')
+
+const cfg = require('./config.json')
+
+cmd(cfg.vesion.server,[{txt:'SERVER-V',txtc:'green',txtb:'white'}])
+cmd(cfg.vesion.db,[{txt:'DATABASE-V',txtc:'red',txtb:'white'}])
+cmd(cfg.vesion.webpage,[{txt:'WEBPAGE-V',txtc:'cyan',txtb:'white'}])
+cmd(cfg.vesion.tgbot,[{txt:'TGBOT-V',txtc:'blue',txtb:'white'}])
+
 cmd('w/Starting health check!')
 let healthCheckErrors = 0
 const fs = require('fs')
@@ -42,4 +50,5 @@ if (healthCheckErrors > 0) {
 require('./webpage/index.js')
 
 //starting tg bot
-require('./tg_bot/index.js')
+//require('./tg_bot/index.js')
+

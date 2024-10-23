@@ -1,4 +1,4 @@
-const consoleLogger = require('../consoleLogger.js')
+const SysController = require('../systemController.js')
 
 module.exports = (db, key) => {
     return new Promise(async resolve => {
@@ -6,18 +6,31 @@ module.exports = (db, key) => {
             [key],
             (err, row) => {
                 if (err) {
-                    resolve({ rslt: 'e', msg: err })
-                    consoleLogger(`e/Ошибка получения пользователя по ключу: ${err}`)
+                    resolve(new SysController.createResponse(
+                        '',
+                        '',
+                        {},
+                        err,
+                        "{{S_DB_GUBK_E}}"
+                    ))
                 } else {
-                    if(row){
-                        row.favs=JSON.parse(row.favs)
-                        row.likes=JSON.parse(row.likes)
-                        row.dislikes=JSON.parse(row.dislikes)
-                        row.blacklist=JSON.parse(row.blacklist)
-                        row.usersettings=JSON.parse(row.usersettings)
-                        resolve(row)
-                    }else{
-                        resolve(null)
+                    if (row) {
+                        row.favs = JSON.parse(row.favs)
+                        row.likes = JSON.parse(row.likes)
+                        row.dislikes = JSON.parse(row.dislikes)
+                        row.blacklist = JSON.parse(row.blacklist)
+                        row.usersettings = JSON.parse(row.usersettings)
+                        resolve(new SysController.createResponse(
+                            's',
+                            `{{S_DB_GUBK_S_F}} ${row.login} {{S_DB_GUBK_S_S}}`,
+                            { user: row }
+                        ))
+                    } else {
+                        resolve(new SysController.createResponse(
+                            'e',
+                            '{{S_DB_GUBK_NU}}',
+                            { user: null }
+                        ))
                     }
                 }
             })

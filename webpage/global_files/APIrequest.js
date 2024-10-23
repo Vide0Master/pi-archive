@@ -21,7 +21,8 @@ async function request(action, request) {
             body: JSON.stringify({
                 action,
                 request,
-                user: keyCheck()
+                user: keyCheck(),
+                client: 'WEB'
             }),
         });
         if (!response.ok) {

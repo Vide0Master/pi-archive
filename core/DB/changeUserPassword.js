@@ -7,10 +7,10 @@ module.exports = (db, userKey, newPassword) => {
             (err) => {
                 resolve(new SysController.createResponse(
                     's',
-                    'Пароль успешно изменён',
+                    '{{S_DB_CUP_S}}',
                     {},
                     err,
-                    `Ошибка смены пароля`
+                    `{{S_DB_CUP_E}}`
                 ))
             })
     })

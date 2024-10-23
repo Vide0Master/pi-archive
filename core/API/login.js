@@ -4,8 +4,8 @@ const SysController = require('../systemController.js')
 module.exports = (request) => {
     return new Promise(async resolve => {
         const userData = await SysController.dbinteract.getUserByLogin(request.login)
-        if(!userData.user){
-            resolve(new SysController.createResponse('e','Такого профиля не существует'))
+        if (!userData.user) {
+            resolve(new SysController.createResponse('e', '{{S_API_LGIN_NP}}'))
             return
         }
 
@@ -15,21 +15,22 @@ module.exports = (request) => {
         }
 
         if (request.password != userData.user.password) {
-            resolve(new SysController.createResponse('w','Неверный пароль'))
+            resolve(new SysController.createResponse('w', '{{S_API_LGIN_WP}}'))
             return
         }
 
-        if (userData.user.status=='unconfirmed') {
-            resolve(new SysController.createResponse('w','Ваш профиль ещё не потверждён администратором'))
+        if (userData.user.status == 'unconfirmed') {
+            resolve(new SysController.createResponse('w', '{{S_API_LGIN_UP}}'))
             return
         }
 
-        const key_update = await SysController.dbinteract.updateUserKey(request.login, request.userKey)
-
+        const key_update = await SysController.APIcontroller('sessionController', null,
+            { type: 'addSession', login: request.login, stype: 'WEB', skey: request.userKey })
+        console.log(key_update)
         if (key_update.rslt == 'e') {
             resolve(key_update)
         } else {
-            resolve(new SysController.createResponse('s','Успешная авторизация'))
+            resolve(new SysController.createResponse('s', '{{S_API_LGIN_S}}'))
         }
     })
 }

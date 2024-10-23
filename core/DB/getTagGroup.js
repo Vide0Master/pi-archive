@@ -10,15 +10,15 @@ module.exports = (db, name) => {
 
                     resolve(new sysController.createResponse(
                         's',
-                        `Успешно получены группы тегов`,
+                        `{{S_DB_GTG_S}}`,
                         { group: row },
                         err,
-                        `Ошибка получения групп тегов`
+                        `{{S_DB_GTG_e}}`
                     ))
                 } else {
                     resolve(new sysController.createResponse(
                         'w',
-                        `Нету групп тегов`
+                        `{{S_DB_GTG_NG}}`
                     ))
                 }
             })

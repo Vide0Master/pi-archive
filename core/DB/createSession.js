@@ -1,16 +1,17 @@
 const sysController = require('../systemController')
 
-module.exports = (db, likes, userLogin) => {
+module.exports = (db, user, stype, skey) => {
     return new Promise(async resolve => {
-        db.run(`UPDATE users SET 'dislikes' = ? WHERE login = ?`,
-            [JSON.stringify(likes), userLogin],
+        db.run(`INSERT INTO sessions(user,type,key,tslac)
+            VALUES(?,?,?,?)`,
+            [user, stype, skey, Date.now()],
             (err) => {
                 resolve(new sysController.createResponse(
                     's',
-                    `{{S_DB_UUD_S}} ${userLogin}`,
+                    `Created session`,
                     {},
                     err,
-                    `{{S_DB_UUD_E}} ${userLogin}`
+                    `Error creating session`
                 ))
             })
     })

@@ -3,9 +3,10 @@
 
 module.exports = function (text, preps = []) {
 
-    const w_data = text.split('/')
-    const line = w_data[1]
-    const type = w_data[0]
+    const w_data = text.split('/');
+
+    const line = w_data[1] || w_data[0];
+    const type = w_data[1] ? w_data[0] : '';
 
     datetime = colorizeText(` ${parseTimestamp(new Date())} `, 'white', 'cyan')
 
@@ -14,10 +15,9 @@ module.exports = function (text, preps = []) {
     for (const prep of preps) {
         result += colorizeText(` ${prep.txt} `, prep.txtc, prep.txtb)
     }
-
     switch (type) {
         default: {
-            result = datetime + ' ' + line
+            result += ' ' + line
         }; break;
         case "e": {
             result += `${colorizeText(' ERROR ', 'white', 'red')} ${line}`
@@ -45,7 +45,6 @@ module.exports = function (text, preps = []) {
     console.log(result);
 };
 
-// Define available colors
 const colors = {
     black: 30,
     red: 31,

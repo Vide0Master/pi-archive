@@ -5,12 +5,13 @@ module.exports = (db, user) => {
         db.all(`SELECT * FROM messages WHERE "to" = ? OR "from" = ? AND "msgtype" = "DM" ORDER BY timestamp DESC`,
             [user, user],
             (err, rows) => {
-                if (err) {
-                    sysController.log(`e/Ошибка получения сообщений [getUserMessages]: ${err}`)
-                    resolve({ rslt: 'e', msg: err })
-                } else {
-                    resolve(rows)
-                }
+                resolve(new sysController.createResponse(
+                    's',
+                    '{{S_DB_GUM_S}}',
+                    {messages:rows},
+                    err,
+                    '{{S_DB_GUM_S}}'
+                ))
             })
     })
 }

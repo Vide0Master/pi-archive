@@ -1,7 +1,6 @@
 const syscontroller = require('../systemController.js')
 
-//экспорт функции
-module.exports = (request,user) => {
+module.exports = (request, user) => {
     return new Promise(async resolve => {
         const user_sets = user.usersettings
         const posts = await syscontroller.dbinteract.getPosts(
@@ -10,7 +9,12 @@ module.exports = (request,user) => {
             (request.page - 1) * (request.postsCount || user_sets.posts_per_page),
             request.postsCount || user_sets.posts_per_page)
 
-        for (const post of posts) {
+        if (posts.rslt != 's') {
+            resolve(posts)
+            return
+        }
+
+        for (const post of posts.posts) {
             post.timestamp = parseInt(post.timestamp)
             post.size = JSON.parse(post.size)
             post.source = JSON.parse(post.source)
@@ -30,6 +34,6 @@ module.exports = (request,user) => {
 
             post.postRating = postRatings.scores
         }
-        resolve(posts)
+        resolve(posts.posts)
     })
 }

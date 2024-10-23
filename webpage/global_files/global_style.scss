@@ -224,7 +224,21 @@ img {
         border-top-right-radius: 1em;
         align-self: center;
         color: #fff;
-        text-align: center;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.2em;
+
+        .main-text {
+            text-align: center;
+        }
+
+        .actions-row{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
     }
 }
 
