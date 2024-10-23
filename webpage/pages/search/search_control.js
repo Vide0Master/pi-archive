@@ -3,7 +3,7 @@ const urlTags = urlParams.get('tags');
 
 //region Page links
 async function update_pages(tags, blacklist) {
-    const page_count = await request(`getPageCount`, { userKey: localStorage.getItem('userKey') || sessionStorage.getItem('userKey'), tags, blacklist })
+    const page_count = await request(`getPageCount`, { tags, blacklist })
 
     const page_list_block = document.querySelector('.page-navigator')
     page_list_block.innerHTML = ''
@@ -46,7 +46,6 @@ async function get_posts(page) {
 
     const post_list = await request('getPosts',
         {
-            userKey: localStorage.getItem('userKey') || sessionStorage.getItem('userKey'),
             tags: taglist.tags,
             blacklist: taglist.blacklist,
             page

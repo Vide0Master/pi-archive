@@ -11,7 +11,6 @@ module.exports = (db, type, key) => {
                         `Error getting session data: ${err}`,
                     ))
                 } else {
-                    console.log(row)
                     let login = ''
                     if (row) login = row.user
                     db.get(`SELECT * FROM users WHERE login = ?`, [login],
@@ -24,6 +23,11 @@ module.exports = (db, type, key) => {
                                 ))
                                 return
                             }
+                            row.favs = JSON.parse(row.favs)
+                            row.likes = JSON.parse(row.likes)
+                            row.dislikes = JSON.parse(row.dislikes)
+                            row.blacklist = JSON.parse(row.blacklist)
+                            row.usersettings = JSON.parse(row.usersettings)
                             resolve(new sysController.createResponse(
                                 's',
                                 `Got user with session data`,

@@ -3,7 +3,7 @@ const sysController = require('../systemController')
 module.exports = (db, fileName, fileSize, user) => {
     return new Promise(async resolve => {
         db.run(`INSERT INTO posts('size', 'file', 'timestamp', 'author') VALUES(?, ?, ?, ?)`,
-            [JSON.stringify(fileSize), fileName, Date.now(), user.login],
+            [JSON.stringify(fileSize), fileName, Date.now(), user],
             (err) => {
                 if (err) {
                     resolve(new sysController.createResponse(

@@ -90,13 +90,14 @@ app.post('/api', async (req, res) => {
 })
 
 // Middleware для проверки пользовательского ключа и уровня доступа
-const checkUserPermissionUpload = (req, res, next) => {
+const checkUserPermissionUpload = async (req, res, next) => {
     const userKey = req.headers['user-key'];
     if (!userKey) {
         return res.send('e/Отказано в доступе.');
     }
 
-    const userPermission = sysController.dbinteract.getUserPermission(userKey);
+    const userPermission = sysController.config.static.user_status[(await sysController.dbinteract.getUserBySessionData('WEB', userKey)).user.status]
+
     if (userPermission < 1) {
         return res.send('e/Отказано в доступе.');
     } else {
@@ -112,7 +113,7 @@ app.post('/upload', checkUserPermissionUpload, (req, res, next) => {
             return
         }
 
-        const fileResult = await sysController.fileProcessor(req.file.path, req.headers['user-key'])
+        const fileResult = await sysController.fileProcessor(req.file.path, { type: "WEB", key: req.headers['user-key'] })
         res.send(JSON.stringify(fileResult));
     })
 })
@@ -153,7 +154,10 @@ app.get('/file', async (req, res) => {
             user_perm = 1;
         }
     } else {
-        user_perm = await sysController.dbinteract.getUserPermission(userKey);
+        const userData = await sysController.dbinteract.getUserBySessionData('WEB', userKey)
+        if (userData.rslt == 's') {
+            user_perm = sysController.config.static.user_status[userData.user.status]
+        }
     }
 
     if (user_perm < 1) {

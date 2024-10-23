@@ -12,12 +12,26 @@ module.exports = async (action, user, request) => {
         let user_data = null;
         let user_permission = 0
 
-
         if (user) {
             const userRslt = await dbinteract.getUserBySessionData(user.type, user.key)
             if (userRslt.rslt == "s") {
                 user_data = userRslt.user
                 user_permission = config.static.user_status[user_data.status]
+
+                const latConfirm = await dbinteract.checkSessionLAT(user.type, user.key)
+                if(latConfirm.rslt=='e'){
+                    resolve(latConfirm)
+                    return
+                }
+                if(!latConfirm.valid){
+                    const sessDelRslt =  await dbinteract.deleteUserSession(user.type, user.key)
+                    if(sessDelRslt.rslt=='s'){
+                        resolve({ result: 'access_rejection', action })
+                        return
+                    }
+                    resolve(sessDelRslt)
+                    return
+                }
             }
         }
 

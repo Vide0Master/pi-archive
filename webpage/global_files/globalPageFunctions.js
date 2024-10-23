@@ -179,9 +179,19 @@ function setFooterText() {
     const actions = createDiv('actions-row', footer)
 
     const github = createAction('Github', actions, () => {
-        window.open('https://t.me/pi_archive_bot', '_blank').focus();
+        window.open('https://github.com/Vide0Master/pi-archive', '_blank').focus();
     })
     github.title='Здесь можно просмотреть код проекта и сообщить о ошибке'
+
+    const verInfo = createDiv('versionInfo',actions)
+    async function getVers() {
+        const versInfo = await request('getVersionInfo')
+        for(const ver in versInfo){
+            const verBlock = createDiv('',verInfo)
+            verBlock.innerHTML=`${ver}: ${versInfo[ver]}`
+        }
+    }
+    getVers()
 }
 
 PInav()

@@ -5,7 +5,7 @@ module.exports = (request, user) => {
         const user_sets = user.usersettings
         const posts = await syscontroller.dbinteract.getPosts(
             request.tags,
-            request.blacklist.concat(user.blacklist || '[]'),
+            request.blacklist.concat(user.blacklist || []),
             (request.page - 1) * (request.postsCount || user_sets.posts_per_page),
             request.postsCount || user_sets.posts_per_page)
 

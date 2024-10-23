@@ -2,10 +2,9 @@ const cmd = require('./core/consoleLogger.js')
 
 const cfg = require('./config.json')
 
-cmd(cfg.vesion.server,[{txt:'SERVER-V',txtc:'green',txtb:'white'}])
-cmd(cfg.vesion.db,[{txt:'DATABASE-V',txtc:'red',txtb:'white'}])
-cmd(cfg.vesion.webpage,[{txt:'WEBPAGE-V',txtc:'cyan',txtb:'white'}])
-cmd(cfg.vesion.tgbot,[{txt:'TGBOT-V',txtc:'blue',txtb:'white'}])
+for (const ver in cfg.vesion) {
+    cmd(cfg.vesion[ver], [{ txt: ver + '-V', txtc: 'cyan', txtb: 'magenta' }])
+}
 
 cmd('w/Starting health check!')
 let healthCheckErrors = 0
@@ -42,7 +41,7 @@ if (!FSExist('/storage/UNLINKED')) {
 cmd('i/End of health check!')
 if (healthCheckErrors > 0) {
     cmd(`w/Fixed ${healthCheckErrors} issues`)
-}else{
+} else {
     cmd(`s/No issues detected`)
 }
 
@@ -50,6 +49,5 @@ if (healthCheckErrors > 0) {
 require('./webpage/index.js')
 
 //starting tg bot
-cmd('w/Telegram bot is temporarily disabled')
-//require('./tg_bot/index.js')
+require('./tg_bot/index.js')
 
