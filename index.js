@@ -21,7 +21,7 @@ if (!FSExist('/storage')) {
 }
 if (!FSExist('/storage/data.db')) {
     cmd('ce/Database is missing!')
-    fs.copyFileSync('./core/emptyData.db', './storage/data.db')
+    fs.copyFileSync('./core/template.db', './storage/data.db')
     healthCheckErrors++
 }
 if (!FSExist('/storage/file_storage')) {
@@ -50,5 +50,6 @@ if (healthCheckErrors > 0) {
 require('./webpage/index.js')
 
 //starting tg bot
+cmd('w/Telegram bot is temporarily disabled')
 //require('./tg_bot/index.js')
 
