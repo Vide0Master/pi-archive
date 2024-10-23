@@ -1,7 +1,6 @@
 
 const SysController = require('../systemController.js')
 
-//экспорт функции
 module.exports = (request) => {
     return new Promise(async resolve => {
         const data = await SysController.dbinteract.getPostData(request.id)
@@ -14,7 +13,7 @@ module.exports = (request) => {
         if (!data.post) {
             resolve(new SysController.createResponse(
                 'w',
-                'Такого поста нету!'
+                '{{S_API_GPD_PM}}'
             ))
             return
         }

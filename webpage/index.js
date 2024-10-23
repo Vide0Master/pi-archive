@@ -45,7 +45,7 @@ const path = require('path');
 const fs = require('fs')
 
 // Модуль веб-страницы
-sysController.log('i/Запуск веб страницы')
+sysController.log('i/Starting WEB server...')
 
 const app = express();
 
@@ -90,13 +90,14 @@ app.post('/api', async (req, res) => {
 })
 
 // Middleware для проверки пользовательского ключа и уровня доступа
-const checkUserPermissionUpload = (req, res, next) => {
+const checkUserPermissionUpload = async (req, res, next) => {
     const userKey = req.headers['user-key'];
     if (!userKey) {
         return res.send('e/Отказано в доступе.');
     }
 
-    const userPermission = sysController.dbinteract.getUserPermission(userKey);
+    const userPermission = sysController.config.static.user_status[(await sysController.dbinteract.getUserBySessionData('WEB', userKey)).user.status]
+
     if (userPermission < 1) {
         return res.send('e/Отказано в доступе.');
     } else {
@@ -112,7 +113,7 @@ app.post('/upload', checkUserPermissionUpload, (req, res, next) => {
             return
         }
 
-        const fileResult = await sysController.fileProcessor(req.file.path, req.headers['user-key'])
+        const fileResult = await sysController.fileProcessor(req.file.path, { type: "WEB", key: req.headers['user-key'] })
         res.send(JSON.stringify(fileResult));
     })
 })
@@ -132,42 +133,45 @@ app.get('/file', async (req, res) => {
             const tempKeyCheck = await sysController.dbinteract.getTempKeyData(tempKey);
 
             if (tempKeyCheck.rslt === 'e') {
-                return res.status(500).send('<h1>500</h1>Ошибка сервера!');
+                return res.status(500).send('<h1>500</h1>Server error!');
             }
 
             if (!tempKeyCheck.data) {
-                return res.status(403).send('<h1>403</h1>Отказано в доступе!<br>Истёк срок службы ключа.');
+                return res.status(403).send('<h1>403</h1>Access rejected!<br>Access key expired.');
             }
 
             const tempKeyData = tempKeyCheck.data;
 
             if (tempKeyData.postID != postID) {
-                return res.status(403).send(`<h1>403</h1>Отказано в доступе!<br>Ключ не принадлежит посту ID:${postID}.`);
+                return res.status(403).send(`<h1>403</h1>Access rejected!<br>Access key does not matching post ID:${postID}.`);
             }
 
             if (tempKeyData.expires !== 'infinite' && tempKeyData.expires < Date.now()) {
                 await sysController.dbinteract.deleteExpiredTempKey(tempKeyData.key);
-                return res.status(403).send('<h1>403</h1>Отказано в доступе!<br>Истёк срок службы ключа.');
+                return res.status(403).send('<h1>403</h1>Access rejected!<br>Access key expired.');
             }
 
             user_perm = 1;
         }
     } else {
-        user_perm = await sysController.dbinteract.getUserPermission(userKey);
+        const userData = await sysController.dbinteract.getUserBySessionData('WEB', userKey)
+        if (userData.rslt == 's') {
+            user_perm = sysController.config.static.user_status[userData.user.status]
+        }
     }
 
     if (user_perm < 1) {
-        return res.status(403).send('<h1>403</h1>Отказано в доступе!');
+        return res.status(403).send('<h1>403</h1>Access rejected!');
     }
 
     if (user_perm == 'e') {
-        return res.status(500).send('<h1>500</h1>Ошибка сервера!');
+        return res.status(500).send('<h1>500</h1>Server error!');
     }
 
     const file = await sysController.dbinteract.getFileNameByPostID(postID);
 
     if (!file) {
-        return res.status(500).send('<h1>500</h1>Запись о файле утеряна!\nСрочно сообщите администратору!');
+        return res.status(500).send('<h1>500</h1>Record data missing!\nReport to admin ASAP!');
     }
 
     if (file.rslt === 'e') {
@@ -195,10 +199,10 @@ app.get('/file', async (req, res) => {
             if (fs.existsSync(thumbnailPath)) {
                 res.sendFile(thumbnailPath);
             } else {
-                res.status(404).send('<h1>404</h1>Миниатюра видео не найдена!');
+                res.status(404).send('<h1>404</h1>Preview not found!');
             }
         } else {
-            res.status(400).send('<h1>400</h1>Неподдерживаемый тип файла для миниатюры!');
+            res.status(400).send('<h1>400</h1>Unsopported filetype for preview!');
         }
         return;
     }
@@ -227,13 +231,13 @@ app.get('/file', async (req, res) => {
 
         fileStream.pipe(res);
     } else {
-        res.sendFile(filepath,()=>{});
+        res.sendFile(filepath, () => { });
     }
 });
 
 //Запуск слушателя на порту из config.json
 app.listen(sysController.config.static.web_app.port, () => {
-    sysController.log('s/Веб страница запущена успешно')
+    sysController.log('s/WEB server started succesfully!')
 });
 
-//sysController.dbinteract.AUDITPosts()
+sysController.dbinteract.AUDITPosts()

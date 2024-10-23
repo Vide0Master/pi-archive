@@ -12,10 +12,10 @@ module.exports = (db, user, expires, post) => {
             err => {
                 resolve(new sysController.createResponse(
                     's',
-                    `Успешно создан временный ключ`,
+                    `{{S_DB_CTK_S}}`,
                     { key: tempKey, expires: expires, post },
                     err,
-                    `Ошибка создания временного ключа`
+                    `{{S_DB_CTK_E}}`
                 ))
             })
     })

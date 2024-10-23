@@ -5,12 +5,13 @@ module.exports = (db, postID, userKey) => {
         db.run(`UPDATE users SET avatarpostid = ? WHERE auth_key = ?`,
             [postID, userKey],
             (err) => {
-                if (err) {
-                    resolve({ rslt: 'e', msg: err })
-                    sysController.log(`e/Ошибка установки ID аватара: ${err}`)
-                } else {
-                    resolve({rslt:'s', msg:`s/Успешно установлен аватар ID:${postID}`})
-                }
+                resolve(new sysController.createResponse(
+                    's',
+                    '{{S_DB_SUA_S}}',
+                    {},
+                    err,
+                    '{{S_DB_SUA_E}}'
+                ))
             })
     })
 }

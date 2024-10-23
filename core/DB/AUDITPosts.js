@@ -2,43 +2,62 @@ const sysController = require('../systemController')
 const fs = require('fs')
 const path = require('path')
 
+function audLog(txt) {
+    sysController.log(txt, [{ txt: 'AUDIT', txtc: 'red', txtb: 'white' }])
+}
+
 module.exports = (db) => {
     return new Promise(async resolve => {
         const dbAudit = await new Promise(resolve => {
             db.all(`SELECT * FROM posts`, (err, rows) => {
                 resolve(new sysController.createResponse(
                     's',
-                    `Успешно получены посты из БД для аудита`,
+                    `Got posts from DB for audit`,
                     { posts: rows },
                     err,
-                    `Ошибка получения постов из БД для аудита`
+                    `Successfully got posts from DB for audit`
                 ))
             })
         })
+
+        audLog(`${dbAudit.rslt}/${dbAudit.msg}`)
+        if (dbAudit.rslt == 'e') {
+            return
+        }
 
         const fileAudit = await new Promise(resolve => {
             fs.readdir(path.join(__dirname, `../../storage/file_storage`), (err, files) => {
                 resolve(new sysController.createResponse(
                     's',
-                    `Успешно получен список файлов для аудита`,
+                    `Got posts file list for audit`,
                     { files: files },
                     err,
-                    `Ошибка получения списка файлов для аудита`
+                    `Error while getting posts file list for audit`
                 ))
             })
         })
+
+        audLog(`${fileAudit.rslt}/${fileAudit.msg}`)
+        if (fileAudit.rslt == 'e') {
+            return
+        }
 
         const thumbAudit = await new Promise(resolve => {
             fs.readdir(path.join(__dirname, `../../storage/video_thumbnails`), (err, files) => {
                 resolve(new sysController.createResponse(
                     's',
-                    `Успешно получен список файлов для аудита`,
+                    `Got video thumbnails file list for audit`,
                     { files: files },
                     err,
-                    `Ошибка получения списка файлов для аудита`
+                    `Error while getting video thumbnails file list for audit`
                 ))
             })
         })
+
+        audLog(`${thumbAudit.rslt}/${thumbAudit.msg}`)
+        if (thumbAudit.rslt == 'e') {
+            return
+        }
 
         const audit_list = { dbAud: [], postFiles: [], thumbs: [] }
 
@@ -122,14 +141,14 @@ async function WriteAuditFile(data) {
             if (line.unlinked) {
                 auditTextLine += `FILE [${line.filename}] IS UNRELATED TO ANY POST\n\n`
 
-                if(sysController.config.static.AUDITCONTROL=='MOVE'){
+                if (sysController.config.static.AUDITCONTROL == 'MOVE') {
                     await new Promise(resolve => {
                         fs.rename(
                             path.join(__dirname, `../../storage/file_storage`, line.filename),
                             path.join(__dirname, `../../storage/UNLINKED`, line.filename),
-                            (err)=>{
-                                if(err){
-                                    sysController.log(`e/Ошибка перемещения файла [${line.filename}] [AUDIT]`)
+                            (err) => {
+                                if (err) {
+                                    sysController.log(`e/Error moving file [${line.filename}] [AUDIT]`)
                                 }
                                 resolve()
                             }
@@ -148,15 +167,15 @@ async function WriteAuditFile(data) {
 
             if (line.unlinked) {
                 auditTextLine += `THUMB [${line.filename}] IS UNRELATED TO ANY VIDEO`
-                
-                if(sysController.config.static.AUDITCONTROL=='MOVE'){
+
+                if (sysController.config.static.AUDITCONTROL == 'MOVE') {
                     await new Promise(resolve => {
                         fs.rename(
                             path.join(__dirname, `../../storage/file_storage`, line.filename),
                             path.join(__dirname, `../../storage/UNLINKED`, line.filename),
-                            (err)=>{
-                                if(err){
-                                    sysController.log(`e/Ошибка перемещения файла [${line.filename}] [AUDIT]`)
+                            (err) => {
+                                if (err) {
+                                    sysController.log(`e/Error moving file [${line.filename}] [AUDIT]`)
                                 }
                                 resolve()
                             }
@@ -185,12 +204,12 @@ async function WriteAuditFile(data) {
             }
             const audit_data = new sysController.createResponse(
                 's',
-                `Успешно создан файл аудита`,
+                `Created DB audit file`,
                 {},
                 err,
-                `Ошибка создания файла аудита`
+                `Error creating DB audit file:`
             )
-            sysController.log(`i/${audit_data.msg}`)
+            audLog(`${audit_data.rslt}/${audit_data.msg}`)
         }
     )
 }

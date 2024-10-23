@@ -17,11 +17,6 @@ module.exports = (request, userData) => {
             //region g grp b id
             case 'getGroupByID': {
                 const group = await sysController.dbinteract.getPostGroupByID(request.id)
-                if (group.rslt == 'e') {
-                    resolve(group)
-                    sysController.log(group.rslt + '/' + group.msg)
-                    return
-                }
                 resolve(group)
             }; break;
 
@@ -41,7 +36,6 @@ module.exports = (request, userData) => {
                 const currentPostListRslt = await sysController.dbinteract.getPostGroupByID(request.id)
                 if (currentPostListRslt.rslt == 'e') {
                     resolve(currentPostListRslt)
-                    sysController.log(currentPostListRslt.rslt + '/' + currentPostListRslt.msg)
                     return
                 }
 
@@ -52,7 +46,7 @@ module.exports = (request, userData) => {
                     if (grp.group.includes(postString) && grp.id != request.id) {
                         resolve(new sysController.createResponse(
                             'w',
-                            `Пост нельзя присвоить в 2 разные группы. Уже присвоен группе ID${grp.id}`
+                            `{{S_DB_CPG_MGAE}} ID${grp.id}`
                         ))
                     }
                 }

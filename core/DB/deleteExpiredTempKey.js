@@ -7,10 +7,10 @@ module.exports = (db, key) => {
             err => {
                 resolve(new sysController.createResponse(
                     's',
-                    `Успешно удалён временный ключ поста`,
+                    `Temporary key deleted`,
                     {},
                     err,
-                    `Ошибка удаления временного ключа`
+                    `Error deleting temporary key`
                 ))
             })
     })

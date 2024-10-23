@@ -6,12 +6,13 @@ module.exports = (db, postID, tags) => {
         db.run(`UPDATE posts SET tags = ? WHERE id = ?`,
             [JSON.stringify(tags), postID],
             (err) => {
-                if (err) {
-                    resolve({ rslt: 'e', msg: `e/Ошибка обновления тегов поста [${postID}] [updateTags]: ${err}` })
-                    SysController.log(`e/Ошибка обновления тегов поста [${postID}] [updateTags]: ${err}`)
-                } else {
-                    resolve({ rslt: 's', msg: `s/Теги успешно изменены!` })
-                }
+                resolve(new SysController.createResponse(
+                    's',
+                    `{{S_DB_UT_S}} ${postID}`,
+                    {},
+                    err,
+                    `{{S_DB_UT_E}} ${postID}`
+                ))
             }
         )
     })

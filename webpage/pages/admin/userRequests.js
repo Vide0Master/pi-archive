@@ -1,7 +1,12 @@
 async function updateRequestList() {
 
-    const data = await request('getAdminRequests')
-    console.log(data)
+    let data = await request('getAdminRequests')
+    if (data.rslt != 's') {
+        alert(data.rslt + '/' + data.msg)
+    } else {
+        data = data.requests
+    }
+    if (DEVMODE) console.log(data)
     const request_list = document.querySelector('.user-requests-block').querySelector('.list')
     request_list.innerHTML = ''
     const request_list_label = document.querySelector('.user-requests-block').querySelector('.label')

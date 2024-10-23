@@ -1,11 +1,15 @@
 const SysController = require('../systemController')
 
-//экспорт функции
 module.exports = (request, userData) => {
     return new Promise(async resolve => {
         const tags = request.taglist
         const limit = request.tagcount
-        const DBtags = await SysController.dbinteract.getTagList(limit)
+        let DBtags = await SysController.dbinteract.getTagList(limit)
+        if (DBtags.rslt != 's') {
+            resolve(DBtags)
+            return
+        }
+        DBtags = DBtags.tagList
         const userblacklist = userData.blacklist
         let tag_array = []
         if (tags) {

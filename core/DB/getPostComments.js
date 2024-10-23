@@ -7,10 +7,10 @@ module.exports = (db, postID) => {
             (err, rows) => {
                 resolve(new sysController.createResponse(
                     's',
-                    `Получен список комментариев поста [${postID}]`,
+                    `{{S_DB_GPC_S}} [${postID}]`,
                     { comments: rows },
                     err,
-                    `Ошибка получения комментариев поста [${postID}] [getUserMessages]:`
+                    `{{S_DB_GPC_E}} [${postID}]`
                 ))
             })
     })

@@ -131,16 +131,10 @@ let post_data;
                     }
                     break
                 case 'timestamp':
-                    elm.innerText = `Пост создан: ${formatTimestamp(line_val)}`;
+                    elm.innerText = `Пост создан: ${parseTimestamp(line_val)}`;
                     break;
             }
         }
-    }
-
-    //region format time
-    function formatTimestamp(timestamp) {
-        const currentdate = new Date(Math.floor(timestamp));
-        return `${currentdate.getDate()}/${currentdate.getMonth() + 1}/${currentdate.getFullYear()} ${currentdate.getHours()}:${currentdate.getMinutes()}:${currentdate.getSeconds()}`;
     }
 
     //region admin actions
@@ -190,7 +184,7 @@ let post_data;
                         }
                     })
                 createAction(
-                    'Изменить порядок постов в группе',
+                    'Редактировать группу',
                     document.querySelector('.post-actions'),
                     () => {
                         const container = createBlurOverlay()
@@ -201,10 +195,25 @@ let post_data;
                             }
                         })
 
-                        const reord_over = reorderOverlay(post_data.postGroupData, false, false, async (result, data) => {
+                        const reord_over = reorderOverlay(post_data.postGroupData, true, true, async (result, data) => {
                             switch (result) {
                                 case 'cancel': {
                                     container.remove()
+                                }; break;
+                                case 'delete': {
+                                    if (confirm(`Вы уверены что хотите удалить группу ID:${post_data.postGroupData.id}|${post_data.postGroupData.name}`)) {
+                                        const deleteResult = await request('controlGroup',
+                                            {
+                                                type: 'deleteGroup',
+                                                groupID: post_data.postGroupData.id
+                                            })
+                                        if (deleteResult.rslt == 's') {
+                                            container.remove()
+                                            alert(`e/${deleteResult.msg}`)
+                                        } else {
+                                            alert(`${deleteResult.rslt}/${deleteResult.msg}`, 5000)
+                                        }
+                                    }
                                 }; break;
                                 case 'reorder': {
                                     const reorderResult = await request('controlGroup',
@@ -216,7 +225,22 @@ let post_data;
                                     if (reorderResult.rslt == 's') {
                                         container.remove()
                                     }
-                                    alert(`${reorderResult.rslt}/${reorderResult.msg}`)
+                                    alert(`${reorderResult.rslt}/${reorderResult.msg}`, 5000)
+                                }; break;
+                                case 'rename': {
+                                    container.remove()
+                                    const new_name = showPopup(title = 'Измените название группы', defaultText = post_data.postGroupData.name)
+                                    new_name.then(async value => {
+                                        if (value) {
+                                            const rename_result = await request('controlGroup',
+                                                {
+                                                    type: 'renameGroup',
+                                                    groupID: post_data.postGroupData.id,
+                                                    newName: value
+                                                })
+                                            alert(`${rename_result.rslt}/${rename_result.msg}`, 5000)
+                                        }
+                                    })
                                 }; break;
                             }
                         })
@@ -306,7 +330,7 @@ let post_data;
             const group_selector = createSelect(groups_select, "Выберите группу", async (value) => {
                 switch (value) {
                     case 'create_group': {
-                        const groupName = await showPopup('Введите название коллекции')
+                        const groupName = await showPopup('Введите название группы')
                         if (groupName) {
                             const group_create_result = await request('controlGroup', { type: 'createGroup', posts: [post_data.id], name: groupName })
                             alert(group_create_result.rslt + '/' + group_create_result.msg, 5000)

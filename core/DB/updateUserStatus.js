@@ -8,10 +8,10 @@ module.exports = (db, login, status) => {
             (err) => {
                 resolve(new SysController.createResponse(
                     's',
-                    `Успешно обновлен статус [${login}]`,
+                    `{{S_DB_UST_S}} ${login}`,
                     {},
                     err,
-                    'Ошибка обновления статуса пользователя'
+                    '{{S_DB_UST_E}}'
                 ))
             })
     })

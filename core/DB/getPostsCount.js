@@ -1,8 +1,8 @@
-const consoleLogger = require('../consoleLogger')
+const consoleLogger = require('../consoleLogger');
+const SysController = require('../systemController');
 
 module.exports = (db, tags = [], blacklist = []) => {
     return new Promise((resolve) => {
-        // Создание SQL-запроса с условиями LIKE, NOT LIKE и параметрами LIMIT и OFFSET
         let query = 'SELECT COUNT(*) as count FROM posts';
         let params = []
 
@@ -41,15 +41,14 @@ module.exports = (db, tags = [], blacklist = []) => {
             }
         }
 
-        // Выполнение запроса
         db.get(query, params, (err, row) => {
-            if (err) {
-                resolve({ rslt: 'e', msg: err });
-                consoleLogger(`e/Ошибка получения количества постов[getPostCount]: ${err}`);
-                console.log(err)
-            } else {
-                resolve(row.count);
-            }
+            resolve(new SysController.createResponse(
+                's',
+                '{{S_DB_GPCN_S}}',
+                { count: row.count },
+                err,
+                '{{S_DB_GPCN_E}}'
+            ))
         });
     });
 }

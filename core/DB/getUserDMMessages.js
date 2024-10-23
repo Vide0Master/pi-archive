@@ -7,17 +7,11 @@ module.exports = (db, userRQ, userK) => {
             (err, rows) => {
                 resolve(new sysController.createResponse(
                     's',
-                    'Успешно получены сообщения',
+                    `{{S_DB_GUDMM_S}} ${userRQ}`,
                     {messages:rows},
                     err,
-                    'Ошибка получения списка сообщения:'
+                    `{{S_DB_GUDMM_E}} ${userRQ}`
                 ))
-                if (err) {
-                    sysController.log(`e/Ошибка получения сообщений [getUserDMMessages]: ${err}`)
-                    resolve({ rslt: 'e', msg: err })
-                } else {
-                    resolve(rows)
-                }
             })
     })
 }

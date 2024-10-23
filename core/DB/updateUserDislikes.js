@@ -7,10 +7,10 @@ module.exports = (db, likes, userLogin) => {
             (err) => {
                 resolve(new sysController.createResponse(
                     's',
-                    `Обновлен список дизлайков ${userLogin}`,
+                    `{{S_DB_UUD_S}} ${userLogin}`,
                     {},
                     err,
-                    `Ошибка обновления дизлайков ${userLogin}`
+                    `{{S_DB_UUD_E}} ${userLogin}`
                 ))
             })
     })

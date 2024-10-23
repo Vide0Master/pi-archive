@@ -1,6 +1,12 @@
 {
     "DEVMODE": false,
     "AUDITCONTROL": "MOVE",
+    "vesion": {
+        "Server": "b0.1.2",
+        "DB": "b1.1",
+        "Webpage": "b0.1.2",
+        "TGbot": "TD"
+    },
     "user_status": {
         "unconfirmed": 0,
         "user": 1,
@@ -13,6 +19,8 @@
             "AuthyPageAccessCheck": 0,
             "register": 0,
             "login": 0,
+            "sessionController":0,
+            "getVersionInfo":1,
             "getWelcomeText": 1,
             "getUserProfileData": 1,
             "changeUserName": 1,
@@ -55,11 +63,13 @@
         },
         "post_limits": {
             "max_tags": 50,
-            "max_desc_length": 5000
-        }
+            "max_desc_length": 2000
+        },
+        "sessionTimeLimit": 259200000
     },
     "standartUserSettings": {
-        "posts_per_page": 50
+        "posts_per_page": 50,
+        "lang": "ENG"
     },
     "user_status_translation": {
         "unconfirmed": "неподтверждён",

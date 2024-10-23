@@ -1,8 +1,7 @@
-const consoleLogger = require('../systemController').log
+const SysController = require('../systemController');
 
 module.exports = (db, tags = [], blacklist = [], from, posts) => {
     return new Promise((resolve) => {
-        // Создание SQL-запроса с условиями LIKE, NOT LIKE и параметрами LIMIT и OFFSET
         let query = 'SELECT * FROM posts';
         let params = []
 
@@ -45,15 +44,14 @@ module.exports = (db, tags = [], blacklist = [], from, posts) => {
         query += ' LIMIT ? OFFSET ?';
         params.push(posts, from);
 
-        // Выполнение запроса
         db.all(query, params, (err, rows) => {
-            if (err) {
-                resolve({ rslt: 'e', msg: `e/Ошибка запроса базы данных [getPosts]: ${err}` });
-                consoleLogger(`e/Ошибка запроса базы данных [getPosts]: ${err}`);
-                console.log(err)
-            } else {
-                resolve(rows);
-            }
+            resolve(new SysController.createResponse(
+                's',
+                '{{S_DB_GPSTS_S}}',
+                { posts: rows },
+                err,
+                '{{S_DB_GPSTS_E}}'
+            ))
         });
     });
 };

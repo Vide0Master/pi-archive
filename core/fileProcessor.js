@@ -7,7 +7,7 @@ const path = require('path')
 const SysController = require('./systemController.js')
 const Response = require('./responseConstructor.js')
 
-module.exports = (filePath, userKey) => {
+module.exports = (filePath, sessionData) => {
     return new Promise(async resolve => {
         try {
             const fileSize = {
@@ -24,7 +24,9 @@ module.exports = (filePath, userKey) => {
                 const metadata = await sharp(filePath).metadata();
                 fileSize.x = metadata.width
                 fileSize.y = metadata.height
-                const dbuser = await dbinteract.getUserByKey(userKey)
+
+
+                const dbuser = (await dbinteract.getUserBySessionData(sessionData.type, sessionData.key)).user.login
                 const result = await dbinteract.createPost(save_file_name + ext, fileSize, dbuser);
 
                 const systemTags = []
@@ -48,7 +50,7 @@ module.exports = (filePath, userKey) => {
                 }
 
                 await dbinteract.updateTags(result.id, systemTags)
-                
+
                 if (result.rslt == 's') {
                     resolve(new Response(
                         's',
@@ -71,6 +73,7 @@ module.exports = (filePath, userKey) => {
 
                     const width = metadata.streams[0].width;
                     const height = metadata.streams[0].height;
+
 
                     // Создаем превью из видео с помощью fluent-ffmpeg
                     const thumbnailPath = path.join(__dirname, '../storage/video_thumbnails');
@@ -101,7 +104,8 @@ module.exports = (filePath, userKey) => {
                     fileSize.x = width
                     fileSize.y = height
 
-                    const dbuser = await dbinteract.getUserByKey(userKey)
+
+                    const dbuser = (await dbinteract.getUserBySessionData(sessionData.type, sessionData.key)).user.login
                     const result = await dbinteract.createPost(save_file_name + ext, fileSize, dbuser);
 
                     const systemTags = []
@@ -115,12 +119,16 @@ module.exports = (filePath, userKey) => {
                         }; break;
                     }
 
+                    const audioStreams = metadata.streams.filter(stream => stream.codec_type === 'audio');
+                    const hasAudio = audioStreams.length > 0;
+                    if(hasAudio){
+                        systemTags.push('with_sound')
+                    }
+
                     systemTags.push('video')
 
                     await dbinteract.updateTags(result.id, systemTags)
 
-
-                    
                     if (result.rslt == 's') {
                         resolve(new Response(
                             's',

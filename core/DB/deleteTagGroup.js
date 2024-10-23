@@ -7,10 +7,10 @@ module.exports = (db, groupname) => {
             err => {
                 resolve(new sysController.createResponse(
                     's',
-                    `Успешно удалена группа тегов "${groupname}"`,
+                    `{{S_DB_DTG_S}} "${groupname}"`,
                     {},
                     err,
-                    `Ошибка удаления группы тегов "${groupname}"`
+                    `{{S_DB_DTG_S}} "${groupname}"`
                 ))
             }
         )

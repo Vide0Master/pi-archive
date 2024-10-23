@@ -61,14 +61,6 @@ module.exports = class Response {
     }
 
     /**
-     * Проверяет, не является ли ответ ошибкой.
-     * @returns {boolean} True, если ответ не является ошибкой.
-     */
-    static isNotErr() {
-        return this.rslt != 'e';
-    }
-
-    /**
      * Проверяет, является ли ответ успешным.
      * @returns {boolean} True, если ответ является успешным.
      */

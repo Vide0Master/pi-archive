@@ -9,10 +9,10 @@ module.exports = (db, groupName, groupPosts, owner) => {
             (err) => {
                 resolve(new sysController.createResponse(
                     's',
-                    `Успешно создана группа [${groupName}]`,
+                    `{{S_DB_CRPG_S}} [${groupName}]`,
                     {},
                     err,
-                    `Ошибка создания группы [${groupName}]`
+                    `{{S_DB_CRPG_E}} [${groupName}]`
                 ))
             })
     })

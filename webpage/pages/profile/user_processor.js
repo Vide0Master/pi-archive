@@ -82,6 +82,8 @@ function showUserData(userData) {
         postsCount: 'Количество постов: '
     }
 
+    console.log(userData.data)
+
     for (const line in usr_data_list) {
         const ln = createDiv('data-line')
         container.appendChild(ln)
@@ -100,6 +102,9 @@ function showUserData(userData) {
                 } else {
                     ln.remove()
                 }
+            }; break;
+            case 'creationdate': {
+                ln.innerHTML = usr_data_list[line] + parseTimestamp(userData.data[line])
             }; break;
             case 'postsCount': {
                 ln.innerHTML = usr_data_list[line]
@@ -139,9 +144,9 @@ function showActions(userData, activeUser) {
                 const rslt = await request('changeUserName', { userKey: localStorage.getItem('userKey') || sessionStorage.getItem('userKey'), newName: new_name })
 
                 if (rslt.rslt == 's') {
-                    window.location.href = `/profile?alert=s/Имя+пользователя+изменено+успешно!/5000`
+                    window.location.href = `/profile?alert=${rslt.rslt}/${rslt.msg.split(' ').join('+')}/5000`
                 } else {
-                    alert(rslt.msg, 5000)
+                    alert(rslt.rslt + '/' + rslt.msg, 5000)
                 }
             }
         })
@@ -151,7 +156,7 @@ function showActions(userData, activeUser) {
             const new_pasas = prompt('Введите новый пароль:')
             if (new_pasas) {
                 const rslt = await request('changeUserPassword', { userKey: localStorage.getItem('userKey') || sessionStorage.getItem('userKey'), newPassword: CryptoJS.SHA256(new_pasas).toString() })
-                alert(rslt.msg, 5000)
+                alert(rslt.rslt + '/' + rslt.msg, 5000)
             }
         })
 
@@ -179,84 +184,6 @@ function showActions(userData, activeUser) {
                 })
                 alert(result.msg)
             }
-        })
-
-        //region edit grp
-        createAction('Редактировать группу', container, async () => {
-            const container = createBlurOverlay()
-
-            container.addEventListener('click', (e) => {
-                if (e.target === container) {
-                    container.remove()
-                }
-            })
-
-            const selector_div = createDiv('group-editor-selector-container')
-            container.appendChild(selector_div)
-
-            const user_post_groups = await request('controlGroup', { type: 'getMyGroups' })
-            const groups_select = []
-            for (const grp of user_post_groups.groups) {
-                groups_select.push({ name: `ID:${grp.id}|${grp.name}`, value: grp.id })
-            }
-            const group_selector = createSelect(groups_select, "Выберите группу", async (value) => {
-                selector_div.remove()
-
-                const selected_group = user_post_groups.groups.find(item => item.id == value)
-
-                const reord_over = reorderOverlay(selected_group, true, true, async (result, data) => {
-                    switch (result) {
-                        case 'cancel': {
-                            container.remove()
-                        }; break;
-                        case 'delete': {
-                            if (confirm(`Вы уверены что хотите удалить группу ID:${selected_group.id}|${selected_group.name}`)) {
-                                const deleteResult = await request('controlGroup',
-                                    {
-                                        type: 'deleteGroup',
-                                        groupID: selected_group.id
-                                    })
-                                if (deleteResult.rslt == 's') {
-                                    container.remove()
-                                    alert(`e/${deleteResult.msg}`)
-                                } else {
-                                    alert(`${deleteResult.rslt}/${deleteResult.msg}`, 5000)
-                                }
-                            }
-                        }; break;
-                        case 'reorder': {
-                            const reorderResult = await request('controlGroup',
-                                {
-                                    type: 'reorderGroup',
-                                    newOrder: data,
-                                    groupID: selected_group.id
-                                })
-                            if (reorderResult.rslt == 's') {
-                                container.remove()
-                            }
-                            alert(`${reorderResult.rslt}/${reorderResult.msg}`, 5000)
-                        }; break;
-                        case 'rename': {
-                            container.remove()
-                            const new_name = showPopup(title = 'Измените название группы', defaultText = selected_group.name)
-                            new_name.then(async value => {
-                                if (value) {
-                                    const rename_result = await request('controlGroup',
-                                        {
-                                            type: 'renameGroup',
-                                            groupID: selected_group.id,
-                                            newName: value
-                                        })
-                                    alert(`${rename_result.rslt}/${rename_result.msg}`, 5000)
-                                }
-                            })
-                        }; break;
-                    }
-                })
-
-                container.appendChild(reord_over)
-            })
-            selector_div.appendChild(group_selector)
         })
     } else {
         //region wr msg
@@ -289,7 +216,7 @@ async function getFavs(favs, isActiveUser) {
     const fav_label = createDiv('label', favs_container)
     fav_label.innerHTML = 'Избранное'
 
-    if(isActiveUser) fav_label.innerHTML += ' пользователя'
+    if (isActiveUser) fav_label.innerHTML += ' пользователя'
 
 
     const favs_zone = createDiv('favs-zone', favs_container)

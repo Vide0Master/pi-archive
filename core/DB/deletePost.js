@@ -9,10 +9,10 @@ module.exports = (db, postID) => {
             (err) => {
                 resolve(new SysController.createResponse(
                     's',
-                    `Пост ${postID} успешно удалён`,
+                    `{{S_DB_DP_S}} ${postID}`,
                     {},
                     err,
-                    'Ошибка уддаления поста [deltePost]'
+                    `{{S_DB_DP_E}} ${postID}`
                 ))
             }
         )

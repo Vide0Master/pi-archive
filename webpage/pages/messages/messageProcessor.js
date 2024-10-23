@@ -4,7 +4,7 @@ async function getMessages() {
     const DMs = await request('controlUserDM', { type: 'getUserDMs' })
 
     const chat_column = document.querySelector('.chat-column')
-    for (const dm of DMs) {
+    for (const dm of DMs.loginsList) {
         const user_dm_opener = createDiv('user-db-link', chat_column)
 
         const comment_author = createAction('', user_dm_opener)
@@ -60,7 +60,7 @@ async function getMessages() {
             parseUserLogin(msg.from, userName)
 
             const time_info = createDiv('msg-gray-text', message_header)
-            time_info.innerHTML = parseTimestmap(msg.timestamp)
+            time_info.innerHTML = parseTimestamp(msg.timestamp)
 
             const read_status = createDiv('msg-gray-text', message_header)
             read_status.innerHTML = msg.read == 0 ? "Не прочитано" : "Прочитано"

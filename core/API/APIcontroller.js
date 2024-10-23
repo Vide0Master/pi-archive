@@ -1,37 +1,54 @@
 
-//модуль работы со всеми API
+//API
 
 const dbinteract = require('../systemController.js').dbinteract
 const APIrestrictions = require('../systemController.js').config.static.restrictions.api
 const consoleLogger = require('../consoleLogger.js')
+const LanguageManager = require('../lang/langController.js')
+const config = require('../systemController.js').config
 
-module.exports = async (action, user, request, isTGbotRequest) => {
+module.exports = async (action, user, request) => {
     return new Promise(async resolve => {
-        //переменная для данных пользователя (технические функции и доп проверки безопасности)
-        let user_data;
-        //получить уровень допуска пользователя
+        let user_data = null;
         let user_permission = 0
-        if (!isTGbotRequest) {
-            user_permission = await dbinteract.getUserPermission(user)
-            user_data = await dbinteract.getUserByKey(user)
-        } else {
-            user_permission = await dbinteract.getUserPermissionTGID(user)
-            user_data = await dbinteract.getUserByTGID(user)
+
+        if (user) {
+            const userRslt = await dbinteract.getUserBySessionData(user.type, user.key)
+            if (userRslt.rslt == "s") {
+                user_data = userRslt.user
+                user_permission = config.static.user_status[user_data.status]
+
+                const latConfirm = await dbinteract.checkSessionLAT(user.type, user.key)
+                if(latConfirm.rslt=='e'){
+                    resolve(latConfirm)
+                    return
+                }
+                if(!latConfirm.valid){
+                    const sessDelRslt =  await dbinteract.deleteUserSession(user.type, user.key)
+                    if(sessDelRslt.rslt=='s'){
+                        resolve({ result: 'access_rejection', action })
+                        return
+                    }
+                    resolve(sessDelRslt)
+                    return
+                }
+            }
         }
 
+        let userLanguage
+        if (!user_data || !user_data.usersettings || !user_data.usersettings.lang) userLanguage = 'ENG'
         if (user_permission >= APIrestrictions[action]) {
-            //если уровень превышает или равен, то
             try {
-                //вызвать API файл и обработать запрос
                 const rqst = require(`./${action}.js`)
-                resolve(await rqst(request, user_data))
+                const rqst_rslt = await rqst(request, user_data)
+                if (rqst_rslt.msg)
+                    rqst_rslt.msg = LanguageManager.parseLine(rqst_rslt.msg, LanguageManager.translations[userLanguage])
+                resolve(rqst_rslt)
             } catch (err) {
-                console.log(err)
-                resolve({ result: 'API_error', error: err.message })
-                consoleLogger(`e/Ошибка модуля API [${action}]: ${err.message}`)
+                resolve({ rslt: 'e', msg: err.message })
+                consoleLogger(`e/[${action}]: ${err.message}`, [{ txt: 'API', txtc: "blue", txtb: "white" }, { txt: action, txtc: "white", txtb: "blue" }])
             }
         } else {
-            //иначе отказать
             resolve({ result: 'access_rejection', action })
         }
     })

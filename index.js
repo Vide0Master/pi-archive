@@ -1,4 +1,11 @@
 const cmd = require('./core/consoleLogger.js')
+
+const cfg = require('./config.json')
+
+for (const ver in cfg.vesion) {
+    cmd(cfg.vesion[ver], [{ txt: ver + '-V', txtc: 'cyan', txtb: 'magenta' }])
+}
+
 cmd('w/Starting health check!')
 let healthCheckErrors = 0
 const fs = require('fs')
@@ -13,7 +20,7 @@ if (!FSExist('/storage')) {
 }
 if (!FSExist('/storage/data.db')) {
     cmd('ce/Database is missing!')
-    fs.copyFileSync('./core/emptyData.db', './storage/data.db')
+    fs.copyFileSync('./core/template.db', './storage/data.db')
     healthCheckErrors++
 }
 if (!FSExist('/storage/file_storage')) {
@@ -34,7 +41,7 @@ if (!FSExist('/storage/UNLINKED')) {
 cmd('i/End of health check!')
 if (healthCheckErrors > 0) {
     cmd(`w/Fixed ${healthCheckErrors} issues`)
-}else{
+} else {
     cmd(`s/No issues detected`)
 }
 
@@ -43,3 +50,4 @@ require('./webpage/index.js')
 
 //starting tg bot
 require('./tg_bot/index.js')
+
