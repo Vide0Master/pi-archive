@@ -418,12 +418,13 @@ let post_data;
                 const rslt = await request('setPostAsUserAvatar', { postID: post_data.id })
                 alert(rslt.msg, 5000)
             })
-            createAction('Отправить пост в Телеграм', document.querySelector('.post-actions'), async (event) => {
-                event.preventDefault()
-                const rslt = await request('TGSendPostDM', { postID: post_data.id, isFile: event.shiftKey })
+            //region send post to tg
+            // createAction('Отправить пост в Телеграм', document.querySelector('.post-actions'), async (event) => {
+            //     event.preventDefault()
+            //     const rslt = await request('TGSendPostDM', { postID: post_data.id, isFile: event.shiftKey })
 
-                alert(`${rslt.rslt}/${rslt.msg}`, 5000)
-            })
+            //     alert(`${rslt.rslt}/${rslt.msg}`, 5000)
+            // })
             await handleAdminActions();
 
             const response = await fetch(file_link);
