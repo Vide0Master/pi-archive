@@ -19,8 +19,8 @@
             "AuthyPageAccessCheck": 0,
             "register": 0,
             "login": 0,
-            "sessionController":0,
-            "getVersionInfo":1,
+            "sessionController": 0,
+            "getVersionInfo": 1,
             "getWelcomeText": 1,
             "getUserProfileData": 1,
             "changeUserName": 1,
@@ -47,6 +47,7 @@
             "TGSendPostDM": 1,
             "getAdminRequests": 3,
             "userConfirmation": 3,
+            "resetUserPassContr": 3,
             "stopAPP": 3
         },
         "pages": {

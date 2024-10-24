@@ -14,7 +14,7 @@ module.exports = (request) => {
             return
         }
 
-        if (request.password != userData.user.password) {
+        if (SysController.hashString(request.password) != userData.user.password) {
             resolve(new SysController.createResponse('w', '{{S_API_LGIN_WP}}'))
             return
         }
@@ -26,7 +26,6 @@ module.exports = (request) => {
 
         const key_update = await SysController.APIcontroller('sessionController', null,
             { type: 'addSession', login: request.login, stype: 'WEB', skey: request.userKey })
-        console.log(key_update)
         if (key_update.rslt == 'e') {
             resolve(key_update)
         } else {

@@ -16,6 +16,8 @@ module.exports = class SysController {
 
     static hashGen = require('./hashGen.js')
 
+    static hashString = require('./hashStringToMD5.js')
+
     static fileProcessor = require('./fileProcessor.js')
 
     static async APIcontroller(action, user, request, isTGbotRequest) {

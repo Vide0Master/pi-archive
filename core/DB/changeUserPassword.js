@@ -1,9 +1,9 @@
 const SysController = require("../systemController")
 
-module.exports = (db, userKey, newPassword) => {
+module.exports = (db, login, newPassword) => {
     return new Promise(async resolve => {
-        db.run(`UPDATE users SET password = ? WHERE auth_key = ?`,
-            [newPassword, userKey],
+        db.run(`UPDATE users SET password = ? WHERE login = ?`,
+            [SysController.hashString(newPassword), login],
             (err) => {
                 resolve(new SysController.createResponse(
                     's',

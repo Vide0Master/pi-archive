@@ -1,13 +1,5 @@
 const syscontroller = require('../systemController.js')
 
-class session {
-    constructor(type, key, lastActionTime) {
-        this.type = type
-        this.key = key
-        this.lat = lastActionTime
-    }
-}
-
 module.exports = (request, user) => {
     return new Promise(async resolve => {
         switch (request.type) {
