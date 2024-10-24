@@ -1,8 +1,8 @@
 const syscontroller = require('../systemController.js')
 
-module.exports = (request) => {
+module.exports = (request,user) => {
     return new Promise(async resolve => {
-        const rslt = await syscontroller.dbinteract.changeUserPassword(request.userKey, request.newPassword)
+        const rslt = await syscontroller.dbinteract.changeUserPassword(user.login, request.newPassword)
         resolve(rslt)
     })
 }

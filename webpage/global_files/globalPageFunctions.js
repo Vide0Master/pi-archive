@@ -555,7 +555,7 @@ function copyToClipboard(value, message) {
 
     document.body.removeChild(tempTextarea);
 
-    alert(`s/${message}`, 5000);
+    alert(`i/${message}`, 5000);
 }
 
 //region search
@@ -793,9 +793,9 @@ function onElementFullyVisible(element, callback) {
 //region format user inp
 function formatUserText(input) {
     let formattedText = input
-        .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')  // Жирный текст
-        .replace(/\*(.*?)\*/g, '<i>$1</i>')      // Курсив
-        .replace(/_(.*?)_/g, '<u>$1</u>')        // Подчёркнутый
-        .replace(/\n/g, '<br>');                 // Переносы строк
+        .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
+        .replace(/\*(.*?)\*/g, '<i>$1</i>')
+        .replace(/_(.*?)_/g, '<u>$1</u>')
+        .replace(/\n/g, '<br>');
     return formattedText;
 }
