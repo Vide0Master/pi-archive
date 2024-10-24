@@ -160,17 +160,17 @@ function showActions(userData, activeUser) {
             }
         })
 
-        //region tg bot link
-        createAction('Телеграм бот', container, async () => {
-            window.open('https://t.me/pi_archive_bot', '_blank').focus();
-        })
+        // region tg bot link
+        // createAction('Телеграм бот', container, async () => {
+        //     window.open('https://t.me/pi_archive_bot', '_blank').focus();
+        // })
 
         //region cp ukey
-        createAction('Скопировать ключ пользователя', container, async () => {
-            const userKey = localStorage.getItem('userKey') || sessionStorage.getItem('userKey');
+        // createAction('Скопировать ключ пользователя', container, async () => {
+        //     const userKey = localStorage.getItem('userKey') || sessionStorage.getItem('userKey');
 
-            copyToClipboard(userKey, 'Ключ пользователя скопирован')
-        })
+        //     copyToClipboard(userKey, 'Ключ пользователя скопирован')
+        // })
 
         //region ch blklist
         createAction('Изменить чёрный список', container, async () => {
