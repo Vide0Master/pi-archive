@@ -22,15 +22,19 @@ const storage = multer.diskStorage({
     }
 });
 
-// Функция для проверки размера файла в зависимости от его типа
 const fileFilter = (req, file, cb) => {
     const ext = path.extname(file.originalname).toLowerCase();
-    if (['.jpg', '.jpeg', '.png', '.webp', '.gif'].includes(ext)) {
+    // Разрешенные расширения для фото и видео
+    const allowedImageExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
+    const allowedVideoExtensions = ['.mp4', '.mov', '.avi', '.mkv'];
+    
+    if (allowedImageExtensions.includes(ext)) {
         req.fileSizeLimit = 50 * 1024 * 1024; // 50 MB для фото
-    } else if (['.mp4', '.mov', '.avi', '.mkv'].includes(ext)) {
+    } else if (allowedVideoExtensions.includes(ext)) {
         req.fileSizeLimit = 1 * 1024 * 1024 * 1024; // 1 GB для видео
     } else {
-        req.fileSizeLimit = 10 * 1024 * 1024; // 10 MB по умолчанию
+        // Отклоняем файл, если расширение не соответствует
+        return cb(new Error('Unsupported filetype'), false);
     }
     cb(null, true);
 };
@@ -93,13 +97,13 @@ app.post('/api', async (req, res) => {
 const checkUserPermissionUpload = async (req, res, next) => {
     const userKey = req.headers['user-key'];
     if (!userKey) {
-        return res.send('e/Отказано в доступе.');
+        return res.send('e/Access rejected.');
     }
 
     const userPermission = sysController.config.static.user_status[(await sysController.dbinteract.getUserBySessionData('WEB', userKey)).user.status]
 
     if (userPermission < 1) {
-        return res.send('e/Отказано в доступе.');
+        return res.send('e/Access rejected.');
     } else {
         next();
     }
@@ -108,6 +112,7 @@ const checkUserPermissionUpload = async (req, res, next) => {
 //middleware для загрузки файлов от пользователя
 app.post('/upload', checkUserPermissionUpload, (req, res, next) => {
     upload(req, res, async () => {
+        console.log(req.file)
         if (!req.file) {
             res.send('w/Нет файла для загрузки.');
             return

@@ -1,7 +1,4 @@
 
-//Authy - кастомная библиотека направленная на контроль авторизации пользователя, и отслеживание взаимодействия со страницами
-//Интересный факт что название чем-то схоже с словом "аутизм", так что Аути можно интерпретировать как намёк на аутизм
-
 let userKey = ''
 
 class Authy {
@@ -26,7 +23,7 @@ class Authy {
 
     static async pageAccesCheck() {
         const rslt = await request('AuthyPageAccessCheck', { page: window.location.pathname.replace(/\//g, '')})
-        if (rslt.result != 's') {
+        if (rslt.rslt != 's') {
             await this.unlogin()
         }
     }
@@ -63,4 +60,3 @@ Authy.pageAccesCheck()
 if (['welcome', 'register', 'login'].includes(window.location.pathname.replace(/\//g, '')) && userKey != '') {
     Authy.loginCheck()
 }
-

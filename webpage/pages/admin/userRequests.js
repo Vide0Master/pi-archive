@@ -2,7 +2,7 @@ async function updateRequestList() {
 
     let data = await request('getAdminRequests')
     if (data.rslt != 's') {
-        alert(data.rslt + '/' + data.msg)
+        return
     } else {
         data = data.requests
     }

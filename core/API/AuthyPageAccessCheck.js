@@ -11,9 +11,15 @@ module.exports = (request, user_data) => {
             permission_level = SysController.config.static.user_status[user_data.status]
         }
         if (permission_level >= pageRestrictions[request.page]) {
-            resolve({ result: 's', perm_level: permission_level })
+            resolve(new SysController.createResponse(
+                's',
+                'Acces granted',
+                { perm_level: permission_level }
+            ))
         } else {
-            resolve({ result: 'access_rejection' })
+            resolve(new SysController.createResponse(
+                'access_rejection'
+            ))
         }
     })
 }

@@ -49,7 +49,7 @@ module.exports = (request, userByKey) => {
         }
 
         user.status = SysController.config.static.user_status_translation[user.status]
-        user.postsCount = await SysController.dbinteract.getPostsCount([`author:${user.login}`])
+        user.postsCount = (await SysController.dbinteract.getPostsCount([`author:${user.login}`])).count||0
 
         resolve(new SysController.createResponse(
             's',
