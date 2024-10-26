@@ -13,7 +13,7 @@ module.exports = (request, user) => {
                         msgtype: 'COMMENT'
                     })
                 if (messageCreateResult.rslt == 's') {
-                    resolve(new sysController.createResponse('s', '{{S_API_CPC_CC}}!'))
+                    resolve(new sysController.createResponse('s', 'Comment created!'))
                 } else {
                     resolve(messageCreateResult)
                 }
@@ -25,9 +25,9 @@ module.exports = (request, user) => {
             case 'deleteComment': {
                 const deleteResult = await sysController.dbinteract.deleteMessage(request.messageID)
                 if (deleteResult.rslt == 'e') {
-                    resolve(new sysController.createResponse('e','{{S_API_CPC_CR_E}}!'))
+                    resolve(new sysController.createResponse('e','Error deleting comment!'))
                 } else {
-                    resolve(new sysController.createResponse('s','{{S_API_CPC_CR_S}}'))
+                    resolve(new sysController.createResponse('s','Comment deleted'))
                 }
             }; break;
         }

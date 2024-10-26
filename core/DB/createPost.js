@@ -11,16 +11,16 @@ module.exports = (db, fileName, fileSize, user) => {
                         '',
                         {},
                         err,
-                        '{{S_DB_CP_EWM}}'
+                        'Error creating post'
                     ))
                 } else {
                     db.get(`SELECT * FROM posts WHERE file = '${fileName}'`, (err, row) => {
                         resolve(new sysController.createResponse(
                             's',
-                            '{{S_DB_CP_GPID_S}}',
+                            'Post created, heres ID',
                             { id: row.id },
                             err,
-                            '{{S_DB_CP_GPID_S}}'
+                            'Post created, heres ID'
                         ))
                     })
                 }

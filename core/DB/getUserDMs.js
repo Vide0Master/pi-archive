@@ -14,7 +14,7 @@ module.exports = (db, user) => {
                         '',
                         {},
                         err,
-                        '{{S_DB_GUD_E}} ${user}'
+                        'Error getting DM list of ${user}'
                     ))
                     return
                 }
@@ -30,7 +30,7 @@ module.exports = (db, user) => {
 
                 resolve(new sysController.createResponse(
                     's',
-                    `{{S_DB_GUD_S}} ${user}`,
+                    `Got DM list of ${user}`,
                     { loginsList: [...logins] }
                 ))
             }

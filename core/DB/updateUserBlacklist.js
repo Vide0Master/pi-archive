@@ -8,10 +8,10 @@ module.exports = (db, userKey, blacklist) => {
             (err) => {
                 resolve(new SysController.createResponse(
                     's',
-                    `{{S_DB_UUB_S}}: ${blacklist.length}`,
+                    `Blacklist updates, new blacklist size: ${blacklist.length}`,
                     {},
                     err,
-                    '{{S_DB_UUB_E}}'
+                    'Error updating blacklist'
                 ))
             })
     })

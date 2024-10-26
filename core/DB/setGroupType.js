@@ -7,7 +7,7 @@ module.exports = (db, groupID, newType) => {
             (err) => {
                 resolve(new sysController.createResponse(
                     's',
-                    '{{S_DB_SGT_S}}',
+                    'Changed group type',
                     {},
                     err,
                     '{{S_DB_SGT_e}}'

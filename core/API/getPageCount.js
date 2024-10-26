@@ -13,7 +13,7 @@ module.exports = (request,user) => {
         }
         resolve(new syscontroller.createResponse(
             's',
-            '{{S_API_GPC_S}}',
+            'Calculated page count',
             { pages: Math.ceil(posts_count.count / user_sets.posts_per_page) },
         ))
     })

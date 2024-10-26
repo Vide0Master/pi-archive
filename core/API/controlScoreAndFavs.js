@@ -7,7 +7,7 @@ module.exports = (request, userData) => {
                 if (userData.likes.includes(request.postID)) {
                     resolve(new sysController.createResponse(
                         'e',
-                        '{{S_API_CLDF_GE}}'
+                        'Are you special?'
                     ))
                 } else {
                     userData.likes.push(request.postID)
@@ -19,7 +19,7 @@ module.exports = (request, userData) => {
                 if (!userData.likes.includes(request.postID)) {
                     resolve(new sysController.createResponse(
                         'e',
-                        '{{S_API_CLDF_GE}}'
+                        'Are you special?'
                     ))
                 } else {
                     const likes_result = await sysController.dbinteract.updateUserLikes(userData.likes.filter(element => element != request.postID), userData.login)
@@ -30,7 +30,7 @@ module.exports = (request, userData) => {
                 if (userData.dislikes.includes(request.postID)) {
                     resolve(new sysController.createResponse(
                         'e',
-                        '{{S_API_CLDF_GE}}'
+                        'Are you special?'
                     ))
                 } else {
                     userData.dislikes.push(request.postID)
@@ -42,7 +42,7 @@ module.exports = (request, userData) => {
                 if (!userData.dislikes.includes(request.postID)) {
                     resolve(new sysController.createResponse(
                         'e',
-                        '{{S_API_CLDF_GE}}'
+                        'Are you special?'
                     ))
                 } else {
                     const dislikes_result = await sysController.dbinteract.updateUserDislikes(userData.dislikes.filter(element => element != request.postID), userData.login)
@@ -53,7 +53,7 @@ module.exports = (request, userData) => {
                 if (userData.favs.includes(request.postID)) {
                     resolve(new sysController.createResponse(
                         'e',
-                        '{{S_API_CLDF_GE}}'
+                        'Are you special?'
                     ))
                 } else {
                     userData.favs.push(request.postID)
@@ -65,7 +65,7 @@ module.exports = (request, userData) => {
                 if (!userData.favs.includes(request.postID)) {
                     resolve(new sysController.createResponse(
                         'e',
-                        '{{S_API_CLDF_GE}}'
+                        'Are you special?'
                     ))
                 } else {
                     const favs_result = await sysController.dbinteract.updateUserFavs(userData.favs.filter(element => element != request.postID), userData.login)
@@ -75,7 +75,7 @@ module.exports = (request, userData) => {
             case 'getUserInfo': {
                 resolve(new sysController.createResponse(
                     's',
-                    '{{S_API_CLDF_GSUD}}',
+                    'Got user raing and fav data',
                     {
                         likes: userData.likes,
                         dislikes: userData.dislikes,

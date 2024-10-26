@@ -13,7 +13,7 @@ module.exports = (request) => {
         if (!data.post) {
             resolve(new SysController.createResponse(
                 'w',
-                '{{S_API_GPD_PM}}'
+                'No such post'
             ))
             return
         }

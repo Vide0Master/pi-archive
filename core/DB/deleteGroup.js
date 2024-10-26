@@ -7,10 +7,10 @@ module.exports = (db, id) => {
             err => {
                 resolve(new sysController.createResponse(
                     's',
-                    `{{S_DB_DG_S}} ${id}`,
+                    `Deleted group ${id}`,
                     {},
                     err,
-                    `{{S_DB_DG_E}} ${id}`
+                    `Error deleting group ${id}`
                 ))
             })
     })

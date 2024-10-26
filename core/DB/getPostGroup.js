@@ -9,10 +9,10 @@ module.exports = (db, postID) => {
 
                 resolve(new sysController.createResponse(
                     's',
-                    `{{S_DB_GPG_S}} [${postID}]`,
+                    `Got info of post [${postID}]`,
                     { data },
                     err,
-                    `{{S_DB_GPG_E}} [${postID}]`
+                    `Error while getting info of post [${postID}]`
                 ))
             })
     })

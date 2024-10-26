@@ -8,10 +8,10 @@ module.exports = (db, postID, tags) => {
             (err) => {
                 resolve(new SysController.createResponse(
                     's',
-                    `{{S_DB_UT_S}} ${postID}`,
+                    `Updated tags for post ${postID}`,
                     {},
                     err,
-                    `{{S_DB_UT_E}} ${postID}`
+                    `Error updating tags for post ${postID}`
                 ))
             }
         )

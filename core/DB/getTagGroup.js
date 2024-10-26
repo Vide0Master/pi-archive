@@ -10,7 +10,7 @@ module.exports = (db, name) => {
 
                     resolve(new sysController.createResponse(
                         's',
-                        `{{S_DB_GTG_S}}`,
+                        `Got tag groups`,
                         { group: row },
                         err,
                         `{{S_DB_GTG_e}}`
@@ -18,7 +18,7 @@ module.exports = (db, name) => {
                 } else {
                     resolve(new sysController.createResponse(
                         'w',
-                        `{{S_DB_GTG_NG}}`
+                        `No tag groups`
                     ))
                 }
             })

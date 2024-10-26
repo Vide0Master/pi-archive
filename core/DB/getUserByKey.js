@@ -11,7 +11,7 @@ module.exports = (db, key) => {
                         '',
                         {},
                         err,
-                        "{{S_DB_GUBK_E}}"
+                        "Error getting user by user key"
                     ))
                 } else {
                     if (row) {
@@ -22,13 +22,13 @@ module.exports = (db, key) => {
                         row.usersettings = JSON.parse(row.usersettings)
                         resolve(new SysController.createResponse(
                             's',
-                            `{{S_DB_GUBK_S_F}} ${row.login} {{S_DB_GUBK_S_S}}`,
+                            `Got user ${row.login} by key`,
                             { user: row }
                         ))
                     } else {
                         resolve(new SysController.createResponse(
                             'e',
-                            '{{S_DB_GUBK_NU}}',
+                            'No such user',
                             { user: null }
                         ))
                     }

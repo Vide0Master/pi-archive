@@ -7,10 +7,10 @@ module.exports = (db, login) => {
             (err) => {
                 resolve(new sysController.createResponse(
                     's',
-                    `{{S_DB_DUSR_S_F}} [${login}] {{S_DB_DUSR_S_S}}`,
+                    `User [${login}] deleted`,
                     {},
                     err,
-                    `{{S_DB_DUSR_E}} ${login}`
+                    `Error deleting user ${login}`
                 ))
             })
     })

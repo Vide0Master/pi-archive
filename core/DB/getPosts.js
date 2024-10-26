@@ -47,10 +47,10 @@ module.exports = (db, tags = [], blacklist = [], from, posts) => {
         db.all(query, params, (err, rows) => {
             resolve(new SysController.createResponse(
                 's',
-                '{{S_DB_GPSTS_S}}',
+                'Got post list',
                 { posts: rows },
                 err,
-                '{{S_DB_GPSTS_E}}'
+                'Error getting posts list'
             ))
         });
     });

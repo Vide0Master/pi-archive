@@ -7,10 +7,10 @@ module.exports = (db, userKey, newName) => {
             (err) => {
                 resolve(new SysController.createResponse(
                     's',
-                    '{{S_DB_CUN_S}}!',
+                    'Username changed!',
                     {},
                     err,
-                    '{{S_DB_CUN_E}}'
+                    'Error while changing username'
                 ))
             })
     })
