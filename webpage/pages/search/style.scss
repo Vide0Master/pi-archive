@@ -112,6 +112,92 @@ main {
         background-color: #fff;
         top: calc(-0.5em - 1px);
     }
+
+    .pageNavCont {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5em;
+
+        .pageSelectorNumber {
+            text-align: center;
+            background-color: transparent;
+            color: #fff;
+            border: none;
+            font-size: 1em;
+
+            border: 0.15em solid #fff;
+            padding: 0.25em;
+            border-radius: 0.5em;
+
+            transition: 0.1s;
+
+            &:hover {
+                border-color: blueviolet;
+            }
+
+            &::-webkit-inner-spin-button {
+                display: none;
+            }
+        }
+
+        .pageIndicatorCont {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 0.2em;
+            height: 2em;
+
+            .pageInd {
+                width: 1em;
+                height: 1em;
+                background-color: #fff;
+                transition: 0.1s;
+                cursor: pointer;
+                text-align: center;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+                padding: 0.25em;
+
+                &.current {
+                    background-color: greenyellow;
+                }
+
+                &.switch {
+                    height: 2em;
+                    background-color: blueviolet;
+                    color: #fff;
+                }
+
+                &:hover {
+                    height: 2em;
+                    background-color: blueviolet;
+                    color: #fff;
+                }
+
+                &.hidden {
+                    background-color: rgba(255, 255, 255, 0.1);
+
+                    cursor: auto;
+                    pointer-events: none;
+
+                    .div {
+                        width: 1em;
+                        height: 1em;
+                    }
+                }
+            }
+        }
+    }
+
+    a {
+        &.disabled {
+            color: #808080;
+            pointer-events: none;
+        }
+    }
 }
 
 .collection-container {
