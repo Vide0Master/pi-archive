@@ -12,10 +12,10 @@ module.exports = (db, limit) => {
             (err, rows) => {
                 resolve(new SysController.createResponse(
                     's',
-                    '{{S_DB_GTL_S}}',
+                    'Got tag list',
                     { tagList: rows },
                     err,
-                    '{{S_DB_GTL_E}}'
+                    'Error getting tag list'
                 ))
             })
     })

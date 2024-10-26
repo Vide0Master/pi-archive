@@ -7,10 +7,10 @@ module.exports = (db, user) => {
             (err, rows) => {
                 resolve(new sysController.createResponse(
                     's',
-                    `{{S_DB_GPGS_S}} [${user}]`,
+                    `Got post groups of [${user}]`,
                     { groups: rows },
                     err,
-                    `{{S_DB_GPGS_E}} [${user}]`
+                    `Error getting post groups of [${user}]`
                 ))
             })
     })

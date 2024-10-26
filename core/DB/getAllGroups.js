@@ -8,10 +8,10 @@ module.exports = (db) => {
             }
             resolve(new sysController.createResponse(
                 's',
-                `{{S_DB_GAG_S}}`,
+                `Got all groups`,
                 { groups: rows },
                 err,
-                `{{S_DB_GAG_E}}`
+                `Error getting groups`
             ))
         })
     })

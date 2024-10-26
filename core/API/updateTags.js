@@ -16,7 +16,7 @@ module.exports = (request, user_data) => {
         if (!isOwner && !isAdmin) {
             resolve(new sysController.createResponse(
                 'e',
-                '{{S_API_UPT_AR}}'
+                'You are NOT permitted to do this operation'
             ))
             return
         }
@@ -26,7 +26,7 @@ module.exports = (request, user_data) => {
         if (request.newTags.length > max_tags_length) {
             resolve(new sysController.createResponse(
                 'e',
-                `{{S_API_UPT_TMT_F}} ${max_tags_length} {{S_API_UPT_TMT_S}}`
+                `Too much tags, maximum ${max_tags_length} tags`
             ))
             return
         }

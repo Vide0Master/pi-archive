@@ -9,7 +9,7 @@ module.exports = (request, user_data) => {
         if (request.newDesc.length > max_desc_length) {
             resolve(new SysController.createResponse(
                 'e',
-                `{{S_API_UPD_DIL_F}}: ${max_desc_length} {{S_API_UPD_DIL_S}}`
+                `Description is too long, limit: ${max_desc_length} symbols`
             ))
             return
         }
@@ -22,7 +22,7 @@ module.exports = (request, user_data) => {
         if (!isOwner && !isAdmin) {
             resolve(new SysController.createResponse(
                 'e',
-                '{{S_API_UPD_AR}}'
+                'You are NOT permitted to do this operation'
             ))
             return
         }

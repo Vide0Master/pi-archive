@@ -7,10 +7,10 @@ module.exports = (db, userRQ, userK) => {
             (err, rows) => {
                 resolve(new sysController.createResponse(
                     's',
-                    `{{S_DB_GUDMM_S}} ${userRQ}`,
+                    `Got DM messages of ${userRQ}`,
                     {messages:rows},
                     err,
-                    `{{S_DB_GUDMM_E}} ${userRQ}`
+                    `Error getting DM messages of ${userRQ}`
                 ))
             })
     })

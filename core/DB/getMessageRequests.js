@@ -7,10 +7,10 @@ module.exports = (db) => {
         db.all(`SELECT * FROM messages WHERE "to" = "SYSTEM"`, (err, rows) => {
             resolve(new SysController.createResponse(
                 's',
-                '{{S_DB_GMAR_S}}',
+                'Got admin requests',
                 { requests: rows },
                 err,
-                '{{S_DB_GMAR_E}}'
+                'Error while getting admin requests'
             ))
         })
     })

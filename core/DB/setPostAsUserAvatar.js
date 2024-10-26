@@ -7,10 +7,10 @@ module.exports = (db, postID, userKey) => {
             (err) => {
                 resolve(new sysController.createResponse(
                     's',
-                    '{{S_DB_SUA_S}}',
+                    'Set avatar',
                     {},
                     err,
-                    '{{S_DB_SUA_E}}'
+                    'Error setting avatar'
                 ))
             })
     })

@@ -12,7 +12,7 @@ module.exports = (request) => {
             case 'updateGroup': {
                 const groupRslt = await SysController.dbinteract.getTagGroup(request.group)
                 if (!groupRslt.group) {
-                    resolve(new SysController.createResponse('e', '{{S_API_CTG_NGE}}'))
+                    resolve(new SysController.createResponse('e', 'No such group'))
                     return
                 }
 

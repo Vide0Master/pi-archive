@@ -8,19 +8,19 @@ module.exports = (db, id) => {
                 if (!row) {
                     resolve(new sysController.createResponse(
                         'e',
-                        `{{S_DB_GPGID_NG_F}}:${id} {{S_DB_GPGID_NG_S}}!`,
+                        `Post group ID:${id} is missing from DB!`,
                     ))
                 } else {
                     row.group = JSON.parse(row.group)
                     const rsp = new sysController.createResponse(
                         's',
-                        `{{S_DB_GPGID_S}}:${id}`,
+                        `Got post group ID:${id}`,
                         { group: row },
                         err,
-                        `{{S_DB_GPGID_E}}:${id}`
+                        `Error while getting post group ID:${id}`
                     )
                     resolve(rsp)
-                    if (rsp.isErr()) {
+                    if (rsp.rslt=='e') {
                         sysController.log(rsp.rslt + '/' + rsp.msg)
                     }
                 }

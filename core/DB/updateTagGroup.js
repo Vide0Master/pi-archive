@@ -13,10 +13,10 @@ module.exports = (db, groupName, newGroupData) => {
             (err) => {
                 resolve(new sysController.createResponse(
                     's',
-                    `{{S_DB_UTG_S}} "${groupName}"`,
+                    `Updated tag group "${groupName}"`,
                     {},
                     err,
-                    `{{S_DB_UTG_E}} "${groupName}"`
+                    `Error while updating tag group "${groupName}"`
                 ))
             })
     })

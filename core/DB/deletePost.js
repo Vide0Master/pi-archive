@@ -9,10 +9,10 @@ module.exports = (db, postID) => {
             (err) => {
                 resolve(new SysController.createResponse(
                     's',
-                    `{{S_DB_DP_S}} ${postID}`,
+                    `Deleted post ${postID}`,
                     {},
                     err,
-                    `{{S_DB_DP_E}} ${postID}`
+                    `Error deleting post ${postID}`
                 ))
             }
         )

@@ -7,10 +7,10 @@ module.exports = (db, groupID, newGroupName) => {
             (err) => {
                 resolve(new sysController.createResponse(
                     's',
-                    `{{S_DB_UGN_S}} ${newGroupName}`,
+                    `Changed group name to ${newGroupName}`,
                     {},
                     err,
-                    `{{S_DB_UGN_E}}`
+                    `Error while changing group name`
                 ))
             })
     })

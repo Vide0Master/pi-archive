@@ -9,15 +9,15 @@ module.exports = (db, login) => {
                 if (!row) {
                     resolve(new SysController.createResponse(
                         'e',
-                        `{{S_DB_GUBL_NU}}`,
+                        `No such user`,
                     ))
                 } else {
                     resolve(new SysController.createResponse(
                         's',
-                        `{{S_DB_GUBL_S_F}} ${row.login} {{S_DB_GUBL_S_S}}`,
+                        `Got user ${row.login} by login`,
                         { user: row },
                         err,
-                        `{{S_DB_GUBL_E}} ${login}`
+                        `Error getting user by login ${login}`
                     ))
                 }
             })

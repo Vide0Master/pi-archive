@@ -7,10 +7,10 @@ module.exports = (db, user) => {
             (err, rows) => {
                 resolve(new sysController.createResponse(
                     's',
-                    '{{S_DB_GUM_S}}',
+                    'Got user messages',
                     {messages:rows},
                     err,
-                    '{{S_DB_GUM_S}}'
+                    'Got user messages'
                 ))
             })
     })

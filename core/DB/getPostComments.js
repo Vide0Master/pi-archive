@@ -7,10 +7,10 @@ module.exports = (db, postID) => {
             (err, rows) => {
                 resolve(new sysController.createResponse(
                     's',
-                    `{{S_DB_GPC_S}} [${postID}]`,
+                    `Got comments of post [${postID}]`,
                     { comments: rows },
                     err,
-                    `{{S_DB_GPC_E}} [${postID}]`
+                    `Error getting comments of post  [${postID}]`
                 ))
             })
     })

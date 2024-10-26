@@ -21,7 +21,7 @@ module.exports = (request, user_data) => {
         if (!isOwner && !isAdmin) {
             resolve(new sysController.createResponse(
                 'e',
-                '{{S_API_DP_ARJ}}'
+                'Access rejected'
             ))
             return
         }
@@ -30,8 +30,8 @@ module.exports = (request, user_data) => {
         if (['.jpg', '.jpeg', '.png', '.webp', '.gif'].includes(ext)) {
             fs.unlink(`./storage/file_storage/${postData.file}`, async (err) => {
                 if (err) {
-                    sysController.log(`e/{{S_API_DP_EDF}} [deletePost|image]: ${err}`)
-                    resolve({ rslt: 'e', msg: `e/{{S_API_DP_EDF}} [deletePost|image]: ${err}` })
+                    sysController.log(`e/Erorr deleting file [deletePost|image]: ${err}`)
+                    resolve({ rslt: 'e', msg: `e/Erorr deleting file [deletePost|image]: ${err}` })
                     return
                 } else {
                     const result = await sysController.dbinteract.deletePost(request.post)
@@ -41,14 +41,14 @@ module.exports = (request, user_data) => {
         } else if (['.mp4', '.mov', '.avi', '.mkv'].includes(ext)) {
             fs.unlink(`./storage/file_storage/${postData.file}`, async (err) => {
                 if (err) {
-                    sysController.log(`e/{{S_API_DP_EDF}} [deletePost|video]: ${err}`)
-                    resolve({ rslt: 'e', msg: `e/{{S_API_DP_EDF}} [deletePost|video]: ${err}` })
+                    sysController.log(`e/Erorr deleting file [deletePost|video]: ${err}`)
+                    resolve({ rslt: 'e', msg: `e/Erorr deleting file [deletePost|video]: ${err}` })
                     return
                 } else {
                     fs.unlink(`./storage/video_thumbnails/THUMBFOR-${path.parse(postData.file).name}.jpg`, async (err) => {
                         if (err) {
-                            sysController.log(`e/{{S_API_DP_EDF}} [deletePost|video|thumbnail]: ${err}`)
-                            resolve({ rslt: 'e', msg: `e/{{S_API_DP_EDF}} [deletePost|video|thumbnail]: ${err}` })
+                            sysController.log(`e/Erorr deleting file [deletePost|video|thumbnail]: ${err}`)
+                            resolve({ rslt: 'e', msg: `e/Erorr deleting file [deletePost|video|thumbnail]: ${err}` })
                         } else {
                             const result = await sysController.dbinteract.deletePost(request.post)
                             resolve(result)

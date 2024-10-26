@@ -44,10 +44,10 @@ module.exports = (db, tags = [], blacklist = []) => {
         db.get(query, params, (err, row) => {
             resolve(new SysController.createResponse(
                 's',
-                '{{S_DB_GPCN_S}}',
+                'Got post count',
                 { count: row.count },
                 err,
-                '{{S_DB_GPCN_E}}'
+                'Error while getting post count'
             ))
         });
     });

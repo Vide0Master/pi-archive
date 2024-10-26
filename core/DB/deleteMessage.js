@@ -7,10 +7,10 @@ module.exports = (db, messageID) => {
             (err) => {
                 resolve(new SysController.createResponse(
                     's',
-                    `{{S_DB_RMM_S}} ID:[${messageID}]`,
+                    `Removed message ID:[${messageID}]`,
                     {},
                     err,
-                    `{{S_DB_RMM_E}} ID:[${messageID}]`
+                    `Error while deleting message ID:[${messageID}]`
                 ))
             })
     })

@@ -46,7 +46,7 @@ module.exports = (request, userData) => {
                     if (grp.group.includes(postString) && grp.id != request.id) {
                         resolve(new sysController.createResponse(
                             'w',
-                            `{{S_DB_CPG_MGAE}} ID${grp.id}`
+                            `Post cannot be assigned to 2 different groups. Post is already issigned to group ID${grp.id}`
                         ))
                     }
                 }

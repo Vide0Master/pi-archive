@@ -53,7 +53,7 @@ module.exports = (request, userByKey) => {
 
         resolve(new SysController.createResponse(
             's',
-            `{{S_API_GUPD_S}} ${user.login}`,
+            `Got data of user ${user.login}`,
             { data: user, isOwner }
         ))
     })

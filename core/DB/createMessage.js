@@ -19,10 +19,10 @@ module.exports = (db, messageData) => {
                 (err) => {
                     resolve(new sysController.createResponse(
                         's',
-                        `{{S_DB_CM_S}} [${messageData.from}>${messageData.to}]`,
+                        `Message created [${messageData.from}>${messageData.to}]`,
                         {},
                         err,
-                        `{{S_DB_CM_E}} [${messageData.from}>${messageData.to}]`
+                        `Error while creating message [${messageData.from}>${messageData.to}]`
                     ))
                 })
         })
