@@ -72,7 +72,23 @@ main {
             border-radius: 0.5em;
 
             .score {
-                color: #fff;
+                height: 15px;
+                width: 75px;
+                border-radius: 10px;
+                display: flex;
+                flex-direction: row;
+                align-items: stretch;
+                justify-content: space-between;
+                overflow: hidden;
+                background-color: #202020;
+
+                .positive {
+                    background-color: green;
+                }
+
+                .negative {
+                    background-color: #cb4700;
+                }
             }
 
             .liked {
@@ -100,6 +116,7 @@ main {
                 align-items: center;
                 gap: 0.25em;
 
+                cursor: pointer;
                 color: #fff;
 
                 &:hover {
@@ -367,7 +384,7 @@ main {
         user-select: none;
     }
 
-    .close-btn{
+    .close-btn {
         position: absolute;
         top: 0;
         left: 0;
@@ -383,7 +400,7 @@ main {
         cursor: pointer;
         user-select: none;
 
-        &:hover{
+        &:hover {
             opacity: 0.9;
         }
     }

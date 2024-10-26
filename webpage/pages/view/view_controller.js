@@ -553,6 +553,10 @@ async function process_LDF() {
 
     const score = createDiv('score', container)
 
+    const positiveBar = createDiv('positive', score)
+
+    const negativeBar = createDiv('negative', score)
+
     const vote_down = createButton('▼', container)
     if (userdata.dislikes.includes(post_data.id)) {
         vote_down.classList.add('disliked')
@@ -603,15 +607,24 @@ async function process_LDF() {
 
     async function updateScore() {
         const post_stats = await request('controlScoreAndFavs', { type: 'getPostScore', postID: post_data.id })
-        const rating = post_stats.scores.likes - post_stats.scores.dislikes
-        score.innerHTML = Math.abs(rating)
-        switch (true) {
-            case rating < 0: {
-                score.innerHTML = '▼' + score.innerHTML
-            }; break;
-            case rating > 0: {
-                score.innerHTML = '▲' + score.innerHTML
-            }; break;
+
+        vote_up.value = post_stats.scores.likes > 0 ? post_stats.scores.likes + '▲' : '▲';
+        vote_down.value = post_stats.scores.dislikes > 0 ? post_stats.scores.dislikes + '▼' : '▼';
+
+        const likes = parseFloat(post_stats.scores.likes) || 0;
+        const dislikes = parseFloat(post_stats.scores.dislikes) || 0;
+
+        const total = likes + dislikes;
+
+        if (total === 0) {
+            positiveBar.style.width = `0`;
+            negativeBar.style.width = `0`;
+        } else {
+            const positiveScCoef = (likes / total) * 100;
+            const negativeScCoef = (dislikes / total) * 100;
+
+            positiveBar.style.width = `calc(${positiveScCoef}% - 1px)`;
+            negativeBar.style.width = `calc(${negativeScCoef}% - 1px)`;
         }
     }
 
