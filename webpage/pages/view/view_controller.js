@@ -505,7 +505,7 @@ async function createComments() {
             userAvatar.setAttribute('onclick', `window.location.href='/view?id=${userAvatarID}'`)
 
             const comment_creation_date = createDiv('creation-date', user_data_container)
-            comment_creation_date.innerHTML = parseTimestmap(comment.timestamp)
+            comment_creation_date.innerHTML = parseTimestamp(comment.timestamp)
 
             const comment_data_container = createDiv('comment-data-container', comment_container)
 
