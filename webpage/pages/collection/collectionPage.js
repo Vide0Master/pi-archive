@@ -1,9 +1,5 @@
 async function processCollection(id) {
-    console.log(id)
-
     const collectionInfo = (await request('controlGroup', { type: 'getGroupByID', id })).group
-
-    console.log(collectionInfo)
 
     async function fetchPostData(id) {
         const pdata = await request('getPostData', { id });
@@ -17,7 +13,6 @@ async function processCollection(id) {
     background.style.display = 'none'
 
     const page_counter = createDiv('page-counter', background)
-    page_counter.innerHTML = `0 / ${collectionInfo.group.length + 1}`
 
     const closeComic = createDiv('close-comic', background)
     closeComic.innerHTML = 'Закрыть просмотр'
@@ -25,7 +20,7 @@ async function processCollection(id) {
 
     const pages = []
 
-    let currentpage = 0
+    let currentpage = 1
     function displayComic(pg) {
         background.removeAttribute('style')
         document.querySelector('html').style.overflow = 'hidden'
@@ -36,20 +31,30 @@ async function processCollection(id) {
         for (const elem of document.querySelectorAll('.pages-container *')) {
             elem.style.display = 'none'
         }
-        const page = pages[currentpage]
+        const page = pages[currentpage - 1]
         page.removeAttribute('style')
-        page_counter.innerHTML = `${currentpage + 1} / ${collectionInfo.group.length}`
+        update_pages(currentpage)
     }
-    function nextPage() {
-        if (currentpage < collectionInfo.group.length - 1) {
-            currentpage++
+    function nextPage(event) {
+        if (event.shiftKey) {
+            currentpage = collectionInfo.group.length
             switchPage()
+        } else {
+            if (currentpage < collectionInfo.group.length) {
+                currentpage++
+                switchPage()
+            }
         }
     }
-    function prevPage() {
-        if (currentpage > 0) {
-            currentpage--
+    function prevPage(event) {
+        if (event.shiftKey) {
+            currentpage = 1
             switchPage()
+        } else {
+            if (currentpage > 1) {
+                currentpage--
+                switchPage()
+            }
         }
     }
     function closeOverlay() {
@@ -57,8 +62,91 @@ async function processCollection(id) {
         document.querySelector('html').removeAttribute('style')
     }
 
+    async function update_pages(currentPage) {
+        const pageButtonsLimit = 6
+
+        const page_count = collectionInfo.group.length
+
+        const page_list_block = page_counter
+        page_list_block.innerHTML = ''
+
+        currentPage = parseInt(currentPage)
+
+        const pageNcont = createDiv('pageNavCont', page_list_block)
+
+        const pageIndicatorCont = createDiv('pageIndicatorCont', pageNcont)
+        for (let i = currentPage - pageButtonsLimit; i <= currentPage + pageButtonsLimit; i++) {
+            const pageDiv = createDiv('pageInd', pageIndicatorCont)
+            const pageDivNumb = createDiv('pageN', pageDiv)
+            pageDivNumb.innerHTML = i
+            if (i == currentPage) {
+                pageDiv.classList.add('current')
+            } else if (i < 1 || i > page_count) {
+                pageDiv.classList.add('hidden')
+                pageDivNumb.innerHTML = ''
+            } else {
+                pageDiv.addEventListener('click', () => {
+                    currentpage = i
+                    switchPage()
+                })
+            }
+        }
+
+        const pageSelector = document.createElement('input')
+        pageNcont.appendChild(pageSelector)
+        pageSelector.type = 'number'
+        pageSelector.className = 'pageSelectorNumber'
+        pageSelector.min = 1
+        pageSelector.max = currentPage + pageButtonsLimit
+        pageSelector.step = 1
+        pageSelector.value = currentPage
+
+        pageSelector.addEventListener('wheel', (event) => {
+            console.log('scroll')
+            event.preventDefault();
+            const step = parseInt(pageSelector.getAttribute('step')) || 1;
+            const currentValue = parseInt(pageSelector.value) || 0;
+
+            if (event.deltaY < 0 && currentValue < page_count) {
+                pageSelector.value = currentValue + step;
+                console.log("scr+")
+            } else if (event.deltaY > 0 && currentValue > 1) {
+                pageSelector.value = currentValue - step;
+                console.log("scr-")
+            }
+
+            const pageindicators = pageIndicatorCont.querySelectorAll('.pageInd')
+            pageindicators.forEach((ind, i) => {
+                ind.classList.remove('switch')
+                if (i - pageButtonsLimit + currentPage == pageSelector.value && pageSelector.value != currentPage) {
+                    ind.classList.add('switch')
+                }
+            })
+        });
+
+        pageSelector.addEventListener('mouseleave', () => {
+            if (pageSelector.value != currentPage) {
+                currentpage = pageSelector.value
+                switchPage()
+            }
+        })
+
+        pageSelector.addEventListener('change', () => {
+            if (pageSelector.value > page_count.pages) {
+                pageSelector.value = page_count.pages
+            }
+            if (pageSelector.value < 1) {
+                pageSelector.value = 1
+            }
+            if (pageSelector.value != currentPage) {
+                currentpage = pageSelector.value
+                switchPage()
+            }
+        })
+    }
+
     const prevPageElem = createDiv('prev-page', background)
-    prevPageElem.addEventListener('click', () => { prevPage() })
+    prevPageElem.addEventListener('click', (e) => { prevPage(e) })
     const left_arrow = document.createElement('img')
     prevPageElem.appendChild(left_arrow)
     left_arrow.src = 'left-arrow.svg'
@@ -74,7 +162,7 @@ async function processCollection(id) {
     }
 
     const nextPageElem = createDiv('next-page', background)
-    nextPageElem.addEventListener('click', () => { nextPage() })
+    nextPageElem.addEventListener('click', (e) => { nextPage(e) })
     const right_arrow = document.createElement('img')
     nextPageElem.appendChild(right_arrow)
     right_arrow.src = 'right-arrow.svg'
@@ -107,7 +195,7 @@ async function processCollection(id) {
     for (const post of collectionInfo.group) {
         const page_container = createDiv('col-page-container', collectionContainer)
 
-        const CC = counter - 1
+        const CC = counter
         page_container.addEventListener('click', () => {
             displayComic(CC)
         })
@@ -131,8 +219,6 @@ async function processCollection(id) {
             }
         }
     }
-
-
 
     createTagSelector(tags, document.querySelector('.tags'))
 
@@ -222,3 +308,4 @@ async function processCollection(id) {
 
 const params = new URLSearchParams(window.location.search)
 processCollection(params.get('id'))
+
