@@ -240,6 +240,7 @@ app.get('/file', async (req, res) => {
     }
 });
 
+app.use(`/eula`, express.static(globalFilesPath));
 app.get('/eula', async (req, res) => {
     res.sendFile(path.join(__dirname, './eula.html'))
 })
