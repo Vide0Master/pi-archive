@@ -27,7 +27,7 @@ const fileFilter = (req, file, cb) => {
     // Разрешенные расширения для фото и видео
     const allowedImageExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
     const allowedVideoExtensions = ['.mp4', '.mov', '.avi', '.mkv'];
-    
+
     if (allowedImageExtensions.includes(ext)) {
         req.fileSizeLimit = 50 * 1024 * 1024; // 50 MB для фото
     } else if (allowedVideoExtensions.includes(ext)) {
@@ -239,6 +239,10 @@ app.get('/file', async (req, res) => {
         res.sendFile(filepath, () => { });
     }
 });
+
+app.get('/eula', async (req, res) => {
+    res.sendFile(path.join(__dirname, './eula.html'))
+})
 
 //Запуск слушателя на порту из config.json
 app.listen(sysController.config.static.web_app.port, () => {
