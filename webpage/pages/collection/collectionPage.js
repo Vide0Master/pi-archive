@@ -174,11 +174,11 @@ async function processCollection(id) {
                 switch (event.code) {
                     case 'KeyA':
                     case 'ArrowLeft':
-                        prevPage()
+                        prevPage(event)
                         break;
                     case 'KeyD':
                     case 'ArrowRight':
-                        nextPage()
+                        nextPage(event)
                         break;
                     case 'Escape':
                         closeOverlay()
