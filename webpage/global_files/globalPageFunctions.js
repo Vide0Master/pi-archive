@@ -178,6 +178,10 @@ function setFooterText() {
 
     const actions = createDiv('actions-row', footer)
 
+    createAction('EULA',actions,()=>{
+        window.open('/eula', '_blank').focus();
+    })
+
     const github = createAction('Github', actions, () => {
         window.open('https://github.com/Vide0Master/pi-archive', '_blank').focus();
     })
