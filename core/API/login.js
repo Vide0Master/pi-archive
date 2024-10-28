@@ -25,7 +25,7 @@ module.exports = (request) => {
         }
 
         const key_update = await SysController.APIcontroller('sessionController', null,
-            { type: 'addSession', login: request.login, stype: 'WEB', skey: request.userKey })
+            { type: 'addSession', login: request.login, stype: request.sessionType, skey: request.userKey })
         if (key_update.rslt == 'e') {
             resolve(key_update)
         } else {

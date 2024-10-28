@@ -39,10 +39,6 @@ async function update_pages(tags, blacklist, currentPage) {
 
     const pageIndicatorCont = createDiv('pageIndicatorCont', pageNcont)
 
-    console.log(currentPage - pageButtonsLimit)
-    console.log(currentPage + pageButtonsLimit)
-
-
     for (let i = currentPage - pageButtonsLimit; i <= currentPage + pageButtonsLimit; i++) {
         const pageDiv = createDiv('pageInd', pageIndicatorCont)
         const pageDivNumb = createDiv('pageN', pageDiv)

@@ -1,6 +1,8 @@
 const syscontroller = require('../systemController.js')
 
 module.exports = (request, user) => {
+    console.log(request)
+    console.log(user)
     return new Promise(async resolve => {
         switch (request.type) {
             case 'getSessions': {

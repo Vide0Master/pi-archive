@@ -38,10 +38,17 @@ function createAction(name, parentElement, cb) {
 
 //region cr Pcard
 function createPostCard(postData) {
-    console.log(postData)
     const postCard = document.createElement('div')
     postCard.className = 'post-card'
-    postCard.setAttribute('onclick', `window.location.href='/view?id=${postData.id}'`)
+    postCard.addEventListener('mousedown', (event) => {
+        if (event.button === 1)
+            event.preventDefault()
+        if ((event.button === 0 && event.ctrlKey) || event.button === 1) {
+            window.open(`/view?id=${postData.id}`, '_blank').focus();
+            return
+        }
+        window.location.href = `/view?id=${postData.id}`
+    })
 
     const preview_container = createDiv('preview-container')
     postCard.appendChild(preview_container)
@@ -101,7 +108,7 @@ function createPostCard(postData) {
         return parts.length > 1 ? parts.pop() : '';
     }
 
-    if (['mp4', 'mov', 'avi', 'mkv'].includes(getFileExtension(postData.file))) {
+    if (['mp4', 'mov', 'avi', 'mkv', 'gif'].includes(getFileExtension(postData.file))) {
         const video_ind_cont = createDiv('video-indicator')
         preview_container.appendChild(video_ind_cont)
 
@@ -171,28 +178,28 @@ setFooterText()
 //region footer text
 function setFooterText() {
     const footer = document.querySelector('footer')
-    footer.innerHTML=''
+    footer.innerHTML = ''
 
     const main_text = createDiv('main-text', footer)
     main_text.innerHTML = `Разработка VideoMaster'а. Система с ограниченными доступом. Распространение внутренней информации - запрещено. Любые решения администрации - неоспоримы.`
 
     const actions = createDiv('actions-row', footer)
 
-    createAction('EULA',actions,()=>{
+    createAction('EULA', actions, () => {
         window.open('/eula', '_blank').focus();
     })
 
     const github = createAction('Github', actions, () => {
         window.open('https://github.com/Vide0Master/pi-archive', '_blank').focus();
     })
-    github.title='Здесь можно просмотреть код проекта и сообщить о ошибке'
+    github.title = 'Здесь можно просмотреть код проекта и сообщить о ошибке'
 
-    const verInfo = createDiv('versionInfo',actions)
+    const verInfo = createDiv('versionInfo', actions)
     async function getVers() {
         const versInfo = await request('getVersionInfo')
-        for(const ver in versInfo){
-            const verBlock = createDiv('',verInfo)
-            verBlock.innerHTML=`${ver}: ${versInfo[ver]}`
+        for (const ver in versInfo) {
+            const verBlock = createDiv('', verInfo)
+            verBlock.innerHTML = `${ver}: ${versInfo[ver]}`
         }
     }
     getVers()
@@ -317,7 +324,6 @@ function createGroup(groupData) {
         const elems = createDiv('list', groupElem)
 
         let z_ind = group.length
-        console.log(group)
         for (const post of group) {
             elems.append(createPostCard(post))
         }
@@ -329,14 +335,21 @@ function createGroup(groupData) {
 
 //region create coll
 function createCollection(collectionData) {
-    console.log(collectionData)
     const colCont = createDiv('collection-container')
 
     async function BDSM() {
 
         const textblock = createDiv('text-block', colCont)
         textblock.innerText = 'Просмотреть как коллекцию'
-        textblock.addEventListener('click', () => { window.location.href = `/collection?id=${collectionData.id}` })
+        textblock.addEventListener('mousedown', (event) => {
+            if (event.button === 1)
+                event.preventDefault()
+            if ((event.button === 0 && event.ctrlKey) || event.button === 1) {
+                window.open(`/collection?id=${collectionData.id}`, '_blank').focus();
+                return
+            }
+            window.location.href = `/collection?id=${collectionData.id}`
+        })
 
         for (const pageID of collectionData.group) {
             colCont.appendChild(createPostCard((await request('getPostData', { id: pageID })).post))
@@ -381,7 +394,6 @@ function createSelect(list, placeholder = '', onChangeCallback) {
 
 //region create reorderer
 function reorderOverlay(group, isDeletable, isRenamable, callback) {
-    console.log(group)
     const container = createDiv('reorderer-container');
 
     const BDSM = async () => {
@@ -466,7 +478,6 @@ function reorderOverlay(group, isDeletable, isRenamable, callback) {
         function updateOrder() {
             const items = Array.from(reorderContainer.querySelectorAll('.post-card'));
             const order = items.map(item => item.dataset.id);
-            console.log('Updated Order:', order);
         }
 
         reorderContainer.addEventListener('click', (e) => {
@@ -675,11 +686,7 @@ async function createTagSelector(tags, elem) {
         }
     }
 
-    console.log(groups)
-
     groups.sort((a, b) => b.priority - a.priority)
-
-    console.log(groups)
 
     const tagblock = document.querySelector('.search-col .tags')
 

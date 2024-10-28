@@ -82,7 +82,6 @@ function showUserData(userData) {
         postsCount: 'Количество постов: '
     }
 
-    console.log(userData.data)
 
     for (const line in usr_data_list) {
         const ln = createDiv('data-line')

@@ -82,7 +82,6 @@ module.exports = (request, userData) => {
 
             //region rnm grp
             case 'renameGroup': {
-                console.log(request)
                 const rename_result = await sysController.dbinteract.updateGroupName(request.groupID, request.newName)
                 resolve(rename_result)
             }; break;

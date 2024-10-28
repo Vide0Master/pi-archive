@@ -49,5 +49,5 @@ if (healthCheckErrors > 0) {
 require('./webpage/index.js')
 
 //starting tg bot
-//require('./tg_bot/index.js')
+require('./tg_bot/index.js')
 

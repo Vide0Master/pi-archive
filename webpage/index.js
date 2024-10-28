@@ -112,7 +112,6 @@ const checkUserPermissionUpload = async (req, res, next) => {
 //middleware для загрузки файлов от пользователя
 app.post('/upload', checkUserPermissionUpload, (req, res, next) => {
     upload(req, res, async () => {
-        console.log(req.file)
         if (!req.file) {
             res.send('w/Нет файла для загрузки.');
             return

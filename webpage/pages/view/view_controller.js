@@ -319,7 +319,6 @@ let post_data;
             label.innerHTML = 'Добавить пост в группу'
 
             const user_post_groups = await request('controlGroup', { type: 'getMyGroups' })
-            console.log(user_post_groups)
 
             const groups_select = []
             groups_select.push({ name: 'Создать новую группу', value: 'create_group' })
@@ -361,7 +360,6 @@ let post_data;
         try {
             const post_data = await fetchPostData(id);
 
-            console.log(post_data)
             displayPostData(post_data)
 
             createTagSelector(post_data.tags, document.querySelector('.tags'));
@@ -396,7 +394,6 @@ let post_data;
                                         post: post_data.id
                                     }
                                 )
-                                console.log(tempKeyRegisterRslt)
                                 if (tempKeyRegisterRslt.rslt == 'e') {
                                     alert(`${tempKeyRegisterRslt.rslt}/${tempKeyRegisterRslt.msg}`)
                                 } else {

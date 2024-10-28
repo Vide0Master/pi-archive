@@ -36,12 +36,13 @@ class Authy {
             sessionStorage.setItem('userKey', userKey)
         }
         loginData.userKey = userKey
+        loginData.sessionType = "WEB"
         const resp = await request('login', loginData)
         return resp
     }
 
     static async loginCheck() {
-        const rslt = await request('loginCheck', { userKey: userKey })
+        const rslt = await request('loginCheck')
         if (rslt.rslt = 's') {
             window.location.href = '/search'
         }

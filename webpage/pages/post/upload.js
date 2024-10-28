@@ -37,8 +37,6 @@ function createUploadBlock(container) {
         const filesToUploadLocal = Array.from(fileInput.files);
         uploadButton.style.display = 'none'
 
-        console.log(fileInput.files)
-
         filesToUploadLocal.forEach((file, index) => {
             const fileBlock = document.createElement('div');
             fileBlock.className = 'file-block'
@@ -179,7 +177,6 @@ function createUploadBlock(container) {
                     }
 
                     const postData = await request('getPostData', { id: upload.postID })
-                    console.log(postData)
                     if (postData.rslt == 'e') {
                         alert(`${postData.rslt}/${postData.msg}`)
 
@@ -238,7 +235,6 @@ function createUploadBlock(container) {
             reader.readAsDataURL(file);
         });
         gftu = filesToUpload
-        console.log(filesToUpload)
     });
 }
 
