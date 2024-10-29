@@ -2,7 +2,7 @@ const sysController = require('../core/systemController.js');
 const TelegramBot = require('node-telegram-bot-api');
 const tgBotController = require('./tgBotController.js');
 
-sysController.log('i/Starting Telegram bot');
+sysController.log('i/Starting Telegram bot', [{ txt: 'TGBot', txtb: 'blue', txtc: 'white' }]);
 const token = sysController.config.private.telegram_bot.token;
 const bot = new TelegramBot(token, { polling: true });
 tgBotController.initialize(bot);
@@ -74,3 +74,5 @@ bot.on('message', async (msg) => {
         tgBotController.executeCommand(command, chatId, userData.user, msg.message_id, ...args);
     }
 });
+
+sysController.log('s/Telegram bot strted', [{ txt: 'TGBot', txtb: 'blue', txtc: 'white' }])

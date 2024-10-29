@@ -1,4 +1,4 @@
-
+0
 const SysController = require('../systemController.js')
 
 module.exports = (request) => {
