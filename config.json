@@ -70,7 +70,8 @@
             "start":0,
             "login":0,
             "unlogin":1,
-            "addTags":1
+            "addTags":1,
+            "testCommand":4
         },
         "sessionTimeLimit": 259200000
     },

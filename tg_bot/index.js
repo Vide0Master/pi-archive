@@ -40,7 +40,6 @@ bot.on('message', async (msg) => {
 
         const filePath = await tgBotController.useUtil('downloadFile', fileId)
         const result = await sysController.fileProcessor(filePath, { type: 'TGBOT', key: chatId });
-        console.log(result)
         tgBotController.sendMessage(chatId, result.msg, msg.message_id,
             [
                 { text: 'Add post tags', data: `addTags:${result.postID}:test` }
@@ -71,7 +70,7 @@ bot.on('message', async (msg) => {
             return
         }
 
-        tgBotController.executeCommand(command, chatId, userData.user, msg.message_id, ...args);
+        tgBotController.executeCommand(command, chatId, msg.message_id, userData.user, ...args);
     }
 });
 

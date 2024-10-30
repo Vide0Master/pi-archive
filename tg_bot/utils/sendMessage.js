@@ -1,21 +1,14 @@
 // utils/sendMessage.js
-module.exports = async (bot, chatId, text, replyToMessageId = null, buttons = []) => {
+module.exports = async (bot, chatId, text, replyToMessageId = null, reply_markup = null) => {
     try {
         const options = {
             ...replyToMessageId && { reply_to_message_id: replyToMessageId },
-            ...buttons.length > 0 && {
-                reply_markup: {
-                    inline_keyboard: [buttons.map((button) => ({
-                        text: button.text,
-                        callback_data: button.data
-                    }))]
-                }
-            }
+            ...reply_markup
         };
 
         const sentMessage = await bot.sendMessage(chatId, text, options);
 
-        // Return the ID of the sent message
+        // Возвращает ID отправленного сообщения
         return sentMessage.message_id;
     } catch (error) {
         console.error('Error sending message:', error);

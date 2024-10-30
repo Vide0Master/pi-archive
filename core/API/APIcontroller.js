@@ -4,15 +4,14 @@
 const dbinteract = require('../systemController.js').dbinteract
 const APIrestrictions = require('../systemController.js').config.static.restrictions.api
 const consoleLogger = require('../consoleLogger.js')
-const LanguageManager = require('../lang/langController.js')
 const config = require('../systemController.js').config
-const hashStr = require('../systemController.js').hashString
 
 module.exports = async (action, user, request) => {
     return new Promise(async resolve => {
         let user_data = null;
         let user_permission = 0
 
+        console.log(user)
         if (user) {
             const userRslt = await dbinteract.getUserBySessionData(user.type, user.key)
             if (userRslt.rslt == "s") {
@@ -35,6 +34,9 @@ module.exports = async (action, user, request) => {
                 }
             }
         }
+
+        console.log(user_data)
+        console.log(user_permission)
 
         if (user_permission >= APIrestrictions[action]) {
             try {

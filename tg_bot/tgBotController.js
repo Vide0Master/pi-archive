@@ -7,8 +7,26 @@ module.exports = class tgBotController {
     static sysController;
     static followups = {};
 
-    static async API(action, user, request) {
-        return this.sysController.APIprocessorTG(action, user, request);
+    static userConstr = class {
+        constructor(chatId) {
+            this.type = 'TGBOT',
+                this.key = chatId
+        }
+    }
+
+    static inlineConstr = class {
+        constructor(buttons){
+            this=[]
+            let row = 1
+            while(buttons.length>0){
+                let buttonsRow = []
+                
+            }
+        }
+    }
+
+    static async API(action, chatID, request) {
+        return await this.sysController.APIprocessorTG(action, new this.userConstr(chatID), request);
     }
 
     static async getUserByTGID(tgid) {
@@ -30,28 +48,24 @@ module.exports = class tgBotController {
         return await util(this.bot, ...args);
     }
 
-    static async executeCommand(command, chatId, userdata, msgID, ...args) {
+    static async executeCommand(command, chatId, msgID, userdata, ...args) {
         const commandPath = path.join(__dirname, 'commands', `${command}.js`);
         if (!fs.existsSync(commandPath)) {
             await this.sendMessage(chatId, 'No file for command ' + command, msgID)
             return
         }
         const commandFn = require(commandPath);
-        await commandFn(this.bot, chatId, userdata, ...args);
+        await commandFn(this.bot, chatId, msgID, userdata, ...args);
     }
 
-    static async executeFollowup(name, chatId, userdata, msgID, followupData, ...args) {
+    static async executeFollowup(name, chatId, msgID, userdata, followupData, ...args) {
         const commandPath = path.join(__dirname, 'followups', `${name}.js`);
         if (!fs.existsSync(commandPath)) {
             await this.sendMessage(chatId, 'No file for followup ' + name, msgID)
             return
         }
         const commandFn = require(commandPath);
-        await commandFn(this.bot, chatId, userdata, msgID, followupData, ...args);
-    }
-
-    static async sendMessage(chatId, text, replyto, options = {}) {
-        return await this.useUtil('sendMessage', chatId, text, replyto, options);
+        await commandFn(this.bot, chatId, msgID, userdata, followupData, ...args);
     }
 
     static async registerButtonHandler() {
@@ -66,5 +80,13 @@ module.exports = class tgBotController {
             }
             await this.bot.answerCallbackQuery(id);
         });
+    }
+
+    static async sendMessage(chatId, text, replyto, options = {}) {
+        return await this.useUtil('sendMessage', chatId, text, replyto, options);
+    }
+
+    static async deleteMessage(chatId, messageId) {
+        return await this.useUtil('deleteMessage', chatId, messageId);
     }
 }
