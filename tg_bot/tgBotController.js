@@ -15,13 +15,18 @@ module.exports = class tgBotController {
     }
 
     static inlineConstr = class {
-        constructor(buttons){
-            this=[]
-            let row = 1
-            while(buttons.length>0){
-                let buttonsRow = []
-                
-            }
+        constructor(buttons) {
+            this.inline_keyboard = [];
+
+            let row = [];
+            buttons.forEach((button, index) => {
+                row.push({ text: button.text, callback_data: button.data });
+
+                if (row.length === 3 || index === buttons.length - 1) {
+                    this.inline_keyboard.push(row);
+                    row = [];
+                }
+            });
         }
     }
 

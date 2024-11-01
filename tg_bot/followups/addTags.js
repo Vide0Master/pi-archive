@@ -4,12 +4,12 @@ const sysController = require('../../core/systemController')
 module.exports = async (bot, chatId, userdata, msgID, followupData, ...args) => {
     const addTags = args[0].split(' ')
 
-    const postData = await tgBotController.API('getPostData', { type: 'TGBOT', key: chatId }, { id: followupData.postID })
+    const postData = await tgBotController.API('getPostData', chatId, { id: followupData.postID })
     if (postData.rslt == 'e') {
         tgBotController.sendMessage(chatId, 'Error: ' + postData.msg)
         return
     }
-
+    console.log(postData)
     const new_tags = postData.post.tags.concat(addTags)
 
     const tagRslt = await sysController.dbinteract.updateTags(followupData.postID, new_tags)

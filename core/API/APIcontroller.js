@@ -11,7 +11,6 @@ module.exports = async (action, user, request) => {
         let user_data = null;
         let user_permission = 0
 
-        console.log(user)
         if (user) {
             const userRslt = await dbinteract.getUserBySessionData(user.type, user.key)
             if (userRslt.rslt == "s") {
@@ -34,9 +33,6 @@ module.exports = async (action, user, request) => {
                 }
             }
         }
-
-        console.log(user_data)
-        console.log(user_permission)
 
         if (user_permission >= APIrestrictions[action]) {
             try {

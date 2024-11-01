@@ -1,6 +1,4 @@
 const fs = require('fs');
-const path = require('path');
-const tgBotController = require('../tgBotController')
 
 module.exports = async (bot, chatId, msgId, files, options = {}) => {
     const { caption = '', buttons = [] } = options;
@@ -15,12 +13,14 @@ module.exports = async (bot, chatId, msgId, files, options = {}) => {
             }
         };
 
+        const fstream = fs.createReadStream(media)
+
         if (type === 'photo') {
-            await bot.sendPhoto(chatId, media, messageOptions);
+            await bot.sendPhoto(chatId, fstream, messageOptions);
         } else if (type === 'video') {
-            await bot.sendVideo(chatId, media, messageOptions);
+            await bot.sendVideo(chatId, fstream, messageOptions);
         } else if (type === 'document') {
-            await bot.sendDocument(chatId, media, messageOptions);
+            await bot.sendDocument(chatId, fstream, messageOptions);
         } else {
             console.error(`Unsupported file type: ${type}`);
         }

@@ -66,12 +66,13 @@
             "max_tags": 50,
             "max_desc_length": 2000
         },
-        "tgbotfunctions":{
-            "start":0,
-            "login":0,
-            "unlogin":1,
-            "addTags":1,
-            "testCommand":4
+        "tgbotfunctions": {
+            "start": 0,
+            "login": 0,
+            "unlogin": 1,
+            "post": 1,
+            "addTags": 1,
+            "testCommand": 4
         },
         "sessionTimeLimit": 259200000
     },
