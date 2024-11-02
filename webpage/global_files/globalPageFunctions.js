@@ -311,24 +311,33 @@ function parseUserLogin(login, elem) {
 //region create group
 function createGroup(groupData) {
     const groupElem = createDiv('group-line')
+    groupElem.style.setProperty('--borderclr', groupData.color)
 
-    const BDSM = async () => {
-        groupElem.setAttribute('group-name', groupData.name)
+    const actionRow = createDiv('action-row', groupElem)
+    const groupName = createDiv('group-name', actionRow)
+    groupName.innerHTML = groupData.name
+    createDiv('splitter', groupElem)
 
-        const group = []
+    if (groupData.type == 'collection') {
+        const openAsColl = createButton('View as collection', actionRow)
+        openAsColl.addEventListener('mousedown', (event) => {
+            if (event.button === 1)
+                event.preventDefault()
+            if ((event.button === 0 && event.ctrlKey) || event.button === 1) {
+                window.open(`/collection?id=${groupData.id}`, '_blank').focus();
+                return
+            }
+            window.location.href = `/collection?id=${groupData.id}`
+        })
+    }
 
-        for (const ID of groupData.group) {
-            group.push((await request('getPostData', { id: ID })).post)
-        }
-
-        const elems = createDiv('list', groupElem)
-
-        let z_ind = group.length
-        for (const post of group) {
-            elems.append(createPostCard(post))
+    const list = createDiv('list', groupElem)
+    const GROUPER = async () => {
+        for (const post of groupData.group) {
+            list.append(createPostCard((await request('getPostData', { id: post })).post))
         }
     }
-    BDSM()
+    GROUPER()
 
     return groupElem
 }
@@ -336,28 +345,21 @@ function createGroup(groupData) {
 //region create coll
 function createCollection(collectionData) {
     const colCont = createDiv('collection-container')
+    const colNnBrow = createDiv('action-row', colCont)
+    createDiv('splitter', colCont)
+    const list = createDiv('posts-list', colCont)
 
-    async function BDSM() {
+    const name = createDiv('group-name', colNnBrow)
+    name.innerHTML = collectionData.name
 
-        const textblock = createDiv('text-block', colCont)
-        textblock.innerText = 'Просмотреть как коллекцию'
-        textblock.addEventListener('mousedown', (event) => {
-            if (event.button === 1)
-                event.preventDefault()
-            if ((event.button === 0 && event.ctrlKey) || event.button === 1) {
-                window.open(`/collection?id=${collectionData.id}`, '_blank').focus();
-                return
-            }
-            window.location.href = `/collection?id=${collectionData.id}`
-        })
 
+
+    async function COLLECTIONER() {
         for (const pageID of collectionData.group) {
-            colCont.appendChild(createPostCard((await request('getPostData', { id: pageID })).post))
+            list.appendChild(createPostCard((await request('getPostData', { id: pageID })).post))
         }
     }
-    BDSM()
-
-    colCont.setAttribute('col-name', `${collectionData.name} | ${collectionData.group.length} стр.`)
+    COLLECTIONER()
 
     return colCont
 }
@@ -393,10 +395,10 @@ function createSelect(list, placeholder = '', onChangeCallback) {
 }
 
 //region create reorderer
-function reorderOverlay(group, isDeletable, isRenamable, callback) {
+function reorderOverlay(group, callback) {
     const container = createDiv('reorderer-container');
 
-    const BDSM = async () => {
+    const RENDER = async () => {
         const label = createDiv('label');
         container.appendChild(label);
         label.innerText = `${group.id}|${group.name}`;
@@ -522,22 +524,27 @@ function reorderOverlay(group, isDeletable, isRenamable, callback) {
             callback('cancel')
         });
 
-        if (isDeletable) {
-            const delete_btn = createButton('Удалить');
-            delete_btn.style.backgroundColor = 'red';
-            button_row.appendChild(delete_btn);
-            delete_btn.addEventListener('click', () => {
-                callback('delete')
-            });
-        }
+        const delete_btn = createButton('Удалить');
+        delete_btn.style.backgroundColor = 'red';
+        button_row.appendChild(delete_btn);
+        delete_btn.addEventListener('click', () => {
+            callback('delete')
+        });
 
-        if (isRenamable) {
-            const rename_btn = createButton('Переименовать');
-            button_row.appendChild(rename_btn);
-            rename_btn.addEventListener('click', () => {
-                callback('rename')
-            });
-        }
+        const rename_btn = createButton('Переименовать');
+        button_row.appendChild(rename_btn);
+        rename_btn.addEventListener('click', () => {
+            callback('rename')
+        });
+
+        const colorSel = document.createElement('input')
+        button_row.appendChild(colorSel);
+        colorSel.type='color'
+        colorSel.value=group.color
+        colorSel.title='Group outline color'
+        colorSel.addEventListener('change',()=>{
+            callback('color', colorSel.value)
+        })
 
         const confirm_btn = createButton('Принять');
         button_row.appendChild(confirm_btn);
@@ -548,7 +555,7 @@ function reorderOverlay(group, isDeletable, isRenamable, callback) {
         });
     };
 
-    BDSM();
+    RENDER();
 
     return container;
 }

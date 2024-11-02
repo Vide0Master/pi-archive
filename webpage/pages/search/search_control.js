@@ -160,15 +160,7 @@ async function get_posts(page) {
                         post_list.splice(index, 1);
                     }
                 });
-
-                switch (post.postGroupData.type) {
-                    case 'collection': {
-                        elm = createCollection(post.postGroupData)
-                    }; break;
-                    case 'group': {
-                        elm = createGroup(post.postGroupData)
-                    }; break;
-                }
+                elm = createGroup(post.postGroupData)
             }; break;
             default: {
                 elm = createPostCard(post)

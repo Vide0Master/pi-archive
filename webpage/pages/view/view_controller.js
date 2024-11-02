@@ -195,7 +195,7 @@ let post_data;
                             }
                         })
 
-                        const reord_over = reorderOverlay(post_data.postGroupData, true, true, async (result, data) => {
+                        const reord_over = reorderOverlay(post_data.postGroupData, async (result, data) => {
                             switch (result) {
                                 case 'cancel': {
                                     container.remove()
@@ -242,6 +242,15 @@ let post_data;
                                         }
                                     })
                                 }; break;
+                                case 'color': {
+                                    const color_result = await request('controlGroup',
+                                        {
+                                            type: 'setGroupColor',
+                                            groupID: post_data.postGroupData.id,
+                                            newColor: data
+                                        })
+                                    alert(`${color_result.rslt}/${color_result.msg}`, 5000)
+                                };break;
                             }
                         })
                         container.appendChild(reord_over)
