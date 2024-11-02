@@ -37,18 +37,19 @@ function createAction(name, parentElement, cb) {
 }
 
 //region cr Pcard
-function createPostCard(postData) {
+function createPostCard(postData, noClickReaction) {
     const postCard = document.createElement('div')
     postCard.className = 'post-card'
-    postCard.addEventListener('mousedown', (event) => {
-        if (event.button === 1)
-            event.preventDefault()
-        if ((event.button === 0 && event.ctrlKey) || event.button === 1) {
-            window.open(`/view?id=${postData.id}`, '_blank').focus();
-            return
-        }
-        window.location.href = `/view?id=${postData.id}`
-    })
+    if (!noClickReaction)
+        postCard.addEventListener('mousedown', (event) => {
+            if (event.button === 1)
+                event.preventDefault()
+            if ((event.button === 0 && event.ctrlKey) || event.button === 1) {
+                window.open(`/view?id=${postData.id}`, '_blank').focus();
+                return
+            }
+            window.location.href = `/view?id=${postData.id}`
+        })
 
     const preview_container = createDiv('preview-container')
     postCard.appendChild(preview_container)
@@ -415,8 +416,7 @@ function reorderOverlay(group, callback) {
                 container.remove()
                 return
             }
-            const pcard = createPostCard(postData.post);
-            pcard.removeAttribute('onclick')
+            const pcard = createPostCard(postData.post, true);
             pcard.draggable = true;
             pcard.dataset.id = ID;
             idToElementMap.set(ID, pcard);
@@ -539,10 +539,10 @@ function reorderOverlay(group, callback) {
 
         const colorSel = document.createElement('input')
         button_row.appendChild(colorSel);
-        colorSel.type='color'
-        colorSel.value=group.color
-        colorSel.title='Group outline color'
-        colorSel.addEventListener('change',()=>{
+        colorSel.type = 'color'
+        colorSel.value = group.color
+        colorSel.title = 'Group outline color'
+        colorSel.addEventListener('change', () => {
             callback('color', colorSel.value)
         })
 
