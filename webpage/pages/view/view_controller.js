@@ -426,6 +426,7 @@ let post_data;
 
             const response = await fetch(file_link);
             const contentType = response.headers.get('Content-Type').split('/')[0];
+            console.log(contentType)
             process_LDF()
             createComments()
             fetchAndDisplayFile(file_link, contentType)

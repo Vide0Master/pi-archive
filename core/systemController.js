@@ -4,6 +4,21 @@ const consoleLogger = require('./consoleLogger.js')
 class SysController {
     static log = consoleLogger
 
+    static parseTimestamp(timestamp) {
+        let currentdate = new Date(Math.floor(timestamp));
+    
+        const padZero = (num) => num.toString().padStart(2, '0');
+    
+        let datetime = padZero(currentdate.getDate()) + "."
+            + padZero(currentdate.getMonth() + 1) + "."
+            + currentdate.getFullYear() + " "
+            + padZero(currentdate.getHours()) + ":"
+            + padZero(currentdate.getMinutes()) + ":"
+            + padZero(currentdate.getSeconds());
+    
+        return datetime;
+    }
+
     static dbinteract = require('./DB/DBController.js')
 
     static config = {

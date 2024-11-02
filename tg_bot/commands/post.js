@@ -1,5 +1,5 @@
 const tgBotController = require('../tgBotController');
-const sysController = tgBotController.sysController;
+const sysController = require('../../core/systemController')
 const path = require('path');
 
 // Функция для определения типа файла на основе его расширения
@@ -13,9 +13,17 @@ const getFileType = (filename) => {
     return 'document';
 };
 
-
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Б';
+    const k = 1024;
+    const sizes = ['B', 'Kb', 'Mb', 'Gb'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    const size = parseFloat((bytes / Math.pow(k, i)).toFixed(1));
+    return `${size} ${sizes[i]}`;
+}
 
 module.exports = async (bot, chatId, msgId, userdata, ...args) => {
+    console.log(userdata)
     const postIdArg = args[0];
     const isDoc = args[1] === 'file';
 
@@ -63,24 +71,54 @@ module.exports = async (bot, chatId, msgId, userdata, ...args) => {
     for (const postId of postIds) {
         const postData = await tgBotController.API('getPostData', chatId, { id: postId });
 
+        const filePath = path.join(__dirname, `../../storage/file_storage/${postData.post.file}`);
+        const fileType = getFileType(postData.post.file);
+        let typeToSend = isDoc ? 'document' : fileType;
+
         if (postData.rslt == 'e') {
             await tgBotController.sendMessage(chatId, postData.msg, msgId);
             continue;
         }
-        
+
         if (postData.rslt == 'w') {
             await tgBotController.sendMessage(chatId, `Post ${postId} is not present`, msgId);
             continue;
         }
 
-        const filePath = path.join(__dirname, `../../storage/file_storage/${postData.post.file}`);
-        const fileType = getFileType(postData.post.file);
+        const postCapLines = []
+        postCapLines.push(`<b><i>Post ${postData.post.id}</i></b>`)
+        if (postData.post.description) postCapLines.push(`Post ${postData.post.id}`)
+        postCapLines.push('Tags: ' + postData.post.tags.map(v => '<b>#' + v + '</b>').join(', '))
+        postCapLines.push(`Post uploaded by <b><a href="http://vmtech.hopto.org:2000/profile/?user=${postData.post.author}">${postData.post.author}</a></b> via ${postData.post.file.split('-')[0]} on ${sysController.parseTimestamp(postData.post.timestamp)}`)
+        postCapLines.push(`Size: ${postData.post.size.x}x${postData.post.size.y} (${formatFileSize(postData.post.size.weight)})`)
+        postCapLines.push(`File format: ${postData.post.file.split('.').pop().toUpperCase()}`)
 
-        // Определяем тип отправляемого файла
-        const typeToSend = isDoc ? 'document' : fileType;
+        if (postData.post.size.weight > 10485760 && typeToSend != 'document') {
+            typeToSend = 'document'
+            postCapLines.push(`<b><i>Upload made as file, file size exceeded 10Mb</i></b>`)
+        }
+
+        if (postData.post.size.weight > 52428800) {
+            await tgBotController.sendMessage(chatId, 'File size ecxeeded 50Mb, upload canceled', msgId);
+            return
+        }
+
+        const caption = postCapLines.join('\n\n')
+
+        const postActions = []
+
+        if (userdata.login == postData.post.author) {
+            postActions.push({ text: 'Add post tags', data: `addTags:${postId}` })
+        }
+
+        const buttons = new tgBotController.inlineConstr(postActions)
 
         await tgBotController.useUtil('sendFile', chatId, null, [
             { type: typeToSend, media: filePath }
-        ]);
+        ], {
+            caption: caption,
+            buttons: buttons.inline_keyboard,
+            filename: `POST-${postData.post.id}${path.extname(postData.post.file)}`
+        });
     }
 };

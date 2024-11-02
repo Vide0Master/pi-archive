@@ -3,7 +3,8 @@ module.exports = async (bot, chatId, text, replyToMessageId = null, reply_markup
     try {
         const options = {
             ...replyToMessageId && { reply_to_message_id: replyToMessageId },
-            ...reply_markup
+            ...reply_markup,
+            parse_mode: 'HTML'
         };
 
         const sentMessage = await bot.sendMessage(chatId, text, options);

@@ -26,24 +26,38 @@ bot.on('message', async (msg) => {
 
         let fileId;
         if (msg.photo) {
+            if (msg.photo[msg.photo.length - 1].file_size > 20971520) {
+                await tgBotController.sendMessage(chatId, 'Photo is too large! 20Mb max', msg.message_id);
+                return
+            }
             fileId = msg.photo[msg.photo.length - 1].file_id;
         } else if (msg.video) {
+            if (msg.video.file_size > 20971520) {
+                await tgBotController.sendMessage(chatId, 'Video is too large! 20Mb max', msg.message_id);
+                return
+            }
             fileId = msg.video.file_id;
         } else if (msg.document && msg.document.mime_type.startsWith('image/')) {
+            if (msg.document.file_size > 20971520) {
+                await tgBotController.sendMessage(chatId, 'Photo is too large! 20Mb max', msg.message_id);
+                return
+            }
             fileId = msg.document.file_id;
-        } else if (msg.document && msg.document.mime_type === 'video/mp4') {
+        } else if (msg.document && msg.document.mime_type.startsWith('video')) {
+            if (msg.document.file_size > 20971520) {
+                await tgBotController.sendMessage(chatId, 'Video is too large! 20Mb max', msg.message_id);
+                return
+            }
             fileId = msg.document.file_id;
         } else {
-            sendMessage(bot, chatId, 'This file format is unsupported.', messageId);
+            await tgBotController.sendMessage(chatId, result.msg, msg.message_id, 'This file format is unsupported.');
             return
         }
-
         const filePath = await tgBotController.useUtil('downloadFile', fileId)
         const result = await sysController.fileProcessor(filePath, { type: 'TGBOT', key: chatId });
-        tgBotController.sendMessage(chatId, result.msg, msg.message_id,
-            [
-                { text: 'Add post tags', data: `addTags:${result.postID}:test` }
-            ]);
+        tgBotController.sendMessage(chatId, result.msg, msg.message_id, new tgBotController.inlineConstr([
+            { text: 'Add post tags', data: `addTags:${result.postID}` }
+        ]));
         return
     }
 

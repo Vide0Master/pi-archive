@@ -12,7 +12,8 @@ module.exports = async (bot, chatId, userdata, msgID, followupData, ...args) => 
     console.log(postData)
     const new_tags = postData.post.tags.concat(addTags)
 
-    const tagRslt = await sysController.dbinteract.updateTags(followupData.postID, new_tags)
+    const tagRslt = await tgBotController.API('updateTags', chatId, { post: followupData.postID, newTags: new_tags })
+
     if (tagRslt.rslt == 'e') {
         tgBotController.sendMessage(chatId, 'Error: ' + tagRslt.msg)
         return

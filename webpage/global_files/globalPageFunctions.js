@@ -595,7 +595,7 @@ function search(alert) {
 function formatFileSize(bytes) {
     if (bytes === 0) return '0 Б';
     const k = 1024;
-    const sizes = ['Б', 'КБ', 'МБ', 'ГБ', 'ТБ', 'ПБ', 'ЭБ', 'ЗБ', 'ЙБ'];
+    const sizes = ['B', 'Kb', 'Mb', 'Gb'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     const size = parseFloat((bytes / Math.pow(k, i)).toFixed(1));
     return `${size} ${sizes[i]}`;
