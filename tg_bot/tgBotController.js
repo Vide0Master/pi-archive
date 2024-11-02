@@ -60,7 +60,7 @@ module.exports = class tgBotController {
             return
         }
         const commandFn = require(commandPath);
-        await commandFn(this.bot, chatId, msgID, userdata, ...args);
+        return await commandFn(this.bot, chatId, msgID, userdata, ...args);
     }
 
     static async executeFollowup(name, chatId, msgID, userdata, followupData, ...args) {

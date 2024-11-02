@@ -9,7 +9,6 @@ module.exports = async (bot, chatId, userdata, msgID, followupData, ...args) => 
         tgBotController.sendMessage(chatId, 'Error: ' + postData.msg)
         return
     }
-    console.log(postData)
     const new_tags = postData.post.tags.concat(addTags)
 
     const tagRslt = await tgBotController.API('updateTags', chatId, { post: followupData.postID, newTags: new_tags })

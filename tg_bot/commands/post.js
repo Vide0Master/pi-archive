@@ -23,7 +23,6 @@ function formatFileSize(bytes) {
 }
 
 module.exports = async (bot, chatId, msgId, userdata, ...args) => {
-    console.log(userdata)
     const postIdArg = args[0];
     const isDoc = args[1] === 'file';
 
@@ -100,7 +99,10 @@ module.exports = async (bot, chatId, msgId, userdata, ...args) => {
 
         if (postData.post.size.weight > 52428800) {
             await tgBotController.sendMessage(chatId, 'File size ecxeeded 50Mb, upload canceled', msgId);
-            return
+            return new sysController.createResponse(
+                'e',
+                'File size ecxeeded 50Mb, upload canceled'
+            )
         }
 
         const caption = postCapLines.join('\n\n')
@@ -121,4 +123,9 @@ module.exports = async (bot, chatId, msgId, userdata, ...args) => {
             filename: `POST-${postData.post.id}${path.extname(postData.post.file)}`
         });
     }
+
+    return new sysController.createResponse(
+        's',
+        'Post sent'
+    )
 };
