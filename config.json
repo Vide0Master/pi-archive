@@ -69,6 +69,7 @@
         "tgbotfunctions": {
             "start": 0,
             "login": 0,
+            "help": 0,
             "unlogin": 1,
             "post": 1,
             "addTags": 1,
