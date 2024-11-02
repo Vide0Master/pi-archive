@@ -122,89 +122,102 @@ app.post('/upload', checkUserPermissionUpload, (req, res, next) => {
     })
 })
 
-const fileCache = require('../core/fileCache.js')
-
 // путь для передачи файлов с проверкой пользовтеля
 app.get('/file', async (req, res) => {
-    const { tempKey, id: postID, userKey, thumb } = req.query;
+    const tempKey = req.query.tempKey;
+    const postID = req.query.id;
+    const userKey = req.query.userKey;
+
     let user_perm = 0;
 
-    // Права доступа
+    // Если предоставлен userKey, игнорируем временный ключ
     if (!userKey) {
         if (tempKey) {
             const tempKeyCheck = await sysController.dbinteract.getTempKeyData(tempKey);
-            if (tempKeyCheck.rslt === 'e') return res.status(500).send('<h1>500</h1>Server error!');
-            if (!tempKeyCheck.data) return res.status(403).send('<h1>403</h1>Access rejected!<br>Access key expired.');
+
+            if (tempKeyCheck.rslt === 'e') {
+                return res.status(500).send('<h1>500</h1>Server error!');
+            }
+
+            if (!tempKeyCheck.data) {
+                return res.status(403).send('<h1>403</h1>Access rejected!<br>Access key expired.');
+            }
 
             const tempKeyData = tempKeyCheck.data;
-            if (tempKeyData.postID != postID) return res.status(403).send(`<h1>403</h1>Access rejected!<br>Access key does not match post ID: ${postID}.`);
+
+            if (tempKeyData.postID != postID) {
+                return res.status(403).send(`<h1>403</h1>Access rejected!<br>Access key does not matching post ID:${postID}.`);
+            }
+
             if (tempKeyData.expires !== 'infinite' && tempKeyData.expires < Date.now()) {
                 await sysController.dbinteract.deleteExpiredTempKey(tempKeyData.key);
                 return res.status(403).send('<h1>403</h1>Access rejected!<br>Access key expired.');
             }
+
             user_perm = 1;
         }
     } else {
-        const userData = await sysController.dbinteract.getUserBySessionData('WEB', userKey);
-        if (userData.rslt === 's') user_perm = sysController.config.static.user_status[userData.user.status];
+        const userData = await sysController.dbinteract.getUserBySessionData('WEB', userKey)
+        if (userData.rslt == 's') {
+            user_perm = sysController.config.static.user_status[userData.user.status]
+        }
     }
 
-    if (user_perm < 1) return res.status(403).send('<h1>403</h1>Access rejected!');
-    if (user_perm === 'e') return res.status(500).send('<h1>500</h1>Server error!');
+    if (user_perm < 1) {
+        return res.status(403).send('<h1>403</h1>Access rejected!');
+    }
+
+    if (user_perm == 'e') {
+        return res.status(500).send('<h1>500</h1>Server error!');
+    }
 
     const file = await sysController.dbinteract.getFileNameByPostID(postID);
-    if (!file) return res.status(500).send('<h1>500</h1>Record data missing!\nReport to admin ASAP!');
-    if (file.rslt === 'e') return res.status(file.code).send(`<h1>${file.code}</h1>${file.msg}`);
+
+    if (!file) {
+        return res.status(500).send('<h1>500</h1>Record data missing!\nReport to admin ASAP!');
+    }
+
+    if (file.rslt === 'e') {
+        return res.status(file.code).send(`<h1>${file.code}</h1>` + file.msg);
+    }
 
     const filepath = path.join(__dirname, '../storage/file_storage', file);
-    const mimeType = mime.lookup(filepath) || 'application/octet-stream';
-    const cacheKey = `file_${postID}`;
+    const range = req.headers.range;
+    const mimeType = mime.lookup(filepath);
 
-    // Генерация миниатюры, если требуется
-    const generateThumbnail = thumb === 'true' && !tempKey;
+    // Установка заголовков кэширования на 1 неделю
+    res.set('Cache-Control', 'public, max-age=604800'); // 1 неделя
+    res.set('Expires', new Date(Date.now() + 604800000).toUTCString()); // 1 неделя в будущем
+
+    // Проверка параметра thumb
+    const generateThumbnail = (req.query.thumb === 'true' && !tempKey);
+
     if (generateThumbnail) {
-        const cachedThumb = fileCache.getCachedFile(`${cacheKey}_thumb`);
-        if (cachedThumb) {
-            res.set('Content-Type', mimeType);
-            return res.send(cachedThumb);
-        }
-
         if (mimeType.startsWith('image/')) {
+            // Изменение размера изображения
             const resizedImage = await sharp(filepath)
                 .resize({ height: 200, fit: 'inside' })
                 .toBuffer();
-            fileCache.cacheFile(`${cacheKey}_thumb`, resizedImage);
             res.set('Content-Type', mimeType);
-            return res.send(resizedImage);
+            res.send(resizedImage);
         } else if (mimeType.startsWith('video/')) {
             const thumbnailPath = path.join(__dirname, '../storage/video_thumbnails', `THUMBFOR-${path.parse(filepath).name}.jpg`);
+
             if (fs.existsSync(thumbnailPath)) {
-                const thumbnailData = fs.readFileSync(thumbnailPath);
-                fileCache.cacheFile(`${cacheKey}_thumb`, thumbnailData);
-                res.set('Content-Type', 'image/jpeg');
-                return res.send(thumbnailData);
+                res.sendFile(thumbnailPath);
             } else {
-                return res.status(404).send('<h1>404</h1>Preview not found!');
+                res.status(404).send('<h1>404</h1>Preview not found!');
             }
         } else {
-            return res.status(400).send('<h1>400</h1>Unsupported filetype for preview!');
+            res.status(400).send('<h1>400</h1>Unsopported filetype for preview!');
         }
+        return;
     }
 
-    // Проверка и загрузка кэшированного файла
-    let cachedFile = fileCache.getCachedFile(cacheKey);
-    if (!cachedFile) {
-        cachedFile = fs.readFileSync(filepath);  // Считываем файл, если не найден в кэше
-        fileCache.cacheFile(cacheKey, cachedFile);
-    }
-
-    // Установка правильного заголовка Content-Type
-    res.set('Content-Type', mimeType);
-
-    const range = req.headers.range;
     if (range) {
-        const fileSize = cachedFile.length;
-        const parts = range.replace(/bytes=/, '').split('-');
+        const stat = fs.statSync(filepath);
+        const fileSize = stat.size;
+        const parts = range.replace(/bytes=/, "").split("-");
         const start = parseInt(parts[0], 10);
         const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
 
@@ -213,7 +226,7 @@ app.get('/file', async (req, res) => {
         }
 
         const chunksize = (end - start) + 1;
-        const fileChunk = cachedFile.slice(start, end + 1);
+        const fileStream = fs.createReadStream(filepath, { start, end });
         const head = {
             'Content-Range': `bytes ${start}-${end}/${fileSize}`,
             'Accept-Ranges': 'bytes',
@@ -222,11 +235,10 @@ app.get('/file', async (req, res) => {
         };
 
         res.writeHead(206, head);
-        return res.end(fileChunk);
+        fileStream.pipe(res);
+    } else {
+        res.sendFile(filepath, () => { });
     }
-
-    // Для полного запроса
-    return res.send(cachedFile);
 });
 
 app.use(`/eula`, express.static(globalFilesPath));
