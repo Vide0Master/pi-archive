@@ -2,7 +2,6 @@
 
 document.querySelector('.reset-user-pass').addEventListener('click', async () => {
     const users_list = await request('resetUserPassContr', { type: 'getUsers' })
-    console.log(users_list)
 
     const background = createBlurOverlay()
 

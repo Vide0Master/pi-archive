@@ -1,4 +1,3 @@
-const consoleLogger = require('../consoleLogger');
 const SysController = require('../systemController');
 
 module.exports = (db, tags = [], blacklist = []) => {

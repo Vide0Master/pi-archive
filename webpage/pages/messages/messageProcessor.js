@@ -69,9 +69,7 @@ async function getMessages() {
             msgText.innerHTML = msg.message
 
             if (msg.read == 0 && msg.from == user) {
-                console.log('marked ' + msg.message)
                 onElementFullyVisible(msgText, async () => {
-                    console.log('прочитал?')
                     const read_rslt = await request('controlUserDM', { type: 'readMessage', msgID: msg.messageid })
                     if (read_rslt.rslt == 'e') {
                         alert(read_rslt.rslt + '/' + read_rslt.msg)

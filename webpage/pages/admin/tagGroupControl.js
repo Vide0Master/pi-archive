@@ -70,7 +70,6 @@ async function createTagGroupList() {
                 content.insertBefore(tagElem, add_btn)
                 tagElem.classList.add('new')
             }
-            console.log(localtags)
         })
 
         add_btn.classList.add('plus')
@@ -102,7 +101,6 @@ async function createTagGroupList() {
                 relatedtags: localtags
             }
 
-            console.log(newGroupData)
             const conf_result = await request('controlTagGroups', { type: 'updateGroup', group: tagGroup.groupname, newGroupData: newGroupData })
             if(conf_result.rslt=='s')
                 window.location.href = window.location.href + `?alert=${conf_result.rslt}/${conf_result.msg}`

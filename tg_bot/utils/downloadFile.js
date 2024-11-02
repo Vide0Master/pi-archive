@@ -1,13 +1,15 @@
 const axios = require('axios');
 const fs = require('fs');
 const path = require('path');
+const downloadDir = '../../storage/file_storage'
+const tgBotController = require('../tgBotController')
 
-module.exports.downloadFile = async (bot, fileId, downloadDir) => {
+module.exports = async (bot, fileId) => {
     const file = await bot.getFile(fileId);
     const fileUrl = `https://api.telegram.org/file/bot${bot.token}/${file.file_path}`;
 
-    const fileName = path.basename(file.file_path);
-    const fullPath = path.join(downloadDir, fileName);
+    const fileName = path.basename(`TGBOT-${tgBotController.sysController.hashGen(10)}-${Date.now()}${path.extname(file.file_path)}`);
+    const fullPath = path.join(__dirname, downloadDir, fileName);
 
     const response = await axios({
         url: fileUrl,

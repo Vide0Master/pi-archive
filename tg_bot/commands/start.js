@@ -1,16 +1,8 @@
-// commands/start.js
+const tgBotController = require('../tgBotController');
 
-// Экспортируем функцию, которая будет вызвана при выполнении команды
-module.exports = (bot, msg) => {
-    const chatId = msg.chat.id;
+module.exports = (bot, chatId) => {
 
-    // Сообщение, которое отправит бот в ответ на команду /start
-    const welcomeMessage = 'Добро пожаловать в PI Archive! Я помогу вам сохранять и организовывать ваши фото, видео и файлы.';
+    const welcomeMessage = 'Добро пожаловать в PI Archive!\n\nЭто приложение поможет вам сохранять и организовывать ваши фото, видео и файлы в личном облачном хранилище.\n\nДля начала работы, пожалуйста, используйте команду /login чтобы войти в свой аккаунт.';
 
-    // Используем универсальную функцию для отправки сообщения
-    bot.sendMessage(chatId, welcomeMessage)
-        .then(sentMessage => {
-            console.log(`Отправлено приветственное сообщение с ID: ${sentMessage.message_id}`);
-        })
-        .catch(error => console.error('Ошибка при отправке сообщения:', error));
+    tgBotController.useUtil('sendMessage', chatId, welcomeMessage)
 };

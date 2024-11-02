@@ -5,27 +5,6 @@ const cmd = require('../consoleLogger')
 class LanguageManager {
     static availableLanguages = [];
     static translations = {};
-    static parseLine(line, lang) {
-        // Проверяем, есть ли в строке шаблон вида {{...}}
-        if (!line.includes('{{')) {
-            return line;  // Если шаблона нет, возвращаем строку как есть
-        }
-
-        return line.replace(/{{(.*?)}}/g, (_, key) => {
-            const path = key.split('_');  // Разделяем строку по "_", чтобы получить путь к свойствам объекта
-            let value = lang;
-
-            // Проходим по каждому ключу пути в объекте
-            for (const part of path) {
-                value = value?.[part];
-                if (value === undefined) {
-                    return `{{${key}}}`;  // Если значение не найдено, возвращаем исходный шаблон
-                }
-            }
-
-            return value;  // Заменяем шаблон на найденное значение
-        });
-    }
 }
 
 const files = fs.readdirSync(__dirname);

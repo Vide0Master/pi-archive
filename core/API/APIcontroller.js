@@ -4,9 +4,7 @@
 const dbinteract = require('../systemController.js').dbinteract
 const APIrestrictions = require('../systemController.js').config.static.restrictions.api
 const consoleLogger = require('../consoleLogger.js')
-const LanguageManager = require('../lang/langController.js')
 const config = require('../systemController.js').config
-const hashStr = require('../systemController.js').hashString
 
 module.exports = async (action, user, request) => {
     return new Promise(async resolve => {

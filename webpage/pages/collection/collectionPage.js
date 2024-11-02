@@ -102,17 +102,14 @@ async function processCollection(id) {
         pageSelector.value = currentPage
 
         pageSelector.addEventListener('wheel', (event) => {
-            console.log('scroll')
             event.preventDefault();
             const step = parseInt(pageSelector.getAttribute('step')) || 1;
             const currentValue = parseInt(pageSelector.value) || 0;
 
             if (event.deltaY < 0 && currentValue < page_count) {
                 pageSelector.value = currentValue + step;
-                console.log("scr+")
             } else if (event.deltaY > 0 && currentValue > 1) {
                 pageSelector.value = currentValue - step;
-                console.log("scr-")
             }
 
             const pageindicators = pageIndicatorCont.querySelectorAll('.pageInd')
