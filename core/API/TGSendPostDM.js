@@ -2,11 +2,12 @@ const syscontroller = require('../systemController.js')
 
 module.exports = (request, userData) => {
     return new Promise(async resolve => {
+        const userSessions = (await syscontroller.dbinteract.getUserSessions(userData.login)).sessions
+        const tgsessions = userSessions.filter(v => v.type == 'TGBOT')
+
         let msgrslt
-        if (request.isFile) {
-            msgrslt = await syscontroller.TGController.sendPostAsFile(request.postID, userData.tgid)
-        } else {
-            msgrslt = await syscontroller.TGController.sendPost(request.postID, userData.tgid)
+        for (const tgsession of tgsessions) {
+            msgrslt = await syscontroller.TGController.executeCommand('post', tgsession.key, null, userData, request.postID.toString(), request.isFile ? 'document' : null)
         }
 
         resolve(msgrslt)

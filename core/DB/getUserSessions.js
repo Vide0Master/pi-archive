@@ -2,7 +2,7 @@ const sysController = require('../systemController')
 
 module.exports = (db, login) => {
     return new Promise(async resolve => {
-        db.all(`SELECT * FROM sessions WHERE login = ?`, [login], (err, rows) => {
+        db.all(`SELECT * FROM sessions WHERE user = ?`, [login], (err, rows) => {
             resolve(new sysController.createResponse(
                 's',
                 `Got ${login} sessions`,

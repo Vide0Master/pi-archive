@@ -250,7 +250,7 @@ let post_data;
                                             newColor: data
                                         })
                                     alert(`${color_result.rslt}/${color_result.msg}`, 5000)
-                                };break;
+                                }; break;
                             }
                         })
                         container.appendChild(reord_over)
@@ -407,14 +407,12 @@ let post_data;
                                     alert(`${tempKeyRegisterRslt.rslt}/${tempKeyRegisterRslt.msg}`)
                                 } else {
                                     overlay.remove()
-
                                     const url = new URL(window.location.href)
                                     copyToClipboard(
                                         `${`${url.protocol}//${url.hostname}:${url.port}`}/file?tempKey=${tempKeyRegisterRslt.key}&id=${tempKeyRegisterRslt.post}`,
                                         `Временная ссылка скопирована`
                                     )
                                 }
-
                             }
                         })
                     overlay.appendChild(sel)
@@ -424,18 +422,18 @@ let post_data;
                 const rslt = await request('setPostAsUserAvatar', { postID: post_data.id })
                 alert(rslt.msg, 5000)
             })
-            //region send post to tg
-            // createAction('Отправить пост в Телеграм', document.querySelector('.post-actions'), async (event) => {
-            //     event.preventDefault()
-            //     const rslt = await request('TGSendPostDM', { postID: post_data.id, isFile: event.shiftKey })
+            // region send post to tg
+            createAction('Отправить пост в Телеграм', document.querySelector('.post-actions'), async (event) => {
+                event.preventDefault()
+                const rslt = await request('TGSendPostDM', { postID: post_data.id, isFile: event.shiftKey })
 
-            //     alert(`${rslt.rslt}/${rslt.msg}`, 5000)
-            // })
+                alert(`${rslt.rslt}/${rslt.msg}`, 5000)
+            })
             await handleAdminActions();
 
             const response = await fetch(file_link);
             const contentType = response.headers.get('Content-Type').split('/')[0];
-            console.log(contentType)
+            
             process_LDF()
             createComments()
             fetchAndDisplayFile(file_link, contentType)
