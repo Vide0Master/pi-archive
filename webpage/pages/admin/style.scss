@@ -128,32 +128,6 @@ main{
                             align-items: center;
                             gap: 0.5em;
                         }
-
-                        .color input {
-                            -webkit-appearance: none;
-                            -moz-appearance: none;
-                            appearance: none;
-
-                            box-sizing: border-box;
-                            padding: 0;
-
-                            width: 5em;
-                            height: 1.5em;
-
-                            border: none;
-                            cursor: pointer;
-
-                            background-color: transparent;
-
-                            &::-webkit-color-swatch-wrapper{
-                                padding: 0;
-                                background-color: transparent;
-                            }
-
-                            &::-webkit-color-swatch{
-                                border-radius: 0.75em;
-                            }
-                        }
                     }
 
                     .tag-bar {

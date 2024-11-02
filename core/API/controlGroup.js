@@ -96,6 +96,11 @@ module.exports = (request, userData) => {
                 const setGroupTypeResult = await sysController.dbinteract.setGroupType(request.groupID, request.newGroupType)
                 resolve(setGroupTypeResult)
             }; break;
+
+            case 'setGroupColor': {
+                const setGroupColorResult = await sysController.dbinteract.setGroupColor(request.groupID, request.newColor)
+                resolve(setGroupColorResult)
+            }
         }
     })
 }

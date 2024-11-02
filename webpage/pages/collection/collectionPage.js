@@ -232,7 +232,7 @@ async function processCollection(id) {
                     }
                 })
 
-                const reord_over = reorderOverlay(collectionInfo, true, true, async (result, data) => {
+                const reord_over = reorderOverlay(collectionInfo, async (result, data) => {
                     switch (result) {
                         case 'cancel': {
                             container.remove()
@@ -278,6 +278,15 @@ async function processCollection(id) {
                                     alert(`${rename_result.rslt}/${rename_result.msg}`, 5000)
                                 }
                             })
+                        }; break;
+                        case 'color': {
+                            const color_result = await request('controlGroup',
+                                {
+                                    type: 'setGroupColor',
+                                    groupID: collectionInfo.id,
+                                    newColor: data
+                                })
+                            alert(`${color_result.rslt}/${color_result.msg}`, 5000)
                         }; break;
                     }
                 })
