@@ -70,10 +70,6 @@ module.exports = async (bot, chatId, msgId, userdata, ...args) => {
     for (const postId of postIds) {
         const postData = await tgBotController.API('getPostData', chatId, { id: postId });
 
-        const filePath = path.join(__dirname, `../../storage/file_storage/${postData.post.file}`);
-        const fileType = getFileType(postData.post.file);
-        let typeToSend = isDoc ? 'document' : fileType;
-
         if (postData.rslt == 'e') {
             await tgBotController.sendMessage(chatId, postData.msg, msgId);
             continue;
@@ -83,6 +79,11 @@ module.exports = async (bot, chatId, msgId, userdata, ...args) => {
             await tgBotController.sendMessage(chatId, `Post ${postId} is not present`, msgId);
             continue;
         }
+
+        const filePath = path.join(__dirname, `../../storage/file_storage/${postData.post.file}`);
+        const fileType = getFileType(postData.post.file);
+        let typeToSend = isDoc ? 'document' : fileType;
+
 
         const postCapLines = []
         postCapLines.push(`<b><i>Post ${postData.post.id}</i></b>`)
@@ -109,7 +110,7 @@ module.exports = async (bot, chatId, msgId, userdata, ...args) => {
 
         const postActions = []
 
-        if (userdata.login == postData.post.author) {
+        if (userdata.login == postData.post.author || sysController.config.static.user_status[userdata.status]>1) {
             postActions.push({ text: 'Add post tags', data: `addTags:${postId}` })
         }
 
