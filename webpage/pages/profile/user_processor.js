@@ -182,13 +182,13 @@ function showActions(userData, activeUser) {
         })
 
         // region set avatar
-        createAction(Language.view.actions.setPostAsAvatar, container, async () => {
+        createAction(profileLang.actions.resetAvatar, container, async () => {
             const rslt = await request('controlUserSettings', { type: 'update', update: { ProfileAvatarPostID: null } })
             alert(rslt.msg, 5000)
         })
 
         // region set background
-        createAction(Language.view.actions.setPostAsProfileBackground, container, async () => {
+        createAction(profileLang.actions.resetProfileBackground, container, async () => {
             const rslt = await request('controlUserSettings', { type: 'update', update: { ProfileBackgroundPostID: null } })
             alert(rslt.msg, 5000)
         })
