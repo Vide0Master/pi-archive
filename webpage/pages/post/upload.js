@@ -1,7 +1,9 @@
-const uploadButton = createButton('Загрузить')
+const uploadLang = Language.upload
+
+const uploadButton = createButton(uploadLang.uploadBtn)
 uploadButton.style.display = 'none'
 
-let gftu = []
+let globalFilesTUpload = []
 
 function createUploadBlock(container) {
     const input_wrapper = createDiv('file-input-wrapper')
@@ -17,13 +19,11 @@ function createUploadBlock(container) {
     const label_for_input = document.createElement('label')
     label_for_input.setAttribute('for', 'file-input')
     label_for_input.className = 'file-label'
-    label_for_input.innerText = 'Выбрать файлы'
+    label_for_input.innerText = uploadLang.inputLabel
     input_wrapper.appendChild(label_for_input)
 
     const fileList = createDiv('file-list')
     fileList.style.display = 'none'
-
-    // Вставка элементов в контейнер
 
     container.appendChild(fileList);
     container.appendChild(uploadButton);
@@ -63,7 +63,6 @@ function createUploadBlock(container) {
                 previewElement.className = 'preview-elem'
                 prev_cont.appendChild(previewElement)
 
-                // Добавление элементов в блок файла
                 fileList.appendChild(fileBlock)
                 fileBlock.appendChild(prev_cont)
 
@@ -78,16 +77,15 @@ function createUploadBlock(container) {
                 const fname = createDiv('file-name')
                 data_input_container.appendChild(fname)
                 fname.innerText = file.name
-                fname.title = 'Оригинальное имя файла сохранено не будет'
+                fname.title = uploadLang.fnameTitle
 
                 const tags = document.createElement('textarea')
                 data_input_container.appendChild(tags)
-                tags.placeholder = 'Теги'
+                tags.placeholder = uploadLang.tags
 
                 const desc = document.createElement('textarea')
                 data_input_container.appendChild(desc)
-                desc.placeholder = 'Описание'
-
+                desc.placeholder = uploadLang.description
 
                 const data_progress = createDiv('data-progress')
                 data_container.appendChild(data_progress)
@@ -97,30 +95,31 @@ function createUploadBlock(container) {
                 data_progress.appendChild(upload_container)
                 const upload_text = createDiv()
                 upload_container.appendChild(upload_text)
-                upload_text.innerText = 'Файл'
+                upload_text.innerText = uploadLang.uploadText[0]
+
 
                 updateStatusClass(upload_container, 'waiting')
-                upload_text.innerText = 'Ожидание ...'
+                upload_text.innerText = uploadLang.uploadText[1] + " ..."
 
 
                 const tags_container = createDiv('line-container')
                 data_progress.appendChild(tags_container)
                 const tags_text = createDiv()
                 tags_container.appendChild(tags_text)
-                tags_text.innerText = 'Теги'
+                tags_text.innerText = uploadLang.tags
 
                 updateStatusClass(upload_container, 'no-data')
-                tags_text.innerText = 'Не указаны теги. Этап пропущен.'
+                tags_text.innerText = uploadLang.noTags + ", " + uploadLang.skipStage
 
 
                 const desc_container = createDiv('line-container')
                 data_progress.appendChild(desc_container)
                 const desc_text = createDiv()
                 desc_container.appendChild(desc_text)
-                desc_text.innerText = 'Описание'
+                desc_text.innerText = uploadLang.description
 
                 updateStatusClass(upload_container, 'no-data')
-                desc_text.innerText = 'Нет описания. Этап пропущен.'
+                desc_text.innerText = uploadLang.noDesc + ", " + uploadLang.skipStage
 
 
                 function updateStatusClass(element, newClass) {
@@ -136,10 +135,10 @@ function createUploadBlock(container) {
                 tags.addEventListener('change', () => {
                     if (tags.value == '') {
                         updateStatusClass(tags_container, 'no-data')
-                        tags_text.innerText = 'Не указаны теги. Этап пропущен.'
+                        tags_text.innerText = uploadLang.noTags + ", " + uploadLang.skipStage
                     } else {
                         updateStatusClass(tags_container, 'waiting')
-                        tags_text.innerText = 'Ожидание ...'
+                        tags_text.innerText = uploadLang.uploadText[1] + ' ...'
                     }
                 })
 
@@ -147,15 +146,15 @@ function createUploadBlock(container) {
                 desc.addEventListener('change', () => {
                     if (desc.value == '') {
                         updateStatusClass(desc_container, 'no-data')
-                        desc_text.innerText = 'Нет описания. Этап пропущен.'
+                        desc_text.innerText = uploadLang.noDesc + ", " + uploadLang.skipStage
                     } else {
                         updateStatusClass(desc_container, 'waiting')
-                        desc_text.innerText = 'Ожидание ...'
+                        desc_text.innerText = uploadLang.uploadText[1] + ' ...'
                     }
                 })
 
                 function updateFileProgress(perc) {
-                    upload_text.innerText = `Загрузка файла: ${perc}`
+                    upload_text.innerText = `${uploadLang.uploadingFile}: ${perc}`
                 }
 
                 async function upload() {
@@ -169,11 +168,11 @@ function createUploadBlock(container) {
                     if (upload.rslt == 'e') {
                         updateStatusClass(upload_container, 'error')
                         alert(`${upload.rslt}/${upload.msg}`)
-                        upload_text.innerHTML += '<br>Ошибка!'
+                        upload_text.innerHTML += '<br>' + uploadLang.err
                         return
                     } else {
                         updateStatusClass(upload_container, 'success')
-                        upload_text.innerHTML += '<br>Завершено!'
+                        upload_text.innerHTML += '<br>' + uploadLang.suc
                     }
 
                     const postData = await request('getPostData', { id: upload.postID })
@@ -181,42 +180,41 @@ function createUploadBlock(container) {
                         alert(`${postData.rslt}/${postData.msg}`)
 
                         updateStatusClass(tags_container, 'error')
-                        tags_text.innerText = 'Ошибка получения данных поста для обработки тегов!'
+                        tags_text.innerText = uploadLang.errGettingPostData[0] + " " + uploadLang.errGettingPostData[1] + '!'
 
                         updateStatusClass(desc_container, 'error')
-                        tags_text.innerText = 'Ошибка получения данных поста для обработки описания!'
-
+                        tags_text.innerText = uploadLang.errGettingPostData[0] + " " + uploadLang.errGettingPostData[2] + '!'
                         return
                     }
 
                     if (tags.value != '') {
                         updateStatusClass(tags_container, 'progress')
-                        tags_text.innerText = 'Обработка тегов ...'
+                        tags_text.innerText = uploadLang.tagsProcess[0] + " ..."
                         const new_tags = postData.post.tags.concat(tags.value.split(/\s+|\n+/).filter(val => val !== ''))
                         const tagupd = await request('updateTags', { post: postData.post.id, newTags: new_tags });
 
                         if (tagupd.rslt == 'e') {
                             alert(`${tagupd.rslt}/${tagupd.msg}`)
                             updateStatusClass(tags_container, 'error')
-                            tags_text.innerText = 'Ошибка установки тегов!'
+                            tags_text.innerText = uploadLang.tagsProcess[1]
                         } else {
                             updateStatusClass(tags_container, 'success')
-                            tags_text.innerText = 'Теги обработаны.'
+                            tags_text.innerText = uploadLang.tagsProcess[2]
                         }
                     }
 
                     if (desc.value != '') {
                         updateStatusClass(desc_container, 'progress')
-                        desc_text.innerText = 'Обработка описания ...'
+                        desc_text.innerText = uploadLang.descProcess[0] + " ..."
                         const descupd = await request('updatePostDesc', { postID: postData.post.id, newDesc: desc.value })
 
                         if (descupd.rslt == 'e') {
                             alert(`${descupd.rslt}/${descupd.msg}`)
                             updateStatusClass(desc_container, 'error')
-                            tags_text.innerText = 'Ошибка установки описания!'
+                            tags_text.innerText = uploadLang.descProcess[1]
                         } else {
                             updateStatusClass(desc_container, 'success')
-                            desc_text.innerText = 'Описание обработано.'
+                            desc_text.innerText = uploadLang.descProcess[2]
                         }
                     }
                 }
@@ -224,36 +222,35 @@ function createUploadBlock(container) {
                 if (index == 0) {
                     fileList.removeAttribute('style')
                     uploadButton.removeAttribute('style')
-                    uploadButton.value = 'Загрузить'
+                    uploadButton.value = uploadLang.uploadBtn
                 }
                 if (index > 0) {
-                    uploadButton.value = 'Загрузить всё'
+                    uploadButton.value = uploadLang.uploadBtn + " " + uploadLang.uALL
                 }
 
                 filesToUpload.push(upload)
             };
             reader.readAsDataURL(file);
         });
-        gftu = filesToUpload
+        globalFilesTUpload = filesToUpload
     });
 }
 
 async function uploadProcessor() {
-    if (gftu.length === 0) {
-        console.warn('Нет файлов для загрузки.');
+    if (globalFilesTUpload.length === 0) {
+        console.warn(uploadLang.noFilesToUpload);
         return;
     }
 
-    // Показать сообщение о начале загрузки
-    uploadButton.textContent = 'Загрузка...';
+    uploadButton.textContent = uploadLang.uploading + ' ...';
 
     try {
-        for (const file of gftu) {
+        for (const file of globalFilesTUpload) {
             await file()
         }
-        uploadButton.textContent = 'Загрузить'
+        uploadButton.textContent = uploadLang.uploadBtn
     } catch (error) {
-        alert('Ошибка загрузки: ' + error)
+        alert(uploadLang.uError + ": " + error)
     }
 }
 
@@ -270,7 +267,6 @@ function handleFileUpload(file, progressCallback) {
         const userKey = localStorage.getItem('userKey') || sessionStorage.getItem('userKey');
         xhr.setRequestHeader('user-key', userKey);
 
-        // Отслеживание прогресса загрузки
         xhr.upload.onprogress = function (event) {
             if (event.lengthComputable) {
                 const percentComplete = `${formatFileSize(event.loaded)} / ${formatFileSize(event.total)}`
@@ -278,23 +274,20 @@ function handleFileUpload(file, progressCallback) {
             }
         };
 
-        // Обработка завершения загрузки
         xhr.onload = function () {
             if (xhr.status === 200) {
                 resolve(JSON.parse(xhr.responseText));
             } else {
-                resolve({ rslt: 'e', msg: 'Ошибка загрузки' })
+                resolve({ rslt: 'e', msg: uploadLang.uError })
             }
         };
 
-        // Обработка ошибок
         xhr.onerror = function () {
-            resolve({ rslt: 'e', msg: 'Ошибка запроса' })
+            resolve({ rslt: 'e', msg: 'Request error' })
         };
 
         xhr.send(formData);
     });
 }
 
-// Вызов функции createUploadBlock
 createUploadBlock(document.querySelector('.load-container'));

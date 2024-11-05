@@ -16,11 +16,12 @@ function parseCommand(message) {
 
 bot.on('message', async (msg) => {
     const chatId = msg.chat.id;
-    const userData = await tgBotController.getUserByTGID(chatId)
+    const userData = (await tgBotController.getUserByTGID(chatId))
+    const lpack = tgBotController.getUserLang(userData.user)
 
     if (msg.photo || msg.video || msg.document) {
         if (!userData.user) {
-            tgBotController.sendMessage(chatId, `You are not logged in. Please login first.`)
+            tgBotController.sendMessage(chatId, ``,)
             return
         }
 

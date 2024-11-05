@@ -60,7 +60,7 @@ module.exports = async (bot, chatId, msgId, userdata , help = '') => {
         for (const msg of FAQ) {
             await tgBotController.sendMessage(
                 chatId,
-                `<b><i>Q</i></b>: ${msg.q}\n\n<b><i>A</i></b>: ${msg.a}`
+                `<b><i>Q:</i></b> ${msg.q}\n\n<b><i>A:</i></b> ${msg.a}`
             )
         }
         return
