@@ -375,6 +375,9 @@ async function initialize() {
     try {
         const post_data = await fetchPostData(id);
 
+        const response = await fetch(file_link);
+        const contentType = response.headers.get('Content-Type').split('/')[0];
+
         displayPostData(post_data)
 
         createTagSelector(post_data.tags, document.querySelector('.tags'));
@@ -425,17 +428,19 @@ async function initialize() {
             }
         )
 
-        // region set avatar
-        createAction(viewLang.actions.setPostAsAvatar, document.querySelector('.post-actions'), async () => {
-            const rslt = await request('controlUserSettings', { type: 'update', update: { ProfileAvatarPostID: post_data.id } })
-            alert(rslt.msg, 5000)
-        })
+        if (contentType != 'video') {
+            // region set avatar
+            createAction(viewLang.actions.setPostAsAvatar, document.querySelector('.post-actions'), async () => {
+                const rslt = await request('controlUserSettings', { type: 'update', update: { ProfileAvatarPostID: post_data.id } })
+                alert(rslt.msg, 5000)
+            })
 
-        // region set background
-        createAction(viewLang.actions.setPostAsProfileBackground, document.querySelector('.post-actions'), async () => {
-            const rslt = await request('controlUserSettings', { type: 'update', update: { ProfileBackgroundPostID: post_data.id } })
-            alert(rslt.msg, 5000)
-        })
+            // region set background
+            createAction(viewLang.actions.setPostAsProfileBackground, document.querySelector('.post-actions'), async () => {
+                const rslt = await request('controlUserSettings', { type: 'update', update: { ProfileBackgroundPostID: post_data.id } })
+                alert(rslt.msg, 5000)
+            })
+        }
 
         // region send post to tg
         createAction(viewLang.actions.sendPostToTg, document.querySelector('.post-actions'), async (event) => {
@@ -445,9 +450,6 @@ async function initialize() {
             alert(`${rslt.rslt}/${rslt.msg}`, 5000)
         })
         await handleAdminActions();
-
-        const response = await fetch(file_link);
-        const contentType = response.headers.get('Content-Type').split('/')[0];
 
         process_LDF()
         createComments()
