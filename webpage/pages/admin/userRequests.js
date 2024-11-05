@@ -1,3 +1,13 @@
+const adminLang = Language.admin
+
+document.querySelector('.user-requests-block .label').innerHTML = adminLang.labels.userReq
+document.querySelector('.tag-group-control .label').innerHTML = adminLang.labels.tagGroupsCntrl
+document.querySelector('.groups-list-container .label').innerHTML = adminLang.labels.tagGroupList
+document.querySelector('.create-group-container .label').innerHTML = adminLang.labels.crTagGroup
+document.querySelector('.dangerous-options .label').innerHTML = adminLang.labels.danger.label
+document.querySelector('.dangerous-options .server-stop-btn').value = adminLang.labels.danger.stop
+document.querySelector('.dangerous-options .reset-user-pass').value = adminLang.labels.danger.passRes
+
 async function updateRequestList() {
     let data = await request('getAdminRequests')
     if (data.rslt != 's') {

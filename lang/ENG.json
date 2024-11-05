@@ -59,6 +59,17 @@
             "defaultTags": "Tags",
             "previewLoad": "Loading preview images",
             "admin": {
+                "labels": {
+                    "userReq": "User requests",
+                    "tagGroupsCntrl": "Tag group control",
+                    "tagGroupList": "Group list",
+                    "crTagGroup": "Create tag group",
+                    "danger": {
+                        "label": "Admin actions",
+                        "stop": "Stop and reboot Archive",
+                        "passRes": "Reset user password"
+                    }
+                },
                 "passControl": {
                     "canc": "Cancel",
                     "selectUser": "Select user",
@@ -368,8 +379,8 @@
             ]
         },
         "TGBOT": {
-            "files":{
-                "noLogin":"You are not logged in to upload files.\nPlease login first."
+            "files": {
+                "noLogin": "You are not logged in to upload files.\nPlease login first."
             }
         }
     }
