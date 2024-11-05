@@ -40,13 +40,13 @@ module.exports = function (whitelist = [], blacklist = [], from, count) {
 
     query += ' ORDER BY id DESC'
     
-    if (from) {
-        query += ' OFFSET ?'
-        params.push(from);
-    }
     if (count) {
         query += ' LIMIT ?'
         params.push(count);
+    }
+    if (from) {
+        query += ' OFFSET ?'
+        params.push(from);
     }
 
     return { Cquery: query, params }
