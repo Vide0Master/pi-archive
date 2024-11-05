@@ -10,8 +10,8 @@ async function setHeaderButtrons() {
     const pages = [
         { name: headerLang[0], link: '/search', restr: 1 },
         { name: headerLang[1], link: '/post', restr: 1 },
-        { name: headerLang[2], link: '/profile', restr: 1 },
         { name: headerLang[3], link: '/messages', restr: 1 },
+        { name: headerLang[2], link: '/profile', restr: 1 },
         { name: headerLang[4], link: '/admin', restr: 2 }
     ]
 
@@ -298,12 +298,12 @@ async function getMessageCount() {
 
         if (count.outUnread > 0) {
             const countOut = createDiv()
-            countOut.innerText = count.outUnread
+            countOut.innerText = "▲"+count.outUnread
             countOut.title = msgCountLang[1]
             counter.appendChild(countOut)
         }
 
-        if (count.outUnread > 0 && count.inUnread > 0) {
+        if (count.outUnread > 0 && "▼"+count.inUnread > 0) {
             const splitter = createDiv('splitter')
             counter.appendChild(splitter)
         }
@@ -340,7 +340,7 @@ function parseUserLogin(login, elem) {
             return string.charAt(0).toUpperCase() + string.slice(1);
         }
 
-        userDiv.title = capitalizeFirstLetter(user.data.status)
+        userDiv.title = capitalizeFirstLetter(Language.user_status_translation[user.data.status])
         elem.appendChild(userDiv)
     })()
 }

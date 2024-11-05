@@ -65,15 +65,22 @@ function showUserData(userData) {
         label.innerText = `${profileLang.userData.label[0]} ${userData.data.login}`
     }
 
-    if (userData.data.avatarpostid != '') {
+    if (userData.data.usersettings.ProfileAvatarPostID) {
         const avatar_block = createDiv('avatar-block')
         container.appendChild(avatar_block)
 
         const avatar = document.createElement('img')
         avatar_block.appendChild(avatar)
-        avatar.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${userData.data.avatarpostid}&thumb=true`
-        avatar.setAttribute('onclick', `window.location.href='/view?id=${userData.data.avatarpostid}'`)
-        avatar.title = `${profileLang.userData.avatarPost} ${userData.data.avatarpostid}`
+        avatar.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${userData.data.usersettings.ProfileAvatarPostID}&thumb=true`
+        avatar.setAttribute('onclick', `window.location.href='/view?id=${userData.data.usersettings.ProfileAvatarPostID}'`)
+        avatar.title = `${profileLang.userData.avatarPost} ${userData.data.usersettings.ProfileAvatarPostID}`
+    }
+
+    if (userData.data.usersettings.ProfileBackgroundPostID) {
+        const img = document.createElement('img')
+        img.className = 'backgroundImg'
+        img.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${userData.data.usersettings.ProfileBackgroundPostID}`
+        document.querySelector('main').insertBefore(img, document.querySelector('.user-page-container'))
     }
 
     const usr_data_list = {
@@ -172,6 +179,18 @@ function showActions(userData, activeUser) {
                 })
                 alert(result.msg)
             }
+        })
+
+        // region set avatar
+        createAction(Language.view.actions.setPostAsAvatar, container, async () => {
+            const rslt = await request('controlUserSettings', { type: 'update', update: { ProfileAvatarPostID: null } })
+            alert(rslt.msg, 5000)
+        })
+
+        // region set background
+        createAction(Language.view.actions.setPostAsProfileBackground, container, async () => {
+            const rslt = await request('controlUserSettings', { type: 'update', update: { ProfileBackgroundPostID: null } })
+            alert(rslt.msg, 5000)
         })
     } else {
         //region wr msg

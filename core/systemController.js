@@ -35,6 +35,8 @@ class SysController {
 
     static fileProcessor = require('./fileProcessor.js')
 
+    static queryConstructor = require('./userSearchQueryProcessor.js')
+
     static async APIcontroller(action, user, request) {
         return await require('./API/APIcontroller.js')(action, user, request)
     }

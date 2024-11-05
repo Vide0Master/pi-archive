@@ -2,6 +2,13 @@
     "name": "English",
     "lang": {
         "WEB": {
+            "user_status_translation": {
+                "unconfirmed": "unconfirmed",
+                "user": "user",
+                "moderator": "moderator",
+                "admin": "admin",
+                "owner": "Developer"
+            },
             "alert": {
                 "remove": "Click alert to remove it"
             },
@@ -153,6 +160,7 @@
                         "TLCopied": "Temporary link copied to clipboard"
                     },
                     "setPostAsAvatar": "Set post as profile picture",
+                    "setPostAsProfileBackground": "Set post as profile background",
                     "sendPostToTg": "Send post trogh TG bot to DM",
                     "editTags": {
                         "btn": "Edit tags",
