@@ -1,13 +1,17 @@
 
+const profileLang = Language.profile
 //region init
-(async () => {
+async function init() {
+
     const search = new URLSearchParams(window.location.search)
     const user_login = search.get('user')
 
     const user_data = await request('getUserProfileData', { userKey: localStorage.getItem('userKey') || sessionStorage.getItem('userKey'), login: user_login })
 
     processPage(user_data, !user_login)
-})()
+}
+
+init()
 
 //region process page
 async function processPage(userData, isActiveUser) {
@@ -36,15 +40,15 @@ async function showWelcomeText(login, isOwner) {
 
     const hello = createDiv("hello")
     welcomeMessageContainer.appendChild(hello)
-    const welcome_text = await request('getWelcomeText')
-    hello.innerHTML = welcome_text.welcomeText.text
-    hello.setAttribute('title', welcome_text.welcomeText.lang)
+    const welcome_text = Language.welcome_messages[Math.floor(Math.random() * Language.welcome_messages.length)]
+    hello.innerHTML = welcome_text.text
+    hello.setAttribute('title', welcome_text.lang)
 
     welcomeMessageContainer.innerHTML += `, `
     if (isOwner) {
         parseUserLogin(login, welcomeMessageContainer)
     } else {
-        welcomeMessageContainer.innerHTML += `посетитель`
+        welcomeMessageContainer.innerHTML += profileLang.visitor
     }
 }
 
@@ -55,13 +59,10 @@ function showUserData(userData) {
     const container = createDiv('list-container')
     user_card_block.appendChild(container)
 
-    const label = createDiv('label')
-    container.appendChild(label)
-
     if (!userData.isOwner) {
-        label.innerText = `Данные пользователя ${userData.data.login}`
-    } else {
-        label.innerText = 'Ваши данные'
+        const label = createDiv('label')
+        container.appendChild(label)
+        label.innerText = `${profileLang.userData.label[0]} ${userData.data.login}`
     }
 
     if (userData.data.avatarpostid != '') {
@@ -72,14 +73,14 @@ function showUserData(userData) {
         avatar_block.appendChild(avatar)
         avatar.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${userData.data.avatarpostid}&thumb=true`
         avatar.setAttribute('onclick', `window.location.href='/view?id=${userData.data.avatarpostid}'`)
-        avatar.title = `Нажмите что-бы открыть пост ${userData.data.avatarpostid}`
+        avatar.title = `${profileLang.userData.avatarPost} ${userData.data.avatarpostid}`
     }
 
     const usr_data_list = {
-        username: 'Имя: ',
-        login: 'Логин: ',
-        creationdate: 'Профиль создан: ',
-        postsCount: 'Количество постов: '
+        username: `${profileLang.userData.username}: `,
+        login: `${profileLang.userData.login}: `,
+        creationdate: `${profileLang.userData.creationdate}: `,
+        postsCount: `${profileLang.userData.postsCount}: `
     }
 
 
@@ -110,7 +111,7 @@ function showUserData(userData) {
                 const act = createAction(userData.data[line], ln, () => {
                     window.location.href = `/search?tags=author:${userData.data.login}`
                 })
-                act.title = 'Посмотреть посты пользователя'
+                act.title = profileLang.userData.viewUserPosts
             }; break;
             default: {
                 ln.innerHTML = usr_data_list[line] + userData.data[line]
@@ -128,17 +129,17 @@ function showActions(userData, activeUser) {
 
     const label = createDiv('label')
     container.appendChild(label)
-    label.innerText = 'Действия'
+    label.innerText = profileLang.actions.label
 
     //region owner
     if (userData.isOwner) {
 
         //region unlog
-        createAction('Выйти из аккаунта', container, () => Authy.unlogin())
+        createAction(profileLang.actions.unlogin, container, () => Authy.unlogin())
 
         //region ch username
-        createAction('Сменить имя пользователя', container, async () => {
-            const new_name = prompt('Введите новое имя пользователя:', userData.data.username)
+        createAction(profileLang.actions.changeUserName.btn, container, async () => {
+            const new_name = prompt(profileLang.actions.changeUserName.conf, userData.data.username)
             if (new_name) {
                 const rslt = await request('changeUserName', { userKey: localStorage.getItem('userKey') || sessionStorage.getItem('userKey'), newName: new_name })
 
@@ -151,31 +152,19 @@ function showActions(userData, activeUser) {
         })
 
         //region ch pass
-        createAction('Сменить пароль', container, async () => {
-            const new_pasas = prompt('Введите новый пароль:')
+        createAction(profileLang.actions.changePass.btn, container, async () => {
+            const new_pasas = prompt(profileLang.actions.changePass.conf)
             if (new_pasas) {
                 const rslt = await request('changeUserPassword', { userKey: localStorage.getItem('userKey') || sessionStorage.getItem('userKey'), newPassword: CryptoJS.SHA256(new_pasas).toString() })
                 alert(rslt.rslt + '/' + rslt.msg, 5000)
             }
         })
 
-        // region tg bot link
-        // createAction('Телеграм бот', container, async () => {
-        //     window.open('https://t.me/pi_archive_bot', '_blank').focus();
-        // })
-
-        //region cp ukey
-        // createAction('Скопировать ключ пользователя', container, async () => {
-        //     const userKey = localStorage.getItem('userKey') || sessionStorage.getItem('userKey');
-
-        //     copyToClipboard(userKey, 'Ключ пользователя скопирован')
-        // })
-
         //region ch blklist
-        createAction('Изменить чёрный список', container, async () => {
+        createAction(profileLang.actions.changeBl.btn, container, async () => {
             const blacklist = activeUser.data.blacklist.join('\n')
 
-            const new_blacklist = await showPopup('Измените чёрный список', blacklist)
+            const new_blacklist = await showPopup(profileLang.actions.changeBl.label, blacklist)
             if (blacklist != new_blacklist) {
                 const result = await request('updateBlacklist', {
                     userKey: localStorage.getItem('userKey') || sessionStorage.getItem('userKey'),
@@ -186,8 +175,8 @@ function showActions(userData, activeUser) {
         })
     } else {
         //region wr msg
-        createAction('Написать сообщение', container, async () => {
-            const message_data = await showPopup('Введите текст сообщения')
+        createAction(profileLang.actions.sendDM.btn, container, async () => {
+            const message_data = await showPopup(profileLang.actions.sendDM.label)
             if (message_data) {
                 const message_result = await request('sendMessage', {
                     message: message_data,
@@ -196,7 +185,7 @@ function showActions(userData, activeUser) {
                     msgtype: 'DM'
                 })
                 if (message_result.rslt == 's')
-                    alert('s/Сообщение успешно отправлено', 5000)
+                    alert(`s/${profileLang.actions.sendDM.s}`, 5000)
                 else
                     alert(message_result.msg, 5000)
             }
@@ -213,9 +202,9 @@ async function getFavs(favs, isActiveUser) {
     const favs_container = createDiv('favs-container', document.querySelector('.user-page-container'))
 
     const fav_label = createDiv('label', favs_container)
-    fav_label.innerHTML = 'Избранное'
+    fav_label.innerHTML = profileLang.favs.label
 
-    if (isActiveUser) fav_label.innerHTML += ' пользователя'
+    if (isActiveUser) fav_label.innerHTML += ` ${profileLang.favs.ofUser}`
 
 
     const favs_zone = createDiv('favs-zone', favs_container)

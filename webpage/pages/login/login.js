@@ -18,3 +18,10 @@ async function login() {
 }
 
 document.getElementById('login_btn').addEventListener('click', () => login())
+
+document.querySelector('.login-block .label').innerHTML = Language.login.label
+document.querySelector('.user-data #login').setAttribute('placeholder', Language.login.txt.login)
+document.querySelector('.user-data #password').setAttribute('placeholder', Language.login.txt.pass)
+document.querySelector('.user-data .checkbox div').innerHTML = Language.login.remember
+document.querySelector('.login-block a').innerHTML = Language.login.noacc
+document.querySelector('.login-block #login_btn').value = Language.login.logIn

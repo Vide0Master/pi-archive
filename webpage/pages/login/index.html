@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="nullify.css">
     <link rel="stylesheet" href="global_style.css">
     <link rel="stylesheet" href="style.css">
+    <script src="langControl.js" defer></script>
     <script src="crypto-js.min.js" defer></script>
     <script src="consoleAlert.js"></script>
     <script src="APIrequest.js" defer></script>
@@ -20,17 +21,17 @@
 
 <body>
     <div class="login-block">
-        <div class="label">Войти</div>
+        <div class="label"></div>
         <div class="user-data">
-            <input type="text" placeholder="Логин" id="login" autocomplete="username">
-            <input type="password" placeholder="Пароль" id="password" autocomplete="current-password">
+            <input type="text" id="login" autocomplete="username">
+            <input type="password" id="password" autocomplete="current-password">
             <div class="checkbox">
                 <input type="checkbox" id="stay_logged_in">
-                <div>Запомнить меня</div>
+                <div></div>
             </div>
         </div>
-        <input type="button" value="Войти" id="login_btn">
-        <a href="/register">У меня нет акккаунта</a>
+        <input type="button" id="login_btn">
+        <a href="/register"></a>
     </div>
 </body>
 

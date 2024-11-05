@@ -2,16 +2,17 @@ setHeaderButtrons()
 
 //region head buttons
 async function setHeaderButtrons() {
+    const headerLang = Language.header
     const user_acc = await request('AuthyPageAccessCheck', {
         page: window.location.pathname.replace(/\//g, ''),
         userKey: localStorage.getItem('userKey') || sessionStorage.getItem('userKey')
     })
     const pages = [
-        { name: 'Поиск', link: '/search', restr: 1 },
-        { name: 'Добавить', link: '/post', restr: 1 },
-        { name: 'Профиль', link: '/profile', restr: 1 },
-        { name: 'Сообщения', link: '/messages', restr: 1 },
-        { name: 'Админ-панель', link: '/admin', restr: 2 }
+        { name: headerLang[0], link: '/search', restr: 1 },
+        { name: headerLang[1], link: '/post', restr: 1 },
+        { name: headerLang[2], link: '/profile', restr: 1 },
+        { name: headerLang[3], link: '/messages', restr: 1 },
+        { name: headerLang[4], link: '/admin', restr: 2 }
     ]
 
     const navigator = document.querySelector('header .nav-row')
@@ -38,6 +39,7 @@ function createAction(name, parentElement, cb) {
 
 //region cr Pcard
 function createPostCard(postData, noClickReaction) {
+    const postCardLang = Language.postCard
     const postCard = document.createElement('div')
     postCard.className = 'post-card'
     if (!noClickReaction)
@@ -64,7 +66,7 @@ function createPostCard(postData, noClickReaction) {
     info_row.className = 'info-row'
 
     const postScore = createDiv('', info_row)
-    postScore.title = 'Рейтинг'
+    postScore.title = postCardLang.rating
 
     function updateScore() {
         const post_stats = postData.postRating
@@ -86,7 +88,7 @@ function createPostCard(postData, noClickReaction) {
     async function setFav() {
         if ((await request('controlScoreAndFavs', { type: 'getUserInfo' })).favs.includes(postData.id)) {
             const fav = createDiv('fav')
-            fav.title = 'Находится в избранных'
+            fav.title = postCardLang.fav
             info_row.prepend(fav)
 
             const favImg = document.createElement('img')
@@ -98,11 +100,11 @@ function createPostCard(postData, noClickReaction) {
 
     const postID = createDiv('', info_row)
     postID.innerHTML = `ID:${postData.id}`
-    postID.title = 'Идентификатор поста'
+    postID.title = postCardLang.id
 
     const postCommentsCount = createDiv('', info_row)
     postCommentsCount.innerHTML = `C:${postData.commentCount}`
-    postCommentsCount.title = 'Количество комментариев'
+    postCommentsCount.title = postCardLang.CC
 
     function getFileExtension(filename) {
         const parts = filename.split('.');
@@ -154,7 +156,7 @@ function createPostCard(postData, noClickReaction) {
 
         const text = createDiv('ribbon-text')
         new_ribbon.appendChild(text)
-        text.innerHTML = 'НОВОЕ'
+        text.innerHTML = postCardLang.newPost
     }
 
     if (postData.tags.length < 5) {
@@ -165,9 +167,9 @@ function createPostCard(postData, noClickReaction) {
         low_tags.appendChild(text)
 
         if (postData.tags.length == 0) {
-            text.innerHTML = 'НЕТ ТЕГОВ'
+            text.innerHTML = postCardLang.LTA[0]
         } else {
-            text.innerHTML = 'МАЛО ТЕГОВ'
+            text.innerHTML = postCardLang.LTA[1]
         }
     }
 
@@ -178,35 +180,68 @@ setFooterText()
 
 //region footer text
 function setFooterText() {
+    const footerLang = Language.footer
+
     const footer = document.querySelector('footer')
     footer.innerHTML = ''
 
     const main_text = createDiv('main-text', footer)
-    main_text.innerHTML = `Разработка VideoMaster'а. Система с ограниченными доступом. Распространение внутренней информации - запрещено. Любые решения администрации - неоспоримы.`
+    main_text.innerHTML = footerLang.disclaimer
 
     const actions = createDiv('actions-row', footer)
 
     createAction('EULA', actions, () => {
         window.open('/eula', '_blank').focus();
-    })
+    }).title = footerLang.eula
 
-    const github = createAction('Github', actions, () => {
+    createAction('Github', actions, () => {
         window.open('https://github.com/Vide0Master/pi-archive', '_blank').focus();
-    })
-    github.title = 'Здесь можно просмотреть код проекта и сообщить о ошибке'
+    }).title = footerLang.github
 
-    const verInfo = createDiv('versionInfo', actions)
+    createAction(footerLang.tgbot[0], actions, async () => {
+        window.open('https://t.me/pi_archive_bot', '_blank').focus();
+    }).title = footerLang.tgbot[1]
+
+    //createIndicator('g', sysLabel)
+
+    const sysHealthInfoContainer = createDiv('sys-health-container', footer)
+
+    const sysHealthSizer = createDiv('sys-health-sizer', sysHealthInfoContainer)
+    const sysLabelSizer = createDiv('', sysHealthSizer)
+    sysLabelSizer.innerHTML = footerLang.status.label
+
+    const sysHealth = createDiv('sys-healt-info', sysHealthInfoContainer)
+    const sysLabel = createDiv('', sysHealth)
+    sysLabel.innerHTML = footerLang.status.label
+
+    const elementCont = createDiv('elements-container', sysHealth)
+
+    const versions = createDiv('version-list', elementCont)
+    const verLabel = createDiv('vlabel', versions)
+    verLabel.innerHTML = footerLang.status.vLabel
+
     async function getVers() {
         const versInfo = await request('getVersionInfo')
         for (const ver in versInfo) {
-            const verBlock = createDiv('', verInfo)
+            const verBlock = createDiv('', versions)
             verBlock.innerHTML = `${ver}: ${versInfo[ver]}`
         }
     }
     getVers()
+
+    // const systemRepots = createDiv('sysRepCont', elementCont)
+    // const sysRepLabel = createDiv('label',systemRepots)
+    // sysRepLabel.innerHTML = footerLang.status.systemReports
 }
 
 PInav()
+
+//region circ ind
+function createIndicator(state, parent) {
+    const elem = createDiv('indicator', parent)
+    elem.classList.add(state)
+    return elem
+}
 
 //region PI-nav
 function PInav() {
@@ -245,6 +280,7 @@ function createBlurOverlay() {
 
 //region Message count
 async function getMessageCount() {
+    const msgCountLang = Language.msgCount
     const count = await request('getUserMessageCount')
 
     if (count.outUnread > 0 || count.inUnread > 0) {
@@ -256,14 +292,14 @@ async function getMessageCount() {
         if (count.requiredAction) {
             counter.style.backgroundColor = '#a53030'
             counter.innerText = '!'
-            counter.title = 'Требуется действие!'
+            counter.title = msgCountLang[0]
             return
         }
 
         if (count.outUnread > 0) {
             const countOut = createDiv()
             countOut.innerText = count.outUnread
-            countOut.title = 'Непрочитанные исходящие'
+            countOut.title = msgCountLang[1]
             counter.appendChild(countOut)
         }
 
@@ -275,7 +311,7 @@ async function getMessageCount() {
         if (count.inUnread > 0) {
             const countIn = createDiv()
             countIn.innerText = count.inUnread
-            countIn.title = 'Непрочитанные входящие'
+            countIn.title = msgCountLang[2]
             counter.appendChild(countIn)
         }
     }
@@ -320,7 +356,7 @@ function createGroup(groupData) {
     createDiv('splitter', groupElem)
 
     if (groupData.type == 'collection') {
-        const openAsColl = createButton('View as collection', actionRow)
+        const openAsColl = createButton(Language.group.colView, actionRow)
         openAsColl.addEventListener('mousedown', (event) => {
             if (event.button === 1)
                 event.preventDefault()
@@ -518,20 +554,22 @@ function reorderOverlay(group, callback) {
         const button_row = createDiv('button-row');
         container.appendChild(button_row);
 
-        const cancel_btn = createButton('Отмена');
+        const editorLng = Language.group.editor
+
+        const cancel_btn = createButton(editorLng.cancel);
         button_row.appendChild(cancel_btn);
         cancel_btn.addEventListener('click', () => {
             callback('cancel')
         });
 
-        const delete_btn = createButton('Удалить');
+        const delete_btn = createButton(editorLng.delete);
         delete_btn.style.backgroundColor = 'red';
         button_row.appendChild(delete_btn);
         delete_btn.addEventListener('click', () => {
             callback('delete')
         });
 
-        const rename_btn = createButton('Переименовать');
+        const rename_btn = createButton(editorLng.rename);
         button_row.appendChild(rename_btn);
         rename_btn.addEventListener('click', () => {
             callback('rename')
@@ -541,12 +579,12 @@ function reorderOverlay(group, callback) {
         button_row.appendChild(colorSel);
         colorSel.type = 'color'
         colorSel.value = group.color
-        colorSel.title = 'Group outline color'
+        colorSel.title = editorLng.color
         colorSel.addEventListener('change', () => {
             callback('color', colorSel.value)
         })
 
-        const confirm_btn = createButton('Принять');
+        const confirm_btn = createButton(editorLng.accept);
         button_row.appendChild(confirm_btn);
         confirm_btn.addEventListener('click', () => {
             const items = Array.from(reorderContainer.querySelectorAll('.post-card'));
@@ -685,10 +723,10 @@ async function createTagSelector(tags, elem) {
             const defaultGroupIndex = groups.findIndex(val => val.name == tag.group.name)
             groups[defaultGroupIndex].tags.push(tag)
         } else {
-            if (!groups.find(val => val.name == 'Теги')) {
-                groups.push({ name: 'Теги', priority: 0, tags: [] })
+            if (!groups.find(val => val.name == Language.defaultTags)) {
+                groups.push({ name: Language.defaultTags, priority: 0, tags: [] })
             }
-            const defaultGroupIndex = groups.findIndex(val => val.name == 'Теги')
+            const defaultGroupIndex = groups.findIndex(val => val.name == Language.defaultTags)
             groups[defaultGroupIndex].tags.push(tag)
         }
     }
@@ -728,7 +766,7 @@ function createImgLoadOverlay(parent) {
     const infContainer = createDiv('loading-overlay-info', parent)
 
     const loadLabel = createDiv('label', infContainer)
-    loadLabel.innerHTML = 'Загрузка превью...'
+    loadLabel.innerHTML = Language.previewLoad
     const progressBarContainer = createDiv('progress-bar-cont', infContainer)
     const progressBar = createDiv('progress-bar', progressBarContainer)
 
@@ -792,7 +830,6 @@ function parseTimestamp(timestamp) {
 
 //region elem vis obs
 function onElementFullyVisible(element, callback) {
-    // Создаем функцию-обработчик для IntersectionObserver
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting && entry.intersectionRatio === 1) {
@@ -801,10 +838,9 @@ function onElementFullyVisible(element, callback) {
             }
         });
     }, {
-        threshold: 1.0 // 100% отображения элемента
+        threshold: 0.9
     });
 
-    // Запускаем наблюдение за элементом
     observer.observe(element);
 }
 

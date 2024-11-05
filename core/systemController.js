@@ -55,8 +55,6 @@ class SysController {
     static TGController = require('../tg_bot/tgBotController.js')
 
     static createResponse = require('./responseConstructor.js')
-
-    static langController = require('./lang/langController.js')
 }
 
 module.exports = SysController

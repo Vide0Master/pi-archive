@@ -135,6 +135,24 @@ img {
     display: block;
 }
 
+.indicator {
+    width: 1em;
+    height: 1em;
+    border-radius: 1em;
+
+    &.g {
+        background-color: greenyellow;
+    }
+
+    &.w {
+        background-color: gold;
+    }
+
+    &.e {
+        background-color: red;
+    }
+}
+
 .norma-page-container {
     padding: 0 0.5em;
     display: flex;
@@ -240,6 +258,83 @@ img {
             align-items: center;
             gap: 1em;
         }
+
+        .sys-health-container {
+            position: relative;
+
+            .sys-health-sizer {
+                padding: 0.5em;
+                display: flex;
+                flex-direction: column-reverse;
+                align-items: center;
+                justify-content: center;
+                opacity: 0;
+                width: max-content;
+            }
+
+            .sys-healt-info {
+                position: absolute;
+                transform: translateX(-50%);
+                left: 50%;
+                bottom: 0;
+
+                background-color: #000;
+                padding: 0.5em;
+                border-radius: 0.5em;
+                display: flex;
+                flex-direction: column-reverse;
+                align-items: center;
+                justify-content: center;
+                width: max-content;
+
+                .elements-container {
+                    overflow: hidden;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+
+                    >* {
+                        transition: 0.5s;
+                        margin-bottom: -100%;
+                    }
+                }
+
+                &:hover {
+                    .elements-container {
+                        >* {
+                            opacity: 1;
+                            margin-bottom: 0.5em;
+                        }
+                    }
+                }
+
+                .version-list {
+                    color: #000;
+                    background-color: #fff;
+                    border-radius: 0.5em;
+                    padding: 0.5em;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 0.25em;
+                }
+
+                .sysRepCont {
+                    color: #000;
+                    background-color: #fff;
+                    border-radius: 0.5em;
+                    padding: 0.5em;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 0.25em;
+                }
+            }
+        }
+
 
         .versionInfo {
             display: flex;
@@ -466,8 +561,8 @@ img {
         align-items: center;
         gap: 0.5em;
 
-        input[type=color]{
-            &::-webkit-color-swatch{
+        input[type=color] {
+            &::-webkit-color-swatch {
                 border-radius: 0.2em;
             }
         }
@@ -637,12 +732,12 @@ input[type=color] {
 
     overflow: hidden;
 
-    &::-webkit-color-swatch-wrapper{
+    &::-webkit-color-swatch-wrapper {
         padding: 0;
         background-color: transparent;
     }
 
-    &::-webkit-color-swatch{
+    &::-webkit-color-swatch {
         border-radius: 0.75em;
     }
 }

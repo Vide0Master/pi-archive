@@ -1,0 +1,342 @@
+{
+    "name": "English",
+    "lang": {
+        "WEB": {
+            "alert": {
+                "remove": "Click alert to remove it"
+            },
+            "popup": {
+                "cancel": "Cancel",
+                "accept": "Accept"
+            },
+            "header": [
+                "Search",
+                "Upload",
+                "Profile",
+                "Messages",
+                "Admin panel"
+            ],
+            "footer": {
+                "disclaimer": "Developed by VideoMaster. System with limited access. Any decisions made by owner is undeniable.",
+                "eula": "Here you can read what you can and can`t do.",
+                "github": "Here you can look on what is this thing running, and fill some bug reports.",
+                "tgbot": [
+                    "Telegram bot",
+                    "More access to Archive with bot, sending and loading more content trough it"
+                ],
+                "status": {
+                    "label": "Archive status",
+                    "vLabel": "Versions",
+                    "systemReports": "System reports"
+                }
+            },
+            "msgCount": [
+                "Action needed!",
+                "Unread out",
+                "Unread in"
+            ],
+            "postCard": {
+                "rating": "Rating",
+                "fav": "In favourites",
+                "id": "Post unique ID",
+                "CC": "Comments count",
+                "newPost": "NEW",
+                "LTA": [
+                    "NO TAGS",
+                    "NOT ENOUGH TAGS"
+                ]
+            },
+            "group": {
+                "colView": "View as collection",
+                "editor": {
+                    "cancel": "Cancel",
+                    "delete": "Delete",
+                    "rename": "Rename",
+                    "color": "Outline color",
+                    "accept": "Accept"
+                }
+            },
+            "defaultTags": "Tags",
+            "previewLoad": "Loading preview images",
+            "admin": {
+                "passControl": {
+                    "canc": "Cancel",
+                    "selectUser": "Select user",
+                    "copy": "New password copied to clipboard"
+                },
+                "sysStop": {
+                    "stopQ": "Do you want to stop the server?"
+                },
+                "tagsControl": {
+                    "groupN": "Group name",
+                    "prior": "Priority",
+                    "color": "Color",
+                    "insrtTagName": "Add tags",
+                    "del": {
+                        "btn": "Delete",
+                        "q": "Do you want to delete"
+                    },
+                    "canc": "Cancel",
+                    "acc": {
+                        "btn": "Accept",
+                        "q": "Do you want to update"
+                    },
+                    "NG": {
+                        "ngn": "Group name",
+                        "cr": "Create tag group",
+                        "q": "Confirm creation tag group"
+                    }
+                }
+            },
+            "welcome": {
+                "desc": [
+                    "Welcome to Archive!",
+                    "Log in or register"
+                ],
+                "btnRow": [
+                    "Log in",
+                    "Register"
+                ]
+            },
+            "login": {
+                "label": "Log in",
+                "txt": {
+                    "login": "Login",
+                    "pass": "Password"
+                },
+                "remember": "Remember me",
+                "noacc": "I have no account",
+                "logIn": "Log in"
+            },
+            "view": {
+                "postInfo": "Post info",
+                "postActions": "Post actions",
+                "postData": {
+                    "author": "Author",
+                    "file": "Uploaded via",
+                    "source": {
+                        "none": "No source(s) mentioned",
+                        "present": "Source(s)"
+                    },
+                    "size": "Size",
+                    "fileFormat": {
+                        "filetype": "File type",
+                        "tgAudioWarn": "This video can be displayed without sound because of how Telegram processes GIFs that are downloaded.\n(they all are be downloaded as MP4 without sound)"
+                    },
+                    "creation": "Created on"
+                },
+                "actions": {
+                    "download": "Download file",
+                    "tempLink": {
+                        "btn": "Create temporary file link",
+                        "times": [
+                            "Minutes",
+                            "Minutes",
+                            "Hour",
+                            "Hours",
+                            "Hours",
+                            "Hours",
+                            "Permanent"
+                        ],
+                        "timeLabel": "Time",
+                        "TLCopied": "Temporary link copied to clipboard"
+                    },
+                    "setPostAsAvatar": "Set post as profile picture",
+                    "sendPostToTg": "Send post trogh TG bot to DM",
+                    "editTags": {
+                        "btn": "Edit tags",
+                        "poptext": "Edit tags list"
+                    },
+                    "editDesc": {
+                        "btn": "Edit description",
+                        "poptext": "Edit description text"
+                    },
+                    "rmFromGroup": {
+                        "btn": "Remove from group",
+                        "poptext": "Confirm removing post from group"
+                    },
+                    "editGroup": {
+                        "actName": "Edit group",
+                        "rmConf": "Confirm deleting group",
+                        "rename": "Change group name",
+                        "toColl": {
+                            "btn": "Set collection mode",
+                            "conf": "Confirm setting collection mode"
+                        },
+                        "toGroup": {
+                            "btn": "Set group mode",
+                            "conf": "Confirm setting group mode"
+                        },
+                        "addToGroup": "Add post to group"
+                    },
+                    "rmPost": {
+                        "btn": "Remove post",
+                        "conf": "Confirm deleting post"
+                    },
+                    "groupControl": {
+                        "addToGroupLabel": "Add post to group",
+                        "createNewGroup": "Create new group",
+                        "selectGroupLabel": "Select group",
+                        "newGroupNameLabel": "Enter group name"
+                    }
+                },
+                "comments": {
+                    "writeComment": "Enter comment text",
+                    "sendComment": "Send",
+                    "deleteComment": {
+                        "btn": "Delete comment",
+                        "conf": "Confirm deleting comment"
+                    }
+                }
+            },
+            "profile": {
+                "visitor": "visitor",
+                "userData": {
+                    "label": [
+                        "Data of"
+                    ],
+                    "avatarPost": "Click to view post",
+                    "username": "Nickname",
+                    "login": "Login",
+                    "creationdate": "Profile created",
+                    "postsCount": "Posts",
+                    "viewUserPosts": "View user posts"
+                },
+                "actions": {
+                    "label": "Actions",
+                    "unlogin": "Log out",
+                    "changeUserName": {
+                        "btn": "Change nickanme",
+                        "conf": "Enter new nickname"
+                    },
+                    "changePass":{
+                        "btn": "Change password",
+                        "conf": "Enter new password"
+                    },
+                    "changeBl":{
+                        "btn":"Change blacklist",
+                        "label":"Change blacklist tags"
+                    },
+                    "sendDM":{
+                        "btn":"Send message to user",
+                        "label":"Enter message text",
+                        "s":"Message sent!"
+                    }
+                },
+                "favs":{
+                    "label":"Favourites",
+                    "ofUser":"of user"
+                }
+            },
+            "welcome_messages": [
+                {
+                    "lang": "Ukrainian",
+                    "text": "Привіт"
+                },
+                {
+                    "lang": "russian",
+                    "text": "Привет"
+                },
+                {
+                    "lang": "English",
+                    "text": "Hello"
+                },
+                {
+                    "lang": "Spanish",
+                    "text": "Hola"
+                },
+                {
+                    "lang": "French",
+                    "text": "Bonjour"
+                },
+                {
+                    "lang": "Deuch",
+                    "text": "Hallo"
+                },
+                {
+                    "lang": "Italian",
+                    "text": "Ciao"
+                },
+                {
+                    "lang": "Potrugese",
+                    "text": "Olá"
+                },
+                {
+                    "lang": "Chinese (mandaring)",
+                    "text": "你好 (Nǐ hǎo)"
+                },
+                {
+                    "lang": "Japanese",
+                    "text": "こんにちは (Konnichiwa)"
+                },
+                {
+                    "lang": "Korean",
+                    "text": "안녕하세요 (Annyeonghaseyo)"
+                },
+                {
+                    "lang": "Arab",
+                    "text": "مرحبا (Marhaban)"
+                },
+                {
+                    "lang": "Holland",
+                    "text": "Hallo"
+                },
+                {
+                    "lang": "Sweden",
+                    "text": "Hej"
+                },
+                {
+                    "lang": "Norwegian",
+                    "text": "Hei"
+                },
+                {
+                    "lang": "Finnish",
+                    "text": "Hei"
+                },
+                {
+                    "lang": "Danish",
+                    "text": "Hej"
+                },
+                {
+                    "lang": "Turkish",
+                    "text": "Merhaba"
+                },
+                {
+                    "lang": "Greece",
+                    "text": "Γειά σου (Yia sou)"
+                },
+                {
+                    "lang": "Hebrew",
+                    "text": "שלום (Shalom)"
+                },
+                {
+                    "lang": "Polish",
+                    "text": "Cześć"
+                },
+                {
+                    "lang": "Czech",
+                    "text": "Ahoj"
+                },
+                {
+                    "lang": "Slovakian",
+                    "text": "Ahoj"
+                },
+                {
+                    "lang": "Hungarian",
+                    "text": "Szia"
+                },
+                {
+                    "lang": "Hungaryan",
+                    "text": "Salut"
+                }
+            ]
+        },
+        "TGBOT": {
+            "AUTH": {
+                "NU": "This user is unregistered or was not verified.",
+                "E": "Error",
+                "S": "Successfully authorized"
+            }
+        }
+    }
+}
