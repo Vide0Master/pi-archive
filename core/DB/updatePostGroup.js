@@ -10,7 +10,7 @@ module.exports = (db, postGroupID, data) => {
                     `Updated posts group ID:${postGroupID}`,
                     {},
                     err,
-                    `Updated posts group ID:${postGroupID}`
+                    `Error updating posts group ID:${postGroupID}`
                 ))
             })
     })
