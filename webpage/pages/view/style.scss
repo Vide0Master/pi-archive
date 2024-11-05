@@ -383,25 +383,4 @@ main {
         transform: translate(-50%, -50%);
         user-select: none;
     }
-
-    .close-btn {
-        position: absolute;
-        top: 0;
-        left: 0;
-        padding: 1em;
-        border-bottom-right-radius: 1em;
-        background-color: #000;
-        color: #fff;
-        font-size: 1.2em;
-        opacity: 0.4;
-        transition: 0.3s;
-        overflow: hidden;
-
-        cursor: pointer;
-        user-select: none;
-
-        &:hover {
-            opacity: 0.9;
-        }
-    }
 }

@@ -86,6 +86,8 @@ fs.readdirSync(pagesPath).forEach(page => {
     });
 })
 
+app.use(`/lang`,express.static(path.join(__dirname,'../lang')))
+
 //слушатель post запросов
 app.use(express.json({ limit: '10mb' }));
 app.use(bodyParser.json({ extended: true, limit: '10mb' }));

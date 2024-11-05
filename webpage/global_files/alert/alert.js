@@ -18,7 +18,7 @@ function createNotification(str, timeout = 0) {
     }
 
     if (timeout == 0) {
-        message+='<br><br>(нажмите что-бы закрыть уведомление)'
+        message+=`<br><br>${Language.alert.remove}`
     }
 
     const container = document.getElementById('notification-container');

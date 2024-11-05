@@ -1,5 +1,4 @@
 async function updateRequestList() {
-
     let data = await request('getAdminRequests')
     if (data.rslt != 's') {
         return

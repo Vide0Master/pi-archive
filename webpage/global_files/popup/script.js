@@ -17,9 +17,9 @@ function showPopup(title = 'Title', defaultText = '') {
 
         const btn_row = createDiv('button_row')
 
-        const btnD = createButton('Отмена')
+        const btnD = createButton(Language.popup.cancel)
         btn_row.appendChild(btnD)
-        const btnC = createButton('Принять')
+        const btnC = createButton(Language.popup.accept)
         btn_row.appendChild(btnC)
 
         btnC.addEventListener('click', () => {

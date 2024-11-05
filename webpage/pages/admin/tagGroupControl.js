@@ -1,4 +1,5 @@
 async function createTagGroupList() {
+    const tagCLang = Language.admin.tagsControl
     const tagGroupResult = await request('controlTagGroups', { type: 'getAllGroups' })
     if (DEVMODE) console.log(tagGroupResult)
 
@@ -14,19 +15,19 @@ async function createTagGroupList() {
         const buttons = createDiv('button-bar', tag_group_div)
 
         const groupNameCont = createDiv('group-name', header)
-        groupNameCont.innerHTML = 'Имя группы: '
+        groupNameCont.innerHTML = tagCLang.groupN+': '
         const name = document.createElement('input')
         name.type = 'text'
         groupNameCont.appendChild(name)
 
         const priorityCont = createDiv('priority', header)
-        priorityCont.innerHTML = 'Приоритет: '
+        priorityCont.innerHTML = tagCLang.prior+': '
         const priority = document.createElement('input')
         priority.type = 'text'
         priorityCont.appendChild(priority)
 
         const colorCont = createDiv('color', header)
-        colorCont.innerHTML = 'Цвет группы: '
+        colorCont.innerHTML = tagCLang.color+': '
         const color = document.createElement('input')
         color.type = 'color'
         colorCont.appendChild(color)
@@ -60,7 +61,7 @@ async function createTagGroupList() {
         }
 
         const add_btn = createAction('+', content, async () => {
-            const newTagsLine = await showPopup('Введите название тега')
+            const newTagsLine = await showPopup(tagCLang.insrtTagName)
             if (!newTagsLine) return
             const newTagsArray = newTagsLine.split(/\s+|\n+/).filter(val => val !== '')
             for (const tagname of newTagsArray) {
@@ -74,13 +75,13 @@ async function createTagGroupList() {
 
         add_btn.classList.add('plus')
 
-        const remove_btn = createButton('Удалить', buttons)
-        const cancel_btn = createButton('Отменить', buttons)
-        const confirm_btn = createButton('Применить', buttons)
+        const remove_btn = createButton(tagCLang.del.btn, buttons)
+        const cancel_btn = createButton(tagCLang.canc, buttons)
+        const confirm_btn = createButton(tagCLang.acc.btn, buttons)
 
         remove_btn.style.backgroundColor = 'red'
         remove_btn.addEventListener('click', async () => {
-            if (!confirm(`Вы уверены в удалении группы "${tagGroup.groupname}"?`)) return
+            if (!confirm(`${tagCLang.del.q} "${tagGroup.groupname}"?`)) return
 
             const rmResult = await request('controlTagGroups', { type: 'removeGroup', groupName: tagGroup.groupname })
 
@@ -93,7 +94,7 @@ async function createTagGroupList() {
         })
 
         confirm_btn.addEventListener('click', async () => {
-            if (!confirm(`Вы уверены в обновлении тегов группы "${tagGroup.groupname}"?`)) return
+            if (!confirm(`${tagCLang.acc.q} "${tagGroup.groupname}"?`)) return
             const newGroupData = {
                 groupname: name.value,
                 priority: priority.value,
@@ -113,12 +114,12 @@ async function createTagGroupList() {
     const newTagGropName = document.createElement('input')
     crGroupCont.appendChild(newTagGropName)
     newTagGropName.type = 'text'
-    newTagGropName.placeholder = 'Имя группы'
+    newTagGropName.placeholder = tagCLang.NG.ngn
 
-    const crNewGroupBtn = createButton('Создать группу тегов', crGroupCont)
+    const crNewGroupBtn = createButton(tagCLang.NG.cr, crGroupCont)
 
     crNewGroupBtn.addEventListener('click', async () => {
-        if (!confirm(`Вы уверены в создании новой группы "${newTagGropName.value}"?`)) return
+        if (!confirm(`${tagCLang.NG.q} "${newTagGropName.value}"`)) return
 
         const crResult = await request('controlTagGroups', { type: 'createGroup', groupName: newTagGropName.value })
         window.location.href = window.location.href + `?alert=${crResult.rslt}/${crResult.msg}`

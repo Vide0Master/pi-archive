@@ -3,6 +3,8 @@ const urlTags = urlParams.get('tags');
 
 const pageButtonsLimit = 6
 
+document.querySelector('.search-row #taglist').placeholder=Language.defaultTags
+
 //region Page links
 async function update_pages(tags, blacklist, currentPage) {
     const page_count = await request(`getPageCount`, { tags, blacklist })
