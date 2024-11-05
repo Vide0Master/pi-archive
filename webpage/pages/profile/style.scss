@@ -82,14 +82,23 @@ main {
     position: relative;
     overflow: hidden;
 
-    .backgroundImg {
+    .imgContainer {
         z-index: 1;
         position: absolute;
         width: 100%;
         left: 0;
         top: 0;
+        max-height: 100%;
 
-        mask-image: linear-gradient(to bottom, rgba(255, 255, 255, 1) 80%, rgba(255, 255, 255, 0));
-        pointer-events: none;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        .backgroundImg {
+            width: 100%;
+            mask-image: linear-gradient(to bottom, rgba(255, 255, 255, 1) 80%, rgba(255, 255, 255, 0));
+            pointer-events: none;
+        }
     }
 }

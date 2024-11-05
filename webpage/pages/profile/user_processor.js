@@ -77,10 +77,12 @@ function showUserData(userData) {
     }
 
     if (userData.data.usersettings.ProfileBackgroundPostID) {
+        const imgContainer = createDiv('imgContainer')
         const img = document.createElement('img')
+        imgContainer.appendChild(img)
         img.className = 'backgroundImg'
         img.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${userData.data.usersettings.ProfileBackgroundPostID}`
-        document.querySelector('main').insertBefore(img, document.querySelector('.user-page-container'))
+        document.querySelector('main').insertBefore(imgContainer, document.querySelector('.user-page-container'))
     }
 
     const usr_data_list = {
