@@ -26,6 +26,18 @@ module.exports = (request, user_data) => {
             return
         }
 
+        const postGroup = await sysController.dbinteract.getPostGroup(request.post)
+        if (postGroup.data) {
+            const new_group = postGroup.data.group.filter(v => v != request.post)
+            new_group.forEach((v,i) => {
+                new_group[i] = v.toString()
+            });
+            const grpUpdRslt = await sysController.dbinteract.updatePostGroup(postGroup.data.id, new_group)
+            if (grpUpdRslt.rslt == 'e') {
+                resolve(grpUpdRslt)
+            }
+        }
+
         const ext = path.extname(postData.file).toLowerCase();
         if (['.jpg', '.jpeg', '.png', '.webp', '.gif'].includes(ext)) {
             fs.unlink(`./storage/file_storage/${postData.file}`, async (err) => {
