@@ -209,24 +209,60 @@
                         "btn": "Change nickanme",
                         "conf": "Enter new nickname"
                     },
-                    "changePass":{
+                    "changePass": {
                         "btn": "Change password",
                         "conf": "Enter new password"
                     },
-                    "changeBl":{
-                        "btn":"Change blacklist",
-                        "label":"Change blacklist tags"
+                    "changeBl": {
+                        "btn": "Change blacklist",
+                        "label": "Change blacklist tags"
                     },
-                    "sendDM":{
-                        "btn":"Send message to user",
-                        "label":"Enter message text",
-                        "s":"Message sent!"
+                    "sendDM": {
+                        "btn": "Send message to user",
+                        "label": "Enter message text",
+                        "s": "Message sent!"
                     }
                 },
-                "favs":{
-                    "label":"Favourites",
-                    "ofUser":"of user"
+                "favs": {
+                    "label": "Favourites",
+                    "ofUser": "of user"
                 }
+            },
+            "upload": {
+                "uploadBtn": "Upload",
+                "uploading": "Uploading",
+                "uError": "Upload error",
+                "uAll": "all",
+                "noFilesToUpload": "No files to upload",
+                "inputLabel": "Select or drag-n-drop files",
+                "fnameTitle": "Orignal filename would not be saved",
+                "tags": "Tags",
+                "noTags": "No tags",
+                "description": "Description",
+                "noDesc": "No description",
+                "skipStage": "stage skipped",
+                "uploadText": [
+                    "File",
+                    "Waiting"
+                ],
+                "uploadingFile": "Uploading file",
+                "err": "Error!",
+                "suc": "Completed!",
+                "errGettingPostData": [
+                    "Error getting post data to process",
+                    "tags",
+                    "description"
+                ],
+                "tagsProcess": [
+                    "Processing tags",
+                    "Error setting tags",
+                    "Tags set"
+                ],
+                "descProcess": [
+                    "Processing description",
+                    "Error setting desctiprion",
+                    "Description set"
+                ]
             },
             "welcome_messages": [
                 {
@@ -332,10 +368,8 @@
             ]
         },
         "TGBOT": {
-            "AUTH": {
-                "NU": "This user is unregistered or was not verified.",
-                "E": "Error",
-                "S": "Successfully authorized"
+            "files":{
+                "noLogin":"You are not logged in to upload files.\nPlease login first."
             }
         }
     }

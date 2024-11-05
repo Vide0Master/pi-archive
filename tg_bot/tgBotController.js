@@ -30,6 +30,14 @@ module.exports = class tgBotController {
         }
     }
 
+    static getUserLang(userData) {
+        let userLang = "ENG"
+        try{
+            userLang = userData.usersettings.lang || "ENG"
+        }catch{}
+        return require(`../lang/${userLang}.json`).lang.TGBOT
+    }
+
     static async API(action, chatID, request) {
         return await this.sysController.APIprocessorTG(action, new this.userConstr(chatID), request);
     }
