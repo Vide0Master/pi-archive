@@ -27,7 +27,6 @@ module.exports = (request, user_data) => {
         }
 
         const postGroup = await sysController.dbinteract.getPostGroup(request.post)
-        console.log(postGroup)
         if (postGroup.data) {
             const new_group = postGroup.data.group.filter(v => v != request.post)
             new_group.forEach((v,i) => {
