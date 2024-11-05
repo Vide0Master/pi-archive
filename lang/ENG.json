@@ -240,7 +240,9 @@
                         "btn": "Send message to user",
                         "label": "Enter message text",
                         "s": "Message sent!"
-                    }
+                    },
+                    "resetAvatar":"Reset profile picture",
+                    "resetProfileBackground":"Reset profile background"
                 },
                 "favs": {
                     "label": "Favourites",
