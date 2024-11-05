@@ -1,4 +1,4 @@
-const DEVMODE = localStorage.getItem('DEV') === 'SEXGAY'
+const DEVMODE = localStorage.getItem('DEV') === 'BONDAGE'
 
 async function request(action, request) {
     function keyCheck() {

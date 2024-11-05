@@ -40,7 +40,7 @@
             "controlUserDM": 1,
             "getUserMessageCount": 1,
             "deleteMessage": 1,
-            "setPostAsUserAvatar": 1,
+            "controlUserSettings": 1,
             "controlGroup": 1,
             "controlTagGroups": 2,
             "authTGUser": 0,
@@ -79,14 +79,9 @@
     },
     "standartUserSettings": {
         "posts_per_page": 50,
+        "ProfileAvatarPostID": null,
+        "ProfileBackgroundPostID": null,
         "lang": "ENG"
-    },
-    "user_status_translation": {
-        "unconfirmed": "неподтверждён",
-        "user": "пользователь",
-        "moderator": "модератор",
-        "admin": "администратор",
-        "owner": "владелец"
     },
     "telegram_bot": {
         "batchDownloadLimit": 10

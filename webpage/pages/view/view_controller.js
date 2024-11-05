@@ -424,8 +424,16 @@ async function initialize() {
                 overlay.appendChild(sel)
             }
         )
+
+        // region set avatar
         createAction(viewLang.actions.setPostAsAvatar, document.querySelector('.post-actions'), async () => {
-            const rslt = await request('setPostAsUserAvatar', { postID: post_data.id })
+            const rslt = await request('controlUserSettings', { type: 'update', update: { ProfileAvatarPostID: post_data.id } })
+            alert(rslt.msg, 5000)
+        })
+
+        // region set background
+        createAction(viewLang.actions.setPostAsProfileBackground, document.querySelector('.post-actions'), async () => {
+            const rslt = await request('controlUserSettings', { type: 'update', update: { ProfileBackgroundPostID: post_data.id } })
             alert(rslt.msg, 5000)
         })
 
@@ -510,11 +518,14 @@ async function createComments() {
             })
             parseUserLogin(comment.from, comment_author)
 
-            const userAvatar = document.createElement('img')
-            user_data_container.appendChild(userAvatar)
-            const userAvatarID = (await request('getUserProfileData', { login: comment.from })).data.avatarpostid
-            userAvatar.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${userAvatarID}&thumb=true`
-            userAvatar.setAttribute('onclick', `window.location.href='/view?id=${userAvatarID}'`)
+            const userData = await request('getUserProfileData', { login: comment.from })
+            const userAvatarID = userData.data.usersettings.ProfileAvatarPostID
+            if (userAvatarID) {
+                const userAvatar = document.createElement('img')
+                user_data_container.appendChild(userAvatar)
+                userAvatar.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${userAvatarID}&thumb=true`
+                userAvatar.setAttribute('onclick', `window.location.href='/view?id=${userAvatarID}'`)
+            }
 
             const comment_creation_date = createDiv('creation-date', user_data_container)
             comment_creation_date.innerHTML = parseTimestamp(comment.timestamp)

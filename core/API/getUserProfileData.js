@@ -43,12 +43,10 @@ module.exports = (request, userByKey) => {
             delete user.likes
             delete user.dislikes
             delete user.blacklist
-            delete user.usersettings
         } else {
             user.acc_level = SysController.config.static.user_status[user.status]
         }
 
-        user.status = SysController.config.static.user_status_translation[user.status]
         user.postsCount = (await SysController.dbinteract.getPostsCount([`author:${user.login}`])).count||0
 
         resolve(new SysController.createResponse(

@@ -4,7 +4,7 @@ function styledConsoleWarning(msg, style) {
 
 if (localStorage.getItem('DEV') == 'BONDAGE') {
     styledConsoleWarning('DEV MODE ENABLED!', 'color: red; font-size: 4em; font-weight: bold;')
-    styledConsoleWarning(`If you saw const DEVMODE = localStorage.getItem('DEV') === 'SEXGAY'`, 'color: cyan; font-size: 1em; font-weight: bold;')
+    styledConsoleWarning(`If you saw const DEVMODE = localStorage.getItem('DEV') === 'BONDAGE'`, 'color: cyan; font-size: 1em; font-weight: bold;')
     styledConsoleWarning('Congratulations! You know how to "hack" some websites. But.', 'color: #fff; font-size: 1.2em; font-weight: bold;')
     styledConsoleWarning('RESET YOUR LOCALSTORAGE!', 'color: red; font-size: 5em; font-weight: bold;')
     styledConsoleWarning(`I made this mode only for testing and debugging. You can use this if you know what you are doing and want to fill detailed bug report.`, 'color: cyan; font-size: 1.3em; font-weight: bold;')

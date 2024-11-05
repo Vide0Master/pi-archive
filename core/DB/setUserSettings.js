@@ -1,16 +1,16 @@
 const sysController = require('../systemController')
 
-module.exports = (db, postID, login) => {
+module.exports = (db, login, data) => {
     return new Promise(async resolve => {
-        db.run(`UPDATE users SET avatarpostid = ? WHERE login = ?`,
-            [postID, login],
+        db.run(`UPDATE users SET usersettings = ? WHERE login = ?`,
+            [JSON.stringify(data), login],
             (err) => {
                 resolve(new sysController.createResponse(
                     's',
-                    'Set avatar',
+                    'Changed user settings',
                     {},
                     err,
-                    'Error setting avatar'
+                    'Error changing user settings'
                 ))
             })
     })

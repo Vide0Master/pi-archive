@@ -10,8 +10,9 @@ async function getMessages() {
         const comment_author = createAction('', user_dm_opener)
         parseUserLogin(dm, comment_author)
 
-
-        const userAvatarID = (await request('getUserProfileData', { login: dm })).data.avatarpostid
+        const userData = await request('getUserProfileData', { login: dm })
+        console.log(userData)
+        const userAvatarID = userData.data.usersettings.ProfileAvatarPostID
         if (userAvatarID) {
             const userAvatar = document.createElement('img')
             user_dm_opener.appendChild(userAvatar)
