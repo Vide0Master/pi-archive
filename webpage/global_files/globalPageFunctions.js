@@ -46,7 +46,7 @@ async function addTagsAutofill(field, parent) {
                 autocomplete.style.display = 'none'
                 selPos = -1
                 selector = []
-                rst = true
+                return
             } else {
                 search(field.value)
             }
