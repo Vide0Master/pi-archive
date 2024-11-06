@@ -35,7 +35,7 @@ module.exports = (request, userByKey) => {
 
         delete user.password
         delete user.auth_key
-        
+
         user.trueUserStatus = user.status
 
         if (!isOwner) {
@@ -46,8 +46,8 @@ module.exports = (request, userByKey) => {
         } else {
             user.acc_level = SysController.config.static.user_status[user.status]
         }
-
-        user.postsCount = (await SysController.dbinteract.getPostsCount([`author:${user.login}`])).count||0
+        user.usersettings = JSON.parse(user.usersettings)
+        user.postsCount = (await SysController.dbinteract.getPostsCount([`author:${user.login}`])).count || 0
 
         resolve(new SysController.createResponse(
             's',
