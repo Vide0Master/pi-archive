@@ -14,7 +14,7 @@ module.exports = function (whitelist = [], blacklist = [], from, count) {
                         params.push(`${tag.split(':')[1]}`)
                     }; break;
                     default: {
-                        queryArray.push('whitelist LIKE ?')
+                        queryArray.push('tags LIKE ?')
                         params.push(`%${tag}%`)
                     }; break;
                 }
@@ -26,7 +26,7 @@ module.exports = function (whitelist = [], blacklist = [], from, count) {
                         params.push(`${antiTag.split(':')[1]}`)
                     }; break;
                     default: {
-                        queryArray.push('whitelist NOT LIKE ?')
+                        queryArray.push('tags NOT LIKE ?')
                         params.push(`%${antiTag}%`)
                     }; break;
                 }
