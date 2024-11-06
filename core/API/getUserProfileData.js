@@ -10,7 +10,6 @@ module.exports = (request, userByKey) => {
                 return
             } else {
                 userByLogin = userByLoginResult.user
-                userByLogin.favs = JSON.parse(userByLogin.favs)
             }
         }
 
@@ -46,7 +45,7 @@ module.exports = (request, userByKey) => {
         } else {
             user.acc_level = SysController.config.static.user_status[user.status]
         }
-        user.usersettings = JSON.parse(user.usersettings)
+
         user.postsCount = (await SysController.dbinteract.getPostsCount([`author:${user.login}`])).count || 0
 
         resolve(new SysController.createResponse(
