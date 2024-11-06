@@ -5,7 +5,6 @@ module.exports = (db, tags = [], blacklist = []) => {
         let query = 'SELECT COUNT(*) as count FROM posts';
 
         const { Cquery, params } = SysController.queryConstructor(tags, blacklist)
-        console.log(query + Cquery, params)
         
         db.get(query + Cquery, params, (err, row) => {
             resolve(new SysController.createResponse(

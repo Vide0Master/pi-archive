@@ -5,7 +5,6 @@ module.exports = (db, tags = [], blacklist = [], from, posts) => {
         let query = 'SELECT * FROM posts';
 
         const { Cquery, params } = SysController.queryConstructor(tags, blacklist, from, posts)
-        console.log(query + Cquery, params)
 
         db.all(query + Cquery, params, (err, rows) => {
             resolve(new SysController.createResponse(

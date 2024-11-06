@@ -307,7 +307,7 @@ async function handleAdminActions() {
             const rslt = await request('deletePost', { post: post_data.id });
 
             if (rslt.rslt == 's') {
-                search(rslt)
+                search(document.getElementById('taglist').value,rslt)
             } else {
                 alert(rslt.msg, 5000);
             }
@@ -461,15 +461,6 @@ async function initialize() {
 }
 
 initialize();
-
-//region search
-document.getElementById('search-button').addEventListener('click', search);
-document.getElementById('taglist').addEventListener('keyup', (e) => {
-    if (e.key == 'Enter') {
-        search();
-    }
-});
-
 
 //region comments
 async function createComments() {

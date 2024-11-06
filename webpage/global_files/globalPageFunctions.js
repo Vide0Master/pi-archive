@@ -28,6 +28,120 @@ async function setHeaderButtrons() {
     getMessageCount()
 }
 
+//region tag autofill
+async function addTagsAutofill(field, parent) {
+    const autocomplete = createDiv('autocomplete', parent)
+    autocomplete.style.display = 'none'
+    let selector = []
+    let selPos = -1
+
+    async function process(e) {
+        const parts = field.value.split(' ')
+        const lastPart = parts[parts.length - 1]
+
+        if (e.code == "Enter") {
+            if (selPos > -1) {
+                parts[parts.length - 1] = selector[selPos].tag;
+                field.value = parts.join(' ') + " "
+                autocomplete.style.display = 'none'
+                selPos = -1
+                selector = []
+                rst = true
+            } else {
+                search(field.value)
+            }
+        }
+
+        if (lastPart.length >= 2) {
+            let rst = false
+            switch (e.code) {
+                case "ArrowUp": {
+                    e.preventDefault()
+                    if (selPos > 0) {
+                        selPos -= 1
+                    }
+                    rst = true
+                }; break;
+                case "ArrowDown": {
+                    e.preventDefault()
+                    if (selPos < selector.length - 1) {
+                        selPos += 1
+                    }
+                    rst = true
+                }; break;
+            }
+            for (const elm of selector) {
+                elm.elem.classList.remove('active')
+            }
+            if (selPos >= 0 && selPos < selector.length)
+                selector[selPos].elem.classList.add('active')
+
+            console.log(selPos)
+            console.log(selector)
+            if (rst)
+                return
+
+            const listRslt = await request('getTagsAutocomplete', { tagPart: lastPart })
+            if (listRslt.rslt == 'e') {
+                alert(listRslt.rslt + "/" + listRslt.msg)
+                return
+            }
+            if (listRslt.tags.length == 0) {
+                autocomplete.style.display = 'none'
+                autocomplete.innerHTML = ''
+                return
+            }
+
+            selector = []
+            selPos = -1
+            autocomplete.removeAttribute('style')
+            autocomplete.innerHTML = ''
+
+            for (const tag of listRslt.tags) {
+                const tagContainer = createDiv('tagContainer', autocomplete)
+                const tagElem = createTagline(tag, { s: false, tedit: false })
+                tagContainer.appendChild(tagElem)
+                selector.push({
+                    tag: tag.tag,
+                    elem: tagContainer
+                })
+            }
+
+        } else {
+            autocomplete.style.display = 'none'
+        }
+    }
+
+    field.addEventListener('keyup', (e) => {
+        process(e)
+    })
+    field.addEventListener('click',()=>{
+        process()
+    })
+    field.addEventListener('focusout', () => {
+        autocomplete.style.display = 'none'
+    })
+    field.addEventListener('focusin', () => {
+        if (autocomplete.innerHTML != '') {
+            autocomplete.removeAttribute('style')
+        }
+    })
+}
+
+function tryInsertSearchActions() {
+    const sfield = document.querySelector('.search-row')
+    if (sfield) {
+        const taglist = sfield.querySelector('#taglist')
+        taglist.setAttribute('autocomplete', 'off')
+        const searchBtn = sfield.querySelector('#search-button')
+        searchBtn.addEventListener('click', () => {
+            search(taglist.value)
+        })
+        addTagsAutofill(taglist, sfield)
+    }
+}
+tryInsertSearchActions()
+
 //region cr action
 function createAction(name, parentElement, cb) {
     const action = document.createElement('a');
@@ -619,9 +733,8 @@ function copyToClipboard(value, message) {
 }
 
 //region search
-function search(alert) {
-    const tagline = document.getElementById('taglist').value
-    const tags = tagline.trim().split(/\s/).filter(val => val !== '');
+function search(taglist, alert) {
+    const tags = taglist.trim().split(/\s/).filter(val => val !== '');
 
     let query_page = `/search?tags=`
 
@@ -647,67 +760,59 @@ function formatFileSize(bytes) {
 }
 
 //region cr tag line
-function createTagline(tag) {
+function createTagline(tag, params = { s: true, tedit: true }) {
     const tagline = document.createElement('div');
     tagline.className = 'tagline';
 
     const linkElems = [];
 
-    const plusElem = createAction('+', tagline, () => {
-        document.getElementById('taglist').value += ' ' + tag.tag;
-        search();
-    });
-    linkElems.push(plusElem);
-
-    const minusElem = createAction('-', tagline, () => {
-        document.getElementById('taglist').value += ' -' + tag.tag;
-        search();
-    });
-    linkElems.push(minusElem);
-
-    const tagElem = createAction(tag.tag, tagline, () => {
-        document.getElementById('taglist').value = tag.tag;
-        search();
-    });
-    linkElems.push(tagElem);
-
-    const tagquantitty = document.createElement('div');
-    tagline.appendChild(tagquantitty);
-    tagquantitty.innerText = tag.count > 999 ? `${(tag.count / 1000).toFixed(1)}k` : tag.count;
-    tagquantitty.className = 'tag-quantity';
-
     let originalColor = '#49e8fc';
     if (tag.group) {
         originalColor = tag.group.color;
     }
+    if (params.tedit) {
+        const plusElem = createAction('+', tagline, () => {
+            document.getElementById('taglist').value += ' ' + tag.tag;
+            if (params.s)
+                search(document.getElementById('taglist').value);
+        });
+        plusElem.style.color = originalColor
+        linkElems.push(plusElem);
+    }
 
-    const uniqueClass = 'S' + Authy.generateKey(10)
+    if (params.tedit) {
+        const minusElem = createAction('-', tagline, () => {
+            document.getElementById('taglist').value += ' -' + tag.tag;
+            if (params.s)
+                search(document.getElementById('taglist').value);
+        });
+        linkElems.push(minusElem);
+        minusElem.style.color = originalColor
+    }
 
-    const elemstyle = `
-            .${uniqueClass} {
-                color: ${originalColor};
-                transition: all 0.2s;
-            }
-            .${uniqueClass}:hover {
-                color: ${originalColor};
-                filter: brightness(75%);
-            }
-        `;
-
-    const style = document.createElement('style');
-    tagline.appendChild(style);
-
-    style.innerHTML = elemstyle
-
-    linkElems.forEach((elem) => {
-        elem.classList.add(uniqueClass);
+    const tagElem = createAction(tag.tag, tagline, () => {
+        if (params.tedit)
+            document.getElementById('taglist').value = tag.tag;
+        if (params.s)
+            search(document.getElementById('taglist').value);
     });
+    linkElems.push(tagElem);
+
+    tagElem.style.color = originalColor
+
+    if (tag.count > 0) {
+        const tagquantitty = document.createElement('div');
+        tagline.appendChild(tagquantitty);
+        tagquantitty.innerText = tag.count > 999 ? `${(tag.count / 1000).toFixed(1)}k` : tag.count;
+        tagquantitty.className = 'tag-quantity';
+    }
+
     return tagline
 }
 
 //region cr tag select
 async function createTagSelector(tags, elem) {
-    const taglist = await request('getTagList', { taglist: tags });
+    const taglist = await request('getTagsList', { taglist: tags });
     const tagcol = elem
     tagcol.innerHTML = '';
 

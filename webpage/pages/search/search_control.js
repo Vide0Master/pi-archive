@@ -122,8 +122,8 @@ function get_tags() {
     const tags = urlTags.trim().split(/\s/).filter(val => val !== '');
 
     let tagline = document.getElementById('taglist')
+    tagline.value = tags.join(' ')
     for (const tag of tags) {
-        tagline.value += tag + ' '
         if (tag.startsWith("-")) {
             taglist.blacklist.push(tag.slice(1))
         } else {
@@ -176,23 +176,11 @@ async function get_posts(page) {
     createImgLoadOverlay(posts_block)
 }
 
-document.getElementById('search-button')
-    .addEventListener('click', () => {
-        search()
-    })
-
-document.getElementById('taglist')
-    .addEventListener('keyup', (e) => {
-        if (e.key == 'Enter') {
-            search()
-        }
-    })
-
 get_posts(1)
 
 //region Get glob tags
 async function getGlobalTags(lim) {
-    return await request('getTagList', { tagcount: lim, userKey: localStorage.getItem('userKey') || sessionStorage.getItem('userKey') })
+    return await request('getTagsList', { tagcount: lim, userKey: localStorage.getItem('userKey') || sessionStorage.getItem('userKey') })
 }
 
 //region cr tag sel

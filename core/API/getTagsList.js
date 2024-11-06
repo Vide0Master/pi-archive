@@ -4,7 +4,7 @@ module.exports = (request, userData) => {
     return new Promise(async resolve => {
         const tags = request.taglist
         const limit = request.tagcount
-        let DBtags = await SysController.dbinteract.getTagList(limit)
+        let DBtags = await SysController.dbinteract.getTagsList(limit)
         if (DBtags.rslt != 's') {
             resolve(DBtags)
             return
