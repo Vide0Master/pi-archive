@@ -21,20 +21,7 @@
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            gap: 0.5em;
-
-            .search-row {
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                justify-content: space-between;
-                gap: 0.25em;
-                width: 100%;
-
-                input[type=text] {
-                    width: 7em;
-                }
-            }
+            gap: 0.3em;
 
             .tags {
                 display: flex;
@@ -48,21 +35,6 @@
 
                     .label {
                         font-size: 1.3em;
-                    }
-
-                    .tagline {
-                        display: flex;
-                        flex-direction: row;
-                        align-items: center;
-                        gap: 0.25em;
-
-                        a {
-                            text-decoration: none;
-                        }
-
-                        .tag-quantity {
-                            color: #808080;
-                        }
                     }
                 }
             }

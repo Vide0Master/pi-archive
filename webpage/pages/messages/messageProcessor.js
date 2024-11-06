@@ -11,7 +11,6 @@ async function getMessages() {
         parseUserLogin(dm, comment_author)
 
         const userData = await request('getUserProfileData', { login: dm })
-        console.log(userData)
         const userAvatarID = userData.data.usersettings.ProfileAvatarPostID
         if (userAvatarID) {
             const userAvatar = document.createElement('img')
