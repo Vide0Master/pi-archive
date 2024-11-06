@@ -42,7 +42,7 @@ async function addTagsAutofill(field, parent) {
         if (e.code == "Enter") {
             if (selPos > -1) {
                 parts[parts.length - 1] = selector[selPos].tag;
-                field.value = parts.join(' ') + " "
+                field.value = parts.join(' ')
                 autocomplete.style.display = 'none'
                 selPos = -1
                 selector = []
