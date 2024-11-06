@@ -264,7 +264,7 @@ function createPostCard(postData, noClickReaction) {
     const warning_container = createDiv('warning-container')
     preview_container.appendChild(warning_container)
 
-    if (timeSinceCreation(postData.timestamp) < 5) {
+    if (timeSinceCreation(postData.timestamp) < 12) {
         const new_ribbon = createDiv('new-ribbon')
         warning_container.appendChild(new_ribbon)
 
