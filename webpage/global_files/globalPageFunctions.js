@@ -298,19 +298,19 @@ async function getMessageCount() {
 
         if (count.outUnread > 0) {
             const countOut = createDiv()
-            countOut.innerText = "▲"+count.outUnread
+            countOut.innerText = "▲" + count.outUnread
             countOut.title = msgCountLang[1]
             counter.appendChild(countOut)
         }
 
-        if (count.outUnread > 0 && "▼"+count.inUnread > 0) {
+        if (count.outUnread > 0 && count.inUnread > 0) {
             const splitter = createDiv('splitter')
             counter.appendChild(splitter)
         }
 
         if (count.inUnread > 0) {
             const countIn = createDiv()
-            countIn.innerText = count.inUnread
+            countIn.innerText = "▼" + count.inUnread
             countIn.title = msgCountLang[2]
             counter.appendChild(countIn)
         }
