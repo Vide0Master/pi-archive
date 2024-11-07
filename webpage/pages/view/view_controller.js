@@ -1,5 +1,5 @@
 let post_data;
-
+console.log(document.querySelector('.tags'))
 const viewLang = Language.view
 document.querySelector('.post-info .label').innerHTML = viewLang.postInfo
 document.querySelector('.post-actions .label').innerHTML = viewLang.postActions

@@ -1,44 +1,38 @@
 .content-container {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: auto 1fr;
     gap: 0.5em;
 
-    @media (max-width:600px) {
-        flex-direction: column-reverse;
+    .search-row {
+        grid-column: 1;
     }
 
     .search-data-act {
+        grid-column: 1;
         display: flex;
         flex-direction: column;
         gap: 1em;
 
-        .search-col {
+        .tags {
             background-color: #00365d;
             color: #fff;
             padding: 0.3em;
             border-radius: 0.3em;
-
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
-            gap: 0.3em;
+            gap: 0.5em;
 
-            .tags {
+            .tag-group {
                 display: flex;
                 flex-direction: column;
-                gap: 0.5em;
+                gap: 0.25em;
 
-                .tag-group {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 0.25em;
-
-                    .label {
-                        font-size: 1.3em;
-                    }
+                .label {
+                    font-size: 1.3em;
                 }
             }
         }
+
 
         .post-info {
             background-color: #00365d;
@@ -76,6 +70,12 @@
     }
 
     .collection-container {
+        grid-column: 2;
+
+        @media (max-width:600px) {
+            grid-column: 1;
+            grid-row: 2;
+        }
 
         display: flex;
         flex-direction: row;
@@ -87,9 +87,12 @@
         .col-page-container {
             position: relative;
             cursor: pointer;
+            max-width: 100%;
+            box-sizing: border-box;
 
             img {
-                height: 300px;
+                max-height: 300px;
+                max-width: 100%;
             }
 
             .page-number-counter-container {
@@ -159,7 +162,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-
+    z-index: 10;
     background-color: rgba(0, 0, 0, 0.95);
 
     display: flex;
