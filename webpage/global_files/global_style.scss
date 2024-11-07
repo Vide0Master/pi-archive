@@ -165,6 +165,9 @@ img {
     gap: 0.1em;
     background-color: #fff;
     border-radius: 1em;
+    width: 100%;
+    box-sizing: border-box;
+    height: 1.4em;
 
     #taglist {
         color: #000;
@@ -175,6 +178,7 @@ img {
         width: auto;
         padding: 0.2em 0.5em;
         padding-right: 0.1em;
+        flex: 1;
 
         &::placeholder {
             color: #000;

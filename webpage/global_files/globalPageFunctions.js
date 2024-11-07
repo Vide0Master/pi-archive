@@ -838,7 +838,7 @@ async function createTagSelector(tags, elem) {
 
     groups.sort((a, b) => b.priority - a.priority)
 
-    const tagblock = document.querySelector('.search-col .tags')
+    const tagblock = tagcol
 
     for (const group of groups) {
         const groupelem = createDiv('tag-group', tagblock)
