@@ -37,15 +37,27 @@ async function addTagsAutofill(field, parent) {
 
     async function process(e) {
         const parts = field.value.split(' ')
-        const lastPart = parts[parts.length - 1]
+        const preLastPart = parts[parts.length - 1]
+
+        let lastPart = preLastPart
+        if (preLastPart[0] == '-') {
+            lastPart = lastPart.substring(1)
+        }
+
+        function setField() {
+            parts[parts.length - 1] = selector[selPos].tag;
+            if (preLastPart[0] == '-') {
+                parts[parts.length - 1] = "-" + parts[parts.length - 1]
+            }
+            field.value = parts.join(' ')
+            autocomplete.style.display = 'none'
+            selPos = -1
+            selector = []
+        }
 
         if (e.code == "Enter") {
             if (selPos > -1) {
-                parts[parts.length - 1] = selector[selPos].tag;
-                field.value = parts.join(' ')
-                autocomplete.style.display = 'none'
-                selPos = -1
-                selector = []
+                setField()
                 return
             } else {
                 search(field.value)
@@ -97,6 +109,7 @@ async function addTagsAutofill(field, parent) {
             autocomplete.removeAttribute('style')
             autocomplete.innerHTML = ''
 
+            let i = 0
             for (const tag of listRslt.tags) {
                 const tagContainer = createDiv('tagContainer', autocomplete)
                 const tagElem = createTagline(tag, { s: false, tedit: false })
@@ -105,6 +118,13 @@ async function addTagsAutofill(field, parent) {
                     tag: tag.tag,
                     elem: tagContainer
                 })
+                tagElem.addEventListener('mousedown', () => {
+
+                    selPos = i++
+                    console.log('clicked ' + tag.tag)
+                    setField()
+                })
+                console.log(i)
             }
 
         } else {
@@ -115,8 +135,8 @@ async function addTagsAutofill(field, parent) {
     field.addEventListener('keyup', (e) => {
         process(e)
     })
-    field.addEventListener('click',()=>{
-        process()
+    field.addEventListener('click', (e) => {
+        process(e)
     })
     field.addEventListener('focusout', () => {
         autocomplete.style.display = 'none'
