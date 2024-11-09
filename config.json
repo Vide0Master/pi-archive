@@ -20,6 +20,7 @@
             "register": 0,
             "login": 0,
             "sessionController": 0,
+            "getLangsList": 0,
             "getVersionInfo": 1,
             "getWelcomeText": 1,
             "getUserProfileData": 1,

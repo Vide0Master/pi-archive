@@ -8,7 +8,7 @@
                 "user": "user",
                 "moderator": "moderator",
                 "admin": "admin",
-                "owner": "Developer"
+                "owner": "developer"
             },
             "alert": {
                 "remove": "Click alert to remove it"
@@ -267,7 +267,12 @@
                         "s": "Message sent!"
                     },
                     "resetAvatar": "Reset profile picture",
-                    "resetProfileBackground": "Reset profile background"
+                    "resetProfileBackground": "Reset profile background",
+                    "lang":{
+                        "btn":"Change language",
+                        "sel":"Select desired language",
+                        "cnc":"Cancel"
+                    }
                 },
                 "favs": {
                     "label": "Favourites",
@@ -406,10 +411,6 @@
                 {
                     "lang": "Hungarian",
                     "text": "Szia"
-                },
-                {
-                    "lang": "Hungaryan",
-                    "text": "Salut"
                 }
             ]
         },
