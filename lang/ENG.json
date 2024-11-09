@@ -67,6 +67,7 @@
             "collection": {
                 "postInfoLabel": "Collection info",
                 "postActionsLabel": "Actions",
+                "viewFrom":"View at<br>this page",
                 "data": {
                     "name": "Name",
                     "id": "ID",
