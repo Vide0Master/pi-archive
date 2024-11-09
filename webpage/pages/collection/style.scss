@@ -1,6 +1,7 @@
 .content-container {
     display: grid;
     grid-template-columns: auto 1fr;
+    grid-template-rows: auto 1fr;
     gap: 0.5em;
 
     .search-row {
@@ -71,6 +72,7 @@
 
     .collection-container {
         grid-column: 2;
+        grid-row: 1/-1;
 
         @media (max-width:600px) {
             grid-column: 1;
