@@ -1,5 +1,37 @@
+const collectionLang = Language.collection
+
+const postInfoCont = document.querySelector('.post-info')
+postInfoCont.querySelector('.label').innerHTML = collectionLang.postInfoLabel
+document.querySelector('.post-actions .label').innerHTML = collectionLang.postActionsLabel
+document.querySelector('.search-row #taglist').placeholder = Language.defaultTags
+
 async function processCollection(id) {
     const collectionInfo = (await request('controlGroup', { type: 'getGroupByID', id })).group
+
+    const postDataTemplate = {
+        name: collectionLang.data.name,
+        id: collectionLang.data.id,
+        owner: collectionLang.data.owner
+    }
+
+    for (const line in postDataTemplate) {
+        const lname = postDataTemplate[line]
+        const lval = collectionInfo[line]
+        switch (line) {
+            case "owner": {
+                const lineElem = createDiv('', postInfoCont)
+                lineElem.innerHTML = `${lname}: `
+                const act = createAction('', lineElem, () => {
+                    window.location.href = `/profile?user=${line_val}`
+                })
+                parseUserLogin(lval, act)
+            }; break;
+            default: {
+                const lineElem = createDiv('', postInfoCont)
+                lineElem.innerHTML = `${lname}: ${lval}`
+            }
+        }
+    }
 
     async function fetchPostData(id) {
         const pdata = await request('getPostData', { id });
@@ -15,7 +47,7 @@ async function processCollection(id) {
     const page_counter = createDiv('page-counter', background)
 
     const closeComic = createDiv('close-comic', background)
-    closeComic.innerHTML = 'Закрыть просмотр'
+    closeComic.innerHTML = collectionLang.overlay.close
     closeComic.addEventListener('click', () => { closeOverlay() })
 
     const pages = []
@@ -223,7 +255,7 @@ async function processCollection(id) {
         const actionCol = document.querySelector('.post-actions')
 
         if (await ownerVerify(collectionInfo.owner) || await adminVerify()) {
-            createAction('Редактировать коллекцию', actionCol, () => {
+            createAction(collectionLang.actions.editColl.btn, actionCol, () => {
                 const container = createBlurOverlay()
 
                 container.addEventListener('click', (e) => {
@@ -238,7 +270,7 @@ async function processCollection(id) {
                             container.remove()
                         }; break;
                         case 'delete': {
-                            if (confirm(`Вы уверены что хотите удалить коллекцию ID:${collectionInfo.id}|${collectionInfo.name}`)) {
+                            if (confirm(`${collectionLang.actions.editColl.delete} "${collectionInfo.name}"`)) {
                                 const deleteResult = await request('controlGroup',
                                     {
                                         type: 'deleteGroup',
@@ -266,7 +298,7 @@ async function processCollection(id) {
                         }; break;
                         case 'rename': {
                             container.remove()
-                            showPopupInput(title = 'Измените название коллекции', defaultText = collectionInfo.name,async (value)=>{
+                            showPopupInput(collectionLang.actions.editColl.rename, collectionInfo.name, async (value) => {
                                 if (value) {
                                     const rename_result = await request('controlGroup',
                                         {
@@ -292,10 +324,10 @@ async function processCollection(id) {
                 container.appendChild(reord_over)
             })
             createAction(
-                'Конвертировать коллекцию в группу',
+                collectionLang.actions.toGroup.btn,
                 document.querySelector('.post-actions'),
                 async () => {
-                    if (confirm('Вы уверены что хотите конвертировать эту коллекцию в группу?')) {
+                    if (confirm(`${collectionLang.actions.toGroup.btn} "${collectionInfo.name}"`)) {
                         const convResult = await request('controlGroup',
                             {
                                 type: 'setGroupType',

@@ -980,18 +980,13 @@ function formatUserText(input) {
 }
 
 function showPopupInput(title = 'Title', defaultText = '', cb) {
-    // Create background blur element
     const blurryBackground = createBlurOverlay()
 
-    // Create popup container
     const popup = document.createElement('div')
     popup.className = 'popup'
 
-    // Create title
     const popupTitle = document.createElement('h2')
     popupTitle.textContent = title
-
-    // Create textarea
 
     const textarea = document.createElement('textarea')
     textarea.value = defaultText
@@ -1018,19 +1013,16 @@ function showPopupInput(title = 'Title', defaultText = '', cb) {
         cb(false)
     })
 
-    // Append elements to popup
     popup.appendChild(popupTitle)
     const txtCont = createDiv('textarea-container', popup)
     txtCont.appendChild(textarea)
     popup.appendChild(btn_row)
     blurryBackground.appendChild(popup)
 
-    // Function to close popup
     function closePopup() {
         document.body.removeChild(blurryBackground)
     }
 
-    // Close popup on background click
     blurryBackground.addEventListener('click', (event) => {
         if (event.target === blurryBackground) {
             closePopup()
@@ -1038,7 +1030,6 @@ function showPopupInput(title = 'Title', defaultText = '', cb) {
         }
     });
 
-    // Focus textarea
     textarea.focus()
     document.body.classList.add('blurred')
 
