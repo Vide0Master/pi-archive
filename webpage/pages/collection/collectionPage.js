@@ -239,7 +239,7 @@ async function processCollection(id) {
         page_num.innerHTML = counter++
 
         const view_from_page = createDiv('view-from-page', page_num_cont)
-        view_from_page.innerHTML = 'Просмотреть с<br>этой страницы'
+        view_from_page.innerHTML = collectionLang.viewFrom
 
         const postData = await fetchPostData(post)
         for (const tag of postData.tags) {
