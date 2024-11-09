@@ -1,5 +1,6 @@
 {
     "name": "English",
+    "id": "ENG",
     "lang": {
         "WEB": {
             "user_status_translation": {
@@ -61,6 +62,29 @@
                     "rename": "Rename",
                     "color": "Outline color",
                     "accept": "Accept"
+                }
+            },
+            "collection": {
+                "postInfoLabel": "Collection info",
+                "postActionsLabel": "Actions",
+                "data": {
+                    "name": "Name",
+                    "id": "ID",
+                    "owner": "Author"
+                },
+                "overlay": {
+                    "close": "Close"
+                },
+                "actions": {
+                    "editColl": {
+                        "btn": "Edit collection",
+                        "delete": "Confirm deleting collection",
+                        "rename": "Rename collection"
+                    },
+                    "toGroup": {
+                        "btn": "Set group mode",
+                        "conf": "Confirm setting group mode for collection"
+                    }
                 }
             },
             "defaultTags": "Tags",
@@ -241,8 +265,8 @@
                         "label": "Enter message text",
                         "s": "Message sent!"
                     },
-                    "resetAvatar":"Reset profile picture",
-                    "resetProfileBackground":"Reset profile background"
+                    "resetAvatar": "Reset profile picture",
+                    "resetProfileBackground": "Reset profile background"
                 },
                 "favs": {
                     "label": "Favourites",
