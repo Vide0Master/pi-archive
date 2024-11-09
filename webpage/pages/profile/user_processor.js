@@ -172,15 +172,15 @@ function showActions(userData, activeUser) {
         //region ch blklist
         createAction(profileLang.actions.changeBl.btn, container, async () => {
             const blacklist = activeUser.data.blacklist.join('\n')
-
-            const new_blacklist = await showPopup(profileLang.actions.changeBl.label, blacklist)
-            if (blacklist != new_blacklist) {
-                const result = await request('updateBlacklist', {
-                    userKey: localStorage.getItem('userKey') || sessionStorage.getItem('userKey'),
-                    blacklist: new_blacklist.split(/\s+|\n+|\,/).filter(val => val !== '')
-                })
-                alert(result.msg)
-            }
+            showPopupInput(profileLang.actions.changeBl.label, blacklist, async (new_blacklist) => {
+                if (blacklist != new_blacklist) {
+                    const result = await request('updateBlacklist', {
+                        userKey: localStorage.getItem('userKey') || sessionStorage.getItem('userKey'),
+                        blacklist: new_blacklist.split(/\s+|\n+|\,/).filter(val => val !== '')
+                    })
+                    alert(result.msg)
+                }
+            })
         })
 
         // region set avatar
@@ -197,19 +197,20 @@ function showActions(userData, activeUser) {
     } else {
         //region wr msg
         createAction(profileLang.actions.sendDM.btn, container, async () => {
-            const message_data = await showPopup(profileLang.actions.sendDM.label)
-            if (message_data) {
-                const message_result = await request('sendMessage', {
-                    message: message_data,
-                    from: activeUser.data.login,
-                    to: userData.data.login,
-                    msgtype: 'DM'
-                })
-                if (message_result.rslt == 's')
-                    alert(`s/${profileLang.actions.sendDM.s}`, 5000)
-                else
-                    alert(message_result.msg, 5000)
-            }
+            showPopupInput(profileLang.actions.sendDM.label, async (message_data) => {
+                if (message_data) {
+                    const message_result = await request('sendMessage', {
+                        message: message_data,
+                        from: activeUser.data.login,
+                        to: userData.data.login,
+                        msgtype: 'DM'
+                    })
+                    if (message_result.rslt == 's')
+                        alert(`s/${profileLang.actions.sendDM.s}`, 5000)
+                    else
+                        alert(message_result.msg, 5000)
+                }
+            })
         })
         if (activeUser.data.acc_level > 1) {
 
