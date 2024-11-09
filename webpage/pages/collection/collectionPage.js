@@ -266,8 +266,7 @@ async function processCollection(id) {
                         }; break;
                         case 'rename': {
                             container.remove()
-                            const new_name = showPopup(title = 'Измените название коллекции', defaultText = collectionInfo.name)
-                            new_name.then(async value => {
+                            showPopupInput(title = 'Измените название коллекции', defaultText = collectionInfo.name,async (value)=>{
                                 if (value) {
                                     const rename_result = await request('controlGroup',
                                         {

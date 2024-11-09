@@ -7,7 +7,7 @@ async function createTagGroupList() {
 
     const tagGroupListBlock = document.getElementById('tag-groups-list')
 
-    for (const tagGroup of tagGroupList.sort((a,b)=>b.priority-a.priority)) {
+    for (const tagGroup of tagGroupList.sort((a, b) => b.priority - a.priority)) {
         const tag_group_div = createDiv('tag-group-continer', tagGroupListBlock)
 
         const header = createDiv('head-bar', tag_group_div)
@@ -15,19 +15,19 @@ async function createTagGroupList() {
         const buttons = createDiv('button-bar', tag_group_div)
 
         const groupNameCont = createDiv('group-name', header)
-        groupNameCont.innerHTML = tagCLang.groupN+': '
+        groupNameCont.innerHTML = tagCLang.groupN + ': '
         const name = document.createElement('input')
         name.type = 'text'
         groupNameCont.appendChild(name)
 
         const priorityCont = createDiv('priority', header)
-        priorityCont.innerHTML = tagCLang.prior+': '
+        priorityCont.innerHTML = tagCLang.prior + ': '
         const priority = document.createElement('input')
         priority.type = 'text'
         priorityCont.appendChild(priority)
 
         const colorCont = createDiv('color', header)
-        colorCont.innerHTML = tagCLang.color+': '
+        colorCont.innerHTML = tagCLang.color + ': '
         const color = document.createElement('input')
         color.type = 'color'
         colorCont.appendChild(color)
@@ -61,16 +61,17 @@ async function createTagGroupList() {
         }
 
         const add_btn = createAction('+', content, async () => {
-            const newTagsLine = await showPopup(tagCLang.insrtTagName)
-            if (!newTagsLine) return
-            const newTagsArray = newTagsLine.split(/\s+|\n+/).filter(val => val !== '')
-            for (const tagname of newTagsArray) {
-                const tagElem = createTagElem(tagname, () => {
-                    tagElem.remove()
-                })
-                content.insertBefore(tagElem, add_btn)
-                tagElem.classList.add('new')
-            }
+            showPopupInput(tagCLang.insrtTagName, '', (newTagsLine) => {
+                if (!newTagsLine) return
+                const newTagsArray = newTagsLine.split(/\s+|\n+/).filter(val => val !== '')
+                for (const tagname of newTagsArray) {
+                    const tagElem = createTagElem(tagname, () => {
+                        tagElem.remove()
+                    })
+                    content.insertBefore(tagElem, add_btn)
+                    tagElem.classList.add('new')
+                }
+            })
         })
 
         add_btn.classList.add('plus')
@@ -103,7 +104,7 @@ async function createTagGroupList() {
             }
 
             const conf_result = await request('controlTagGroups', { type: 'updateGroup', group: tagGroup.groupname, newGroupData: newGroupData })
-            if(conf_result.rslt=='s')
+            if (conf_result.rslt == 's')
                 window.location.href = window.location.href + `?alert=${conf_result.rslt}/${conf_result.msg}`
             alert(`${conf_result.rslt}/${conf_result.msg}`, 5000)
         })

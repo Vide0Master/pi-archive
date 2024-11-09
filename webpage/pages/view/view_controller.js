@@ -151,27 +151,30 @@ async function handleAdminActions() {
     if (isOwner || isAdmin) {
         createAction(viewLang.actions.editTags.btn, document.querySelector('.post-actions'), async () => {
             let tagline = post_data.tags.join(' ');
-            const taglist = await showPopup(viewLang.actions.editTags.poptext, tagline);
-            if (taglist) {
-                const new_tags = taglist.split(/\s+|\n+/).filter(val => val !== '');
-                const rslt = await request('updateTags', { post: post_data.id, newTags: new_tags });
-                alert(rslt.msg, 5000);
+            const { txtArea, txtAreaCont } = showPopupInput(viewLang.actions.editTags.poptext, tagline, async (taglist) => {
+                if (taglist) {
+                    const new_tags = taglist.split(/\s+|\n+/).filter(val => val !== '');
+                    const rslt = await request('updateTags', { post: post_data.id, newTags: new_tags });
+                    alert(rslt.msg, 5000);
 
-                const pData = await fetchPostData(post_data.id)
-                createTagSelector(pData.tags, document.querySelector('.tags'));
-            }
+                    const pData = await fetchPostData(post_data.id)
+                    createTagSelector(pData.tags, document.querySelector('.tags'));
+                }
+            });
+            addTagsAutofill(txtArea, txtAreaCont)
         });
 
         createAction(viewLang.actions.editDesc.btn, document.querySelector('.post-actions'), async () => {
-            const newDesc = await showPopup(viewLang.actions.editDesc.poptext, post_data.description)
-            if (newDesc) {
-                const updateResult = await request('updatePostDesc', { postID: post_data.id, newDesc: newDesc })
-                alert(`${updateResult.rslt}/${updateResult.msg}`, 5000)
-                if (updateResult.rslt == 's') {
-                    document.querySelector('.view-container .desc').innerText = newDesc
-                    post_data.description = newDesc
+            showPopupInput(viewLang.actions.editDesc.poptext, post_data.description, async (newDesc) => {
+                if (newDesc) {
+                    const updateResult = await request('updatePostDesc', { postID: post_data.id, newDesc: newDesc })
+                    alert(`${updateResult.rslt}/${updateResult.msg}`, 5000)
+                    if (updateResult.rslt == 's') {
+                        document.querySelector('.view-container .desc').innerText = newDesc
+                        post_data.description = newDesc
+                    }
                 }
-            }
+            })
         })
 
         if (post_data.postGroupData) {
@@ -235,14 +238,13 @@ async function handleAdminActions() {
                             }; break;
                             case 'rename': {
                                 container.remove()
-                                const new_name = showPopup(viewLang.actions.editGroup.rename, defaultText = post_data.postGroupData.name)
-                                new_name.then(async value => {
-                                    if (value) {
+                                showPopupInput(viewLang.actions.editGroup.rename, post_data.postGroupData.name, async (new_name) => {
+                                    if (new_name) {
                                         const rename_result = await request('controlGroup',
                                             {
                                                 type: 'renameGroup',
                                                 groupID: post_data.postGroupData.id,
-                                                newName: value
+                                                newName: new_name
                                             })
                                         alert(`${rename_result.rslt}/${rename_result.msg}`, 5000)
                                     }
@@ -307,7 +309,7 @@ async function handleAdminActions() {
             const rslt = await request('deletePost', { post: post_data.id });
 
             if (rslt.rslt == 's') {
-                search(document.getElementById('taglist').value,rslt)
+                search(document.getElementById('taglist').value, rslt)
             } else {
                 alert(rslt.msg, 5000);
             }
@@ -344,14 +346,15 @@ function groupControl() {
         const group_selector = createSelect(groups_select, viewLang.actions.groupControl.selectGroupLabel, async (value) => {
             switch (value) {
                 case 'create_group': {
-                    const groupName = await showPopup(viewLang.actions.groupControl.newGroupNameLabel)
-                    if (groupName) {
-                        const group_create_result = await request('controlGroup', { type: 'createGroup', posts: [post_data.id], name: groupName })
-                        alert(group_create_result.rslt + '/' + group_create_result.msg, 5000)
-                        if (group_create_result.rslt != 'e') {
-                            overlay.remove()
+                    showPopupInput(viewLang.actions.groupControl.newGroupNameLabel, async (groupName) => {
+                        if (groupName) {
+                            const group_create_result = await request('controlGroup', { type: 'createGroup', posts: [post_data.id], name: groupName })
+                            alert(group_create_result.rslt + '/' + group_create_result.msg, 5000)
+                            if (group_create_result.rslt != 'e') {
+                                overlay.remove()
+                            }
                         }
-                    }
+                    })
                 }; break;
                 default: {
                     const group_add_result = await request('controlGroup', { type: 'addPost', post: post_data.id, id: value })
