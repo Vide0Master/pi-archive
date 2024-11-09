@@ -187,12 +187,46 @@ function showActions(userData, activeUser) {
         createAction(profileLang.actions.resetAvatar, container, async () => {
             const rslt = await request('controlUserSettings', { type: 'update', update: { ProfileAvatarPostID: null } })
             alert(rslt.msg, 5000)
+            if (rslt.rslt == 's') {
+                window.location.href = window.location.href
+            }
         })
 
         // region set background
         createAction(profileLang.actions.resetProfileBackground, container, async () => {
             const rslt = await request('controlUserSettings', { type: 'update', update: { ProfileBackgroundPostID: null } })
             alert(rslt.msg, 5000)
+            if (rslt.rslt == 's') {
+                window.location.href = window.location.href
+            }
+        })
+
+        //region set lang
+        createAction(profileLang.actions.lang.btn, container, async () => {
+            const langResult = await request('getLangsList')
+            const overlay = createBlurOverlay()
+            const langlist = []
+            langlist.push({ name: profileLang.actions.lang.cnc, value: "cancel" })
+            for (const lng of langResult.langs) {
+                langlist.push({ name: lng.name, value: lng.id })
+            }
+            const sel = createSelect(langlist, profileLang.actions.lang.sel, async (sel) => {
+                switch (sel) {
+                    case "cancel": {
+                        overlay.remove()
+                    }; break;
+                    default: {
+                        const rslt = await request('controlUserSettings', { type: 'update', update: { lang: sel } })
+                        alert(rslt.msg, 5000)
+                        localStorage.setItem('lang', sel)
+                    }; break
+                }
+            })
+            overlay.appendChild(sel)
+            overlay.addEventListener('click', (e) => {
+                if (e.target == overlay)
+                    overlay.remove()
+            })
         })
     } else {
         //region wr msg
