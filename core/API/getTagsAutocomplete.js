@@ -41,7 +41,7 @@ module.exports = (request, user_data) => {
             }
         }
 
-        const regex = new RegExp(request.tagPart);
+        const regex = new RegExp(request.tagPart.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
         const foundSysTags = systemTags.filter(tag => regex.test(tag));
 
         for (const tag of foundSysTags) {
