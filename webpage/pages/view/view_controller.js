@@ -346,7 +346,7 @@ function groupControl() {
         const group_selector = createSelect(groups_select, viewLang.actions.groupControl.selectGroupLabel, async (value) => {
             switch (value) {
                 case 'create_group': {
-                    showPopupInput(viewLang.actions.groupControl.newGroupNameLabel, async (groupName) => {
+                    showPopupInput(viewLang.actions.groupControl.newGroupNameLabel, "", async (groupName) => {
                         if (groupName) {
                             const group_create_result = await request('controlGroup', { type: 'createGroup', posts: [post_data.id], name: groupName })
                             alert(group_create_result.rslt + '/' + group_create_result.msg, 5000)
