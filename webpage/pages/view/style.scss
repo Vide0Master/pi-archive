@@ -68,8 +68,8 @@ main {
             justify-content: center;
             gap: 0.5em;
 
-            background-color: #00365d;
-            border: 0.2em solid #006cb9;
+            background-color: var(--color1);
+            border: 0.2em solid var(--color3);
             width: fit-content;
             padding: 0.5em;
             border-radius: 0.5em;
@@ -83,7 +83,7 @@ main {
                 align-items: stretch;
                 justify-content: space-between;
                 overflow: hidden;
-                background-color: #202020;
+                background-color: var(--color2);
 
                 .positive {
                     background-color: green;
@@ -112,7 +112,7 @@ main {
 
             .fav {
                 padding: 0.3em;
-                background-color: #006cb9;
+                background-color: var(--interact-passive);
                 border-radius: 0.1em;
                 display: flex;
                 flex-direction: row;
@@ -123,11 +123,11 @@ main {
                 color: #fff;
 
                 &:hover {
-                    background-color: #005999;
+                    background-color: var(--interact-focus);
                 }
 
                 &:active {
-                    background-color: #00365d;
+                    background-color: var(--interact-active);
                 }
 
                 .bookmark-img {
@@ -137,23 +137,23 @@ main {
             }
 
             .faved {
-                background-color: rgb(200, 200, 0);
+                background-color: green;
 
                 &:hover {
-                    background-color: rgb(100, 100, 0);
+                    background-color: rgb(0, 107, 0);
                 }
 
                 &:active {
-                    background-color: rgb(50, 50, 0);
+                    background-color: rgb(0, 75, 0);
                 }
             }
         }
 
         .desc {
             box-sizing: border-box;
-            color: #fff;
-            background-color: #00365d;
-            border: 0.2em solid #006cb9;
+            color: var(--font-color1);
+            background-color: var(--color1);
+            border: 0.2em solid var(--color3);
             width: fit-content;
             padding: 0.5em;
             border-radius: 0.5em;
@@ -167,7 +167,7 @@ main {
             gap: 1em;
 
             box-sizing: border-box;
-            color: #fff;
+            color: var(--font-color1);
             width: fit-content;
 
             @media (min-width:600px) {
@@ -175,15 +175,14 @@ main {
             }
 
             .new-comment-container {
-
                 display: flex;
                 flex-direction: row;
                 align-items: center;
                 justify-content: center;
                 gap: 0.5em;
 
-                background-color: #00365d;
-                border: 0.2em solid #006cb9;
+                background-color: var(--color1);
+                border: 0.2em solid var(--color3);
                 padding: 0.5em;
                 border-radius: 0.5em;
 
@@ -204,8 +203,8 @@ main {
                     align-items: center;
                     gap: 0.5em;
 
-                    background-color: #00365d;
-                    border: 0.2em solid #006cb9;
+                    background-color: var(--color1);
+                    border: 0.2em solid var(--color3);
                     padding: 0.5em;
                     border-radius: 0.5em;
 
@@ -227,7 +226,7 @@ main {
                         }
 
                         .creation-date {
-                            color: #FFF;
+                            color: var(--font-color1);
                         }
                     }
 
@@ -283,8 +282,8 @@ main {
     gap: 1em;
 
     .tags {
-        color: #fff;
-        background-color: #00365d;
+        color: var(--font-color1);
+        background-color: var(--color1);
         display: flex;
         flex-direction: column;
         gap: 0.5em;
@@ -318,8 +317,8 @@ main {
     }
 
     .post-info {
-        background-color: #00365d;
-        color: #fff;
+        background-color: var(--color1);
+        color: var(--font-color1);
         padding: 0.3em;
         border-radius: 0.3em;
 
@@ -341,8 +340,8 @@ main {
     }
 
     .post-actions {
-        background-color: #00365d;
-        color: #fff;
+        background-color: var(--color1);
+        color: var(--font-color1);
         padding: 0.3em;
         border-radius: 0.3em;
 

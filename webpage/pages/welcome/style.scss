@@ -18,13 +18,13 @@ html{
 
     .label {
         font-family: 'Times New Roman', Times, serif;
-        color: #fff;
+        color: var(--font-color1);
         font-size: 3cm;
         text-align: center;
     }
 
     .description {
-        color: #fff;
+        color: var(--font-color1);
         display: flex;
         flex-direction: column;
         justify-content: center;

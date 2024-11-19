@@ -56,9 +56,11 @@ bot.on('message', async (msg) => {
         }
         const filePath = await tgBotController.useUtil('downloadFile', fileId)
         const result = await sysController.fileProcessor(filePath, { type: 'TGBOT', key: chatId });
-        tgBotController.sendMessage(chatId, result.msg, msg.message_id, new tgBotController.inlineConstr([
-            { text: 'Add post tags', data: `addTags:${result.postID}` }
-        ]));
+        const options =
+            new tgBotController.inlineConstr([
+                { text: 'Add post tags', data: `addTags:${result.postID}` }
+            ])
+        tgBotController.sendMessage(chatId, result.msg, msg.message_id, options);
         return
     }
 

@@ -228,6 +228,36 @@ function showActions(userData, activeUser) {
                     overlay.remove()
             })
         })
+
+        //region set theme
+        createAction(profileLang.actions.theme.btn, container, async () => {
+            const overlay = createBlurOverlay()
+            let themelist = []
+            themelist.push({ name: profileLang.actions.theme.cnc, value: "cancel" })
+            themelist = themelist.concat(colorSchemesList)
+
+            for (const i in themelist) {
+                themelist[i].name = profileLang.actions.theme.themes[themelist[i].value]
+            }
+
+            const sel = createSelect(themelist, profileLang.actions.theme.sel, async (sel) => {
+                switch (sel) {
+                    case "cancel": {
+                        overlay.remove()
+                    }; break;
+                    default: {
+                        request('controlUserSettings', { type: 'update', update: { theme: sel } })
+                        localStorage.setItem('theme', sel)
+                        window.location.href=window.location.href
+                    }; break
+                }
+            })
+            overlay.appendChild(sel)
+            overlay.addEventListener('click', (e) => {
+                if (e.target == overlay)
+                    overlay.remove()
+            })
+        })
     } else {
         //region wr msg
         createAction(profileLang.actions.sendDM.btn, container, async () => {

@@ -49,8 +49,8 @@ class Authy {
     }
 
     static async unlogin() {
-        sessionStorage.clear()
-        localStorage.clear()
+        sessionStorage.removeItem('userKey')
+        localStorage.removeItem('userKey')
         window.location.href = '/'
     }
 }

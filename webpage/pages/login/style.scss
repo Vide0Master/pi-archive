@@ -2,6 +2,9 @@ html {
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 100%;
+    background: var(--color1);
+    font-family: Arial, sans-serif;
 }
 
 .login-block {
@@ -9,33 +12,119 @@ html {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.5em;
-
-    box-shadow: 0 0 20px #000;
+    gap: 1em;
+    padding: 1.5em;
     border-radius: 0.5em;
-    padding: 2em;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    background: var(--color2);
+    color: var(--font-color1);
+    width: 100%;
+    max-width: 300px;
 
     .label {
-        color: #fff;
-        font-size: 3em;
+        font-size: 2.2em;
+        font-weight: bold;
+        color: var(--font-color1);
+        text-align: center;
     }
 
-    .user-data {
+    .login-form {
         display: flex;
         flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5em;
+        gap: 0.8em;
+        width: 100%;
 
-        .checkbox{
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3em;
+
+            label {
+                font-size: 1em;
+                color: var(--font-color1);
+                cursor: pointer;
+            }
+
+            input[type=text],
+            input[type=password] {
+                cursor: text;
+                padding: 0.6em;
+                font-size: 0.9em;
+                border: 1px solid var(--color2);
+                border-radius: 0.3em;
+                background: rgba(255, 255, 255, 0.1);
+                color: var(--font-color1);
+
+                &:focus {
+                    background: rgba(255, 255, 255, 0.2);
+                    outline: 0.1em solid var(--color3);
+                }
+            }
+        }
+
+        .stay-in {
             display: flex;
             flex-direction: row;
-            align-items: center;
-            justify-content: center;
             gap: 0.3em;
-            div{
-                color: #fff;
+
+            .checkbox-wrapper {
+                width: fit-content;
+
+                input[type=checkbox] {
+                    cursor: pointer;
+                    appearance: none;
+                    width: fit-content;
+
+                    background-color: #a6a6a6;
+                    height: 1.25em;
+                    width: 2.5em;
+                    border-radius: 1em;
+                    margin: 0;
+
+                    position: relative;
+
+                    transition: 0.15s;
+
+                    &::after {
+                        transition: left 0.15s ease-in;
+                        content: "";
+
+                        position: absolute;
+                        height: 1em;
+                        width: 1.25em;
+                        border-radius: 0.5em;
+                        background-color: #fff;
+                        transform: translateY(-50%);
+                        top: 50%;
+                        left: 0.125em;
+                    }
+
+                    &:checked {
+                        background-color: rgb(80, 234, 19);
+
+                        &::after {
+                            left: 1.125em;
+                            right: 0.125em;
+                        }
+                    }
+                }
             }
+        }
+    }
+
+    .submit-btn {
+        background-color: var(--color3);
+        color: var(--font-color2);
+        padding: 0.7em 1em;
+        border: none;
+        border-radius: 0.3em;
+        font-size: 1em;
+        cursor: pointer;
+        transition: 0.3s ease;
+
+        &:hover {
+            background-color: color-mix(in srgb, var(--color3), #000 90%);
+            color: color-mix(in srgb, var(--font-color1), #FFF 50%);
         }
     }
 }

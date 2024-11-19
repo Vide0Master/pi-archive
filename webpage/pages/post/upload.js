@@ -225,7 +225,7 @@ function createUploadBlock(container) {
                     uploadButton.value = uploadLang.uploadBtn
                 }
                 if (index > 0) {
-                    uploadButton.value = uploadLang.uploadBtn + " " + uploadLang.uALL
+                    uploadButton.value = uploadLang.uploadBtn + " " + uploadLang.uAll
                 }
 
                 filesToUpload.push(upload)

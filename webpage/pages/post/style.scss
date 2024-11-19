@@ -2,6 +2,13 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 2em;
+
+    // Adjust padding for small screens
+    @media (max-width: 600px) {
+        // 600px
+        padding: 1em;
+    }
 }
 
 .load-container {
@@ -9,10 +16,15 @@ main {
     flex-direction: column;
     align-items: center;
     gap: 0.5em;
-    background-color: #0056b3;
+    background-color: var(--color1);
     width: fit-content;
+    max-width: 90%; // Limit container width for smaller screens
     padding: 1em;
     border-radius: 0.5em;
+
+    @media (max-width: 600px) {
+        padding: 0.8em;
+    }
 
     .file-input-wrapper {
         position: relative;
@@ -30,12 +42,12 @@ main {
 
         .file-label {
             display: block;
-            padding: 10px 20px;
-            border: 2px solid #007bff;
-            border-radius: 4px;
-            background-color: #007bff;
-            color: #fff;
-            font-size: 16px;
+            padding: 0.6em 1.2em;
+            border: none;
+            border-radius: 0.25em;
+            background-color: var(--color3);
+            color: var(--font-color2);
+            font-size: 1em;
             text-align: center;
             cursor: pointer;
             transition: background-color 0.3s, border-color 0.3s;
@@ -50,17 +62,27 @@ main {
                 border-color: #a0a0a0;
                 cursor: not-allowed;
             }
+
+            @media (max-width: 600px) {
+                padding: 0.5em 1em;
+                font-size: 0.9em;
+            }
         }
     }
 
     .file-list {
-        border: solid 0.2em rgba(0, 0, 0, 0.2);
+        border: solid 0.2em var(--color3);
         border-radius: 0.2em;
         padding: 0.5em;
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: 0.5em;
+
+        @media (max-width: 600px) {
+            gap: 0.3em;
+            padding: 0.3em;
+        }
 
         .file-block {
             display: flex;
@@ -70,11 +92,20 @@ main {
             box-sizing: border-box;
             width: 100%;
 
+            @media (max-width: 600px) {
+                flex-direction: column;
+                gap: 0.8em;
+            }
+
             .preview-container {
-                width: 50%;
-                height: 200px;
+                height: 12.5em; // 200px
                 display: flex;
-                justify-content: end;
+                justify-content: center;
+
+                @media (max-width: 600px) {
+                    width: 100%;
+                    height: 9.375em; // 150px
+                }
 
                 .preview-elem {
                     max-height: 100%;
@@ -84,27 +115,45 @@ main {
 
             .data-container {
                 color: #fff;
+                display: flex;
+                flex-direction: column;
+                gap: 1em;
+
+                @media (max-width: 600px) {
+                    width: 100%;
+                    align-items: center;
+                }
 
                 .data-input {
-                    width: 300px;
+                    width: 18.75em; // 300px
                     display: flex;
                     flex-direction: column;
                     gap: 1em;
 
+                    @media (max-width: 600px) {
+                        width: 100%;
+                    }
+
                     .file-name {
                         font-size: 1.3em;
+                        word-break: break-all;
+
+                        @media (max-width: 600px) {
+                            font-size: 1.1em;
+                        }
                     }
                 }
 
                 .data-progress {
-                    width: 50%;
+                    width: 100%;
                     display: flex;
                     flex-direction: column;
                     align-items: start;
                     gap: 1em;
 
-                    box-sizing: border-box;
-                    width: 100%;
+                    @media (max-width: 600px) {
+                        align-items: center;
+                    }
 
                     .line-container {
                         display: flex;
@@ -112,14 +161,11 @@ main {
                         align-items: center;
                         flex-wrap: wrap;
                         gap: 0.25em;
-
-                        box-sizing: border-box;
                         width: 100%;
-
                         border-left: solid 0.2em;
-
                         padding-left: 0.2em;
 
+                        // Status-specific colors
                         &.no-data {
                             border-color: grey;
                         }

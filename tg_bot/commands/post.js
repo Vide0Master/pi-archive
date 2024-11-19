@@ -31,14 +31,12 @@ module.exports = async (bot, chatId, msgId, userdata, ...args) => {
             const [start, end] = arg.split('-').map(Number);
             let postIds;
 
-            // Проверка порядка start и end и создание массива в нужном порядке
             if (start < end) {
                 postIds = Array.from({ length: end - start + 1 }, (_, i) => start + i);
             } else {
                 postIds = Array.from({ length: start - end + 1 }, (_, i) => start - i);
             }
 
-            // Проверка на количество элементов в массиве
             if (postIds.length > 10) {
                 tgBotController.sendMessage(chatId, 'No more that 10 posts allowed', msgId);
                 return []
@@ -48,7 +46,6 @@ module.exports = async (bot, chatId, msgId, userdata, ...args) => {
         }
         if (arg.includes(',')) {
             const postIds = arg.split(',').map(Number);
-            // Проверка на количество элементов в массиве
             if (postIds.length > 10) {
                 tgBotController.sendMessage(chatId, 'No more that 10 posts allowed', msgId);
                 return []
@@ -57,7 +54,6 @@ module.exports = async (bot, chatId, msgId, userdata, ...args) => {
         }
 
         const singlePostId = [Number(arg)];
-        // Проверка на количество элементов в массиве
         if (singlePostId.length > 10) {
             tgBotController.sendMessage(chatId, 'No more that 10 posts allowed', msgId);
             return []
@@ -65,6 +61,10 @@ module.exports = async (bot, chatId, msgId, userdata, ...args) => {
         return singlePostId;
     };
 
+    if (!postIdArg) {
+        tgBotController.sendMessage(chatId, 'No post specified', msgId)
+        return
+    }
     const postIds = parsePostIds(postIdArg);
 
     for (const postId of postIds) {
@@ -110,7 +110,7 @@ module.exports = async (bot, chatId, msgId, userdata, ...args) => {
 
         const postActions = []
 
-        if (userdata.login == postData.post.author || sysController.config.static.user_status[userdata.status]>1) {
+        if (userdata.login == postData.post.author || sysController.config.static.user_status[userdata.status] > 1) {
             postActions.push({ text: 'Add post tags', data: `addTags:${postId}` })
         }
 

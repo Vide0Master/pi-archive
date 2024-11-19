@@ -14,23 +14,44 @@
     <script src="consoleAlert.js"></script>
     <script src="APIrequest.js" defer></script>
     <script src="authy.js" defer></script>
-    <script src="globalPageFunctions.js" defer></script>
     <script src="alert/alert.js" defer></script>
     <link rel="stylesheet" href="alert/alert.css">
+    <script src="globalPageFunctions.js" defer></script>
     <script src="reg.js" defer></script>
+    <link rel="stylesheet" href="themes/default.css" id="theme-style">
 </head>
 
 <body>
     <div class="register-block">
-        <div class="register-label">Регистрация</div>
-        <div class="userdata"></div>
+        <div class="register-label">Register</div>
+        <form class="registration-form">
+            <div class="form-group">
+                <label for="nickname">Nickname</label>
+                <input type="text" id="nickname" name="nickname" minlength="4" maxlength="30" required>
+            </div>
+            <div class="form-group">
+                <label for="login">Login</label>
+                <input type="text" id="login" name="login" minlength="4" maxlength="20" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" minlength="8" maxlength="30" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">Repeat password</label>
+                <input type="password" id="confirm-password" name="confirm-password" minlength="8" maxlength="30" required>
+            </div>
+            <div class="form-group">
+                <label for="admin-message">Message to admin</label>
+                <textarea id="admin-message" name="admin-message" placeholder="Message..." minlength="10" maxlength="1000"></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Send request</button>
+        </form>
         <div class="info">
-            <div>После отправки заявки, администратор или владалец должны принять её вручную!</div>
-            <div>Ожидайте решения администратора.</div>
-            <div>(Факт возможного отказа и удаления заявки не исключён)</div>
+            <div>After submitting request, admins need to review your request manually!</div>
+            <div>Please wait for getting access.</div>
         </div>
-        <input type="button" value="Отправить заявку" id="send">
-        <a href="/login">У меня уже есть аккаунт</a>
+        <a href="/login">I have account</a>
     </div>
 </body>
 

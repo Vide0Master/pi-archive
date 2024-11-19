@@ -67,7 +67,7 @@
             "collection": {
                 "postInfoLabel": "Collection info",
                 "postActionsLabel": "Actions",
-                "viewFrom":"View at<br>this page",
+                "viewFrom": "View at<br>this page",
                 "data": {
                     "name": "Name",
                     "id": "ID",
@@ -268,10 +268,20 @@
                     },
                     "resetAvatar": "Reset profile picture",
                     "resetProfileBackground": "Reset profile background",
-                    "lang":{
-                        "btn":"Change language",
-                        "sel":"Select desired language",
-                        "cnc":"Cancel"
+                    "lang": {
+                        "btn": "Change language",
+                        "sel": "Select desired language",
+                        "cnc": "Cancel"
+                    },
+                    "theme": {
+                        "btn": "Change theme",
+                        "cnc": "Cancel",
+                        "sel": "Select desired theme",
+                        "themes": {
+                            "cancel": "Cancel",
+                            "default": "Default",
+                            "egypt": "Egypt"
+                        }
                     }
                 },
                 "favs": {

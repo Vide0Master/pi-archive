@@ -46,9 +46,10 @@ async function processCollection(id) {
 
     const page_counter = createDiv('page-counter', background)
 
-    const closeComic = createDiv('close-comic', background)
-    closeComic.innerHTML = collectionLang.overlay.close
-    closeComic.addEventListener('click', () => { closeOverlay() })
+    background.addEventListener('click', (e) => {
+        if (e.target == background)
+            closeOverlay()
+    })
 
     const pages = []
 

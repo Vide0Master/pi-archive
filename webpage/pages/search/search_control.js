@@ -3,7 +3,7 @@ const urlTags = urlParams.get('tags');
 
 const pageButtonsLimit = 6
 
-document.querySelector('.search-row #taglist').placeholder=Language.defaultTags
+document.querySelector('.search-row #taglist').placeholder = Language.defaultTags
 
 //region Page links
 async function update_pages(tags, blacklist, currentPage) {
@@ -14,11 +14,15 @@ async function update_pages(tags, blacklist, currentPage) {
 
     currentPage = parseInt(currentPage)
 
-    const first = createAction('<<', page_list_block, () => {
+    const pageNcont = createDiv('pageNavCont', page_list_block)
+
+    const pageSelCont = createDiv('pageSelCont', pageNcont)
+
+    const first = createAction('<<', pageSelCont, () => {
         get_posts(1)
     })
     first.title = '1'
-    const previous = createAction('<', page_list_block, () => {
+    const previous = createAction('<', pageSelCont, () => {
         get_posts(currentPage - 1)
     })
     first.title = currentPage - 1
@@ -28,10 +32,8 @@ async function update_pages(tags, blacklist, currentPage) {
         previous.classList.add('disabled')
     }
 
-    const pageNcont = createDiv('pageNavCont', page_list_block)
-
     const pageSelector = document.createElement('input')
-    pageNcont.appendChild(pageSelector)
+    pageSelCont.appendChild(pageSelector)
     pageSelector.type = 'number'
     pageSelector.className = 'pageSelectorNumber'
     pageSelector.min = 1
@@ -84,22 +86,22 @@ async function update_pages(tags, blacklist, currentPage) {
     })
 
     pageSelector.addEventListener('change', () => {
-        if(pageSelector.value>page_count.pages){
-            pageSelector.value=page_count.pages
+        if (pageSelector.value > page_count.pages) {
+            pageSelector.value = page_count.pages
         }
-        if(pageSelector.value<1){
-            pageSelector.value=1
+        if (pageSelector.value < 1) {
+            pageSelector.value = 1
         }
         if (pageSelector.value != currentPage) {
             get_posts(pageSelector.value)
         }
     })
 
-    const next = createAction('>', page_list_block, () => {
+    const next = createAction('>', pageSelCont, () => {
         get_posts(currentPage + 1)
     })
     next.title = currentPage + 1
-    const last = createAction('>>', page_list_block, () => {
+    const last = createAction('>>', pageSelCont, () => {
         get_posts(page_count.pages)
     })
     last.title = page_count.pages
