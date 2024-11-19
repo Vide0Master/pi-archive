@@ -199,7 +199,7 @@ img {
     box-sizing: border-box;
     top: calc(100% + 0.5em);
     width: 100%;
-    background-color: var(--accent);
+    background-color: var(--color2);
     border-radius: 0.5em;
     overflow: hidden;
     z-index: 10;
@@ -209,11 +209,11 @@ img {
         transition: 0.05s;
 
         &:hover {
-            background-color: var(--interactible-active);
+            background-color: var(--interact-active);
         }
 
         &.active {
-            background-color: var(--interactible-active);
+            background-color: var(--interact-active);
         }
     }
 }
