@@ -24,7 +24,7 @@ module.exports = (request) => {
             return
         }
 
-        resolve(new SysController.createResponse('s', 'Profile created and waiting for approval'))
+        resolve(new SysController.createResponse('s', 'Profile registered and waiting for approval'))
         SysController.log(`New user ${request.username} waiting for account confirmation`, [{ txt: "REGISTER", txtc: "green", txtb: "white" }])
     })
 }

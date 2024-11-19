@@ -2,6 +2,9 @@ html {
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 100%;
+    background: var(--color1);
+    font-family: Arial, sans-serif;
 }
 
 .register-block {
@@ -9,78 +12,85 @@ html {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.5em;
-
-    box-shadow: 0 0 20px #000;
+    gap: 1em;
+    padding: 1.5em;
     border-radius: 0.5em;
-    padding: 1em;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    background: var(--color2);
+    color: var(--font-color1);
+    width: 100%;
+    max-width: 300px;
 
     .register-label {
-        color: #fff;
-        font-size: 3em;
+        font-size: 2.2em;
+        font-weight: bold;
+        color: var(--font-color1);
+        text-align: center;
     }
 
-    .userdata {
+    .registration-form {
         display: flex;
         flex-direction: column;
-        gap: 0.3em;
+        gap: 0.8em;
+        width: 100%;
 
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3em;
 
-        .input-container {
-            width: max-content;
-            position: relative;
+            label {
+                font-size: 1em;
+                color: var(--font-color1);
+                cursor: pointer;
+            }
 
+            input,
             textarea {
-                width: 250px;
-                height: 100px;
-            }
+                cursor: text;
+                padding: 0.6em;
+                font-size: 0.9em;
+                border: 1px solid var(--color2);
+                border-radius: 0.3em;
+                background: rgba(255, 255, 255, 0.1);
+                color: var(--font-color1);
 
-            textarea,
-            input {
-                position: relative;
-                z-index: 2;
-            }
-
-            &:focus-within {
-                .stupid-overlay {
-                    opacity: 1;
+                &:focus {
+                    background: rgba(255, 255, 255, 0.2);
+                    outline: 0.1em solid var(--color3);
                 }
             }
 
-            .stupid-overlay {
-                z-index: 3;
-                pointer-events: none;
-                box-sizing: border-box;
-                position: absolute;
-                top: 0;
-                animation: 0.5s stpd-over-out forwards;
-                padding: 0.25em;
-                background-color: #000;
-                border: 0.1em solid yellow;
-                width: fit-content;
-                color: #fff;
+            textarea {
+                resize: none;
+            }
+        }
 
-                width: max-content;
-
-                opacity: 0;
-
-                left: calc(100% + 5px);
-
-                display: flex;
-                flex-direction: column;
-                align-items: start;
+        .submit-btn {
+            background-color: var(--color3);
+            color: var(--font-color2);
+            padding: 0.7em 1em;
+            border: none;
+            border-radius: 0.3em;
+            font-size: 1em;
+            cursor: pointer;
+            transition: 0.3s ease;
+    
+            &:hover {
+                background-color: color-mix(in srgb, var(--color3), #000 90%);
+                color: color-mix(in srgb, var(--font-color1), #FFF 50%);
             }
         }
     }
 
     .info {
-        color: #fff;
+        text-align: center;
+        font-size: 0.8em;
+        color: var(--font-color3);
+
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
+        gap: 0.1em;
     }
 }

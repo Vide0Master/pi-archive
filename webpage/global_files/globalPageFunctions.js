@@ -87,9 +87,6 @@ async function addTagsAutofill(field, parent) {
             }
             if (selPos >= 0 && selPos < selector.length)
                 selector[selPos].elem.classList.add('active')
-
-            console.log(selPos)
-            console.log(selector)
             if (rst)
                 return
 
@@ -121,10 +118,8 @@ async function addTagsAutofill(field, parent) {
                 tagElem.addEventListener('mousedown', () => {
 
                     selPos = i++
-                    console.log('clicked ' + tag.tag)
                     setField()
                 })
-                console.log(i)
             }
 
         } else {
@@ -310,7 +305,10 @@ function createPostCard(postData, noClickReaction) {
     return postCard
 }
 
-setFooterText()
+try {
+    setFooterText()
+} catch { }
+
 
 //region footer text
 function setFooterText() {
@@ -368,7 +366,10 @@ function setFooterText() {
     // sysRepLabel.innerHTML = footerLang.status.systemReports
 }
 
-PInav()
+try {
+    PInav()
+} catch { }
+
 
 //region circ ind
 function createIndicator(state, parent) {
@@ -1035,3 +1036,32 @@ function showPopupInput(title = 'Title', defaultText = '', cb) {
 
     return { txtArea: textarea, txtAreaCont: txtCont }
 }
+
+//region themes
+const colorSchemesList = [
+    { name: 'default', value: 'default' },
+    { name: 'egypt', value: 'egypt' }
+]
+
+function setTheme() {
+    const theme = localStorage.getItem('theme')
+    if (!theme) {
+        localStorage.setItem('theme', 'default')
+        setTheme()
+        return
+    }
+
+    const link = document.getElementById("theme-style");
+
+    if (link) {
+        link.href = `themes/${theme}.css`;
+    } else {
+        const newLink = document.createElement("link");
+        newLink.rel = "stylesheet";
+        newLink.id = "theme-style";
+        newLink.href = `themes/${theme}.css`;
+        document.head.appendChild(newLink);
+    }
+}
+
+setTheme()

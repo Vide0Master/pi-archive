@@ -1,0 +1,33 @@
+:root {
+    //default colors
+    --color1: #000000;
+    --color2: #1f1e0d;
+    --color3: gold;
+    --color4: #DBD3D3;
+
+    --font-color1: #dad61a;
+    --font-color2: #000000;
+    --font-color3: #808080;
+    --font-hover: #ffffff;
+
+    --interact-passive: var(--color2);
+    --interact-active: #9b991e;
+    --interact-focus: var(--color2);
+}
+
+//special styling
+.norma-page-container {
+    header {
+        border: 1px solid gold;
+        border-top: none;
+    }
+
+    main {
+        border: 1px solid gold;
+    }
+
+    footer {
+        border: 1px solid gold;
+        border-bottom: none;
+    }
+}

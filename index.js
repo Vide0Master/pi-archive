@@ -47,6 +47,8 @@ if (healthCheckErrors > 0) {
     cmd(`s/No issues detected`, [hlthPREP])
 }
 
+require('./core/languageVerify.js')
+
 //starting web service
 require('./webpage/index.js')
 

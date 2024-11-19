@@ -272,6 +272,16 @@
                         "btn": "Змінити мову",
                         "sel": "Оберіть бажану мову",
                         "cnc": "Відміна"
+                    },
+                    "theme": {
+                        "btn": "Change theme",
+                        "themes": {
+                            "cancel": "Cancel",
+                            "default": "Default",
+                            "egypt": "Egypt"
+                        },
+                        "cnc": "Cancel",
+                        "sel": "Select desired theme"
                     }
                 },
                 "favs": {

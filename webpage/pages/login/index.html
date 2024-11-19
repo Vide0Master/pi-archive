@@ -16,22 +16,33 @@
     <script src="authy.js" defer></script>
     <script src="alert/alert.js" defer></script>
     <link rel="stylesheet" href="alert/alert.css">
+    <script src="globalPageFunctions.js" defer></script>
     <script src="login.js" defer></script>
+    <link rel="stylesheet" href="themes/default.css" id="theme-style">
 </head>
 
 <body>
     <div class="login-block">
-        <div class="label"></div>
-        <div class="user-data">
-            <input type="text" id="login" autocomplete="username">
-            <input type="password" id="password" autocomplete="current-password">
-            <div class="checkbox">
-                <input type="checkbox" id="stay_logged_in">
-                <div></div>
+        <div class="label">Login</div>
+        <form class="login-form">
+            <div class="form-group">
+                <label for="login">Login</label>
+                <input type="text" id="login" autocomplete="username" required minlength="4" maxlength="20">
             </div>
-        </div>
-        <input type="button" id="login_btn">
-        <a href="/register"></a>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" autocomplete="current-password" required minlength="8"
+                    maxlength="30">
+            </div>
+            <div class="stay-in">
+                <label for="stay_logged_in">Stay logged in</label>
+                <div class="checkbox-wrapper">
+                    <input type="checkbox" name="stay_logged_in" id="stay_logged_in" checked>
+                </div>
+            </div>
+            <button type="submit" class="submit-btn">Login</button>
+        </form>
+        <a href="/register">I dont have an account</a>
     </div>
 </body>
 
