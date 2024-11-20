@@ -168,6 +168,11 @@ function createAction(name, parentElement, cb) {
 
 //region cr Pcard
 function createPostCard(postData, noClickReaction) {
+
+    if(!postData){
+        return createDiv()
+    }
+
     const postCardLang = Language.postCard
     const postCard = document.createElement('div')
     postCard.className = 'post-card'
@@ -980,6 +985,7 @@ function formatUserText(input) {
     return formattedText;
 }
 
+//region popinp
 function showPopupInput(title = 'Title', defaultText = '', cb) {
     const blurryBackground = createBlurOverlay()
 

@@ -27,7 +27,17 @@
         </header>
         <main>
             <div class="load-container">
-
+                <input type="file" name="" id="file-upload" multiple accept=".jpg,.jpeg,.png,.webp,.gif,.mp4,.mov,.avi,.mkv">
+                <label for="file-upload" class="file-upload-label"></label>
+                <div class="action-row">
+                    <input type="button" id="uploadAll">
+                    <div class="checkbox-wrapper">
+                        <div class="label"></div>
+                        <input type="checkbox" id="as_group" title="As group">
+                        <input type="text" placeholder="Group name" id="groupName">
+                    </div>
+                </div>
+                <div class="file-list"></div>
             </div>
         </main>
         <footer></footer>
