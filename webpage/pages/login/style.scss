@@ -66,49 +66,6 @@ html {
             display: flex;
             flex-direction: row;
             gap: 0.3em;
-
-            .checkbox-wrapper {
-                width: fit-content;
-
-                input[type=checkbox] {
-                    cursor: pointer;
-                    appearance: none;
-                    width: fit-content;
-
-                    background-color: #a6a6a6;
-                    height: 1.25em;
-                    width: 2.5em;
-                    border-radius: 1em;
-                    margin: 0;
-
-                    position: relative;
-
-                    transition: 0.15s;
-
-                    &::after {
-                        transition: left 0.15s ease-in;
-                        content: "";
-
-                        position: absolute;
-                        height: 1em;
-                        width: 1.25em;
-                        border-radius: 0.5em;
-                        background-color: #fff;
-                        transform: translateY(-50%);
-                        top: 50%;
-                        left: 0.125em;
-                    }
-
-                    &:checked {
-                        background-color: rgb(80, 234, 19);
-
-                        &::after {
-                            left: 1.125em;
-                            right: 0.125em;
-                        }
-                    }
-                }
-            }
         }
     }
 

@@ -248,7 +248,7 @@ function showActions(userData, activeUser) {
                     default: {
                         request('controlUserSettings', { type: 'update', update: { theme: sel } })
                         localStorage.setItem('theme', sel)
-                        window.location.href=window.location.href
+                        window.location.href = window.location.href
                     }; break
                 }
             })
@@ -284,14 +284,17 @@ function showActions(userData, activeUser) {
     }
 }
 
+//region FAVS
 async function getFavs(favs, isActiveUser) {
+    if (favs.length == 0) {
+        return
+    }
     const favs_container = createDiv('favs-container', document.querySelector('.user-page-container'))
 
     const fav_label = createDiv('label', favs_container)
     fav_label.innerHTML = profileLang.favs.label
 
     if (isActiveUser) fav_label.innerHTML += ` ${profileLang.favs.ofUser}`
-
 
     const favs_zone = createDiv('favs-zone', favs_container)
 

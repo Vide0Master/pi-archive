@@ -30,7 +30,7 @@
                 "github": "Here you can look on what is this thing running, and fill some bug reports.",
                 "tgbot": [
                     "Telegram bot",
-                    "More access to Archive with bot, sending and loading more content trough it"
+                    "More access to Archive with bot, sending and loading more content through it"
                 ],
                 "status": {
                     "label": "Archive status",
@@ -186,7 +186,7 @@
                     },
                     "setPostAsAvatar": "Set post as profile picture",
                     "setPostAsProfileBackground": "Set post as profile background",
-                    "sendPostToTg": "Send post trogh TG bot to DM",
+                    "sendPostToTg": "Send post through TG bot to DM",
                     "editTags": {
                         "btn": "Edit tags",
                         "poptext": "Edit tags list"
@@ -290,40 +290,41 @@
                 }
             },
             "upload": {
-                "uploadBtn": "Upload",
-                "uploading": "Uploading",
-                "uError": "Upload error",
-                "uAll": "all",
-                "noFilesToUpload": "No files to upload",
-                "inputLabel": "Select or drag-n-drop files",
-                "fnameTitle": "Orignal filename would not be saved",
-                "tags": "Tags",
-                "noTags": "No tags",
-                "description": "Description",
-                "noDesc": "No description",
-                "skipStage": "stage skipped",
-                "uploadText": [
-                    "File",
-                    "Waiting"
+                "DnD": "Select or drag and drop files",
+                "uploadAll": "Upload all files",
+                "asGroup": "As group",
+                "groupName": "Group name",
+                "postsUpload": {
+                    "solo": "Post uploaded",
+                    "multiple": "All posts uploaded",
+                    "group": "posts uploaded and grouped into"
+                },
+                "fields": {
+                    "fSize": "File size",
+                    "tags": "Tags",
+                    "desc": "Description"
+                },
+                "queue": "In queue",
+                "upload": [
+                    "Upload progress",
+                    "Uploaded"
                 ],
-                "uploadingFile": "Uploading file",
-                "err": "Error!",
-                "suc": "Completed!",
-                "errGettingPostData": [
-                    "Error getting post data to process",
-                    "tags",
-                    "description"
+                "tags": [
+                    "Setting tags",
+                    "Tags set",
+                    "Error setting tags"
                 ],
-                "tagsProcess": [
-                    "Processing tags",
-                    "Error setting tags",
-                    "Tags set"
+                "desc": [
+                    "Setting description",
+                    "Description set",
+                    "Error setting description"
                 ],
-                "descProcess": [
-                    "Processing description",
-                    "Error setting desctiprion",
-                    "Description set"
-                ]
+                "postCreated": "Post created with",
+                "errGettingPostData":"Error getting post data for post",
+                "uploadFile":"Upload file",
+                "tooBig":"File is to big to upload, max",
+                "noSupport":"Unsupported filetype",
+                "openPost":"View this post in new page"
             },
             "welcome_messages": [
                 {

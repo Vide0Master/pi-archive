@@ -213,6 +213,7 @@
     }
 
     .page-counter {
+        z-index: 10;
         color: #fff;
         position: absolute;
         transform: translateX(-50%);
