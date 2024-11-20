@@ -21,7 +21,7 @@ bot.on('message', async (msg) => {
 
     if (msg.photo || msg.video || msg.document) {
         if (!userData.user) {
-            tgBotController.sendMessage(chatId, ``,)
+            tgBotController.sendMessage(chatId, `You need to /login first`,)
             return
         }
 
@@ -65,6 +65,11 @@ bot.on('message', async (msg) => {
     }
 
     if (tgBotController.followups[chatId]) {
+        if (!userData.user) {
+            tgBotController.sendMessage(chatId, `You need to /login first`,)
+            return
+        }
+
         tgBotController.executeFollowup(
             tgBotController.followups[chatId].type,
             chatId,
@@ -79,7 +84,7 @@ bot.on('message', async (msg) => {
     if (msg.text) {
         const { command, args } = parseCommand(msg.text);
         if (sysController.config.static.restrictions.tgbotfunctions[command] > 0 && !userData.user) {
-            tgBotController.sendMessage(chatId, 'You need to be logged in to use this command', msg.message_id);
+            tgBotController.sendMessage(chatId, 'You need to /login to use this command', msg.message_id);
             return
         }
         if (sysController.config.static.restrictions.tgbotfunctions[command] > sysController.config.static.user_status[(userData.user || { status: 'unconfirmed' }).status]) {
