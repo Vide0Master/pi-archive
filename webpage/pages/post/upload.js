@@ -1,5 +1,10 @@
 const uploadLang = Language.upload
 
+const fSizeLimits={
+    video:1024 * 1024 * 1024 * 5,
+    image:1024 * 1024 * 100
+}
+
 function getelem(selector) {
     return document.querySelector(selector)
 }
@@ -75,7 +80,6 @@ uploadBtn.addEventListener('click', async () => {
     for (const prep of uploadList) {
         requests.push(prep())
     }
-    console.log(requests)
     const IDs = await Promise.all(requests.map(fn => fn()))
     if (asGroup.checked) {
         let groupName = groupField.value
@@ -87,7 +91,6 @@ uploadBtn.addEventListener('click', async () => {
     } else {
         alert(`s/${uploadLang.postsUpload.multiple}`)
     }
-    console.log(IDs)
 })
 
 function updateStatusClass(element, newClass) {
@@ -116,9 +119,8 @@ document.querySelector('#file-upload').addEventListener('change', (e) => {
 
     for (const file of fileList) {
         let preventUpload = false
-        console.log(file)
-        const inVideoLimit = file.size < 1024 * 1024 * 1024 * 5
-        const inImageLimit = file.size < 1024 * 1024 * 50
+        const inVideoLimit = file.size < fSizeLimits.video
+        const inImageLimit = file.size < fSizeLimits.image
 
         if (file.type.startsWith('video/')) {
             if (!inVideoLimit) {
@@ -167,9 +169,9 @@ document.querySelector('#file-upload').addEventListener('change', (e) => {
             const warning = createDiv('warning', dataCol)
             warning.innerHTML = uploadLang.tooBig
             if (preventUpload == 'video') {
-                warning.innerHTML += " " + formatFileSize(1024 * 1024 * 1024 * 5)
+                warning.innerHTML += " " + formatFileSize(fSizeLimits.video)
             } else if (preventUpload == 'image') {
-                warning.innerHTML += " " + formatFileSize(1024 * 1024 * 50)
+                warning.innerHTML += " " + formatFileSize(fSizeLimits.image)
             } else {
                 warning.innerHTML = uploadLang.noSupport
             }

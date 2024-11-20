@@ -1,10 +1,10 @@
 const SysController = require('../systemController');
 
-module.exports = (db, tags = [], blacklist = [], from, posts) => {
+module.exports = (db, queryText, from, posts) => {
     return new Promise((resolve) => {
         let query = 'SELECT * FROM posts';
 
-        const { Cquery, params } = SysController.queryConstructor(tags, blacklist, from, posts)
+        const { Cquery, params } = SysController.queryConstructor(queryText, from, posts)
 
         db.all(query + Cquery, params, (err, rows) => {
             resolve(new SysController.createResponse(

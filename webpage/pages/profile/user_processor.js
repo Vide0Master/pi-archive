@@ -261,7 +261,7 @@ function showActions(userData, activeUser) {
     } else {
         //region wr msg
         createAction(profileLang.actions.sendDM.btn, container, async () => {
-            showPopupInput(profileLang.actions.sendDM.label, async (message_data) => {
+            showPopupInput(profileLang.actions.sendDM.label,`${userData.data.username}!`, async (message_data) => {
                 if (message_data) {
                     const message_result = await request('sendMessage', {
                         message: message_data,
@@ -298,8 +298,13 @@ async function getFavs(favs, isActiveUser) {
 
     const favs_zone = createDiv('favs-zone', favs_container)
 
-    for (const favID of favs) {
-        const pcard = createPostCard((await request('getPostData', { id: favID })).post)
-        favs_zone.appendChild(pcard)
+    const favsList = await request('getPosts',
+        {
+            query: `id:${favs.join(',')}`,
+            page: 1,
+            postsCount: 9999
+        })
+    for (const favID of favsList) {
+        favs_zone.appendChild(createPostCard(favID))
     }
 }

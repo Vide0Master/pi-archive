@@ -6,8 +6,8 @@ const pageButtonsLimit = 6
 document.querySelector('.search-row #taglist').placeholder = Language.defaultTags
 
 //region Page links
-async function update_pages(tags, blacklist, currentPage) {
-    const page_count = await request(`getPageCount`, { tags, blacklist })
+async function update_pages(query, currentPage) {
+    const page_count = await request(`getPageCount`, { query })
 
     const page_list_block = document.querySelector('.page-navigator')
     page_list_block.innerHTML = ''
@@ -112,38 +112,28 @@ async function update_pages(tags, blacklist, currentPage) {
     }
 }
 
+//region P S T SF
+function passSearchTagsToSearchField() {
+    document.getElementById('taglist').value = new URLSearchParams(window.location.search).get('tags')
+}
+
 //region tags from url
 function get_tags() {
-    const taglist = {
-        tags: [],
-        blacklist: []
-    }
     if (!urlTags) {
-        return taglist
+        return document.getElementById('taglist').value
+    } else {
+        return urlTags
     }
-    const tags = urlTags.trim().split(/\s/).filter(val => val !== '');
-
-    let tagline = document.getElementById('taglist')
-    tagline.value = tags.join(' ')
-    for (const tag of tags) {
-        if (tag.startsWith("-")) {
-            taglist.blacklist.push(tag.slice(1))
-        } else {
-            taglist.tags.push(tag)
-        }
-    }
-    return taglist
 }
 
 //region posts for page
 async function get_posts(page) {
     const taglist = get_tags()
-    await update_pages(taglist.tags, taglist.blacklist, page)
+    await update_pages(taglist, page)
 
     const post_list = await request('getPosts',
         {
-            tags: taglist.tags,
-            blacklist: taglist.blacklist,
+            query: taglist,
             page
         })
 
@@ -164,7 +154,7 @@ async function get_posts(page) {
                         post_list.splice(index, 1);
                     }
                 });
-                elm = createGroup(post.postGroupData)
+                elm = await createGroup(post.postGroupData)
             }; break;
             default: {
                 elm = createPostCard(post)
@@ -174,10 +164,9 @@ async function get_posts(page) {
 
         posts_block.appendChild(elm)
     }
-
-    createImgLoadOverlay(posts_block)
 }
 
+passSearchTagsToSearchField()
 get_posts(1)
 
 //region Get glob tags

@@ -818,3 +818,9 @@ function addOpenFullScreenView(file_link) {
     })
 }
 
+//region P S T SF
+function passSearchTagsToSearchField(){
+    document.getElementById('taglist').value = new URLSearchParams(window.location.search).get('tags')
+}
+
+passSearchTagsToSearchField()
