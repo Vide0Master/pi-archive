@@ -3,9 +3,10 @@ const syscontroller = require('../systemController.js')
 module.exports = (request, user) => {
     return new Promise(async resolve => {
         const user_sets = user.usersettings
+        const userQuery = request.query + " " + user.blacklist.map(elem => "-" + elem).join(' ')
+
         const posts = await syscontroller.dbinteract.getPosts(
-            request.tags,
-            request.blacklist.concat(user.blacklist || []),
+            userQuery,
             (request.page - 1) * (request.postsCount || user_sets.posts_per_page),
             request.postsCount || user_sets.posts_per_page)
 
@@ -33,6 +34,8 @@ module.exports = (request, user) => {
             const postRatings = await syscontroller.dbinteract.getPostLikesDislikesFavs(post.id)
 
             post.postRating = postRatings.scores
+
+            post.postRating.faved = user.favs.includes(post.id)
         }
         resolve(posts.posts)
     })

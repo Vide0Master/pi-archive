@@ -1,7 +1,7 @@
 0
 const SysController = require('../systemController.js')
 
-module.exports = (request) => {
+module.exports = (request, user) => {
     return new Promise(async resolve => {
         const data = await SysController.dbinteract.getPostData(request.id)
 
@@ -36,6 +36,8 @@ module.exports = (request) => {
         const postRatings = await SysController.dbinteract.getPostLikesDislikesFavs(request.id)
 
         data.post.postRating = postRatings.scores
+
+        data.post.postRating.faved = user.favs.includes(request.id)
 
         resolve(data)
     })

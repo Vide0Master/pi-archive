@@ -1,12 +1,10 @@
 const syscontroller = require('../systemController.js')
 
-module.exports = (request,user) => {
+module.exports = (request, user) => {
     return new Promise(async resolve => {
         const user_sets = user.usersettings
-        const posts_count = await syscontroller.dbinteract.getPostsCount(
-            request.tags,
-            request.blacklist.concat(user.blacklist || '[]')
-        )
+        const userQuery = request.query + " " + user.blacklist.map(elem => "-" + elem).join(' ')
+        const posts_count = await syscontroller.dbinteract.getPostsCount(userQuery)
         if (posts_count.rslt != 's') {
             resolve(posts_count)
             return

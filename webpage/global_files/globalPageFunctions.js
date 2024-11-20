@@ -169,7 +169,7 @@ function createAction(name, parentElement, cb) {
 //region cr Pcard
 function createPostCard(postData, noClickReaction) {
 
-    if(!postData){
+    if (!postData) {
         return createDiv()
     }
 
@@ -178,13 +178,15 @@ function createPostCard(postData, noClickReaction) {
     postCard.className = 'post-card'
     if (!noClickReaction)
         postCard.addEventListener('mousedown', (event) => {
+            const sTags = new URLSearchParams(window.location.search).get('tags')
+            const Link = `/view?id=${postData.id}${sTags ? `&tags=${sTags}` : ''}`
             if (event.button === 1)
                 event.preventDefault()
             if ((event.button === 0 && event.ctrlKey) || event.button === 1) {
-                window.open(`/view?id=${postData.id}`, '_blank').focus();
+                window.open(Link, '_blank').focus();
                 return
             }
-            window.location.href = `/view?id=${postData.id}`
+            window.location.href = Link
         })
 
     const preview_container = createDiv('preview-container')
@@ -219,18 +221,15 @@ function createPostCard(postData, noClickReaction) {
     }
     updateScore()
 
-    async function setFav() {
-        if ((await request('controlScoreAndFavs', { type: 'getUserInfo' })).favs.includes(postData.id)) {
-            const fav = createDiv('fav')
-            fav.title = postCardLang.fav
-            info_row.prepend(fav)
+    if (postData.postRating.faved) {
+        const fav = createDiv('fav')
+        fav.title = postCardLang.fav
+        info_row.prepend(fav)
 
-            const favImg = document.createElement('img')
-            fav.appendChild(favImg)
-            favImg.src = 'fav.svg'
-        }
+        const favImg = document.createElement('img')
+        fav.appendChild(favImg)
+        favImg.src = 'fav.svg'
     }
-    setFav()
 
     const postID = createDiv('', info_row)
     postID.innerHTML = `ID:${postData.id}`
@@ -498,47 +497,33 @@ function createGroup(groupData) {
     if (groupData.type == 'collection') {
         const openAsColl = createButton(Language.group.colView, actionRow)
         openAsColl.addEventListener('mousedown', (event) => {
+            const sTags = new URLSearchParams(window.location.search).get('tags')
+            const Link = `/collection?id=${groupData.id}${sTags ? `&tags=${sTags}` : ''}`
             if (event.button === 1)
                 event.preventDefault()
             if ((event.button === 0 && event.ctrlKey) || event.button === 1) {
-                window.open(`/collection?id=${groupData.id}`, '_blank').focus();
+                window.open(Link, '_blank').focus();
                 return
             }
-            window.location.href = `/collection?id=${groupData.id}`
+            window.location.href = Link
         })
     }
 
     const list = createDiv('list', groupElem)
-    const GROUPER = async () => {
-        for (const post of groupData.group) {
-            list.append(createPostCard((await request('getPostData', { id: post })).post))
+    async function Grouper() {
+        const post_list = await request('getPosts',
+            {
+                query: `id:${groupData.group.join(',')}`,
+                page: 1,
+                postsCount: 9999
+            })
+        for (const post of post_list) {
+            list.append(createPostCard(post))
         }
     }
-    GROUPER()
+    Grouper()
 
     return groupElem
-}
-
-//region create coll
-function createCollection(collectionData) {
-    const colCont = createDiv('collection-container')
-    const colNnBrow = createDiv('action-row', colCont)
-    createDiv('splitter', colCont)
-    const list = createDiv('posts-list', colCont)
-
-    const name = createDiv('group-name', colNnBrow)
-    name.innerHTML = collectionData.name
-
-
-
-    async function COLLECTIONER() {
-        for (const pageID of collectionData.group) {
-            list.appendChild(createPostCard((await request('getPostData', { id: pageID })).post))
-        }
-    }
-    COLLECTIONER()
-
-    return colCont
 }
 
 //region cr select
@@ -764,9 +749,7 @@ function search(taglist, alert) {
 
     let query_page = `/search?tags=`
 
-    tags.map(tag => {
-        query_page += '+' + tag
-    })
+    query_page += tags.join('+')
 
     if (alert) {
         query_page += `&alert=${alert.rslt}/${alert.msg}`
@@ -796,11 +779,15 @@ function createTagline(tag, params = { s: true, tedit: true }) {
     if (tag.group) {
         originalColor = tag.group.color;
     }
+    const searchElem = document.getElementById('taglist')
     if (params.tedit) {
         const plusElem = createAction('+', tagline, () => {
-            document.getElementById('taglist').value += ' ' + tag.tag;
+            const tagsList = searchElem.value.trim().split(/\s/).filter(val => val !== '')
+            tagsList.push(tag.tag)
+            searchElem.value = tagsList.join(' ')
+            console.log(tagsList.join(' '))
             if (params.s)
-                search(document.getElementById('taglist').value);
+                search(searchElem.value);
         });
         plusElem.style.color = originalColor
         linkElems.push(plusElem);
@@ -808,9 +795,11 @@ function createTagline(tag, params = { s: true, tedit: true }) {
 
     if (params.tedit) {
         const minusElem = createAction('-', tagline, () => {
-            document.getElementById('taglist').value += ' -' + tag.tag;
+            const tagsList = searchElem.value.trim().split(/\s/).filter(val => val !== '')
+            tagsList.push("-" + tag.tag)
+            searchElem.value = tagsList.join(' ')
             if (params.s)
-                search(document.getElementById('taglist').value);
+                search(searchElem.value);
         });
         linkElems.push(minusElem);
         minusElem.style.color = originalColor
@@ -818,9 +807,9 @@ function createTagline(tag, params = { s: true, tedit: true }) {
 
     const tagElem = createAction(tag.tag, tagline, () => {
         if (params.tedit)
-            document.getElementById('taglist').value = tag.tag;
+            searchElem.value = tag.tag;
         if (params.s)
-            search(document.getElementById('taglist').value);
+            search(searchElem.value);
     });
     linkElems.push(tagElem);
 
@@ -888,59 +877,6 @@ async function ownerVerify(uname) {
 async function adminVerify() {
     const user = await request('getUserProfileData', { userKey });
     return user.data.acc_level > 1;
-}
-
-//region cr img load
-function createImgLoadOverlay(parent) {
-    const load_overlay = createDiv('loading-overlay', parent)
-
-    const infContainer = createDiv('loading-overlay-info', parent)
-
-    const loadLabel = createDiv('label', infContainer)
-    loadLabel.innerHTML = Language.previewLoad
-    const progressBarContainer = createDiv('progress-bar-cont', infContainer)
-    const progressBar = createDiv('progress-bar', progressBarContainer)
-
-    const imgCounter = createDiv('label', infContainer)
-
-    const images = parent.querySelectorAll('img');
-    let imagesLoaded = 0;
-
-    function addLoadedAndCheck() {
-        imagesLoaded++;
-        checkImagesLoaded()
-    }
-
-    function checkImagesLoaded() {
-        imgCounter.innerHTML = `${imagesLoaded} / ${images.length}`
-        progressBar.style.width = `${imagesLoaded / images.length * 100}%`
-
-        if (imagesLoaded === images.length) {
-            load_overlay.classList.add('fade-out');
-            infContainer.classList.add('fade-out');
-
-            load_overlay.addEventListener('animationend', function () {
-                load_overlay.remove();
-            });
-            infContainer.addEventListener('animationend', function () {
-                infContainer.remove();
-            });
-        }
-    }
-
-    imgCounter.innerHTML = `0 / ${images.length}`
-
-    images.forEach((img) => {
-        if (img.complete) {
-            addLoadedAndCheck();
-        } else {
-            img.addEventListener('load', addLoadedAndCheck);
-
-            img.addEventListener('error', addLoadedAndCheck);
-        }
-    });
-
-    checkImagesLoaded()
 }
 
 //region parse tmst

@@ -347,3 +347,10 @@ async function processCollection(id) {
 const params = new URLSearchParams(window.location.search)
 processCollection(params.get('id'))
 
+
+//region P S T SF
+function passSearchTagsToSearchField(){
+    document.getElementById('taglist').value = new URLSearchParams(window.location.search).get('tags')
+}
+
+passSearchTagsToSearchField()

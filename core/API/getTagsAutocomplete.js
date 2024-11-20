@@ -1,7 +1,8 @@
 const sysController = require('../systemController.js')
 
 const systemTags = [
-    "author:"
+    "author:",
+    "id:"
 ]
 
 module.exports = (request, user_data) => {

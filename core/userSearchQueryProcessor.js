@@ -1,53 +1,72 @@
 
-module.exports = function (whitelist = [], blacklist = [], from, count) {
-    let query = ''
+module.exports = function (textQuery = '', from, count) {
+    textQuery = textQuery.trim().split(/\s/).filter(val => val !== '')
+    let DBquery = ''
     let params = []
 
-    if (whitelist.length > 0 || blacklist.length > 0) {
+    let customOrder = ''
+
+    if (textQuery.length > 0) {
         try {
-            query += ' WHERE '
+            DBquery += ' WHERE '
             const queryArray = []
-            for (const tag of whitelist) {
+            for (const task of textQuery) {
+                const qLine = { fp: "", sp: "" }
+                const isNegative = task.startsWith('-')
+                const tagName = isNegative ? task.slice(1) : task
+
+                const tfs = (tag) => tagName.startsWith(tag)
+
                 switch (true) {
-                    case tag.startsWith("author:"): {
-                        queryArray.push('"author" LIKE ?')
-                        params.push(`${tag.split(':')[1]}`)
+                    case tfs("author:"): {
+                        qLine.fp = `"author"`
+                        qLine.sp = `LIKE ?`
+                        params.push(`${tagName.split(':')[1]}`)
+                    }; break;
+                    case tfs('id:'): {
+                        qLine.fp = `"id"`
+                        const postIDs = tagName.split(':')[1].split(',')
+                        qLine.sp = `IN (${postIDs.map(() => `?`).join(', ')})`
+                        postIDs.map(v => params.push(parseInt(v)))
+
+                        if (postIDs.length > 1 && !isNegative) {
+                            let order = ' ORDER BY CASE "id" '
+                            order += postIDs.map((v, i) => `WHEN ${v} THEN ${i + 1}`).join(' ')
+                            order += " END"
+                            customOrder = order
+                        }
                     }; break;
                     default: {
-                        queryArray.push('tags LIKE ?')
-                        params.push(`%${tag}%`)
+                        qLine.fp = `tags`
+                        qLine.sp = `LIKE ?`
+                        params.push(`%${tagName}%`)
                     }; break;
                 }
+
+                queryArray.push(isNegative ? `${qLine.fp} NOT ${qLine.sp}` : `${qLine.fp} ${qLine.sp}`)
             }
-            for (const antiTag of blacklist) {
-                switch (true) {
-                    case antiTag.startsWith("author:"): {
-                        queryArray.push('"author" NOT LIKE ?')
-                        params.push(`${antiTag.split(':')[1]}`)
-                    }; break;
-                    default: {
-                        queryArray.push('tags NOT LIKE ?')
-                        params.push(`%${antiTag}%`)
-                    }; break;
-                }
-            }
-            query += queryArray.join(' AND ');
+
+            DBquery += queryArray.join(' AND ');
         } catch (err) {
-            resolve({ rslt: 'e', msg: err })
-            return
+            console.log(err)
+            return { rslt: 'e', msg: err }
         }
     }
 
-    query += ' ORDER BY id DESC'
-    
+    if (customOrder != '') {
+        DBquery += customOrder
+    } else {
+        DBquery += ' ORDER BY id DESC'
+    }
+
     if (count) {
-        query += ' LIMIT ?'
+        DBquery += ' LIMIT ?'
         params.push(count);
     }
     if (from) {
-        query += ' OFFSET ?'
+        DBquery += ' OFFSET ?'
         params.push(from);
     }
 
-    return { Cquery: query, params }
+    return { Cquery: DBquery, params }
 }
