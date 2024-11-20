@@ -65,6 +65,11 @@ bot.on('message', async (msg) => {
     }
 
     if (tgBotController.followups[chatId]) {
+        if (!userData.user) {
+            tgBotController.sendMessage(chatId, `You need to /login first`,)
+            return
+        }
+
         tgBotController.executeFollowup(
             tgBotController.followups[chatId].type,
             chatId,
