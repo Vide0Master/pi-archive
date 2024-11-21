@@ -872,6 +872,11 @@ input[type=color] {
         overflow: hidden;
         height: 200px;
 
+        img {
+            pointer-events: none;
+            height: 100%;
+        }
+
         .video-indicator {
             height: 20px;
             width: 20px;
@@ -1042,10 +1047,6 @@ input[type=color] {
                 justify-content: center;
             }
         }
-    }
-
-    img {
-        pointer-events: none;
     }
 
     &.dragging {
