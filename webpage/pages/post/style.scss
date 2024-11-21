@@ -141,6 +141,10 @@ main {
                 height: fit-content;
                 width: 100%;
 
+                .tag-cont{
+                    position: relative;
+                }
+
                 textarea,
                 input {
                     box-sizing: border-box;
