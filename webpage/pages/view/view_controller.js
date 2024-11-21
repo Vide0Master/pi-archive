@@ -93,6 +93,7 @@ async function displayPostData(post_data) {
         switch (data_line) {
             case 'id':
                 elm.innerHTML = `ID: ${line_val}`;
+                document.querySelector('title').innerHTML=`${viewLang.headerNm} ${line_val}`
                 break;
             case 'author':
                 elm.innerHTML = `${viewLang.postData.author}: `;

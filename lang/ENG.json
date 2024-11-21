@@ -64,6 +64,13 @@
                     "accept": "Accept"
                 }
             },
+            "search": {
+                "shortcut": [
+                    "Search",
+                    "page",
+                    "tags"
+                ]
+            },
             "collection": {
                 "postInfoLabel": "Collection info",
                 "postActionsLabel": "Actions",
@@ -152,6 +159,7 @@
                 "logIn": "Log in"
             },
             "view": {
+                "headerNm": "Post",
                 "postInfo": "Post info",
                 "postActions": "Post actions",
                 "postData": {
@@ -320,11 +328,11 @@
                     "Error setting description"
                 ],
                 "postCreated": "Post created with",
-                "errGettingPostData":"Error getting post data for post",
-                "uploadFile":"Upload file",
-                "tooBig":"File is to big to upload, max",
-                "noSupport":"Unsupported filetype",
-                "openPost":"View this post in new page"
+                "errGettingPostData": "Error getting post data for post",
+                "uploadFile": "Upload file",
+                "tooBig": "File is to big to upload, max",
+                "noSupport": "Unsupported filetype",
+                "openPost": "View this post in new page"
             },
             "welcome_messages": [
                 {

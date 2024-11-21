@@ -131,11 +131,15 @@ async function get_posts(page) {
     const taglist = get_tags()
     await update_pages(taglist, page)
 
-    const post_list = await request('getPosts',
-        {
-            query: taglist,
-            page
-        })
+    const titleElm = document.querySelector('title')
+    titleElm.innerHTML = `${Language.search.shortcut[0]}: ${Language.search.shortcut[1]} ${page}`
+    const tags = taglist.trim().split(/\s/).filter(val => val !== '')
+    if (tags.length > 0) titleElm.innerHTML += `, ${Language.search.shortcut[2]}: ${tags.join(', ')}`
+
+    const post_list = await request('getPosts', {
+        query: taglist,
+        page
+    })
 
     const posts_block = document.querySelector('.results')
     posts_block.innerHTML = ''

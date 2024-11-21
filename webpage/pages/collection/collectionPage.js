@@ -33,6 +33,8 @@ async function processCollection(id) {
         }
     }
 
+    document.querySelector('title').innerHTML = collectionInfo.name
+
     async function fetchPostData(id) {
         const pdata = await request('getPostData', { id });
         if (pdata.rslt != 's') {
@@ -349,7 +351,7 @@ processCollection(params.get('id'))
 
 
 //region P S T SF
-function passSearchTagsToSearchField(){
+function passSearchTagsToSearchField() {
     document.getElementById('taglist').value = new URLSearchParams(window.location.search).get('tags')
 }
 
