@@ -178,9 +178,11 @@ document.querySelector('#file-upload').addEventListener('change', (e) => {
             return
         }
 
+        const tagsCont = createDiv('tag-cont',dataCol)
         const tags = document.createElement('textarea')
-        dataCol.appendChild(tags)
+        tagsCont.appendChild(tags)
         tags.placeholder = uploadLang.fields.tags
+        addTagsAutofill(tags, tagsCont, true)
 
         const desc = document.createElement('textarea')
         dataCol.appendChild(desc)
