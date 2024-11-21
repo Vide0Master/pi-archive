@@ -49,6 +49,7 @@
                 "id": "Post unique ID",
                 "CC": "Comments count",
                 "newPost": "NEW",
+                "video":"Video",
                 "LTA": [
                     "NO TAGS",
                     "NOT ENOUGH TAGS"

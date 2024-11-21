@@ -297,9 +297,9 @@ function createPostCard(postData, noClickReaction) {
         if (['mp4', 'mov', 'avi', 'mkv', 'gif'].includes(fileExt)) {
             const video_ind_cont = createDiv('video-warning', warningContainer)
             if (fileExt != 'gif') {
-                video_ind_cont.innerHTML = 'Video'
+                video_ind_cont.innerHTML = '▶ Video'
             } else {
-                video_ind_cont.innerHTML = 'GIF'
+                video_ind_cont.innerHTML = '▶ GIF'
             }
         }
 
