@@ -15,6 +15,8 @@ init()
 
 //region process page
 async function processPage(userData, isActiveUser) {
+    document.querySelector('title').innerHTML = userData.data.username
+
     let activeUser;
     if (isActiveUser) {
         activeUser = userData
@@ -261,7 +263,7 @@ function showActions(userData, activeUser) {
     } else {
         //region wr msg
         createAction(profileLang.actions.sendDM.btn, container, async () => {
-            showPopupInput(profileLang.actions.sendDM.label,`${userData.data.username}!`, async (message_data) => {
+            showPopupInput(profileLang.actions.sendDM.label, `${userData.data.username}!`, async (message_data) => {
                 if (message_data) {
                     const message_result = await request('sendMessage', {
                         message: message_data,
