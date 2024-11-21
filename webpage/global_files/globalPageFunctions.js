@@ -30,30 +30,48 @@ async function setHeaderButtrons() {
 }
 
 //region tag autofill
-async function addTagsAutofill(field, parent) {
+async function addTagsAutofill(field, parent, preventSearch = false) {
     const autocomplete = createDiv('autocomplete', parent)
     autocomplete.style.display = 'none'
     let selector = []
     let selPos = -1
 
-    async function process(e) {
-        const parts = field.value.split(' ')
-        const preLastPart = parts[parts.length - 1]
+    function getCursorWordIndex(field) {
+        const cursorPos = field.selectionStart;
+        const value = field.value;
+        const parts = value.split(' ');
 
-        let lastPart = preLastPart
-        if (preLastPart[0] == '-') {
-            lastPart = lastPart.substring(1)
+        let startPos = 0;
+        for (let i = 0; i < parts.length; i++) {
+            const word = parts[i];
+            if (cursorPos >= startPos && cursorPos <= startPos + word.length) {
+                return i;
+            }
+            startPos += word.length + 1;
+        }
+        return -1;
+    }
+
+    console.log(preventSearch)
+    async function process(e) {
+        const parts = field.value.split(' ');
+        const cursorWordIndex = getCursorWordIndex(field);
+        const targetWord = parts[cursorWordIndex];
+
+        let lastPart = targetWord;
+        if (targetWord[0] == '-') {
+            lastPart = lastPart.substring(1);
         }
 
         function setField() {
-            parts[parts.length - 1] = selector[selPos].tag;
-            if (preLastPart[0] == '-') {
-                parts[parts.length - 1] = "-" + parts[parts.length - 1]
+            parts[cursorWordIndex] = selector[selPos].tag;
+            if (targetWord[0] == '-') {
+                parts[cursorWordIndex] = "-" + parts[cursorWordIndex];
             }
-            field.value = parts.join(' ')
-            autocomplete.style.display = 'none'
-            selPos = -1
-            selector = []
+            field.value = parts.join(' ');
+            autocomplete.style.display = 'none';
+            selPos = -1;
+            selector = [];
         }
 
         if (e.code == "Enter") {
@@ -61,7 +79,9 @@ async function addTagsAutofill(field, parent) {
                 setField()
                 return
             } else {
-                search(field.value)
+                if (!preventSearch) {
+                    search(field.value)
+                }
             }
         }
 
@@ -128,7 +148,7 @@ async function addTagsAutofill(field, parent) {
         }
     }
 
-    field.addEventListener('keyup', (e) => {
+    field.addEventListener('keydown', (e) => {
         process(e)
     })
     field.addEventListener('click', (e) => {

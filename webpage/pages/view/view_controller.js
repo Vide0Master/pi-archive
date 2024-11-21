@@ -93,7 +93,7 @@ async function displayPostData(post_data) {
         switch (data_line) {
             case 'id':
                 elm.innerHTML = `ID: ${line_val}`;
-                document.querySelector('title').innerHTML=`${viewLang.headerNm} ${line_val}`
+                document.querySelector('title').innerHTML = `${viewLang.headerNm} ${line_val}`
                 break;
             case 'author':
                 elm.innerHTML = `${viewLang.postData.author}: `;
@@ -161,7 +161,7 @@ async function handleAdminActions() {
                     createTagSelector(pData.tags, document.querySelector('.tags'));
                 }
             });
-            addTagsAutofill(txtArea, txtAreaCont)
+            addTagsAutofill(txtArea, txtAreaCont, true)
         });
 
         createAction(viewLang.actions.editDesc.btn, document.querySelector('.post-actions'), async () => {
@@ -820,7 +820,7 @@ function addOpenFullScreenView(file_link) {
 }
 
 //region P S T SF
-function passSearchTagsToSearchField(){
+function passSearchTagsToSearchField() {
     document.getElementById('taglist').value = new URLSearchParams(window.location.search).get('tags')
 }
 
