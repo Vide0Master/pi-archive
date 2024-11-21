@@ -50,6 +50,20 @@
                 }
             }
         }
+
+        .experiments {
+            animation: expFadeIn 0.5s;
+
+            @keyframes expFadeIn {
+                0% {
+                    opacity: 0;
+                }
+
+                100% {
+                    opacity: 1;
+                }
+            }
+        }
     }
 
     .favs-container {
@@ -95,6 +109,7 @@ main {
         align-items: center;
         justify-content: center;
         overflow: hidden;
+
         .backgroundImg {
             width: 100%;
             mask-image: linear-gradient(to bottom, rgba(255, 255, 255, 1) 80%, rgba(255, 255, 255, 0));

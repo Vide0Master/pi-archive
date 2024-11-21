@@ -196,7 +196,141 @@ function createPostCard(postData, noClickReaction) {
 
     const postCardLang = Language.postCard
     const postCard = document.createElement('div')
+
+    if (localStorage.getItem('alternativePostCard')) {
+        postCard.className = 'alternative-post-card'
+
+        if (!noClickReaction)
+            postCard.addEventListener('mousedown', (event) => {
+                const sTags = new URLSearchParams(window.location.search).get('tags')
+                const Link = `/view?id=${postData.id}${sTags ? `&tags=${sTags}` : ''}`
+                if (event.button === 1)
+                    event.preventDefault()
+                if ((event.button === 0 && event.ctrlKey) || event.button === 1) {
+                    window.open(Link, '_blank').focus();
+                    return
+                }
+                window.location.href = Link
+            })
+
+        const postDataCont = createDiv('post-data-container', postCard)
+
+        const postIdCont = createDiv('post-id-container', postDataCont)
+        postIdCont.innerHTML = postData.id
+        postIdCont.title = postCardLang.id
+
+        const post_stats = postData.postRating
+        const rating = post_stats.likes - post_stats.dislikes
+        if (rating != 0) {
+            const ratingCont = createDiv('inf-cont', postDataCont)
+            const postScore = createDiv('rating', ratingCont)
+            postScore.title = postCardLang.rating
+            postScore.innerHTML = Math.abs(rating)
+            switch (true) {
+                case rating < 0: {
+                    postScore.innerHTML = '▼' + postScore.innerHTML
+                    postScore.style.color = 'rgb(200, 0, 0)'
+                }; break;
+                case rating > 0: {
+                    postScore.innerHTML = '▲' + postScore.innerHTML
+                    postScore.style.color = 'rgb(0, 200, 0)'
+                }; break;
+            }
+        }
+
+        if (postData.commentCount > 0) {
+            const commentCont = createDiv('inf-cont', postDataCont)
+            const postCommentsCount = createDiv('comments-count', commentCont)
+            postCommentsCount.innerHTML = postData.commentCount
+            postCommentsCount.title = postCardLang.CC
+        }
+
+        if (postData.postRating.faved) {
+            const favCont = createDiv('inf-cont', postDataCont)
+            const fav = createDiv('fav')
+            fav.title = postCardLang.fav
+            favCont.prepend(fav)
+
+            const favImg = document.createElement('img')
+            fav.appendChild(favImg)
+            favImg.src = 'fav.svg'
+        }
+
+        const imageContainer = createDiv('image-container', postCard)
+
+        const previewImg = document.createElement('img')
+        imageContainer.appendChild(previewImg)
+        previewImg.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${postData.id}&thumb=true`
+        previewImg.className = 'preview-image'
+
+        const warningContainerContainer = createDiv('warning-container-container', postDataCont)
+
+        const warningContainer = createDiv('warning-container', warningContainerContainer)
+
+        function timeSinceCreation(time) {
+            const date1 = Date.now();
+            const date2 = new Date(time);
+            const differenceInMilliseconds = Math.abs(date2 - date1);
+            const differenceInHours = differenceInMilliseconds / (1000 * 60 * 60);
+            return differenceInHours;
+        }
+
+        if (timeSinceCreation(postData.timestamp) < 12) {
+            const new_ribbon = createDiv('new-ribbon', warningContainer)
+            new_ribbon.innerHTML = postCardLang.newPost
+        }
+
+        if (postData.tags.length < 5) {
+            const low_tags = createDiv('low-tags-ribbon', warningContainer)
+            if (postData.tags.length == 0) {
+                low_tags.innerHTML = postCardLang.LTA[0]
+            } else {
+                low_tags.innerHTML = postCardLang.LTA[1]
+            }
+        }
+
+        function getFileExtension(filename) {
+            const parts = filename.split('.');
+            return parts.length > 1 ? parts.pop() : '';
+        }
+        const fileExt = getFileExtension(postData.file)
+        if (['mp4', 'mov', 'avi', 'mkv', 'gif'].includes(fileExt)) {
+            const video_ind_cont = createDiv('video-warning', warningContainer)
+            if (fileExt != 'gif') {
+                video_ind_cont.innerHTML = '▶ Video'
+            } else {
+                video_ind_cont.innerHTML = '▶ GIF'
+            }
+        }
+
+        const defins = [
+            { type: 'UHD 4K', active: (postData.size.y > 2160) },
+            { type: 'QHD 1440', active: (postData.size.y > 1440) },
+            { type: 'FHD 1080', active: (postData.size.y > 1080) },
+            { type: 'HD 720', active: (postData.size.y > 720) }
+        ]
+
+        for (const res of defins) {
+            if (res.active) {
+                const hd_indicator_cont = createDiv('hd-indicator', warningContainer)
+                hd_indicator_cont.innerHTML = res.type
+                break
+            }
+        }
+
+        return postCard
+    }
+
     postCard.className = 'post-card'
+
+    const preview_container = createDiv('preview-container')
+    postCard.appendChild(preview_container)
+
+    const preview = document.createElement('img')
+    preview_container.appendChild(preview)
+    preview.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${postData.id}&thumb=true`
+    preview.className = 'preview-image'
+
     if (!noClickReaction)
         postCard.addEventListener('mousedown', (event) => {
             const sTags = new URLSearchParams(window.location.search).get('tags')
@@ -210,24 +344,15 @@ function createPostCard(postData, noClickReaction) {
             window.location.href = Link
         })
 
-    const preview_container = createDiv('preview-container')
-    postCard.appendChild(preview_container)
-
-    const preview = document.createElement('img')
-    preview_container.appendChild(preview)
-    preview.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${postData.id}&thumb=true`
-    preview.className = 'preview-image'
-
     const info_row = document.createElement('div')
     postCard.appendChild(info_row)
     info_row.className = 'info-row'
 
-    const postScore = createDiv('', info_row)
-    postScore.title = postCardLang.rating
-
-    function updateScore() {
-        const post_stats = postData.postRating
-        const rating = post_stats.likes - post_stats.dislikes
+    const post_stats = postData.postRating
+    const rating = post_stats.likes - post_stats.dislikes
+    if (rating != 0) {
+        const postScore = createDiv('', info_row)
+        postScore.title = postCardLang.rating
         postScore.innerHTML = Math.abs(rating)
         switch (true) {
             case rating < 0: {
@@ -240,7 +365,6 @@ function createPostCard(postData, noClickReaction) {
             }; break;
         }
     }
-    updateScore()
 
     if (postData.postRating.faved) {
         const fav = createDiv('fav')
@@ -256,9 +380,11 @@ function createPostCard(postData, noClickReaction) {
     postID.innerHTML = `ID:${postData.id}`
     postID.title = postCardLang.id
 
-    const postCommentsCount = createDiv('', info_row)
-    postCommentsCount.innerHTML = `C:${postData.commentCount}`
-    postCommentsCount.title = postCardLang.CC
+    if (postData.commentCount > 0) {
+        const postCommentsCount = createDiv('comments-count', info_row)
+        postCommentsCount.innerHTML = postData.commentCount
+        postCommentsCount.title = postCardLang.CC
+    }
 
     function getFileExtension(filename) {
         const parts = filename.split('.');
@@ -431,6 +557,18 @@ function createButton(name, parentElem) {
     return btn
 }
 
+//region cr switch
+function createSwitch(name, parent, cb, checked = false) {
+    const swLine = createDiv('switch-line', parent)
+    createDiv('sw-label', swLine).innerHTML = name
+    const sw = document.createElement('input')
+    sw.type = 'checkbox'
+    sw.checked = checked
+    swLine.appendChild(sw)
+    sw.addEventListener('change', () => cb(sw.checked))
+    return swLine
+}
+
 //region cr blur
 function createBlurOverlay() {
     const overlay = createDiv('blurry-overlay')
@@ -584,7 +722,7 @@ function reorderOverlay(group, callback) {
     const RENDER = async () => {
         const label = createDiv('label');
         container.appendChild(label);
-        label.innerText = `${group.id}|${group.name}`;
+        label.innerText = `"${group.name}" ID:${group.id}`;
 
         const reorderContainer = createDiv('reord-cont');
         container.appendChild(reorderContainer);
@@ -608,9 +746,13 @@ function reorderOverlay(group, callback) {
         let draggedItem = null;
         let selectedItem = null;
 
+        const pcardClass = localStorage.getItem('alternativePostCard') ? '.alternative-post-card' : '.post-card'
+
+        console.log(pcardClass)
+
         reorderContainer.addEventListener('dragstart', (e) => {
-            if (e.target.closest('.post-card')) {
-                draggedItem = e.target.closest('.post-card');
+            if (e.target.closest(pcardClass)) {
+                draggedItem = e.target.closest(pcardClass);
                 draggedItem.classList.add('dragging');
             }
         });
@@ -628,14 +770,14 @@ function reorderOverlay(group, callback) {
         });
 
         reorderContainer.addEventListener('dragenter', (e) => {
-            const target = e.target.closest('.post-card');
+            const target = e.target.closest(pcardClass);
             if (target && target !== draggedItem) {
                 target.classList.add('over');
             }
         });
 
         reorderContainer.addEventListener('dragleave', (e) => {
-            const target = e.target.closest('.post-card');
+            const target = e.target.closest(pcardClass);
             if (target && target !== draggedItem) {
                 target.classList.remove('over');
             }
@@ -643,9 +785,9 @@ function reorderOverlay(group, callback) {
 
         reorderContainer.addEventListener('drop', (e) => {
             e.preventDefault();
-            const target = e.target.closest('.post-card');
+            const target = e.target.closest(pcardClass);
             if (target && target !== draggedItem) {
-                const allItems = Array.from(reorderContainer.querySelectorAll('.post-card'));
+                const allItems = Array.from(reorderContainer.querySelectorAll(pcardClass));
                 const draggedIndex = allItems.indexOf(draggedItem);
                 const targetIndex = allItems.indexOf(target);
 
@@ -660,12 +802,12 @@ function reorderOverlay(group, callback) {
         });
 
         function updateOrder() {
-            const items = Array.from(reorderContainer.querySelectorAll('.post-card'));
+            const items = Array.from(reorderContainer.querySelectorAll(pcardClass));
             const order = items.map(item => item.dataset.id);
         }
 
         reorderContainer.addEventListener('click', (e) => {
-            const target = e.target.closest('.post-card');
+            const target = e.target.closest(pcardClass);
             if (target && target !== selectedItem) {
                 if (selectedItem) {
                     selectedItem.classList.remove('selected');
@@ -679,9 +821,9 @@ function reorderOverlay(group, callback) {
         });
 
         reorderContainer.addEventListener('click', (e) => {
-            const target = e.target.closest('.post-card');
+            const target = e.target.closest(pcardClass);
             if (target && selectedItem && target !== selectedItem) {
-                const allItems = Array.from(reorderContainer.querySelectorAll('.post-card'));
+                const allItems = Array.from(reorderContainer.querySelectorAll(pcardClass));
                 const selectedIndex = allItems.indexOf(selectedItem);
                 const targetIndex = allItems.indexOf(target);
 
@@ -733,7 +875,7 @@ function reorderOverlay(group, callback) {
         const confirm_btn = createButton(editorLng.accept);
         button_row.appendChild(confirm_btn);
         confirm_btn.addEventListener('click', () => {
-            const items = Array.from(reorderContainer.querySelectorAll('.post-card'));
+            const items = Array.from(reorderContainer.querySelectorAll(pcardClass));
             const order = items.map(item => item.dataset.id);
             callback('reorder', order);
         });

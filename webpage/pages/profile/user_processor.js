@@ -32,6 +32,7 @@ async function processPage(userData, isActiveUser) {
         showActions(userData, activeUser)
     }
     if (userData.data.favs.length > 0) getFavs(userData.data.favs, !isActiveUser)
+    if (isActiveUser) addHiddenExperiments()
 }
 
 //region welcome txt
@@ -308,5 +309,67 @@ async function getFavs(favs, isActiveUser) {
         })
     for (const favID of favsList) {
         favs_zone.appendChild(createPostCard(favID))
+    }
+}
+
+function addHiddenExperiments() {
+    const user_card_block = document.querySelector('.user-card')
+    const container = createDiv('list-container', user_card_block)
+
+    container.style.display = 'none'
+
+    const label = createDiv('label', container)
+    label.innerText = "Experiment features"
+
+    let keySequence = [];
+    const targetSequence = ["F1", "F4", "F8", "F8"];
+
+    function onSequenceMatch() {
+        container.removeAttribute('style')
+        container.classList.add('experiments')
+    }
+
+    document.addEventListener("keydown", (event) => {
+        if (!event.shiftKey) {
+            keySequence = [];
+            return;
+        }
+
+        const key = event.key;
+        keySequence.push(key);
+
+        const currentSequence = keySequence.join(",");
+        const targetStart = targetSequence.slice(0, keySequence.length).join(",");
+
+        if (currentSequence === targetSequence.join(",")) {
+            onSequenceMatch();
+            keySequence = [];
+        } else if (currentSequence !== targetStart) {
+            keySequence = [];
+        }
+    });
+
+    document.addEventListener("keyup", (event) => {
+        if (event.key === "Shift") {
+            keySequence = [];
+        }
+    });
+
+
+    const expreimentsFuncs = [
+        { name: "Alternative post card style", key: "alternativePostCard" }
+    ]
+
+    for (const func of expreimentsFuncs) {
+
+        createSwitch(func.name, container, (state) => {
+            const curr = localStorage.getItem(func.key)
+            if (!curr) {
+                localStorage.setItem(func.key, state)
+            } else if (!state && curr) {
+                localStorage.removeItem(func.key)
+            }
+
+        }, localStorage.getItem(func.key))
     }
 }
