@@ -224,7 +224,15 @@ async function processCollection(id) {
     const collectionContainer = createDiv('collection-container', document.querySelector('.content-container'))
     let counter = 1
 
-    for (const post of collectionInfo.group) {
+
+    const post_list = await request('getPosts',
+        {
+            query: `id:${collectionInfo.group.join(',')}`,
+            page: 1,
+            postsCount: 9999
+        })
+
+    for (const post of post_list) {
         const page_container = createDiv('col-page-container', collectionContainer)
 
         const CC = counter
@@ -233,7 +241,7 @@ async function processCollection(id) {
         })
 
         const post_img = document.createElement('img')
-        post_img.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${post}`
+        post_img.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${post.id}`
         page_container.appendChild(post_img)
 
         const page_num_cont = createDiv('page-number-counter-container', page_container)
@@ -244,8 +252,7 @@ async function processCollection(id) {
         const view_from_page = createDiv('view-from-page', page_num_cont)
         view_from_page.innerHTML = collectionLang.viewFrom
 
-        const postData = await fetchPostData(post)
-        for (const tag of postData.tags) {
+        for (const tag of post.tags) {
             if (tags.indexOf(tag) < 0) {
                 tags.push(tag)
             }
