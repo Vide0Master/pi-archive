@@ -1,0 +1,35 @@
+:root {
+    // Цветовая палитра
+    --color1: #521c61; // Светлый пастельный розовый
+    --color2: #67288e; // Легкий сиреневый
+    --color3: #c04278; // Пастельный розовый акцент
+    --color4: #ffffff; // Белый
+
+    --font-color1: #ffffff; // Основной цвет текста
+    --font-color2: #000000; // Розовый хайлайт
+    --font-color3: #a6a6a6; // Для второстепенного текста
+    --font-hover: #d1238b;  // Мягкий розовый для наведения
+
+    --interact-passive: var(--color2); // Пассивные элементы
+    --interact-active: #ffacd3;       // Активные элементы
+    --interact-focus: var(--color3);  // Фокус
+}
+
+// Специальные стили
+.norma-page-container {
+    background-color: var(--color1);
+
+    header {
+        border: 1px solid var(--color3);
+        border-top: none;
+    }
+
+    main {
+        border: 1px solid var(--color3);
+    }
+
+    footer {
+        border: 1px solid var(--color3);
+        border-bottom: none;
+    }
+}

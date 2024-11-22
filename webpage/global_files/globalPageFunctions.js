@@ -1149,6 +1149,7 @@ const colorSchemesList = [
     { name: 'dark', value: 'dark' },
     { name: 'egypt', value: 'egypt' },
     { name: 'nature', value: 'nature' },
+    { name: 'pony', value: 'pony' }
 ]
 
 function setTheme() {

@@ -291,7 +291,8 @@
                             "default": "Default",
                             "dark": "Dark",
                             "egypt": "Egypt",
-                            "nature": "Nature"
+                            "nature": "Nature",
+                            "pony":"Pony"
                         }
                     }
                 },
