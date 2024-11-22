@@ -32,9 +32,9 @@ module.exports = class tgBotController {
 
     static getUserLang(userData) {
         let userLang = "ENG"
-        try{
+        try {
             userLang = userData.usersettings.lang || "ENG"
-        }catch{}
+        } catch { }
         return require(`../lang/${userLang}.json`).lang.TGBOT
     }
 
@@ -85,6 +85,12 @@ module.exports = class tgBotController {
         this.bot.on('callback_query', async ({ id, data, message }) => {
             try {
                 const userData = await tgBotController.getUserByTGID(message.chat.id)
+
+                if (!userData.user) {
+                    tgBotController.sendMessage(message.chat.id, `You need to /login first`, message.message_id)
+                    this.bot.answerCallbackQuery(id);
+                    return
+                }
 
                 const [action, ...args] = data.split(':');
                 await this.executeCommand(action, message.chat.id, userData.user, message.message_id, ...args);
