@@ -32,10 +32,10 @@ module.exports = (filePath, sessionData) => {
                 const systemTags = []
 
                 switch (true) {
-                    case fileSize.y > 2160: {
+                    case fileSize.y >= 2160: {
                         systemTags.push('absurd_res')
                     }; break
-                    case fileSize.y > 1080: {
+                    case fileSize.y >= 1080: {
                         systemTags.push('high_res')
                     }; break;
                 }
@@ -106,10 +106,10 @@ module.exports = (filePath, sessionData) => {
                     const systemTags = []
 
                     switch (true) {
-                        case fileSize.y > 2160: {
+                        case fileSize.y >= 2160: {
                             systemTags.push('absurd_res')
                         }; break
-                        case fileSize.y > 1080: {
+                        case fileSize.y >= 1080: {
                             systemTags.push('high_res')
                         }; break;
                     }
