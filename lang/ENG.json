@@ -49,7 +49,7 @@
                 "id": "Post unique ID",
                 "CC": "Comments count",
                 "newPost": "NEW",
-                "video":"Video",
+                "video": "Video",
                 "LTA": [
                     "NO TAGS",
                     "NOT ENOUGH TAGS"
@@ -289,7 +289,9 @@
                         "themes": {
                             "cancel": "Cancel",
                             "default": "Default",
-                            "egypt": "Egypt"
+                            "dark": "Dark",
+                            "egypt": "Egypt",
+                            "nature": "Nature"
                         }
                     }
                 },

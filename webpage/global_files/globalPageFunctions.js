@@ -1146,7 +1146,9 @@ function showPopupInput(title = 'Title', defaultText = '', cb) {
 //region themes
 const colorSchemesList = [
     { name: 'default', value: 'default' },
-    { name: 'egypt', value: 'egypt' }
+    { name: 'dark', value: 'dark' },
+    { name: 'egypt', value: 'egypt' },
+    { name: 'nature', value: 'nature' },
 ]
 
 function setTheme() {

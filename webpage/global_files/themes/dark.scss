@@ -1,0 +1,18 @@
+:root {
+    //default colors
+    --color1: #000;
+    --color2: #222;
+    --color3: #ffee95;
+    --color4: #999;
+
+    --font-color1: #ffee95;
+    --font-color2: #ffffff;
+    --font-color3: #808080;
+    --font-hover: #f68b00;
+
+    --interact-passive: #8d8453;
+    --interact-active: var(--color4);
+    --interact-focus: var(--font-hover);
+}
+
+//special styling
