@@ -304,10 +304,10 @@ function createPostCard(postData, noClickReaction) {
         }
 
         const defins = [
-            { type: '4K<br>UHD', active: (postData.size.y > 2160) },
-            { type: '1440<br>QHD', active: (postData.size.y > 1440) },
-            { type: '1080<br>FHD', active: (postData.size.y > 1080) },
-            { type: '720<br>HD', active: (postData.size.y > 720) }
+            { type: '4K<br>UHD', active: (postData.size.y >= 2160) },
+            { type: '1440<br>QHD', active: (postData.size.y >= 1440) },
+            { type: '1080<br>FHD', active: (postData.size.y >= 1080) },
+            { type: '720<br>HD', active: (postData.size.y >= 720) }
         ]
 
         for (const res of defins) {
