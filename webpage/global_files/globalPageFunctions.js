@@ -297,23 +297,24 @@ function createPostCard(postData, noClickReaction) {
         if (['mp4', 'mov', 'avi', 'mkv', 'gif'].includes(fileExt)) {
             const video_ind_cont = createDiv('video-warning', warningContainer)
             if (fileExt != 'gif') {
-                video_ind_cont.innerHTML = '▶ Video'
+                video_ind_cont.innerHTML = '▶ ' + postCardLang.video
             } else {
                 video_ind_cont.innerHTML = '▶ GIF'
             }
         }
 
         const defins = [
-            { type: 'UHD 4K', active: (postData.size.y > 2160) },
-            { type: 'QHD 1440', active: (postData.size.y > 1440) },
-            { type: 'FHD 1080', active: (postData.size.y > 1080) },
-            { type: 'HD 720', active: (postData.size.y > 720) }
+            { type: '4K<br>UHD', active: (postData.size.y > 2160) },
+            { type: '1440<br>QHD', active: (postData.size.y > 1440) },
+            { type: '1080<br>FHD', active: (postData.size.y > 1080) },
+            { type: '720<br>HD', active: (postData.size.y > 720) }
         ]
 
         for (const res of defins) {
             if (res.active) {
-                const hd_indicator_cont = createDiv('hd-indicator', warningContainer)
-                hd_indicator_cont.innerHTML = res.type
+                const hd_indicator_cont = createDiv('hd-indicator', imageContainer)
+                const hdText = createDiv('text', hd_indicator_cont)
+                hdText.innerHTML = res.type
                 break
             }
         }
