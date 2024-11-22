@@ -1085,6 +1085,8 @@ input[type=color] {
     position: relative;
     width: fit-content;
 
+    overflow: hidden;
+
     font-size: 0.8em;
 
     .post-data-container {
@@ -1100,6 +1102,8 @@ input[type=color] {
         display: flex;
         flex-direction: row;
         justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
         gap: 0em;
 
         min-width: 0%;
@@ -1269,6 +1273,7 @@ input[type=color] {
 
         img {
             pointer-events: none;
+            height: 100%;
         }
     }
 
@@ -1295,7 +1300,7 @@ input[type=color] {
 
         .post-data-container {
             background-color: var(--color1);
-            min-width: 100%; // Расширяется плавно до полной ширины
+            min-width: 101%; // Расширяется плавно до полной ширины
             border-radius: 0;
             gap: 0.2em;
 
