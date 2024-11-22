@@ -133,7 +133,7 @@ function showUserData(userData) {
 }
 
 //region actions
-function showActions(userData, activeUser) {
+async function showActions(userData, activeUser) {
     const user_card_block = document.querySelector('.user-card')
 
     const container = createDiv('list-container')
@@ -205,15 +205,13 @@ function showActions(userData, activeUser) {
         })
 
         //region set lang
-        createAction(profileLang.actions.lang.btn, container, async () => {
-            const langResult = await request('getLangsList')
-            const overlay = createBlurOverlay()
-            const langlist = []
-            langlist.push({ name: profileLang.actions.lang.cnc, value: "cancel" })
-            for (const lng of langResult.langs) {
-                langlist.push({ name: lng.name, value: lng.id })
-            }
-            const sel = createSelect(langlist, profileLang.actions.lang.sel, async (sel) => {
+        const langResult = await request('getLangsList')
+        const langlist = []
+        for (const lng of langResult.langs) {
+            langlist.push({ name: lng.name, value: lng.id })
+        }
+        container.appendChild(
+            createSelect(langlist, profileLang.actions.lang.sel, async (sel) => {
                 switch (sel) {
                     case "cancel": {
                         overlay.remove()
@@ -225,25 +223,17 @@ function showActions(userData, activeUser) {
                     }; break
                 }
             })
-            overlay.appendChild(sel)
-            overlay.addEventListener('click', (e) => {
-                if (e.target == overlay)
-                    overlay.remove()
-            })
-        })
+        )
+
 
         //region set theme
-        createAction(profileLang.actions.theme.btn, container, async () => {
-            const overlay = createBlurOverlay()
-            let themelist = []
-            themelist.push({ name: profileLang.actions.theme.cnc, value: "cancel" })
-            themelist = themelist.concat(colorSchemesList)
-
-            for (const i in themelist) {
-                themelist[i].name = profileLang.actions.theme.themes[themelist[i].value]
-            }
-
-            const sel = createSelect(themelist, profileLang.actions.theme.sel, async (sel) => {
+        let themelist = []
+        themelist = themelist.concat(colorSchemesList)
+        for (const i in themelist) {
+            themelist[i].name = profileLang.actions.theme.themes[themelist[i].value]
+        }
+        container.appendChild(
+            createSelect(themelist, profileLang.actions.theme.sel, async (sel) => {
                 switch (sel) {
                     case "cancel": {
                         overlay.remove()
@@ -251,16 +241,11 @@ function showActions(userData, activeUser) {
                     default: {
                         request('controlUserSettings', { type: 'update', update: { theme: sel } })
                         localStorage.setItem('theme', sel)
-                        window.location.href = window.location.href
+                        setTheme()
                     }; break
                 }
             })
-            overlay.appendChild(sel)
-            overlay.addEventListener('click', (e) => {
-                if (e.target == overlay)
-                    overlay.remove()
-            })
-        })
+        )
     } else {
         //region wr msg
         createAction(profileLang.actions.sendDM.btn, container, async () => {
@@ -272,10 +257,8 @@ function showActions(userData, activeUser) {
                         to: userData.data.login,
                         msgtype: 'DM'
                     })
-                    if (message_result.rslt == 's')
-                        alert(`s/${profileLang.actions.sendDM.s}`, 5000)
-                    else
-                        alert(message_result.msg, 5000)
+                    if (message_result.rslt != 's')
+                        alert("e/" + message_result.msg, 5000)
                 }
             })
         })

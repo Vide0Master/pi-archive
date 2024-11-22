@@ -279,12 +279,10 @@
                     "resetProfileBackground": "Reset profile background",
                     "lang": {
                         "btn": "Change language",
-                        "sel": "Select desired language",
-                        "cnc": "Cancel"
+                        "sel": "Select desired language"
                     },
                     "theme": {
                         "btn": "Change theme",
-                        "cnc": "Cancel",
                         "sel": "Select desired theme",
                         "themes": {
                             "cancel": "Cancel",
