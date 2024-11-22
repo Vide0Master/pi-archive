@@ -1085,7 +1085,10 @@ input[type=color] {
     position: relative;
     width: fit-content;
 
+    font-size: 0.8em;
+
     .post-data-container {
+        z-index: 1;
         position: absolute;
         top: 0;
         left: 50%;
@@ -1109,6 +1112,7 @@ input[type=color] {
             opacity: 1;
             color: var(--font-color1);
             white-space: nowrap; // Предотвращает перенос текста
+            font-weight: bold;
         }
 
         .inf-cont {
@@ -1147,9 +1151,11 @@ input[type=color] {
 
             .rating {
                 cursor: help;
+                font-weight: bold;
             }
 
             .comments-count {
+                font-weight: bold;
                 cursor: help;
                 background-color: #fff;
                 color: #000;
@@ -1192,18 +1198,12 @@ input[type=color] {
                 &>* {
                     font-weight: bold;
                     text-align: center;
+                    padding: 0.25em 0.15em;
                 }
 
                 .video-warning {
-                    background-color: #fff;
-                    color: #000;
-                }
-
-                .hd-indicator {
-                    background-color: #fff;
-                    color: #000;
-                    word-break: keep-all;
-                    line-break: strict;
+                    background-color: #000;
+                    color: #f90;
                 }
 
                 .new-ribbon {
@@ -1220,7 +1220,52 @@ input[type=color] {
     }
 
     .image-container {
+        position: relative;
         overflow: hidden;
+
+        .hd-indicator {
+            font-size: 0.9em;
+            position: absolute;
+            z-index: 1;
+
+            padding: 0.2em;
+
+            background-color: #000;
+            border: solid 2px gold;
+            word-break: keep-all;
+            line-break: strict;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            width: 2.5em;
+            height: 2.5em;
+            border-radius: 0.4em;
+
+            animation: hdFlyout 0.2s forwards;
+
+            .text {
+                color: gold;
+                text-align: center;
+                font-weight: bold;
+            }
+
+            @keyframes hdFlyout {
+                from {
+                    right: 0.5em;
+                    bottom: 0.5em;
+                    opacity: 1;
+                }
+
+                to {
+                    right: -3em;
+                    bottom: -3em;
+                    opacity: 0;
+                }
+            }
+        }
 
         img {
             pointer-events: none;
@@ -1228,6 +1273,26 @@ input[type=color] {
     }
 
     &:hover {
+        .image-container {
+            .hd-indicator {
+                animation: hdFlyin 0.2s forwards;
+
+                @keyframes hdFlyin {
+                    from {
+                        right: -3em;
+                        bottom: -3em;
+                        opacity: 0;
+                    }
+
+                    to {
+                        right: 0.5em;
+                        bottom: 0.5em;
+                        opacity: 1;
+                    }
+                }
+            }
+        }
+
         .post-data-container {
             background-color: var(--color1);
             min-width: 100%; // Расширяется плавно до полной ширины
