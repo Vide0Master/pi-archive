@@ -1,3 +1,39 @@
+let webSocket
+let WSListener
+if (localStorage.getItem('realtimeChats')) {
+    webSocket = new WebSocket(`ws://${window.location.host}`);
+
+    webSocket.addEventListener('open', () => {
+        if (DEVMODE) {
+            console.log(`WebSocket server(ws://${window.location.host}) connected`);
+        }
+        const authData = {
+            type: "clientAuth",
+            user: {
+                key: localStorage.getItem('userKey') || sessionStorage.getItem('userKey'),
+                type: 'WEB'
+            }
+        }
+        webSocket.send(JSON.stringify(authData));
+    });
+
+    if (DEVMODE) {
+        webSocket.addEventListener('close', () => {
+            console.log('WebSocket connection closed');
+        });
+
+        webSocket.addEventListener('error', (error) => {
+            console.error('WebSocket error:', error);
+        });
+    }
+
+    WSListener = function (type, target, cb) {
+        webSocket.addEventListener('message', (msg) => {
+            const msg = JSON.parse(msg.data)
+            if (msg.type == type && msg.target == target) cb(msg.data)
+        })
+    }
+}
 
 setHeaderButtrons()
 
@@ -52,7 +88,6 @@ async function addTagsAutofill(field, parent, preventSearch = false) {
         return -1;
     }
 
-    console.log(preventSearch)
     async function process(e) {
         const parts = field.value.split(' ');
         const cursorWordIndex = getCursorWordIndex(field);
@@ -749,8 +784,6 @@ function reorderOverlay(group, callback) {
 
         const pcardClass = localStorage.getItem('alternativePostCard') ? '.alternative-post-card' : '.post-card'
 
-        console.log(pcardClass)
-
         reorderContainer.addEventListener('dragstart', (e) => {
             if (e.target.closest(pcardClass)) {
                 draggedItem = e.target.closest(pcardClass);
@@ -949,7 +982,6 @@ function createTagline(tag, params = { s: true, tedit: true }) {
             const tagsList = searchElem.value.trim().split(/\s/).filter(val => val !== '')
             tagsList.push(tag.tag)
             searchElem.value = tagsList.join(' ')
-            console.log(tagsList.join(' '))
             if (params.s)
                 search(searchElem.value);
         });

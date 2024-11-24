@@ -130,6 +130,11 @@ function showUserData(userData) {
             }; break;
         }
     }
+
+    if (localStorage.getItem('realtimeChats')) {
+        const status = createDiv('status', container)
+        status.innerHTML = ''
+    }
 }
 
 //region actions
@@ -295,6 +300,7 @@ async function getFavs(favs, isActiveUser) {
     }
 }
 
+//region experiments
 function addHiddenExperiments() {
     const user_card_block = document.querySelector('.user-card')
     const container = createDiv('list-container', user_card_block)
@@ -340,7 +346,8 @@ function addHiddenExperiments() {
 
 
     const expreimentsFuncs = [
-        { name: "Alternative post card style", key: "alternativePostCard" }
+        { name: "Alternative post card style", key: "alternativePostCard" },
+        { name: "Realtime chats", key: "realtimeChats" }
     ]
 
     for (const func of expreimentsFuncs) {
