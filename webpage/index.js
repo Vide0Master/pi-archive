@@ -1,5 +1,7 @@
 // Импорт
 const sysController = require('../core/systemController.js')
+const cmd = (text) => { sysController.log(text, [{ txt: 'WEB', txtb: 'blue', txtc: 'yellow' }]) }
+cmd('i/Starting WEB server...')
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -49,7 +51,6 @@ const path = require('path');
 const fs = require('fs')
 
 // Модуль веб-страницы
-sysController.log('i/Starting WEB server...')
 
 const app = express();
 
@@ -86,7 +87,7 @@ fs.readdirSync(pagesPath).forEach(page => {
     });
 })
 
-app.use(`/lang`,express.static(path.join(__dirname,'../lang')))
+app.use(`/lang`, express.static(path.join(__dirname, '../lang')))
 
 //слушатель post запросов
 app.use(express.json({ limit: '10mb' }));
@@ -248,9 +249,23 @@ app.get('/eula', async (req, res) => {
     res.sendFile(path.join(__dirname, './eula.html'))
 })
 
+const http = require('http');
+const WebSocket = require('ws');
+const server = http.createServer(app);
+const wss = new WebSocket.Server({ server });
+
+sysController.WSS.WSS = wss
+wss.on('connection', (ws) => {
+    ws.on('message', (msg) => {
+        const request = JSON.parse(msg.toString())
+        sysController.WSS.pocessRequest(ws, request.type, request.user, request.data)
+    })
+})
+
 //Запуск слушателя на порту из config.json
-app.listen(sysController.config.static.web_app.port, () => {
-    sysController.log('s/WEB server started succesfully!')
+server.listen(sysController.config.static.web_app.port, () => {
+    cmd('s/WEB server started succesfully!')
+    cmd(`i/Listening HTTP and WS connections on port [${sysController.config.static.web_app.port}]`)
 });
 
 sysController.dbinteract.AUDITPosts()

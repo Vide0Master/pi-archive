@@ -37,6 +37,8 @@ class SysController {
 
     static queryConstructor = require('./userSearchQueryProcessor.js')
 
+    static WSS = require('./WSS/WSSController.js')
+
     static async APIcontroller(action, user, request) {
         return await require('./API/APIcontroller.js')(action, user, request)
     }

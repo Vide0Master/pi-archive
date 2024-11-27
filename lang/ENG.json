@@ -3,6 +3,11 @@
     "id": "ENG",
     "lang": {
         "WEB": {
+            "userActivityState": {
+                "online": "Online",
+                "afk": "AFK",
+                "offline": "Offline"
+            },
             "user_status_translation": {
                 "unconfirmed": "unconfirmed",
                 "user": "user",
@@ -290,7 +295,7 @@
                             "dark": "Dark",
                             "egypt": "Egypt",
                             "nature": "Nature",
-                            "pony":"Pony"
+                            "pony": "Pony"
                         }
                     }
                 },

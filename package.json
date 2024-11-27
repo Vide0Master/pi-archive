@@ -19,6 +19,7 @@
         "node-sass-middleware": "^1.1.0",
         "node-telegram-bot-api": "^0.66.0",
         "sharp": "^0.33.5",
-        "sqlite3": "^5.1.7"
+        "sqlite3": "^5.1.7",
+        "ws": "^8.18.0"
     }
 }

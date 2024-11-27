@@ -1,4 +1,9 @@
-getMessages()
+if (localStorage.getItem('realtimeChats')) {
+    document.querySelector('main .container').remove()
+} else {
+    getMessages()
+}
+
 
 async function getMessages() {
     const DMs = await request('controlUserDM', { type: 'getUserDMs' })
@@ -20,7 +25,6 @@ async function getMessages() {
 
         user_dm_opener.addEventListener('click', () => openDM(dm))
     }
-
 
     const sender_block = document.querySelector('.send-row .sender')
     const sender_placeholder = document.querySelector('.send-row .placeholder')
@@ -88,3 +92,8 @@ async function getMessages() {
         }
     })
 }
+
+function newMessageProcessor(){
+
+}
+
