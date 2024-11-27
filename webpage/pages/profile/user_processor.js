@@ -88,6 +88,12 @@ function showUserData(userData) {
         document.querySelector('main').insertBefore(imgContainer, document.querySelector('.user-page-container'))
     }
 
+    const status = createDiv('status', container)
+    WSListener('userStatusUpdate', userData.data.login, (data) => {
+        status.innerHTML = Language.userActivityState[data.state]
+    })
+    WSSend('getUserActivity', { user: userData.data.login })
+
     const usr_data_list = {
         username: `${profileLang.userData.username}: `,
         login: `${profileLang.userData.login}: `,
@@ -129,11 +135,6 @@ function showUserData(userData) {
                 ln.innerHTML = usr_data_list[line] + userData.data[line]
             }; break;
         }
-    }
-
-    if (localStorage.getItem('realtimeChats')) {
-        const status = createDiv('status', container)
-        status.innerHTML = ''
     }
 }
 
@@ -305,8 +306,6 @@ function addHiddenExperiments() {
     const user_card_block = document.querySelector('.user-card')
     const container = createDiv('list-container', user_card_block)
 
-    container.style.display = 'none'
-
     const label = createDiv('label', container)
     label.innerText = "Experiment features"
 
@@ -346,7 +345,6 @@ function addHiddenExperiments() {
 
 
     const expreimentsFuncs = [
-        { name: "Alternative post card style", key: "alternativePostCard" },
         { name: "Realtime chats", key: "realtimeChats" }
     ]
 

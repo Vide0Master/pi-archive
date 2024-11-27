@@ -10,36 +10,66 @@ const userStatus = [
 ]
 
 module.exports = (activeClients, userWS, sessionData, userData, requestData) => {
+    function updateForAll(user) {
+        for (const client in activeClients) {
+            const currentCL = activeClients[client]
+            currentCL.ws.send(JSON.stringify(
+                {
+                    type: "userStatusUpdate",
+                    target: user.login,
+                    data: { state: user.status }
+                }
+            ))
+        }
+    }
+
     if (!activeClients[sessionData.key]) {
         activeClients[sessionData.key] = {
             ws: userWS,
             status: userStatus[0],
             login: userData.login,
             sessionTimeout: setTimeout(() => {
-                userWS.send('AFK')
+                updateForAll({
+                    login: userData.login,
+                    status: 'afk'
+                })
                 activeClients[sessionData.key].status = userStatus[1]
                 activeClients[sessionData.key].sessionTimeout = setTimeout(() => {
-                    userWS.send('REMOVED SESSION')
+                    updateForAll({
+                        login: userData.login,
+                        status: 'offline'
+                    })
                     delete activeClients[sessionData.key]
-                }, timeouts.OtAFK);
-            }, timeouts.AFKtOFLL)
+                }, timeouts.AFKtOFLL);
+            }, timeouts.OtAFK)
         }
-        userWS.send('REGISTERED SESSION')
+        updateForAll({
+            login: userData.login,
+            status: 'online'
+        })
     } else {
-        userWS.send('UPDATED SESSION')
+        updateForAll({
+            login: userData.login,
+            status: 'online'
+        })
         activeClients[sessionData.key].ws = userWS
         activeClients[sessionData.key].status = userStatus[0]
         clearTimeout(activeClients[sessionData.key].sessionTimeout)
         activeClients[sessionData.key].sessionTimeout = setTimeout(() => {
-            userWS.send('AFK')
+            updateForAll({
+                login: userData.login,
+                status: 'afk'
+            })
             activeClients[sessionData.key].status = userStatus[1]
             activeClients[sessionData.key].sessionTimeout = setTimeout(() => {
-                userWS.send('REMOVED SESSION')
+                updateForAll({
+                    login: userData.login,
+                    status: 'offline'
+                })
                 delete activeClients[sessionData.key]
-            }, timeouts.OtAFK);
-        }, timeouts.AFKtOFLL)
+            }, timeouts.AFKtOFLL);
+        }, timeouts.OtAFK)
     }
 
-    console.log(sessionData, requestData, activeClients)
     return
 }

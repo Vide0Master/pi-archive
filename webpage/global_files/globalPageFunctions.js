@@ -1,38 +1,47 @@
-let webSocket
-let WSListener
-if (localStorage.getItem('realtimeChats')) {
-    webSocket = new WebSocket(`ws://${window.location.host}`);
+const webSocket = new WebSocket(`ws://${window.location.host}`);
 
-    webSocket.addEventListener('open', () => {
-        if (DEVMODE) {
-            console.log(`WebSocket server(ws://${window.location.host}) connected`);
+webSocket.addEventListener('open', () => {
+    if (DEVMODE) {
+        console.log(`WebSocket server(ws://${window.location.host}) connected`);
+    }
+    const authData = {
+        type: "clientAuth",
+        user: {
+            key: localStorage.getItem('userKey') || sessionStorage.getItem('userKey'),
+            type: 'WEB'
         }
-        const authData = {
-            type: "clientAuth",
-            user: {
-                key: localStorage.getItem('userKey') || sessionStorage.getItem('userKey'),
-                type: 'WEB'
-            }
-        }
-        webSocket.send(JSON.stringify(authData));
+    }
+    webSocket.send(JSON.stringify(authData));
+});
+
+if (DEVMODE) {
+    webSocket.addEventListener('close', () => {
+        console.log('WebSocket connection closed');
     });
 
-    if (DEVMODE) {
-        webSocket.addEventListener('close', () => {
-            console.log('WebSocket connection closed');
-        });
+    webSocket.addEventListener('error', (error) => {
+        console.error('WebSocket error:', error);
+    });
+}
 
-        webSocket.addEventListener('error', (error) => {
-            console.error('WebSocket error:', error);
-        });
-    }
+function WSListener(type, target, cb) {
+    webSocket.addEventListener('message', (msg) => {
+        console.log(`Triggered [${type}] for [${target}], data:`, msg)
+        const WSmsg = JSON.parse(msg.data)
+        if (WSmsg.type == type && WSmsg.target == target) cb(WSmsg.data)
+    })
+}
 
-    WSListener = function (type, target, cb) {
-        webSocket.addEventListener('message', (msg) => {
-            const msg = JSON.parse(msg.data)
-            if (msg.type == type && msg.target == target) cb(msg.data)
-        })
+function WSSend(type, data) {
+    const request = {
+        type,
+        user: {
+            key: localStorage.getItem('userKey') || sessionStorage.getItem('userKey'),
+            type: 'WEB'
+        },
+        data
     }
+    webSocket.send(JSON.stringify(request));
 }
 
 setHeaderButtrons()
@@ -232,140 +241,7 @@ function createPostCard(postData, noClickReaction) {
     const postCardLang = Language.postCard
     const postCard = document.createElement('div')
 
-    if (localStorage.getItem('alternativePostCard')) {
-        postCard.className = 'alternative-post-card'
-
-        if (!noClickReaction)
-            postCard.addEventListener('mousedown', (event) => {
-                const sTags = new URLSearchParams(window.location.search).get('tags')
-                const Link = `/view?id=${postData.id}${sTags ? `&tags=${sTags}` : ''}`
-                if (event.button === 1)
-                    event.preventDefault()
-                if ((event.button === 0 && event.ctrlKey) || event.button === 1) {
-                    window.open(Link, '_blank').focus();
-                    return
-                }
-                window.location.href = Link
-            })
-
-        const postDataCont = createDiv('post-data-container', postCard)
-
-        const postIdCont = createDiv('post-id-container', postDataCont)
-        postIdCont.innerHTML = postData.id
-        postIdCont.title = postCardLang.id
-
-        const post_stats = postData.postRating
-        const rating = post_stats.likes - post_stats.dislikes
-        if (rating != 0) {
-            const ratingCont = createDiv('inf-cont', postDataCont)
-            const postScore = createDiv('rating', ratingCont)
-            postScore.title = postCardLang.rating
-            postScore.innerHTML = Math.abs(rating)
-            switch (true) {
-                case rating < 0: {
-                    postScore.innerHTML = '▼' + postScore.innerHTML
-                    postScore.style.color = 'rgb(200, 0, 0)'
-                }; break;
-                case rating > 0: {
-                    postScore.innerHTML = '▲' + postScore.innerHTML
-                    postScore.style.color = 'rgb(0, 200, 0)'
-                }; break;
-            }
-        }
-
-        if (postData.commentCount > 0) {
-            const commentCont = createDiv('inf-cont', postDataCont)
-            const postCommentsCount = createDiv('comments-count', commentCont)
-            postCommentsCount.innerHTML = postData.commentCount
-            postCommentsCount.title = postCardLang.CC
-        }
-
-        if (postData.postRating.faved) {
-            const favCont = createDiv('inf-cont', postDataCont)
-            const fav = createDiv('fav')
-            fav.title = postCardLang.fav
-            favCont.prepend(fav)
-
-            const favImg = document.createElement('img')
-            fav.appendChild(favImg)
-            favImg.src = 'fav.svg'
-        }
-
-        const imageContainer = createDiv('image-container', postCard)
-
-        const previewImg = document.createElement('img')
-        imageContainer.appendChild(previewImg)
-        previewImg.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${postData.id}&thumb=true`
-        previewImg.className = 'preview-image'
-
-        const warningContainerContainer = createDiv('warning-container-container', postDataCont)
-
-        const warningContainer = createDiv('warning-container', warningContainerContainer)
-
-        function timeSinceCreation(time) {
-            const date1 = Date.now();
-            const date2 = new Date(time);
-            const differenceInMilliseconds = Math.abs(date2 - date1);
-            const differenceInHours = differenceInMilliseconds / (1000 * 60 * 60);
-            return differenceInHours;
-        }
-
-        if (timeSinceCreation(postData.timestamp) < 12) {
-            const new_ribbon = createDiv('new-ribbon', warningContainer)
-            new_ribbon.innerHTML = postCardLang.newPost
-        }
-
-        if (postData.tags.length < 5) {
-            const low_tags = createDiv('low-tags-ribbon', warningContainer)
-            if (postData.tags.length == 0) {
-                low_tags.innerHTML = postCardLang.LTA[0]
-            } else {
-                low_tags.innerHTML = postCardLang.LTA[1]
-            }
-        }
-
-        function getFileExtension(filename) {
-            const parts = filename.split('.');
-            return parts.length > 1 ? parts.pop() : '';
-        }
-        const fileExt = getFileExtension(postData.file)
-        if (['mp4', 'mov', 'avi', 'mkv', 'gif'].includes(fileExt)) {
-            const video_ind_cont = createDiv('video-warning', warningContainer)
-            if (fileExt != 'gif') {
-                video_ind_cont.innerHTML = '▶ ' + postCardLang.video
-            } else {
-                video_ind_cont.innerHTML = '▶ GIF'
-            }
-        }
-
-        const defins = [
-            { type: '4K<br>UHD', active: (postData.size.y >= 2160) },
-            { type: '1440<br>QHD', active: (postData.size.y >= 1440) },
-            { type: '1080<br>FHD', active: (postData.size.y >= 1080) },
-            { type: '720<br>HD', active: (postData.size.y >= 720) }
-        ]
-
-        for (const res of defins) {
-            if (res.active) {
-                const hd_indicator_cont = createDiv('hd-indicator', imageContainer)
-                const hdText = createDiv('text', hd_indicator_cont)
-                hdText.innerHTML = res.type
-                break
-            }
-        }
-
-        return postCard
-    }
-
     postCard.className = 'post-card'
-
-    const preview_container = createDiv('preview-container')
-    postCard.appendChild(preview_container)
-
-    const preview = document.createElement('img')
-    preview_container.appendChild(preview)
-    preview.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${postData.id}&thumb=true`
-    preview.className = 'preview-image'
 
     if (!noClickReaction)
         postCard.addEventListener('mousedown', (event) => {
@@ -380,14 +256,17 @@ function createPostCard(postData, noClickReaction) {
             window.location.href = Link
         })
 
-    const info_row = document.createElement('div')
-    postCard.appendChild(info_row)
-    info_row.className = 'info-row'
+    const postDataCont = createDiv('post-data-container', postCard)
+
+    const postIdCont = createDiv('post-id-container', postDataCont)
+    postIdCont.innerHTML = postData.id
+    postIdCont.title = postCardLang.id
 
     const post_stats = postData.postRating
     const rating = post_stats.likes - post_stats.dislikes
     if (rating != 0) {
-        const postScore = createDiv('', info_row)
+        const ratingCont = createDiv('inf-cont', postDataCont)
+        const postScore = createDiv('rating', ratingCont)
         postScore.title = postCardLang.rating
         postScore.innerHTML = Math.abs(rating)
         switch (true) {
@@ -402,58 +281,34 @@ function createPostCard(postData, noClickReaction) {
         }
     }
 
+    if (postData.commentCount > 0) {
+        const commentCont = createDiv('inf-cont', postDataCont)
+        const postCommentsCount = createDiv('comments-count', commentCont)
+        postCommentsCount.innerHTML = postData.commentCount
+        postCommentsCount.title = postCardLang.CC
+    }
+
     if (postData.postRating.faved) {
+        const favCont = createDiv('inf-cont', postDataCont)
         const fav = createDiv('fav')
         fav.title = postCardLang.fav
-        info_row.prepend(fav)
+        favCont.prepend(fav)
 
         const favImg = document.createElement('img')
         fav.appendChild(favImg)
         favImg.src = 'fav.svg'
     }
 
-    const postID = createDiv('', info_row)
-    postID.innerHTML = `ID:${postData.id}`
-    postID.title = postCardLang.id
+    const imageContainer = createDiv('image-container', postCard)
 
-    if (postData.commentCount > 0) {
-        const postCommentsCount = createDiv('comments-count', info_row)
-        postCommentsCount.innerHTML = postData.commentCount
-        postCommentsCount.title = postCardLang.CC
-    }
+    const previewImg = document.createElement('img')
+    imageContainer.appendChild(previewImg)
+    previewImg.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${postData.id}&thumb=true`
+    previewImg.className = 'preview-image'
 
-    function getFileExtension(filename) {
-        const parts = filename.split('.');
-        return parts.length > 1 ? parts.pop() : '';
-    }
+    const warningContainerContainer = createDiv('warning-container-container', postDataCont)
 
-    if (['mp4', 'mov', 'avi', 'mkv', 'gif'].includes(getFileExtension(postData.file))) {
-        const video_ind_cont = createDiv('video-indicator')
-        preview_container.appendChild(video_ind_cont)
-
-        const ind_img = document.createElement('img')
-        video_ind_cont.appendChild(ind_img)
-        ind_img.src = 'video-indicator.svg'
-    }
-
-    const defins = [
-        { type: '4K<br>UHD', active: (postData.size.y > 2160) },
-        { type: '1440<br>QHD', active: (postData.size.y > 1440) },
-        { type: '1080<br>FHD', active: (postData.size.y > 1080) },
-        { type: '720<br>HD', active: (postData.size.y > 720) }
-    ]
-
-    for (const res of defins) {
-        if (res.active) {
-            const hd_indicator_cont = createDiv('hd-indicator')
-            preview_container.appendChild(hd_indicator_cont)
-
-            const text = createDiv()
-            hd_indicator_cont.appendChild(text)
-            text.innerHTML = res.type
-            break
-        }
-    }
+    const warningContainer = createDiv('warning-container', warningContainerContainer)
 
     function timeSinceCreation(time) {
         const date1 = Date.now();
@@ -463,29 +318,47 @@ function createPostCard(postData, noClickReaction) {
         return differenceInHours;
     }
 
-    const warning_container = createDiv('warning-container')
-    preview_container.appendChild(warning_container)
-
     if (timeSinceCreation(postData.timestamp) < 12) {
-        const new_ribbon = createDiv('new-ribbon')
-        warning_container.appendChild(new_ribbon)
-
-        const text = createDiv('ribbon-text')
-        new_ribbon.appendChild(text)
-        text.innerHTML = postCardLang.newPost
+        const new_ribbon = createDiv('new-ribbon', warningContainer)
+        new_ribbon.innerHTML = postCardLang.newPost
     }
 
     if (postData.tags.length < 5) {
-        const low_tags = createDiv('low-tags-ribbon')
-        warning_container.appendChild(low_tags)
-
-        const text = createDiv('ribbon-text')
-        low_tags.appendChild(text)
-
+        const low_tags = createDiv('low-tags-ribbon', warningContainer)
         if (postData.tags.length == 0) {
-            text.innerHTML = postCardLang.LTA[0]
+            low_tags.innerHTML = postCardLang.LTA[0]
         } else {
-            text.innerHTML = postCardLang.LTA[1]
+            low_tags.innerHTML = postCardLang.LTA[1]
+        }
+    }
+
+    function getFileExtension(filename) {
+        const parts = filename.split('.');
+        return parts.length > 1 ? parts.pop() : '';
+    }
+    const fileExt = getFileExtension(postData.file)
+    if (['mp4', 'mov', 'avi', 'mkv', 'gif'].includes(fileExt)) {
+        const video_ind_cont = createDiv('video-warning', warningContainer)
+        if (fileExt != 'gif') {
+            video_ind_cont.innerHTML = '▶ ' + postCardLang.video
+        } else {
+            video_ind_cont.innerHTML = '▶ GIF'
+        }
+    }
+
+    const defins = [
+        { type: '4K<br>UHD', active: (postData.size.y >= 2160) },
+        { type: '1440<br>QHD', active: (postData.size.y >= 1440) },
+        { type: '1080<br>FHD', active: (postData.size.y >= 1080) },
+        { type: '720<br>HD', active: (postData.size.y >= 720) }
+    ]
+
+    for (const res of defins) {
+        if (res.active) {
+            const hd_indicator_cont = createDiv('hd-indicator', imageContainer)
+            const hdText = createDiv('text', hd_indicator_cont)
+            hdText.innerHTML = res.type
+            break
         }
     }
 
@@ -676,6 +549,14 @@ function parseUserLogin(login, elem) {
 
         userDiv.title = capitalizeFirstLetter(Language.user_status_translation[user.data.status])
         elem.appendChild(userDiv)
+
+        const status = createDiv('ACTstatus', elem)
+        WSListener('userStatusUpdate', user.data.login, (data) => {
+            status.classList.remove(['online', 'afk', 'offline'])
+            status.classList.add(data.state)
+            status.title = Language.userActivityState[data.state]
+        })
+        WSSend('getUserActivity', { user: user.data.login })
     })()
 }
 
@@ -782,7 +663,7 @@ function reorderOverlay(group, callback) {
         let draggedItem = null;
         let selectedItem = null;
 
-        const pcardClass = localStorage.getItem('alternativePostCard') ? '.alternative-post-card' : '.post-card'
+        const pcardClass = '.post-card'
 
         reorderContainer.addEventListener('dragstart', (e) => {
             if (e.target.closest(pcardClass)) {

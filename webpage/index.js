@@ -256,8 +256,6 @@ const wss = new WebSocket.Server({ server });
 
 sysController.WSS.WSS = wss
 wss.on('connection', (ws) => {
-    cmd('ws conn')
-
     ws.on('message', (msg) => {
         const request = JSON.parse(msg.toString())
         sysController.WSS.pocessRequest(ws, request.type, request.user, request.data)
