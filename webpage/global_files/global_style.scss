@@ -728,36 +728,12 @@ img {
 
     width: fit-content;
 
-    .action-row {
-        position: absolute;
-        transform: translateX(-50%);
-        left: 50%;
-        bottom: -50%;
-
-        opacity: 0;
-
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5em;
-        overflow: hidden;
-        transition: 0.3s;
-        z-index: 3;
-
-        background-color: rgba(0, 0, 0, 0.7);
-        padding: 0.5em;
-        border-radius: 0.3em;
-
+    .additional{
         border: solid 0.15em var(--color3);
-
-        .group-name {
-            color: var(--font-color1);
-        }
-
-        @media (max-width:600px) {
-            flex-direction: column;
-        }
+        background-color: var(--color1);
+        color: var(--font-color1);
+        height: 150px;
+        width: 100px;
     }
 
     .list {

@@ -593,9 +593,38 @@ function createGroup(groupData) {
                 page: 1,
                 postsCount: 9999
             })
-        for (const post of post_list) {
+
+        for (let i = 0; i <= 4; i++) {
+            const post = post_list.shift()
             list.append(createPostCard(post))
         }
+        if (groupData.type == 'collection') {
+            const additionals = createDiv('additional', list)
+            const gname = createDiv('groupName', additionals)
+            gname.innerHTML = groupData.name
+
+            if (post_list.length > 0) {
+                const lpages = createDiv('lost-pages', additionals)
+                lpages.innerHTML = '+' + post_list.length
+            }
+        } else {
+            const additionals = createDiv('additional', list)
+            const gname = createDiv('groupName', additionals)
+            gname.innerHTML = groupData.name
+            if (post_list.length > 0) {
+                const lpages = createDiv('lost-pages', additionals)
+                lpages.innerHTML = '+' + post_list.length
+                additionals.addEventListener('click', () => {
+                    while (post_list.length > 0) {
+                        list.append(createPostCard(post_list.shift()))
+                    }
+                    list.append(additionals)
+                })
+            }
+        }
+        // for (const post of post_list) {
+        //     list.append(createPostCard(post))
+        // }
     }
     Grouper()
 
@@ -769,9 +798,9 @@ function reorderOverlay(group, callback) {
         delete_btn.style.backgroundColor = 'red';
         button_row.appendChild(delete_btn);
         delete_btn.addEventListener('click', (e) => {
-            if(e.shiftKey){
+            if (e.shiftKey) {
                 callback('fullDelete')
-            }else{
+            } else {
                 callback('delete')
             }
         });
