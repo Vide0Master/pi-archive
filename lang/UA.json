@@ -80,7 +80,12 @@
                 "actions": {
                     "editColl": {
                         "btn": "Редагувати коллекцію",
-                        "delete": "Підтвердіть видалення коллекції",
+                        "delete": {
+                            "grp": "Confirm deleting collection",
+                            "grps": "Deleted group",
+                            "psts": "Confirm deleting collection and it's posts",
+                            "pstss": "Deleted group and posts"
+                        },
                         "rename": "Перейменувати коллекцію"
                     },
                     "toGroup": {
@@ -202,7 +207,6 @@
                     },
                     "editGroup": {
                         "actName": "Редагувати групу",
-                        "rmConf": "Підтвердіть видалення групи",
                         "rename": "Змінити назву групи",
                         "toColl": {
                             "btn": "Включити режим коллекції",
@@ -212,7 +216,13 @@
                             "btn": "Включити режим групи",
                             "conf": "Підтвердіть включення режиму групи"
                         },
-                        "addToGroup": "Додати пост до групи"
+                        "addToGroup": "Додати пост до групи",
+                        "delete": {
+                            "grp": "Confirm deleting collection",
+                            "grps": "Deleted group",
+                            "psts": "Confirm deleting collection and it's posts",
+                            "pstss": "Deleted group and posts"
+                        }
                     },
                     "rmPost": {
                         "btn": "Видалити пост",

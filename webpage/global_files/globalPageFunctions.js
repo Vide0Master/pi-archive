@@ -768,8 +768,12 @@ function reorderOverlay(group, callback) {
         const delete_btn = createButton(editorLng.delete);
         delete_btn.style.backgroundColor = 'red';
         button_row.appendChild(delete_btn);
-        delete_btn.addEventListener('click', () => {
-            callback('delete')
+        delete_btn.addEventListener('click', (e) => {
+            if(e.shiftKey){
+                callback('fullDelete')
+            }else{
+                callback('delete')
+            }
         });
 
         const rename_btn = createButton(editorLng.rename);

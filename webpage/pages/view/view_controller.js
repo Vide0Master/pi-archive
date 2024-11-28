@@ -210,7 +210,7 @@ async function handleAdminActions() {
                                 container.remove()
                             }; break;
                             case 'delete': {
-                                if (confirm(`${viewLang.actions.editGroup.rmConf} ${post_data.postGroupData.name}`)) {
+                                if (confirm(`${viewLang.actions.editGroup.delete.grp} ${post_data.postGroupData.name}`)) {
                                     const deleteResult = await request('controlGroup',
                                         {
                                             type: 'deleteGroup',
@@ -218,9 +218,28 @@ async function handleAdminActions() {
                                         })
                                     if (deleteResult.rslt == 's') {
                                         container.remove()
-                                        alert(`e/${deleteResult.msg}`)
+                                        alert(`s/${viewLang.actions.editGroup.delete.grps}`)
                                     } else {
                                         alert(`${deleteResult.rslt}/${deleteResult.msg}`, 5000)
+                                    }
+                                }
+                            }; break;
+                            case 'fullDelete': {
+                                if (confirm(`${viewLang.actions.editGroup.delete.psts} "${post_data.postGroupData.name}"`)) {
+                                    for (const post of post_data.postGroupData.group) {
+                                        const rslt = await request('deletePost', { post: post });
+                                        if (rslt.rslt == 'e') alert(rslt.rslt + '/' + rslt.msg)
+                                    }
+                                    const deleteResult = await request('controlGroup', {
+                                        type: 'deleteGroup',
+                                        groupID: post_data.postGroupData.id
+                                    })
+                                    
+                                    if (deleteResult.rslt == 'e') alert(`${deleteResult.rslt}/${deleteResult.msg}`)
+    
+                                    if (deleteResult.rslt == 's') {
+                                        container.remove()
+                                        alert(`s/${viewLang.actions.editGroup.delete.pstss}`)
                                     }
                                 }
                             }; break;

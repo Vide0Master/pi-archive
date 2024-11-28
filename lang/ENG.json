@@ -92,7 +92,12 @@
                 "actions": {
                     "editColl": {
                         "btn": "Edit collection",
-                        "delete": "Confirm deleting collection",
+                        "delete": {
+                            "grp": "Confirm deleting collection",
+                            "grps": "Deleted group",
+                            "psts": "Confirm deleting collection and it's posts",
+                            "pstss": "Deleted group and posts"
+                        },
                         "rename": "Rename collection"
                     },
                     "toGroup": {
@@ -215,7 +220,12 @@
                     },
                     "editGroup": {
                         "actName": "Edit group",
-                        "rmConf": "Confirm deleting group",
+                        "delete": {
+                            "grp": "Confirm deleting collection",
+                            "grps": "Deleted group",
+                            "psts": "Confirm deleting collection and it's posts",
+                            "pstss": "Deleted group and posts"
+                        },
                         "rename": "Change group name",
                         "toColl": {
                             "btn": "Set collection mode",

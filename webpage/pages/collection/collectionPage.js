@@ -280,7 +280,7 @@ async function processCollection(id) {
                             container.remove()
                         }; break;
                         case 'delete': {
-                            if (confirm(`${collectionLang.actions.editColl.delete} "${collectionInfo.name}"`)) {
+                            if (confirm(`${collectionLang.actions.editColl.delete.grp} "${collectionInfo.name}"`)) {
                                 const deleteResult = await request('controlGroup',
                                     {
                                         type: 'deleteGroup',
@@ -288,9 +288,29 @@ async function processCollection(id) {
                                     })
                                 if (deleteResult.rslt == 's') {
                                     container.remove()
-                                    alert(`e/${deleteResult.msg}`)
+                                    alert(`s/${collectionLang.actions.editColl.delete.grps}`)
                                 } else {
                                     alert(`${deleteResult.rslt}/${deleteResult.msg}`, 5000)
+                                }
+                            }
+                        }; break;
+                        case 'fullDelete': {
+                            if (confirm(`${collectionLang.actions.editColl.delete.psts} "${collectionInfo.name}"`)) {
+                                console.log(collectionInfo)
+                                for (const post of collectionInfo.group) {
+                                    const rslt = await request('deletePost', { post: post });
+                                    if (rslt.rslt == 'e') alert(rslt.rslt + '/' + rslt.msg)
+                                }
+                                const deleteResult = await request('controlGroup', {
+                                    type: 'deleteGroup',
+                                    groupID: collectionInfo.id
+                                })
+                                
+                                if (deleteResult.rslt == 'e') alert(`${deleteResult.rslt}/${deleteResult.msg}`)
+
+                                if (deleteResult.rslt == 's') {
+                                    container.remove()
+                                    alert(`s/${collectionLang.actions.editColl.delete.pstss}`)
                                 }
                             }
                         }; break;
