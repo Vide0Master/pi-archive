@@ -299,13 +299,12 @@
                     "resetProfileBackground": "Reset profile background",
                     "lang": {
                         "btn": "Change language",
-                        "sel": "Select desired language"
+                        "sel": "Language"
                     },
                     "theme": {
                         "btn": "Change theme",
-                        "sel": "Select desired theme",
+                        "sel": "Theme",
                         "themes": {
-                            "cancel": "Cancel",
                             "default": "Default",
                             "dark": "Dark",
                             "egypt": "Egypt",
