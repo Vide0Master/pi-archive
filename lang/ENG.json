@@ -189,7 +189,8 @@
                         "filetype": "File type",
                         "tgAudioWarn": "This video can be displayed without sound because of how Telegram processes GIFs that are downloaded.\n(they all are be downloaded as MP4 without sound)"
                     },
-                    "creation": "Created on"
+                    "creation": "Created on",
+                    "descLabel":"Description"
                 },
                 "actions": {
                     "download": "Download file",
