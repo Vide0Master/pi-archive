@@ -713,27 +713,36 @@ img {
 .group-line {
     position: relative;
 
-    display: flex;
-    flex-direction: column-reverse;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 0.3em;
-
     transition: 0.3s;
 
-    overflow: hidden;
-
-    max-width: 100vw;
-
-    width: fit-content;
-
-    .additional{
+    .additional {
         border: solid 0.15em var(--color3);
         background-color: var(--color1);
         color: var(--font-color1);
-        height: 150px;
-        width: 100px;
+        min-height: 50px;
+        min-width: 50px;
+        padding: 0.5em;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5em;
+
+        border-radius: 0.5em;
+
+        .lost-pages {
+            font-size: 2em;
+            font-weight: bolder;
+            transition: 0.2s;
+            cursor: pointer;
+
+            &:hover {
+                color: var(--font-hover);
+            }
+        }
+
+        .groupName {}
     }
 
     .list {
@@ -745,45 +754,47 @@ img {
         gap: 0.5em;
     }
 
-    .splitter {
+    .outline {
+        position: absolute;
+        bottom: -0.3em;
+        left: 50%;
+        transform: translate(-50%);
         width: 30%;
+        height: 0.2em;
         box-sizing: border-box;
         background-color: #fff;
-        height: 0.2em;
         opacity: 0.2;
         transition: 0.4s;
         border-radius: 0.2em;
+
+        background-color: var(--borderclr);
+        z-index: 2;
+        pointer-events: none;
+        
+        border: solid 0.1em transparent;
     }
 
     &:hover {
-        .splitter {
-            width: 100%;
+        .outline {
+            bottom: -0.3em;
+            left: 50%;
+            width: calc(100% + 0.6em);
+            height: calc(100% + 0.6em);
             opacity: 1;
-            background-color: var(--borderclr);
-        }
-
-        .action-row {
-            opacity: 0.3;
-            bottom: 1em;
-
-            transition: 0.3s;
-
-            &:hover{
-                opacity: 1;
-            }
+            border: solid 0.1em var(--borderclr);
+            background-color: transparent;
         }
     }
 
     @media (max-width:600px) {
-        .action-row {
-            opacity: 0.5;
-            bottom: 1em;
-        }
-
-        .splitter {
-            width: 100%;
+        .outline {
+            bottom: -0.3em;
+            left: 50%;
+            width: calc(100% + 0.6em);
+            height: calc(100% + 0.6em);
             opacity: 1;
-            background-color: var(--borderclr);
+            border: solid 0.1em var(--borderclr);
+            background-color: transparent;
         }
     }
 }

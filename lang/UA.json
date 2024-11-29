@@ -63,7 +63,11 @@
                     "rename": "Перейменувати",
                     "color": "Колір рамки",
                     "accept": "Прийняти"
-                }
+                },
+                "VAP": [
+                    "View all",
+                    "pages"
+                ]
             },
             "collection": {
                 "postInfoLabel": "Інформація",

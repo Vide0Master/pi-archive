@@ -296,7 +296,6 @@ async function processCollection(id) {
                         }; break;
                         case 'fullDelete': {
                             if (confirm(`${collectionLang.actions.editColl.delete.psts} "${collectionInfo.name}"`)) {
-                                console.log(collectionInfo)
                                 for (const post of collectionInfo.group) {
                                     const rslt = await request('deletePost', { post: post });
                                     if (rslt.rslt == 'e') alert(rslt.rslt + '/' + rslt.msg)

@@ -8,7 +8,8 @@ module.exports = (request, user) => {
         const posts = await syscontroller.dbinteract.getPosts(
             userQuery,
             (request.page - 1) * (request.postsCount || user_sets.posts_per_page),
-            request.postsCount || user_sets.posts_per_page)
+            request.postsCount || user_sets.posts_per_page,
+            !!request.grpOverride)
 
         if (posts.rslt != 's') {
             resolve(posts)
