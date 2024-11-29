@@ -158,7 +158,7 @@ async function get_posts(page) {
                         post_list.splice(index, 1);
                     }
                 });
-                elm = await createGroup(post.postGroupData)
+                elm = createGroup(post.postGroupData)
             }; break;
             default: {
                 elm = createPostCard(post)

@@ -46,7 +46,7 @@ module.exports = (request, userByKey) => {
             user.acc_level = SysController.config.static.user_status[user.status]
         }
 
-        user.postsCount = (await SysController.dbinteract.getPostsCount(`author:${user.login}`)).count || 0
+        user.postsCount = (await SysController.dbinteract.getPostsCount(`author:${user.login}`, true)).count || 0
 
         resolve(new SysController.createResponse(
             's',

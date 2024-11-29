@@ -1,8 +1,8 @@
 const uploadLang = Language.upload
 
-const fSizeLimits={
-    video:1024 * 1024 * 1024 * 5,
-    image:1024 * 1024 * 100
+const fSizeLimits = {
+    video: 1024 * 1024 * 1024 * 5,
+    image: 1024 * 1024 * 100
 }
 
 function getelem(selector) {
@@ -111,7 +111,7 @@ function checkActionRow(state = true) {
 
 document.querySelector('#file-upload').addEventListener('change', (e) => {
     uploadList = []
-    const fileList = (Array.from(e.target.files)).sort((a, b) => a.name.localeCompare(b.name))
+    const fileList = Array.from(e.target.files)//(Array.from(e.target.files)).sort((a, b) => a.name.localeCompare(b.name))
 
     fileListContainer.innerHTML = ""
 
@@ -178,7 +178,7 @@ document.querySelector('#file-upload').addEventListener('change', (e) => {
             return
         }
 
-        const tagsCont = createDiv('tag-cont',dataCol)
+        const tagsCont = createDiv('tag-cont', dataCol)
         const tags = document.createElement('textarea')
         tagsCont.appendChild(tags)
         tags.placeholder = uploadLang.fields.tags

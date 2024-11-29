@@ -564,26 +564,7 @@ function parseUserLogin(login, elem) {
 function createGroup(groupData) {
     const groupElem = createDiv('group-line')
     groupElem.style.setProperty('--borderclr', groupData.color)
-
-    const actionRow = createDiv('action-row', groupElem)
-    const groupName = createDiv('group-name', actionRow)
-    groupName.innerHTML = groupData.name
-    createDiv('splitter', groupElem)
-
-    if (groupData.type == 'collection') {
-        const openAsColl = createButton(Language.group.colView, actionRow)
-        openAsColl.addEventListener('mousedown', (event) => {
-            const sTags = new URLSearchParams(window.location.search).get('tags')
-            const Link = `/collection?id=${groupData.id}${sTags ? `&tags=${sTags}` : ''}`
-            if (event.button === 1)
-                event.preventDefault()
-            if ((event.button === 0 && event.ctrlKey) || event.button === 1) {
-                window.open(Link, '_blank').focus();
-                return
-            }
-            window.location.href = Link
-        })
-    }
+    createDiv('outline', groupElem)
 
     const list = createDiv('list', groupElem)
     async function Grouper() {
@@ -591,10 +572,65 @@ function createGroup(groupData) {
             {
                 query: `id:${groupData.group.join(',')}`,
                 page: 1,
-                postsCount: 9999
+                postsCount: 9999,
+                grpOverride: true
             })
-        for (const post of post_list) {
-            list.append(createPostCard(post))
+
+        for (let i = 0; i <= 4; i++) {
+            const post = post_list.shift()
+            if (post)
+                list.append(createPostCard(post))
+        }
+        if (groupData.type == 'collection') {
+            const additionals = createDiv('additional', list)
+
+            const gname = createDiv('groupName', additionals)
+            gname.innerHTML = groupData.name
+
+            if (post_list.length > 0) {
+                const lpages = createDiv('lost-pages', additionals)
+                lpages.innerHTML = '+' + post_list.length
+                lpages.title = `${Language.group.VAP[0]} ${post_list.length + 5} ${Language.group.VAP[1]}`
+                lpages.addEventListener('click', () => {
+                    while (post_list.length > 0) {
+                        list.append(createPostCard(post_list.shift()))
+                    }
+                    list.append(additionals)
+                    lpages.remove()
+                })
+            }
+
+            const colview = createButton(Language.group.colView, additionals)
+            colview.addEventListener('mousedown', (event) => {
+                const sTags = new URLSearchParams(window.location.search).get('tags')
+                const Link = `/collection?id=${groupData.id}${sTags ? `&tags=${sTags}` : ''}`
+                if (event.button === 1)
+                    event.preventDefault()
+                if ((event.button === 0 && event.ctrlKey) || event.button === 1) {
+                    window.open(Link, '_blank').focus();
+                    return
+                }
+                window.location.href = Link
+            })
+
+        } else {
+            const additionals = createDiv('additional', list)
+
+            const gname = createDiv('groupName', additionals)
+            gname.innerHTML = groupData.name
+
+            if (post_list.length > 0) {
+                const lpages = createDiv('lost-pages', additionals)
+                lpages.innerHTML = '+' + post_list.length
+                lpages.title = `${Language.group.VAP[0]} ${post_list.length + 5} ${Language.group.VAP[1]}`
+                lpages.addEventListener('click', () => {
+                    while (post_list.length > 0) {
+                        list.append(createPostCard(post_list.shift()))
+                    }
+                    list.append(additionals)
+                    lpages.remove()
+                })
+            }
         }
     }
     Grouper()
@@ -769,9 +805,9 @@ function reorderOverlay(group, callback) {
         delete_btn.style.backgroundColor = 'red';
         button_row.appendChild(delete_btn);
         delete_btn.addEventListener('click', (e) => {
-            if(e.shiftKey){
+            if (e.shiftKey) {
                 callback('fullDelete')
-            }else{
+            } else {
                 callback('delete')
             }
         });

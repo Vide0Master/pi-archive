@@ -39,8 +39,11 @@ main {
         justify-content: space-evenly;
         align-items: center;
         position: relative;
-        overflow: hidden;
         height: fit-content;
+
+        overflow: hidden;
+
+        padding: 0.5em;
     }
 
 
