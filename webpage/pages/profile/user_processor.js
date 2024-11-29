@@ -210,6 +210,22 @@ async function showActions(userData, activeUser) {
             }
         })
 
+        //region set PPP
+        const postsPerPages = [
+            { name: 25, value: 25 },
+            { name: 50, value: 50 },
+            { name: 100, value: 100 },
+            { name: 150, value: 150 },
+            { name: 200, value: 200 },
+        ]
+
+        container.appendChild(
+            createSelect(postsPerPages, profileLang.actions.PPP, async (sel) => {
+                const rslt = await request('controlUserSettings', { type: 'update', update: { posts_per_page: sel } })
+                alert(rslt.msg, 5000)
+            })
+        )
+
         //region set lang
         const langResult = await request('getLangsList')
         const langlist = []
@@ -218,16 +234,9 @@ async function showActions(userData, activeUser) {
         }
         container.appendChild(
             createSelect(langlist, profileLang.actions.lang.sel, async (sel) => {
-                switch (sel) {
-                    case "cancel": {
-                        overlay.remove()
-                    }; break;
-                    default: {
-                        const rslt = await request('controlUserSettings', { type: 'update', update: { lang: sel } })
-                        alert(rslt.msg, 5000)
-                        localStorage.setItem('lang', sel)
-                    }; break
-                }
+                const rslt = await request('controlUserSettings', { type: 'update', update: { lang: sel } })
+                alert(rslt.msg, 5000)
+                localStorage.setItem('lang', sel)
             })
         )
 
@@ -240,16 +249,9 @@ async function showActions(userData, activeUser) {
         }
         container.appendChild(
             createSelect(themelist, profileLang.actions.theme.sel, async (sel) => {
-                switch (sel) {
-                    case "cancel": {
-                        overlay.remove()
-                    }; break;
-                    default: {
-                        request('controlUserSettings', { type: 'update', update: { theme: sel } })
-                        localStorage.setItem('theme', sel)
-                        setTheme()
-                    }; break
-                }
+                request('controlUserSettings', { type: 'update', update: { theme: sel } })
+                localStorage.setItem('theme', sel)
+                setTheme()
             })
         )
     } else {

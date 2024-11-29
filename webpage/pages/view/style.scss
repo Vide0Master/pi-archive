@@ -183,7 +183,7 @@ main {
             color: var(--font-color1);
             width: fit-content;
 
-            @media (min-width:600px) {
+            @media (min-width:700px) {
                 flex-grow: 1;
             }
 
@@ -382,7 +382,7 @@ main {
     }
 }
 
-@media (max-width:600px) {
+@media (max-width:700px) {
     main {
         grid-column-gap: 0;
     }

@@ -276,7 +276,7 @@
                     "viewUserPosts": "View user posts"
                 },
                 "actions": {
-                    "label": "Actions",
+                    "label": "Actions and settings",
                     "unlogin": "Log out",
                     "changeUserName": {
                         "btn": "Change nickanme",
@@ -312,7 +312,8 @@
                             "nature": "Nature",
                             "pony": "Pony"
                         }
-                    }
+                    },
+                    "PPP":"Posts per page"
                 },
                 "favs": {
                     "label": "Favourites",

@@ -29,7 +29,7 @@ button {
         background-color: var(--interact-active);
     }
 
-    @media (max-width: 600px) {}
+    @media (max-width: 700px) {}
 }
 
 input[type=text],
@@ -59,7 +59,7 @@ textarea {
         color: var(--font-color1);
     }
 
-    @media (max-width: 600px) {}
+    @media (max-width: 700px) {}
 }
 
 select {
@@ -291,7 +291,7 @@ img {
         border-bottom-left-radius: 1em;
         border-bottom-right-radius: 1em;
 
-        @media (max-width:600px) {
+        @media (max-width:700px) {
             flex-direction: column;
             gap: 0.5em;
         }
@@ -301,7 +301,7 @@ img {
             filter: invert(1);
             cursor: pointer;
 
-            @media (max-width:600px) {
+            @media (max-width:700px) {
                 display: none;
             }
         }
@@ -517,7 +517,7 @@ img {
         gap: 0.5em;
     }
 
-    @media (max-width:600px) {
+    @media (max-width:700px) {
         .message-data {}
     }
 }
@@ -589,7 +589,7 @@ img {
     justify-content: center;
     align-items: center;
 
-    @media (max-width:600px) {
+    @media (max-width:700px) {
         overflow: auto;
         align-items: flex-start;
     }
@@ -600,7 +600,7 @@ img {
     padding: 20px;
     border-radius: 10px;
     width: 80%;
-    max-width: 600px;
+    max-width: 700px;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -716,6 +716,8 @@ img {
     transition: 0.3s;
 
     .additional {
+        z-index: 1;
+
         border: solid 0.15em var(--color3);
         background-color: var(--color1);
         color: var(--font-color1);
@@ -756,39 +758,34 @@ img {
 
     .outline {
         position: absolute;
-        bottom: -0.3em;
+        top: 50%;
         left: 50%;
-        transform: translate(-50%);
-        width: 25%;
-        height: 0.2em;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        height: 90%;
         box-sizing: border-box;
-        transition: 0.4s;
+        transition: 0.2s;
         border-radius: 0.2em;
 
-        opacity: 0.5;
-
-        background-color: #fff;
-        background-color: var(--borderclr);
-
-        z-index: 2;
         pointer-events: none;
-        
-        border: solid 0.1em transparent;
+
+        border: solid 0.1em color-mix(in srgb, var(--borderclr), transparent 50%);
+
+        opacity: 0;
     }
 
     &:hover {
         .outline {
-            bottom: -0.3em;
+            top: 50%;
             left: 50%;
             width: calc(100% + 0.6em);
             height: calc(100% + 0.6em);
             border: solid 0.1em var(--borderclr);
-            background-color: transparent;
             opacity: 1;
         }
     }
 
-    @media (max-width:600px) {
+    @media (max-width:700px) {
         .outline {
             bottom: -0.3em;
             left: 50%;
@@ -1071,7 +1068,9 @@ input[type=color] {
             pointer-events: none;
             height: 100%;
 
-            @media (max-width:600px) {
+            max-height: 200px;
+
+            @media (max-width:700px) {
                 max-height: 160px;
             }
         }
@@ -1142,6 +1141,56 @@ input[type=color] {
 
                     100% {
                         height: 180px;
+                    }
+                }
+            }
+        }
+    }
+
+    @media (max-width:700px) {
+        .post-data-container {
+            width: max-content;
+            gap: 0.2em;
+
+            .inf-cont {
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+
+                animation: none;
+                display: flex;
+                max-width: 100%;
+                opacity: 1;
+
+                width: max-content;
+            }
+        }
+
+        &:hover {
+            .post-data-container {
+                background-color: var(--color1);
+                min-width: 101%; // Расширяется плавно до полной ширины
+                border-radius: 0;
+
+                .inf-cont {
+                    animation: none;
+                }
+
+                .warning-container-container {
+                    animation: fadeInWarns 0.6s forwards;
+
+                    @keyframes fadeInWarns {
+                        0% {
+                            height: 0;
+                        }
+
+                        33% {
+                            height: 0px;
+                        }
+
+                        100% {
+                            height: 180px;
+                        }
                     }
                 }
             }
