@@ -155,8 +155,21 @@ main {
             background-color: var(--color1);
             border: 0.1em solid var(--color3);
             width: fit-content;
-            padding: 0.5em;
             border-radius: 0.5em;
+
+            .desc-label {
+                padding: 0.5em;
+            }
+
+            .desc-splitter {
+                width: 100%;
+                height: 0.1em;
+                background-color: var(--color3);
+            }
+
+            .desc-text {
+                padding: 0.5em;
+            }
         }
 
         .comments-section-container {

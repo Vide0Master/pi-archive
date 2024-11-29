@@ -107,7 +107,11 @@ async function displayPostData(post_data) {
                 if (!line_val) {
                     desc.remove()
                 } else {
-                    desc.innerText = line_val;
+                    const descLabel = createDiv('desc-label',desc)
+                    descLabel.innerHTML=viewLang.postData.descLabel
+                    createDiv('desc-splitter',desc)
+                    const descText = createDiv('desc-text',desc)
+                    descText.innerText = line_val;
                 }
                 elm.remove()
                 break;
