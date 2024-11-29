@@ -229,7 +229,8 @@ async function processCollection(id) {
         {
             query: `id:${collectionInfo.group.join(',')}`,
             page: 1,
-            postsCount: 9999
+            postsCount: 9999,
+            grpOverride: true
         })
 
     for (const post of post_list) {
