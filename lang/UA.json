@@ -85,10 +85,10 @@
                     "editColl": {
                         "btn": "Редагувати коллекцію",
                         "delete": {
-                            "grp": "Confirm deleting collection",
-                            "grps": "Deleted group",
-                            "psts": "Confirm deleting collection and it's posts",
-                            "pstss": "Deleted group and posts"
+                            "grp": "Підтвердіть видалення коллекції",
+                            "grps": "Видалено коллекцію",
+                            "psts": "Підтвердіть видалення коллекції і її постів",
+                            "pstss": "Видалено коллекцію і її пости"
                         },
                         "rename": "Перейменувати коллекцію"
                     },
@@ -222,10 +222,10 @@
                         },
                         "addToGroup": "Додати пост до групи",
                         "delete": {
-                            "grp": "Confirm deleting collection",
-                            "grps": "Deleted group",
-                            "psts": "Confirm deleting collection and it's posts",
-                            "pstss": "Deleted group and posts"
+                            "grp": "Підтвердіть видалення групи",
+                            "grps": "Видалено групу",
+                            "psts": "Підтвердіть видалення групи і її постів",
+                            "pstss": "Видалено групу і її пости"
                         }
                     },
                     "rmPost": {
@@ -247,7 +247,7 @@
                         "conf": "Підтвердіть видалення коментару"
                     }
                 },
-                "headerNm": "Post"
+                "headerNm": "Пост"
             },
             "profile": {
                 "visitor": "відвідувач",
