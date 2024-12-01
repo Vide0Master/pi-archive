@@ -25,6 +25,7 @@ const WSSController = class {
         }
         if (userData) {
             require(`./${type}.js`)(this.activeCliets, UWS, user, userData, data)
+            require(`./clientAuth.js`)(this.activeCliets, UWS, user, userData)
         }
     }
 }
