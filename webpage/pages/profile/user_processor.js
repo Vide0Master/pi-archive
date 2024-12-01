@@ -49,7 +49,7 @@ async function showWelcomeText(login, isOwner) {
 
     welcomeMessageContainer.innerHTML += `, `
     if (isOwner) {
-        parseUserLogin(login, welcomeMessageContainer)
+        parseUserLogin(login, welcomeMessageContainer, false)
     } else {
         welcomeMessageContainer.innerHTML += profileLang.visitor
     }
@@ -308,6 +308,8 @@ function addHiddenExperiments() {
     const user_card_block = document.querySelector('.user-card')
     const container = createDiv('list-container', user_card_block)
 
+    container.style.display = 'none'
+
     const label = createDiv('label', container)
     label.innerText = "Experiment features"
 
@@ -351,15 +353,20 @@ function addHiddenExperiments() {
     ]
 
     for (const func of expreimentsFuncs) {
-
+        const expName = 'EXPERIMENT_' + func.key
         createSwitch(func.name, container, (state) => {
-            const curr = localStorage.getItem(func.key)
+            const curr = localStorage.getItem(expName)
             if (!curr) {
-                localStorage.setItem(func.key, state)
+                localStorage.setItem(expName, state)
             } else if (!state && curr) {
-                localStorage.removeItem(func.key)
+                localStorage.removeItem(expName)
             }
 
-        }, localStorage.getItem(func.key))
+        }, localStorage.getItem(expName))
+    }
+
+    if (expreimentsFuncs.length == 0) {
+        const noexp = createDiv('', container)
+        noexp.innerHTML = 'No experiments in test'
     }
 }

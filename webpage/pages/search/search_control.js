@@ -168,6 +168,11 @@ async function get_posts(page) {
 
         posts_block.appendChild(elm)
     }
+    
+    document.querySelector('header').scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+    })
 }
 
 passSearchTagsToSearchField()
