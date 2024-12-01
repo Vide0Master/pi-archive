@@ -31,10 +31,10 @@ async function request(action, request) {
             return 'response_error'
         }
         const data = await response.json();
-        if (DEVMODE) console.log(`[API {${action}}]:`, data)
+        if (DEVMODE) console.log(`[API {${action}}${!!request ? !!request.type ? ` TYPE:{${request.type}}` : '' : ''}]:`, data)
         return data
     } catch (error) {
-        console.error('Ошибка запроса:', error);
+        console.error('Request error:', error);
         return 'request_error'
     }
 }

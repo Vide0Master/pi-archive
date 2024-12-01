@@ -26,7 +26,6 @@ if (DEVMODE) {
 
 function WSListener(type, target, cb) {
     webSocket.addEventListener('message', (msg) => {
-        console.log(`Triggered [${type}] for [${target}], data:`, msg)
         const WSmsg = JSON.parse(msg.data)
         if (WSmsg.type == type && WSmsg.target == target) cb(WSmsg.data)
     })
@@ -71,7 +70,7 @@ async function setHeaderButtrons() {
         }
     }
 
-    getMessageCount()
+    //getMessageCount()
 }
 
 //region tag autofill
@@ -488,13 +487,12 @@ function createBlurOverlay() {
 //region Message count
 async function getMessageCount() {
     const msgCountLang = Language.msgCount
-    const count = await request('getUserMessageCount')
+    const count = await request('controlUserDM', { type: 'getUserMessagesCount' })
 
-    if (count.outUnread > 0 || count.inUnread > 0) {
+    if (count.unread > 0 || count.requiredAction) {
         const messages_link = document.querySelector('.nav-row').querySelector('.messages')
 
-        const counter = createDiv('counter')
-        messages_link.appendChild(counter)
+        const counter = createDiv('counter', messages_link)
 
         if (count.requiredAction) {
             counter.style.backgroundColor = '#a53030'
@@ -503,29 +501,17 @@ async function getMessageCount() {
             return
         }
 
-        if (count.outUnread > 0) {
-            const countOut = createDiv()
-            countOut.innerText = "▲" + count.outUnread
-            countOut.title = msgCountLang[1]
-            counter.appendChild(countOut)
-        }
-
-        if (count.outUnread > 0 && count.inUnread > 0) {
-            const splitter = createDiv('splitter')
-            counter.appendChild(splitter)
-        }
-
-        if (count.inUnread > 0) {
+        if (count.unread > 0) {
             const countIn = createDiv()
-            countIn.innerText = "▼" + count.inUnread
-            countIn.title = msgCountLang[2]
+            countIn.innerText = count.unread
+            countIn.title = msgCountLang[1]
             counter.appendChild(countIn)
         }
     }
 }
 
 //region Parse user
-function parseUserLogin(login, elem) {
+function parseUserLogin(login, elem, showCircle = true) {
     (async () => {
         const user = await request('getUserProfileData', { login })
         let color = ''
@@ -550,13 +536,16 @@ function parseUserLogin(login, elem) {
         userDiv.title = capitalizeFirstLetter(Language.user_status_translation[user.data.status])
         elem.appendChild(userDiv)
 
-        const status = createDiv('ACTstatus', elem)
-        WSListener('userStatusUpdate', user.data.login, (data) => {
-            status.classList.remove(['online', 'afk', 'offline'])
-            status.classList.add(data.state)
-            status.title = Language.userActivityState[data.state]
-        })
-        WSSend('getUserActivity', { user: user.data.login })
+        if (showCircle) {
+            const status = createDiv('ACTstatus', elem)
+            WSListener('userStatusUpdate', user.data.login, (data) => {
+                console.log(user.data.login, data)
+                status.classList.remove(...['online', 'afk', 'offline'])
+                status.classList.add(data.state)
+                status.title = Language.userActivityState[data.state]
+            })
+            WSSend('getUserActivity', { user: user.data.login })
+        }
     })()
 }
 
@@ -998,18 +987,25 @@ async function adminVerify() {
 
 //region parse tmst
 function parseTimestamp(timestamp) {
-    let currentdate = new Date(Math.floor(timestamp));
+    timestamp = parseInt(timestamp)
+    const now = new Date();
+    const date = new Date(timestamp);
 
-    const padZero = (num) => num.toString().padStart(2, '0');
+    const time = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+    const fullDate = `${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1).toString().padStart(2, '0')}.${date.getFullYear()}`;
 
-    let datetime = padZero(currentdate.getDate()) + "."
-        + padZero(currentdate.getMonth() + 1) + "."
-        + currentdate.getFullYear() + " "
-        + padZero(currentdate.getHours()) + ":"
-        + padZero(currentdate.getMinutes()) + ":"
-        + padZero(currentdate.getSeconds());
+    const isToday = now.toDateString() === date.toDateString();
+    const isYesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000).toDateString() === date.toDateString();
 
-    return datetime;
+    if (isToday) {
+        return `${Language.timestamps.today}, ${time}`;
+    } else if (isYesterday) {
+        return `${Language.timestamps.yesterday}, ${time}`;
+    } else if (date.getFullYear() === now.getFullYear()) {
+        return `${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1).toString().padStart(2, '0')} ${time}`;
+    } else {
+        return `${fullDate}`;
+    }
 }
 
 //region elem vis obs

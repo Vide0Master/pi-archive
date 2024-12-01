@@ -1,16 +1,19 @@
 const sysController = require('../systemController')
 
-module.exports = (db, userRQ, userK) => {
+module.exports = (db, user) => {
     return new Promise(async resolve => {
-        db.all(`SELECT * FROM messages WHERE ("to" = ? AND "from" = ?) OR ("to" = ? AND "from" = ?) AND "msgtype" = "DM" ORDER BY timestamp DESC`,
-            [userRQ, userK, userK, userRQ],
+        db.all(`SELECT * FROM messages WHERE "to" = ? OR "from" = ? AND "msgtype" = "DM" ORDER BY timestamp DESC`,
+            [user, user],
             (err, rows) => {
+                for(const row of rows){
+                    row.specialdata = JSON.parse(row.specialdata)
+                }
                 resolve(new sysController.createResponse(
                     's',
-                    `Got DM messages of ${userRQ}`,
+                    'Got user messages',
                     {messages:rows},
                     err,
-                    `Error getting DM messages of ${userRQ}`
+                    'Got user messages'
                 ))
             })
     })

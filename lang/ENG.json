@@ -3,6 +3,10 @@
     "id": "ENG",
     "lang": {
         "WEB": {
+            "timestamps": {
+                "today": "Today",
+                "yesterday": "Yesterday"
+            },
             "userActivityState": {
                 "online": "Online",
                 "afk": "AFK",
@@ -45,8 +49,7 @@
             },
             "msgCount": [
                 "Action needed!",
-                "Unread out",
-                "Unread in"
+                "Unread"
             ],
             "postCard": {
                 "rating": "Rating",
@@ -80,6 +83,11 @@
                     "page",
                     "tags"
                 ]
+            },
+            "messages": {
+                "you": "You",
+                "chSel":"Select chat",
+                "enterMessage":"Enter message"
             },
             "collection": {
                 "postInfoLabel": "Collection info",
@@ -190,7 +198,7 @@
                         "tgAudioWarn": "This video can be displayed without sound because of how Telegram processes GIFs that are downloaded.\n(they all are be downloaded as MP4 without sound)"
                     },
                     "creation": "Created on",
-                    "descLabel":"Description"
+                    "descLabel": "Description"
                 },
                 "actions": {
                     "download": "Download file",
@@ -312,7 +320,7 @@
                             "pony": "Pony"
                         }
                     },
-                    "PPP":"Posts per page"
+                    "PPP": "Posts per page"
                 },
                 "favs": {
                     "label": "Favourites",
