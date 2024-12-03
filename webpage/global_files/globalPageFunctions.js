@@ -4,6 +4,7 @@ webSocket.addEventListener('open', () => {
     if (DEVMODE) {
         console.log(`WebSocket server(ws://${window.location.host}) connected`);
     }
+    WSSend('CT')
 });
 
 if (DEVMODE) {
@@ -62,7 +63,7 @@ async function setHeaderButtrons() {
         }
     }
 
-    //getMessageCount()
+    getMessageCount()
 }
 
 //region tag autofill
@@ -236,12 +237,16 @@ function createPostCard(postData, noClickReaction) {
 
     if (!noClickReaction)
         postCard.addEventListener('mousedown', (event) => {
+            event.preventDefault()
             const sTags = new URLSearchParams(window.location.search).get('tags')
             const Link = `/view?id=${postData.id}${sTags ? `&tags=${sTags}` : ''}`
-            if (event.button === 1)
-                event.preventDefault()
-            if ((event.button === 0 && event.ctrlKey) || event.button === 1) {
-                window.open(Link, '_blank').focus();
+
+            if (event.button == 0 && event.ctrlKey) {
+                window.open(Link, '_blank').focus()
+                return
+            }
+            if (event.button == 1) {
+                window.open(Link, '_blank')
                 return
             }
             window.location.href = Link
@@ -479,27 +484,46 @@ function createBlurOverlay() {
 //region Message count
 async function getMessageCount() {
     const msgCountLang = Language.msgCount
-    const count = await request('controlUserDM', { type: 'getUserMessagesCount' })
+    const countRslt = await request('controlUserDM', { type: 'getUserMessagesCount' })
 
-    if (count.unread > 0 || count.requiredAction) {
-        const messages_link = document.querySelector('.nav-row').querySelector('.messages')
+    const messages_link = document.querySelector('.nav-row').querySelector('.messages')
+    const counter = createDiv('counter', messages_link)
 
-        const counter = createDiv('counter', messages_link)
+    async function updateState(count) {
+        if (count.unread > 0 || count.requiredAction) {
+            counter.removeAttribute('style')
+            if (count.requiredAction) {
+                counter.style.backgroundColor = '#a53030'
+                counter.innerText = '!'
+                counter.title = msgCountLang[0]
+                return
+            }
 
-        if (count.requiredAction) {
-            counter.style.backgroundColor = '#a53030'
-            counter.innerText = '!'
-            counter.title = msgCountLang[0]
-            return
-        }
-
-        if (count.unread > 0) {
-            const countIn = createDiv()
-            countIn.innerText = count.unread
-            countIn.title = msgCountLang[1]
-            counter.appendChild(countIn)
+            if (count.unread > 0) {
+                counter.innerText = count.unread
+                counter.title = msgCountLang[1]
+                for(const user in count.unreadPerUser){
+                    const userName = await getUserName(user)
+                    counter.title+=`\n${userName}: ${count.unreadPerUser[user]}`
+                }
+            }
+        } else {
+            counter.style.display = 'none'
         }
     }
+
+    updateState(countRslt)
+
+    WSListener('messageCountUpdate', '', (data) => {
+        updateState(data.count)
+        console.log(data.count)
+    })
+}
+
+//region get username
+async function getUserName(login) {
+    const user = await request('getUserProfileData', { login })
+    return user.data.username
 }
 
 //region Parse user

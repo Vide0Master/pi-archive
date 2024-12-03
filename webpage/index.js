@@ -105,7 +105,7 @@ const checkUserPermissionUpload = async (req, res, next) => {
 app.post('/upload', checkUserPermissionUpload, (req, res, next) => {
     upload(req, res, async () => {
         if (!req.file) {
-            res.send('w/Нет файла для загрузки.');
+            res.send('e/No file.');
             return
         }
 

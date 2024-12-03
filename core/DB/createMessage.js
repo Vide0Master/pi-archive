@@ -1,7 +1,5 @@
 
 //создание сообщения
-
-const consoleLogger = require('../consoleLogger.js')
 const sysController = require('../systemController.js')
 
 module.exports = (db, messageData) => {
@@ -24,13 +22,25 @@ module.exports = (db, messageData) => {
                 msgDataToDB.specialdata
             ],
                 (err) => {
-                    resolve(new sysController.createResponse(
-                        's',
-                        `Message created [${messageData.from}>${messageData.to}]`,
-                        { message: msgDataToDB },
-                        err,
-                        `Error while creating message [${messageData.from}>${messageData.to}]`
-                    ))
+                    if (err) {
+                        resolve(new sysController.createResponse(
+                            'e',
+                            `Error creating message [${msgDataToDB.from}>${msgDataToDB.to}]: ` + err
+                        ))
+                        return
+                    }
+                    db.get(`SELECT messageid FROM messages WHERE timestamp = ?`, [msgDataToDB.timestamp], (err, row) => {
+                        if (!err) {
+                            msgDataToDB.messageid = row.messageid
+                        }
+                        resolve(new sysController.createResponse(
+                            's',
+                            `Message created [${msgDataToDB.from}>${msgDataToDB.to}]`,
+                            { message: msgDataToDB },
+                            err,
+                            `Error getting message id [${msgDataToDB.from}>${msgDataToDB.to}]`
+                        ))
+                    })
                 })
         })
 
