@@ -22,7 +22,10 @@ const WSSController = class {
         }
         if (userData) {
             this.userSessionProcessor(userData, user, UWS)
-            require(`./${type}.js`)(this.activeClients, UWS, user, userData, data)
+            if(type=='CT'){
+                return
+            }
+            require(`./${type}.js`)(this.activeClients, UWS, userData, data)
         }
     }
 

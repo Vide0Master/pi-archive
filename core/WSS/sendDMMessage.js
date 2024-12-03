@@ -1,7 +1,7 @@
 const SysController = require("../systemController")
 
 
-module.exports = async (activeClients, userWS, sessionData, userData, requestData) => {
+module.exports = async (activeClients, userWS, userData, requestData) => {
     const sendrslt = await SysController.dbinteract.createMessage({
         message: requestData.message,
         from: userData.login,
@@ -19,10 +19,18 @@ module.exports = async (activeClients, userWS, sessionData, userData, requestDat
 
 
         const user = activeClients[sendrslt.message.to]
-        user.send(
-            "transmitMessage",
-            sendrslt.message.from,
-            { msg: sendrslt.message }
-        )
+        if (!!user) {
+            user.send(
+                "transmitMessage",
+                sendrslt.message.from,
+                { msg: sendrslt.message }
+            )
+            const msgCountForReciever = await require('../API/controlUserDM')({ type: 'getUserMessagesCount' }, { login: sendrslt.message.to })
+            user.send(
+                'messageCountUpdate',
+                '',
+                { count: msgCountForReciever }
+            )
+        }
     }
 }

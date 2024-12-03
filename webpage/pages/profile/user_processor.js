@@ -109,7 +109,7 @@ function showUserData(userData) {
             case 'username': {
                 if (!userData.isOwner) {
                     ln.innerHTML = usr_data_list[line]
-                    parseUserLogin(userData.data.login, ln)
+                    parseUserLogin(userData.data.login, ln, false)
                 } else {
                     ln.remove()
                 }

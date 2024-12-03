@@ -1,3 +1,3 @@
-module.exports = (activeClients, userWS, sessionData, userData, requestData) => {
+module.exports = (activeClients, userWS, userData, requestData) => {
     
 }

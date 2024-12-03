@@ -34,6 +34,14 @@ module.exports = (request, user_data) => {
 
                 DMs.forEach(DMUser => {
                     DMUser.messages.sort((a, b) => b.timestamp - a.timestamp);
+                    DMUser.messages.forEach(msg => {
+                        if (msg.read == 0 && msg.to == user_data.login) {
+                            if (!DMUser.unread) {
+                                DMUser.unread = 0
+                            }
+                            DMUser.unread += 1
+                        }
+                    })
                 });
 
                 DMs.sort((a, b) => {
@@ -54,11 +62,15 @@ module.exports = (request, user_data) => {
 
                 messages = messages.messages
 
-                let info = { unread: 0, requiredAction: false }
+                let info = { unread: 0, unreadPerUser: {}, requiredAction: false }
 
                 for (const msg of messages) {
                     if (msg.read == 0 && msg.to == user_data.login) {
                         info.unread++
+                        if (!info.unreadPerUser[msg.from]) {
+                            info.unreadPerUser[msg.from] = 0
+                        }
+                        info.unreadPerUser[msg.from] += 1
                     }
                     if (msg.msgtype.startsWith("ACTION")) {
                         info.requiredAction = true
