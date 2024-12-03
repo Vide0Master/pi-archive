@@ -12,6 +12,11 @@ main {
 
     width: 100%;
 
+    @media (max-width:700px) {
+        flex-direction: column;
+        align-items: center;
+    }
+
     .user-col {
         display: flex;
         flex-direction: column;
@@ -114,8 +119,13 @@ main {
         flex-direction: column;
         align-items: center;
         gap: 0.5em;
-        flex: 1;
+        flex: 1 1;
         height: 100%;
+
+        @media (max-width:700px) {
+            width: 100%;
+            box-sizing: border-box;
+        }
 
         &>* {
             background-color: var(--color1);
@@ -145,22 +155,35 @@ main {
                 flex-direction: column-reverse;
                 gap: 0.2em;
 
+                @media (min-width:700px) {
+                    align-items: flex-start;
+                }
+
                 .msg-cont {
-                    background-color: #fff;
                     border-radius: 0.75em;
                     padding: 0.25em 0.5em;
                     display: flex;
                     flex-direction: column;
                     gap: 0.2 em;
+                    color: #000;
 
                     &.out {
                         align-self: flex-end;
                         border-bottom-right-radius: 0;
+                        background-color: #fff;
+
+                        @media (min-width:700px) {
+                            align-self: flex-start;
+                            border-bottom-left-radius: 0;
+                            border-bottom-right-radius: 0.75em;
+                            background-color: #cbcbcb;
+                        }
                     }
 
                     &.in {
                         align-self: flex-start;
                         border-bottom-left-radius: 0;
+                        background-color: #fff;
                     }
 
                     .msg-text {
@@ -173,9 +196,9 @@ main {
                         flex-direction: row-reverse;
                         width: fit-content;
                         align-self: flex-end;
+                        color: #000;
 
                         .time {
-                            color: var(--font-color3);
                             font-size: 0.6em;
                         }
 

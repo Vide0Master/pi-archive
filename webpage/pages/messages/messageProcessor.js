@@ -73,7 +73,6 @@ async function MessageProcessor() {
         }
         updateUnreadCounter(DM.unread || 0)
         WSListener('messageCountUpdate', '', (data) => {
-            console.log(data)
             if (!data.count.unreadPerUser[DM.login]){
                 updateUnreadCounter(0)
             }else{
