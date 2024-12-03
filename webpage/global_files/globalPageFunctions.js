@@ -4,14 +4,6 @@ webSocket.addEventListener('open', () => {
     if (DEVMODE) {
         console.log(`WebSocket server(ws://${window.location.host}) connected`);
     }
-    const authData = {
-        type: "clientAuth",
-        user: {
-            key: localStorage.getItem('userKey') || sessionStorage.getItem('userKey'),
-            type: 'WEB'
-        }
-    }
-    webSocket.send(JSON.stringify(authData));
 });
 
 if (DEVMODE) {

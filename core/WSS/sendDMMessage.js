@@ -17,14 +17,12 @@ module.exports = async (activeClients, userWS, sessionData, userData, requestDat
             }
         ))
 
-        Object.values(activeClients).filter(client => client.login == requestData.to).forEach(client => {
-            client.ws.send(JSON.stringify(
-                {
-                    type: "transmitMessage",
-                    target: sendrslt.message.from,
-                    data: { msg: sendrslt.message }
-                }
-            ))
-        });
+
+        const user = activeClients[sendrslt.message.to]
+        user.send(
+            "transmitMessage",
+            sendrslt.message.from,
+            { msg: sendrslt.message }
+        )
     }
 }
