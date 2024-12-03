@@ -516,7 +516,6 @@ async function getMessageCount() {
 
     WSListener('messageCountUpdate', '', (data) => {
         updateState(data.count)
-        console.log(data.count)
     })
 }
 
@@ -555,7 +554,6 @@ function parseUserLogin(login, elem, showCircle = true) {
         if (showCircle) {
             const status = createDiv('ACTstatus', elem)
             WSListener('userStatusUpdate', user.data.login, (data) => {
-                console.log(user.data.login, data)
                 status.classList.remove(...['online', 'afk', 'offline'])
                 status.classList.add(data.state)
                 status.title = Language.userActivityState[data.state]
