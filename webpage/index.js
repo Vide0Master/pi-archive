@@ -1,4 +1,3 @@
-// Импорт
 const sysController = require('../core/systemController.js')
 const cmd = (text) => { sysController.log(text, [{ txt: 'WEB', txtb: 'blue', txtc: 'yellow' }]) }
 cmd('i/Starting WEB server...')
@@ -13,7 +12,6 @@ const multer = require('multer');
 
 const mime = require('mime-types');
 
-// Настройка хранилища multer для сохранения файлов с их оригинальными расширениями
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, './storage/file_storage');
@@ -26,22 +24,19 @@ const storage = multer.diskStorage({
 
 const fileFilter = (req, file, cb) => {
     const ext = path.extname(file.originalname).toLowerCase();
-    // Разрешенные расширения для фото и видео
     const allowedImageExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
     const allowedVideoExtensions = ['.mp4', '.mov', '.avi', '.mkv'];
 
     if (allowedImageExtensions.includes(ext)) {
-        req.fileSizeLimit = 50 * 1024 * 1024; // 50 MB для фото
+        req.fileSizeLimit = 50 * 1024 * 1024;
     } else if (allowedVideoExtensions.includes(ext)) {
-        req.fileSizeLimit = 1 * 1024 * 1024 * 1024; // 1 GB для видео
+        req.fileSizeLimit = 1 * 1024 * 1024 * 1024;
     } else {
-        // Отклоняем файл, если расширение не соответствует
         return cb(new Error('Unsupported filetype'), false);
     }
     cb(null, true);
 };
 
-// Middleware для настройки ограничения размера файла
 const upload = multer({
     storage: storage,
     fileFilter: fileFilter
@@ -50,15 +45,12 @@ const upload = multer({
 const path = require('path');
 const fs = require('fs')
 
-// Модуль веб-страницы
-
 const app = express();
 
 app.get('/', (req, res) => {
     res.redirect('/welcome')
 })
 
-// прогрузка страниц
 const pagesPath = path.join(__dirname, 'pages');
 const globalFilesPath = path.join(__dirname, 'global_files');
 fs.readdirSync(pagesPath).forEach(page => {
@@ -89,14 +81,12 @@ fs.readdirSync(pagesPath).forEach(page => {
 
 app.use(`/lang`, express.static(path.join(__dirname, '../lang')))
 
-//слушатель post запросов
 app.use(express.json({ limit: '10mb' }));
 app.use(bodyParser.json({ extended: true, limit: '10mb' }));
 app.post('/api', async (req, res) => {
     await sysController.APIprocessorWEB(req, res)
 })
 
-// Middleware для проверки пользовательского ключа и уровня доступа
 const checkUserPermissionUpload = async (req, res, next) => {
     const userKey = req.headers['user-key'];
     if (!userKey) {
@@ -112,7 +102,6 @@ const checkUserPermissionUpload = async (req, res, next) => {
     }
 };
 
-//middleware для загрузки файлов от пользователя
 app.post('/upload', checkUserPermissionUpload, (req, res, next) => {
     upload(req, res, async () => {
         if (!req.file) {
@@ -125,7 +114,6 @@ app.post('/upload', checkUserPermissionUpload, (req, res, next) => {
     })
 })
 
-// путь для передачи файлов с проверкой пользовтеля
 app.get('/file', async (req, res) => {
     const tempKey = req.query.tempKey;
     const postID = req.query.id;
@@ -133,7 +121,6 @@ app.get('/file', async (req, res) => {
 
     let user_perm = 0;
 
-    // Если предоставлен userKey, игнорируем временный ключ
     if (!userKey) {
         if (tempKey) {
             const tempKeyCheck = await sysController.dbinteract.getTempKeyData(tempKey);
@@ -188,16 +175,14 @@ app.get('/file', async (req, res) => {
     const range = req.headers.range;
     const mimeType = mime.lookup(filepath);
 
-    // Установка заголовков кэширования на 1 неделю
-    res.set('Cache-Control', 'public, max-age=604800'); // 1 неделя
-    res.set('Expires', new Date(Date.now() + 604800000).toUTCString()); // 1 неделя в будущем
+    res.set('Cache-Control', 'public, max-age=604800');
+    res.set('Expires', new Date(Date.now() + 604800000).toUTCString());
 
     // Проверка параметра thumb
     const generateThumbnail = (req.query.thumb === 'true' && !tempKey);
 
     if (generateThumbnail) {
         if (mimeType.startsWith('image/')) {
-            // Изменение размера изображения
             const resizedImage = await sharp(filepath)
                 .resize({ height: 200, fit: 'inside' })
                 .toBuffer();
@@ -262,7 +247,6 @@ wss.on('connection', (ws) => {
     })
 })
 
-//Запуск слушателя на порту из config.json
 server.listen(sysController.config.static.web_app.port, () => {
     cmd('s/WEB server started succesfully!')
     cmd(`i/Listening HTTP and WS connections on port [${sysController.config.static.web_app.port}]`)
