@@ -40,7 +40,7 @@ module.exports = (request, user_data) => {
 
         const ext = path.extname(postData.file).toLowerCase();
         if (['.jpg', '.jpeg', '.png', '.webp', '.gif'].includes(ext)) {
-            fs.unlink(`./storage/file_storage/${postData.file}`, async (err) => {
+            fs.rm(`./storage/file_storage/${postData.file}`, async (err) => {
                 if (err) {
                     sysController.log(`e/Erorr deleting file [deletePost|image]: ${err}`)
                     resolve({ rslt: 'e', msg: `e/Erorr deleting file [deletePost|image]: ${err}` })
@@ -51,13 +51,13 @@ module.exports = (request, user_data) => {
                 }
             })
         } else if (['.mp4', '.mov', '.avi', '.mkv'].includes(ext)) {
-            fs.unlink(`./storage/file_storage/${postData.file}`, async (err) => {
+            fs.rm(`./storage/file_storage/${postData.file}`, async (err) => {
                 if (err) {
                     sysController.log(`e/Erorr deleting file [deletePost|video]: ${err}`)
                     resolve({ rslt: 'e', msg: `e/Erorr deleting file [deletePost|video]: ${err}` })
                     return
                 } else {
-                    fs.unlink(`./storage/video_thumbnails/THUMBFOR-${path.parse(postData.file).name}.jpg`, async (err) => {
+                    fs.rm(`./storage/video_thumbnails/THUMBFOR-${path.parse(postData.file).name}.jpg`, async (err) => {
                         if (err) {
                             sysController.log(`e/Erorr deleting file [deletePost|video|thumbnail]: ${err}`)
                             resolve({ rslt: 'e', msg: `e/Erorr deleting file [deletePost|video|thumbnail]: ${err}` })
