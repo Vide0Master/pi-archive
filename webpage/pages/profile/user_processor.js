@@ -221,7 +221,7 @@ async function showActions(userData, activeUser) {
         ]
 
         container.appendChild(
-            createSelect(postsPerPages, profileLang.actions.PPP + `: ${userData.data.usersettings.posts_per_page}`, async (sel) => {
+            createSelect(postsPerPages, profileLang.actions.PPP + `: ${userData.data.usersettings.posts_per_page||50}`, async (sel) => {
                 const rslt = await request('controlUserSettings', { type: 'update', update: { posts_per_page: sel } })
                 alert(rslt.msg, 5000)
             })
@@ -234,7 +234,7 @@ async function showActions(userData, activeUser) {
             langlist.push({ name: lng.name, value: lng.id })
         }
         container.appendChild(
-            createSelect(langlist, profileLang.actions.lang.sel + `: ${langlist.find(v => v.value == userData.data.usersettings.lang).name}`, async (sel) => {
+            createSelect(langlist, profileLang.actions.lang.sel + `: ${langlist.find(v => v.value == localStorage.getItem('lang')).name}`, async (sel) => {
                 await request('controlUserSettings', { type: 'update', update: { lang: sel } })
                 localStorage.setItem('lang', sel)
                 window.location.href = window.location.href
@@ -248,7 +248,7 @@ async function showActions(userData, activeUser) {
             themelist[i].name = profileLang.actions.theme.themes[themelist[i].value]
         }
         container.appendChild(
-            createSelect(themelist, profileLang.actions.theme.sel + `: ${profileLang.actions.theme.themes[userData.data.usersettings.theme]}`, async (sel) => {
+            createSelect(themelist, profileLang.actions.theme.sel + `: ${profileLang.actions.theme.themes[localStorage.getItem('theme')]}`, async (sel) => {
                 request('controlUserSettings', { type: 'update', update: { theme: sel } })
                 localStorage.setItem('theme', sel)
                 setTheme()
