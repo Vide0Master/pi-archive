@@ -1,4 +1,4 @@
-html{
+html {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -15,12 +15,24 @@ html{
     border-radius: 0.5em;
     padding: 1em;
 
+    .label-row {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 1em;
+        .label {
+            font-family: 'Times New Roman', Times, serif;
+            color: var(--font-color1);
+            font-size: 3cm;
+            text-align: center;
+        }
 
-    .label {
-        font-family: 'Times New Roman', Times, serif;
-        color: var(--font-color1);
-        font-size: 3cm;
-        text-align: center;
+        img{
+            height: 3cm;
+            filter: invert(1);
+        }
     }
 
     .description {
@@ -31,6 +43,7 @@ html{
         align-items: center;
         text-align: center;
         gap: 0.2em;
+
         div {
             width: fit-content;
         }

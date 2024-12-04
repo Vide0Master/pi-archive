@@ -36,7 +36,8 @@ function WSSend(type, data) {
     webSocket.send(JSON.stringify(request));
 }
 
-setHeaderButtrons()
+if (localStorage.getItem('userKey') || sessionStorage.getItem('userKey'))
+    setHeaderButtrons()
 
 //region head buttons
 async function setHeaderButtrons() {
@@ -502,9 +503,9 @@ async function getMessageCount() {
             if (count.unread > 0) {
                 counter.innerText = count.unread
                 counter.title = msgCountLang[1]
-                for(const user in count.unreadPerUser){
+                for (const user in count.unreadPerUser) {
                     const userName = await getUserName(user)
-                    counter.title+=`\n${userName}: ${count.unreadPerUser[user]}`
+                    counter.title += `\n${userName}: ${count.unreadPerUser[user]}`
                 }
             }
         } else {

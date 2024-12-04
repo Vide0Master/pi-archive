@@ -33,6 +33,7 @@ async function processPage(userData, isActiveUser) {
     }
     if (userData.data.favs.length > 0) getFavs(userData.data.favs, !isActiveUser)
     if (isActiveUser) addHiddenExperiments()
+    if (isActiveUser) showSessionControl()
 }
 
 //region welcome txt
@@ -367,5 +368,53 @@ function addHiddenExperiments() {
     if (expreimentsFuncs.length == 0) {
         const noexp = createDiv('', container)
         noexp.innerHTML = 'No experiments in test'
+    }
+}
+
+//region sessions
+
+async function showSessionControl() {
+    const sessionLang = Language.profile.sessions
+    const user_card_block = document.querySelector('.user-card')
+    const container = createDiv('list-container', user_card_block)
+    const label = createDiv('label', container)
+    label.innerHTML = sessionLang.label
+    const sessionRslt = await request('getUserSessionList')
+
+    const currentKey = localStorage.getItem('userKey') || sessionStorage.getItem('userKey')
+
+    for (const session of sessionRslt.sessions.sort((a, b) => b.tslac - a.tslac)) {
+        const sessionCard = createDiv('session-card', container)
+
+        if (session.key == currentKey) {
+            sessionCard.classList.add('current')
+            createDiv('current-session', sessionCard).innerHTML = sessionLang.current
+        }
+
+        if (session.type == 'TGBOT') {
+            sessionCard.classList.add('TG')
+        }
+
+        const sessionType = createDiv('session-type', sessionCard)
+        sessionType.innerHTML = sessionLang.type + ": " + session.type
+
+        const sessionDate = createDiv('last-activity', sessionCard)
+        sessionDate.innerHTML = sessionLang.lastActive + ': ' + parseTimestamp(session.tslac)
+
+        const actionBar = createDiv('action-bar', sessionCard)
+        const revokeBtn = createButton(sessionLang.revoke, actionBar)
+        revokeBtn.addEventListener('click', async () => {
+            const rslt = await request('sessionController', {
+                type: 'removeSession',
+                stype: session.type,
+                skey: session.key
+            })
+            if (rslt.rslt == 's') {
+                alert(`s/${sessionLang.revokeSucc}`, 3000)
+                sessionCard.remove()
+            } else {
+                alert(rslt.rslt + "/" + rslt.msg)
+            }
+        })
     }
 }

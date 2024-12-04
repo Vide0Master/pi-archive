@@ -10,20 +10,37 @@ function checkPass() {
     const passGood = password.value == confirmPassword.value
     if (!passGood) {
         confirmPassword.style.outline = '2px solid red'
-    }else{
+    } else {
         confirmPassword.removeAttribute('style')
     }
     return passGood
 }
 
-password.addEventListener('update', checkPass)
-confirmPassword.addEventListener('update', checkPass)
+async function loginCheck() {
+    const isLoginAvailable = await request('checkLoginAvailability', { login: login.value })
+    if (isLoginAvailable) {
+        login.style.outline = '2px solid green'
+    } else {
+        login.style.outline = '2px solid red'
+    }
+    return isLoginAvailable
+}
+
+password.addEventListener('change', checkPass)
+confirmPassword.addEventListener('change', checkPass)
+
+login.addEventListener('change', loginCheck)
 
 form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     if (!checkPass()) {
         alert("e/Passwords do not match!", 5000);
+        return;
+    }
+
+    if (!await loginCheck()) {
+        alert("e/Login is taken!", 5000);
         return;
     }
 
