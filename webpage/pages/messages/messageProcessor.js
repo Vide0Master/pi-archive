@@ -73,9 +73,9 @@ async function MessageProcessor() {
         }
         updateUnreadCounter(DM.unread || 0)
         WSListener('messageCountUpdate', '', (data) => {
-            if (!data.count.unreadPerUser[DM.login]){
+            if (!data.count.unreadPerUser[DM.login]) {
                 updateUnreadCounter(0)
-            }else{
+            } else {
                 updateUnreadCounter(data.count.unreadPerUser[DM.login])
             }
         })
@@ -95,6 +95,28 @@ async function MessageProcessor() {
 
             const text = createDiv('msg-text', msgCont)
             text.innerHTML = msgData.message
+
+            console.log(msgData.message)
+            const postMatches = Array.from(msgData.message.matchAll(/#(\d+)/g), match => match[1])
+            console.log(postMatches)
+            if (postMatches.length > 0) {
+                const postRow = createDiv('post-row', msgCont)
+
+                async function insertPosts(posts) {
+                    const post_list = await request('getPosts',
+                        {
+                            query: `id:${posts.join(',')}`,
+                            page: 1,
+                            postsCount: 9999,
+                            grpOverride: true
+                        })
+
+                    for (const postData of post_list) {
+                        postRow.appendChild(createPostCard(postData))
+                    }
+                }
+                insertPosts(postMatches)
+            }
 
             const dataRow = createDiv('data-row', msgCont)
 
