@@ -285,6 +285,14 @@ main {
                 }
             }
         }
+
+        .group-info {
+            background-color: var(--color1);
+            border: 0.1em solid var(--color3);
+            width: fit-content;
+            padding: 0.5em;
+            border-radius: 0.5em;
+        }
     }
 }
 
