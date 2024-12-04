@@ -164,7 +164,7 @@ main {
                     padding: 0.25em 0.5em;
                     display: flex;
                     flex-direction: column;
-                    gap: 0.2 em;
+                    gap: 0.2em;
                     color: #000;
 
                     &.out {
@@ -208,6 +208,13 @@ main {
                                 width: 0.6em;
                             }
                         }
+                    }
+
+                    .post-row{
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        gap: 0.5em;
                     }
                 }
             }
