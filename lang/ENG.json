@@ -86,8 +86,8 @@
             },
             "messages": {
                 "you": "You",
-                "chSel":"Select chat",
-                "enterMessage":"Enter message"
+                "chSel": "Select chat",
+                "enterMessage": "Enter message"
             },
             "collection": {
                 "postInfoLabel": "Collection info",
@@ -325,6 +325,14 @@
                 "favs": {
                     "label": "Favourites",
                     "ofUser": "of user"
+                },
+                "sessions": {
+                    "label": "Sessions",
+                    "current": "Current session",
+                    "type": "Type",
+                    "lastActive":"Last activity",
+                    "revoke":"Revoke",
+                    "revokeSucc":"Sesion revoked"
                 }
             },
             "upload": {

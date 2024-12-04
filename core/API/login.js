@@ -29,7 +29,7 @@ module.exports = (request) => {
         if (key_update.rslt == 'e') {
             resolve(key_update)
         } else {
-            resolve(new SysController.createResponse('s', 'Login successful'))
+            resolve(new SysController.createResponse('s', 'Login successful', { usersettings: userData.user.usersettings }))
         }
     })
 }

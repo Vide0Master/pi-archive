@@ -10,6 +10,7 @@ module.exports = (db, login) => {
                     resolve(new SysController.createResponse(
                         'e',
                         `No such user`,
+                        { user: null }
                     ))
                 } else {
                     row.favs = JSON.parse(row.favs)

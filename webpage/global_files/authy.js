@@ -22,7 +22,7 @@ class Authy {
     }
 
     static async pageAccesCheck() {
-        const rslt = await request('AuthyPageAccessCheck', { page: window.location.pathname.replace(/\//g, '')})
+        const rslt = await request('AuthyPageAccessCheck', { page: window.location.pathname.replace(/\//g, '') })
         if (rslt.rslt != 's') {
             await this.unlogin()
         }
@@ -49,6 +49,11 @@ class Authy {
     }
 
     static async unlogin() {
+        await request('sessionController', {
+            type: 'removeSession',
+            stype: "WEB",
+            skey: sessionStorage.getItem('userKey')
+        })
         sessionStorage.removeItem('userKey')
         localStorage.removeItem('userKey')
         window.location.href = '/'
