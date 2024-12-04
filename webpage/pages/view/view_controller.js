@@ -107,10 +107,10 @@ async function displayPostData(post_data) {
                 if (!line_val) {
                     desc.remove()
                 } else {
-                    const descLabel = createDiv('desc-label',desc)
-                    descLabel.innerHTML=viewLang.postData.descLabel
-                    createDiv('desc-splitter',desc)
-                    const descText = createDiv('desc-text',desc)
+                    const descLabel = createDiv('desc-label', desc)
+                    descLabel.innerHTML = viewLang.postData.descLabel
+                    createDiv('desc-splitter', desc)
+                    const descText = createDiv('desc-text', desc)
                     descText.innerText = line_val;
                 }
                 elm.remove()
@@ -238,9 +238,9 @@ async function handleAdminActions() {
                                         type: 'deleteGroup',
                                         groupID: post_data.postGroupData.id
                                     })
-                                    
+
                                     if (deleteResult.rslt == 'e') alert(`${deleteResult.rslt}/${deleteResult.msg}`)
-    
+
                                     if (deleteResult.rslt == 's') {
                                         container.remove()
                                         alert(`s/${viewLang.actions.editGroup.delete.pstss}`)
@@ -478,6 +478,12 @@ async function initialize() {
         await handleAdminActions();
 
         process_LDF()
+        if (post_data.postGroupData) {
+            processGroupData(post_data.postGroupData)
+        }else{
+            document.querySelector('.group-info').remove()
+        }
+        console.log(post_data)
         createComments()
         fetchAndDisplayFile(file_link, contentType)
         if (contentType == 'image') addOpenFullScreenView(file_link)
@@ -848,3 +854,8 @@ function passSearchTagsToSearchField() {
 }
 
 passSearchTagsToSearchField()
+
+function processGroupData(postGroup) {
+    const container = document.querySelector('.group-info')
+    container.appendChild(createGroup(postGroup))
+}
