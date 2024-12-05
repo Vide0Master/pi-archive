@@ -95,7 +95,7 @@ module.exports = async (bot, chatId, msgId, userdata, ...args) => {
             .map((v, i) => (i % 3 == 0 ? `\n║   ${v}` : v))
             .join(', '))
 
-        postCapLines.push(`${lpack.post.postData.uploadedBy[0]} <b><a href="http://vmtech.hopto.org:2000/profile/?user=${postData.post.author}">${postData.post.author}</a></b> ${lpack.post.postData.uploadedBy[1]} ${postData.post.file.split('-')[0]} ${sysController.parseTimestamp(postData.post.timestamp)}`)
+        postCapLines.push(`${lpack.post.postData.uploadedBy[0]} <b><a href="http://vmtech.hopto.org:2000/profile/?user=${postData.post.author}">${postData.post.author}</a></b>\n║   ${lpack.post.postData.uploadedBy[1]} ${postData.post.file.split('-')[0]} ${sysController.parseTimestamp(postData.post.timestamp)}`)
         postCapLines.push(`${lpack.post.postData.size}: ${postData.post.size.x}x${postData.post.size.y} (${formatFileSize(postData.post.size.weight)})`)
         postCapLines.push(`${lpack.post.postData.fileFormat}: ${postData.post.file.split('.').pop().toUpperCase()}`)
 
@@ -116,11 +116,11 @@ module.exports = async (bot, chatId, msgId, userdata, ...args) => {
 
         while (postCapLines.length > 0) {
             if (caption == '') {
-                caption += '╔═  ' + postCapLines.shift() + '\n║\n'
+                caption += '╔═ ' + postCapLines.shift() + '\n'
             } else if (postCapLines.length == 1) {
-                caption += '╚═  ' + postCapLines.shift()
+                caption += '╚═ ' + postCapLines.shift()
             } else {
-                caption += '╠═  ' + postCapLines.shift() + '\n║\n'
+                caption += '╠═ ' + postCapLines.shift() + '\n'
             }
         }
 
