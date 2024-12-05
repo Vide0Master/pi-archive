@@ -489,6 +489,7 @@
                 "postLimit": "Maximum 10 posts allowed",
                 "noPostRequested": "Post not specified\n\nAvailable options:\n/post id\n/post id,id,id\n/post id-id",
                 "fileSizeLimit": "Upload canceled:\nFile size ecxeeded 50Mb",
+                "webResponse": "Post sent to DM",
                 "postMissing": [
                     "Post",
                     "missing"
@@ -504,8 +505,7 @@
                     ],
                     "size": "Size",
                     "fileFormat": "File format",
-                    "sizeOverflow": "File size exceeded 10Mb\nUpload made as file",
-                    "webResponse": "Post sent to DM"
+                    "sizeOverflow": "File size exceeded 10Mb\nUpload made as file"
                 }
             },
             "login": {
