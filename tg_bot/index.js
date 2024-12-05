@@ -21,44 +21,44 @@ bot.on('message', async (msg) => {
 
     if (msg.photo || msg.video || msg.document) {
         if (!userData.user) {
-            tgBotController.sendMessage(chatId, `You need to /login first`,)
+            tgBotController.sendMessage(chatId, lpack.noLogin)
             return
         }
 
         let fileId;
         if (msg.photo) {
             if (msg.photo[msg.photo.length - 1].file_size > 20971520) {
-                await tgBotController.sendMessage(chatId, 'Photo is too large! 20Mb max', msg.message_id);
+                await tgBotController.sendMessage(chatId, lpack.uploadErr.img, msg.message_id);
                 return
             }
             fileId = msg.photo[msg.photo.length - 1].file_id;
         } else if (msg.video) {
             if (msg.video.file_size > 20971520) {
-                await tgBotController.sendMessage(chatId, 'Video is too large! 20Mb max', msg.message_id);
+                await tgBotController.sendMessage(chatId, lpack.uploadErr.vid, msg.message_id);
                 return
             }
             fileId = msg.video.file_id;
         } else if (msg.document && msg.document.mime_type.startsWith('image/')) {
             if (msg.document.file_size > 20971520) {
-                await tgBotController.sendMessage(chatId, 'Photo is too large! 20Mb max', msg.message_id);
+                await tgBotController.sendMessage(chatId, lpack.uploadErr.img, msg.message_id);
                 return
             }
             fileId = msg.document.file_id;
         } else if (msg.document && msg.document.mime_type.startsWith('video')) {
             if (msg.document.file_size > 20971520) {
-                await tgBotController.sendMessage(chatId, 'Video is too large! 20Mb max', msg.message_id);
+                await tgBotController.sendMessage(chatId, lpack.uploadErr.vid, msg.message_id);
                 return
             }
             fileId = msg.document.file_id;
         } else {
-            await tgBotController.sendMessage(chatId, result.msg, msg.message_id, 'This file format is unsupported.');
+            await tgBotController.sendMessage(chatId, result.msg, msg.message_id, lpack.uploadErr.noSupp);
             return
         }
         const filePath = await tgBotController.useUtil('downloadFile', fileId)
         const result = await sysController.fileProcessor(filePath, { type: 'TGBOT', key: chatId });
         const options =
             new tgBotController.inlineConstr([
-                { text: 'Add post tags', data: `addTags:${result.postID}` }
+                { text: lpack.msgButtons.addPostTags, data: `addTags:${result.postID}` }
             ])
         tgBotController.sendMessage(chatId, result.msg, msg.message_id, options);
         return
@@ -66,15 +66,15 @@ bot.on('message', async (msg) => {
 
     if (tgBotController.followups[chatId]) {
         if (!userData.user) {
-            tgBotController.sendMessage(chatId, `You need to /login first`,)
+            tgBotController.sendMessage(chatId, lpack.noLogin)
             return
         }
 
         tgBotController.executeFollowup(
             tgBotController.followups[chatId].type,
             chatId,
-            userData.user,
             msg.message_id,
+            userData.user,
             tgBotController.followups[chatId].data,
             msg.text
         )
@@ -84,11 +84,11 @@ bot.on('message', async (msg) => {
     if (msg.text) {
         const { command, args } = parseCommand(msg.text);
         if (sysController.config.static.restrictions.tgbotfunctions[command] > 0 && !userData.user) {
-            tgBotController.sendMessage(chatId, 'You need to /login to use this command', msg.message_id);
+            tgBotController.sendMessage(chatId, lpack.noLogin, msg.message_id);
             return
         }
         if (sysController.config.static.restrictions.tgbotfunctions[command] > sysController.config.static.user_status[(userData.user || { status: 'unconfirmed' }).status]) {
-            tgBotController.sendMessage(chatId, 'You don\'t have permission to use this command', msg.message_id);
+            tgBotController.sendMessage(chatId, lpack.noPerm, msg.message_id);
             return
         }
 
