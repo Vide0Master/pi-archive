@@ -89,7 +89,11 @@ module.exports = async (bot, chatId, msgId, userdata, ...args) => {
         const postCapLines = []
 
         postCapLines.push(`<b><i>${lpack.post.postData.post} ${postData.post.id}</i></b>`)
-        if (postData.post.description) postCapLines.push(`┣${lpack.post.postData.desc} ${postData.post.description}`)
+        if (postData.post.description) postCapLines.push(`${lpack.post.postData.desc}:` + postData.post.description
+            .split(' ')
+            .map((v, i) => (i % 4 == 0 ? `\n║   ${v}` : v))
+            .join(' ')
+        )
         postCapLines.push(`${lpack.post.postData.tags}: ` + postData.post.tags
             .map(v => '<b>#' + v + '</b>')
             .map((v, i) => (i % 3 == 0 ? `\n║   ${v}` : v))
