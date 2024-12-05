@@ -489,6 +489,7 @@
                 "postLimit": "Максимум 10 постів",
                 "noPostRequested": "Пост не вказано\nДоступны опції:\n/post id\n/post id,id,id\n/post id-id",
                 "fileSizeLimit": "Завантаження відмінено:\nРозмір файлу перевищує 50Mb",
+                "webResponse": "Пост відправлено у ПП",
                 "postMissing": [
                     "Пост",
                     "відстуній"
@@ -503,7 +504,6 @@
                     "size": "Розмір",
                     "fileFormat": "Формат файлу",
                     "sizeOverflow": "Розмір файлу перевищує 10Mb\nПост завантажено як файл",
-                    "webResponse": "Пост відправлено у ПП",
                     "desc": "Опис"
                 }
             },
