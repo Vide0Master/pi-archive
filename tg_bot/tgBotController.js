@@ -93,7 +93,7 @@ module.exports = class tgBotController {
                 }
 
                 const [action, ...args] = data.split(':');
-                await this.executeCommand(action, message.chat.id, userData.user, message.message_id, ...args);
+                await this.executeCommand(action, message.chat.id, message.message_id, userData.user, ...args);
             } catch (err) {
                 this.sendMessage(message.chat.id, 'Error processing callback: ' + err)
             }

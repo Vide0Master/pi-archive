@@ -330,9 +330,9 @@
                     "label": "Sessions",
                     "current": "Current session",
                     "type": "Type",
-                    "lastActive":"Last activity",
-                    "revoke":"Revoke",
-                    "revokeSucc":"Sesion revoked"
+                    "lastActive": "Last activity",
+                    "revoke": "Revoke",
+                    "revokeSucc": "Sesion revoked"
                 }
             },
             "upload": {
@@ -472,8 +472,59 @@
             ]
         },
         "TGBOT": {
+            "noLogin": "You need to /login first for this action",
+            "noPerm": "You don't have permission to use this command",
+            "uploadErr": {
+                "img": "Image is too large! 20Mb max",
+                "vid": "Video is too large! 20Mb max",
+                "noSupp": "File format unsupported"
+            },
+            "msgButtons": {
+                "addPostTags": "Add post tags"
+            },
             "files": {
                 "noLogin": "You are not logged in to upload files.\nPlease login first."
+            },
+            "post": {
+                "postLimit": "Maximum 10 posts allowed",
+                "noPostRequested": "Post not specified\n\nAvailable options:\n/post id\n/post id,id,id\n/post id-id",
+                "fileSizeLimit": "Upload canceled:\nFile size ecxeeded 50Mb",
+                "postMissing": [
+                    "Post",
+                    "missing"
+                ],
+                "postData": {
+                    "post": "Post",
+                    "desc": "Description",
+                    "tags": "Tags",
+                    "uploadedBy": [
+                        "Uploaded by",
+                        "via",
+                        "on "
+                    ],
+                    "size": "Size",
+                    "fileFormat": "File format",
+                    "sizeOverflow": "File size exceeded 10Mb\nUpload made as file",
+                    "webResponse": "Post sent to DM"
+                }
+            },
+            "login": {
+                "crLogged": "You are already logged in",
+                "succ":"Logged in!"
+            },
+            "unlogin": {
+                "noLog": "You are not logged in",
+                "succ":"Deauthed!"
+            },
+            "addTags": {
+                "err": "Error",
+                "noPost": "No such post",
+                "editRestr": "You cant edit this post tags",
+                "writeTags": "Write tags that you want to add separated by spaces",
+                "tagsAdded": [
+                    "Tags added for post",
+                    "Full list"
+                ]
             }
         }
     }

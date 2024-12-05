@@ -483,7 +483,6 @@ async function initialize() {
         }else{
             document.querySelector('.group-info').remove()
         }
-        console.log(post_data)
         createComments()
         fetchAndDisplayFile(file_link, contentType)
         if (contentType == 'image') addOpenFullScreenView(file_link)

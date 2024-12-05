@@ -96,9 +96,7 @@ async function MessageProcessor() {
             const text = createDiv('msg-text', msgCont)
             text.innerHTML = msgData.message
 
-            console.log(msgData.message)
             const postMatches = Array.from(msgData.message.matchAll(/#(\d+)/g), match => match[1])
-            console.log(postMatches)
             if (postMatches.length > 0) {
                 const postRow = createDiv('post-row', msgCont)
 

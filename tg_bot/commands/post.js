@@ -14,7 +14,7 @@ const getFileType = (filename) => {
 };
 
 function formatFileSize(bytes) {
-    if (bytes === 0) return '0 Б';
+    if (bytes === 0) return '0 B';
     const k = 1024;
     const sizes = ['B', 'Kb', 'Mb', 'Gb'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
@@ -23,6 +23,7 @@ function formatFileSize(bytes) {
 }
 
 module.exports = async (bot, chatId, msgId, userdata, ...args) => {
+    const lpack = tgBotController.getUserLang(userdata)
     const postIdArg = args[0];
     const isDoc = args[1] === 'file';
 
@@ -38,7 +39,7 @@ module.exports = async (bot, chatId, msgId, userdata, ...args) => {
             }
 
             if (postIds.length > 10) {
-                tgBotController.sendMessage(chatId, 'No more that 10 posts allowed', msgId);
+                tgBotController.sendMessage(chatId, lpack.post.postLimit, msgId);
                 return []
             }
 
@@ -47,7 +48,7 @@ module.exports = async (bot, chatId, msgId, userdata, ...args) => {
         if (arg.includes(',')) {
             const postIds = arg.split(',').map(Number);
             if (postIds.length > 10) {
-                tgBotController.sendMessage(chatId, 'No more that 10 posts allowed', msgId);
+                tgBotController.sendMessage(chatId, lpack.post.postLimit, msgId);
                 return []
             }
             return postIds;
@@ -55,14 +56,14 @@ module.exports = async (bot, chatId, msgId, userdata, ...args) => {
 
         const singlePostId = [Number(arg)];
         if (singlePostId.length > 10) {
-            tgBotController.sendMessage(chatId, 'No more that 10 posts allowed', msgId);
+            tgBotController.sendMessage(chatId, lpack.post.postLimit, msgId);
             return []
         }
         return singlePostId;
     };
 
     if (!postIdArg) {
-        tgBotController.sendMessage(chatId, 'No post specified', msgId)
+        tgBotController.sendMessage(chatId, lpack.post.noPostRequested, msgId)
         return
     }
     const postIds = parsePostIds(postIdArg);
@@ -76,7 +77,7 @@ module.exports = async (bot, chatId, msgId, userdata, ...args) => {
         }
 
         if (postData.rslt == 'w') {
-            await tgBotController.sendMessage(chatId, `Post ${postId} is not present`, msgId);
+            await tgBotController.sendMessage(chatId, `${lpack.post.postMissing[0]} ${postId} ${lpack.post.postMissing[1]}`, msgId);
             continue;
         }
 
@@ -86,32 +87,47 @@ module.exports = async (bot, chatId, msgId, userdata, ...args) => {
 
 
         const postCapLines = []
-        postCapLines.push(`<b><i>Post ${postData.post.id}</i></b>`)
-        if (postData.post.description) postCapLines.push(`Post ${postData.post.id}`)
-        postCapLines.push('Tags: ' + postData.post.tags.map(v => '<b>#' + v + '</b>').join(', '))
-        postCapLines.push(`Post uploaded by <b><a href="http://vmtech.hopto.org:2000/profile/?user=${postData.post.author}">${postData.post.author}</a></b> via ${postData.post.file.split('-')[0]} on ${sysController.parseTimestamp(postData.post.timestamp)}`)
-        postCapLines.push(`Size: ${postData.post.size.x}x${postData.post.size.y} (${formatFileSize(postData.post.size.weight)})`)
-        postCapLines.push(`File format: ${postData.post.file.split('.').pop().toUpperCase()}`)
+
+        postCapLines.push(`<b><i>${lpack.post.postData.post} ${postData.post.id}</i></b>`)
+        if (postData.post.description) postCapLines.push(`┣${lpack.post.postData.desc} ${postData.post.description}`)
+        postCapLines.push(`${lpack.post.postData.tags}: ` + postData.post.tags
+            .map(v => '<b>#' + v + '</b>')
+            .map((v, i) => (i % 3 == 0 ? `\n║   ${v}` : v))
+            .join(', '))
+
+        postCapLines.push(`${lpack.post.postData.uploadedBy[0]} <b><a href="http://vmtech.hopto.org:2000/profile/?user=${postData.post.author}">${postData.post.author}</a></b> ${lpack.post.postData.uploadedBy[1]} ${postData.post.file.split('-')[0]} ${sysController.parseTimestamp(postData.post.timestamp)}`)
+        postCapLines.push(`${lpack.post.postData.size}: ${postData.post.size.x}x${postData.post.size.y} (${formatFileSize(postData.post.size.weight)})`)
+        postCapLines.push(`${lpack.post.postData.fileFormat}: ${postData.post.file.split('.').pop().toUpperCase()}`)
 
         if (postData.post.size.weight > 10485760 && typeToSend != 'document') {
             typeToSend = 'document'
-            postCapLines.push(`<b><i>Upload made as file, file size exceeded 10Mb</i></b>`)
+            postCapLines.push(`<b><i>${lpack.post.postData.sizeOverflow}</i></b>`)
         }
 
         if (postData.post.size.weight > 52428800) {
-            await tgBotController.sendMessage(chatId, 'File size ecxeeded 50Mb, upload canceled', msgId);
+            await tgBotController.sendMessage(chatId, lpack.post.fileSizeLimit, msgId);
             return new sysController.createResponse(
                 'e',
-                'File size ecxeeded 50Mb, upload canceled'
+                lpack.post.fileSizeLimit
             )
         }
 
-        const caption = postCapLines.join('\n\n')
+        let caption = ''//postCapLines.join('\n\n')
+
+        while (postCapLines.length > 0) {
+            if (caption == '') {
+                caption += '╔═  ' + postCapLines.shift() + '\n║\n'
+            } else if (postCapLines.length == 1) {
+                caption += '╚═  ' + postCapLines.shift()
+            } else {
+                caption += '╠═  ' + postCapLines.shift() + '\n║\n'
+            }
+        }
 
         const postActions = []
 
         if (userdata.login == postData.post.author || sysController.config.static.user_status[userdata.status] > 1) {
-            postActions.push({ text: 'Add post tags', data: `addTags:${postId}` })
+            postActions.push({ text: lpack.msgButtons.addPostTags, data: `addTags:${postId}` })
         }
 
         const buttons = new tgBotController.inlineConstr(postActions)
@@ -127,6 +143,6 @@ module.exports = async (bot, chatId, msgId, userdata, ...args) => {
 
     return new sysController.createResponse(
         's',
-        'Post sent'
+        lpack.post.webResponse
     )
 };
