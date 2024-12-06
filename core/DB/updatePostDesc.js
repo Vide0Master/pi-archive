@@ -7,10 +7,10 @@ module.exports = (db, postID, desc) => {
             (err) => {
                 resolve(new sysController.createResponse(
                     's',
-                    `Описание обновлено`,
+                    `Updated description`,
                     {},
                     err,
-                    `Ошибка обновления описания`
+                    `Error updating description`
                 ))
             })
     })

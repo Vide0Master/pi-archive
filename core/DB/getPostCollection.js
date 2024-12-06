@@ -9,10 +9,10 @@ module.exports = (db, postID) => {
 
                 resolve(new sysController.createResponse(
                     's',
-                    `Получена информация о группе поста [${postID}]`,
+                    `Got group of post [${postID}]`,
                     { data },
                     err,
-                    `Ошибка получения группы поста [${postID}]`
+                    `Error getting group of post [${postID}]`
                 ))
             })
     })

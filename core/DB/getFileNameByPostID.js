@@ -6,11 +6,11 @@ module.exports = (db, postID) => {
             [postID],
             (err, row) => {
                 if (err) {
-                    resolve({ rslt: 'e', msg: `Внутренняя ошибка: ` + err, code: 500 })
+                    resolve({ rslt: 'e', msg: `Internal error: ` + err, code: 500 })
                     consoleLogger(`e/${err}`)
                 } else {
                     if (!row) {
-                        resolve({ rslt: 'e', msg: 'Такой записи нету', code: 400 })
+                        resolve({ rslt: 'e', msg: 'No record', code: 400 })
                     } else {
                         resolve(row.file)
                     }

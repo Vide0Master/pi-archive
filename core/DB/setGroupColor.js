@@ -10,7 +10,7 @@ module.exports = (db, groupID, color) => {
                     'Changed group color',
                     {},
                     err,
-                    '{{S_DB_SGT_e}}'
+                    'Error changing group color'
                 ))
             })
     })
