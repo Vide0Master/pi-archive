@@ -5,10 +5,10 @@ module.exports = (db) => {
 
         resolve(new sysController.createResponse(
             's',
-            `Успешно`,
+            `Success`,
             {},
             err,
-            `Ошибка`
+            `Error`
         ))
     })
 }

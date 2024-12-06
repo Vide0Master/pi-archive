@@ -1,6 +1,3 @@
-
-//создание пользователя
-
 const syscontroller = require('../systemController.js')
 
 module.exports = (db, userData) => {
@@ -11,10 +8,10 @@ module.exports = (db, userData) => {
             (err) => {
                 resolve(new syscontroller.createResponse(
                     's',
-                    `Cоздан пользователь [${userData.login}]`,
+                    `User [${userData.login}] created`,
                     {},
                     err,
-                    `Ошибка создания пользователя [${userData.login}]`
+                    `Error creating user [${userData.login}]`
                 ))
             })
     })

@@ -41,7 +41,8 @@ module.exports = (db, messageData) => {
                             `Error getting message id [${msgDataToDB.from}>${msgDataToDB.to}]`
                         ))
                     })
-                })
+                }
+            )
         })
 
         resolve(rslt)

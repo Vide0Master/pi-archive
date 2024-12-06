@@ -10,7 +10,7 @@ module.exports = (db, groupID, newType) => {
                     'Changed group type',
                     {},
                     err,
-                    '{{S_DB_SGT_e}}'
+                    'Error changing group type'
                 ))
             })
     })
