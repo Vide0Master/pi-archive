@@ -480,7 +480,8 @@
                 "noSupp": "File format unsupported"
             },
             "msgButtons": {
-                "addPostTags": "Add post tags"
+                "addPostTags": "Add post tags",
+                "setPostDesc": "Set post description"
             },
             "files": {
                 "noLogin": "You are not logged in to upload files.\nPlease login first."
@@ -510,11 +511,11 @@
             },
             "login": {
                 "crLogged": "You are already logged in",
-                "succ":"Logged in!"
+                "succ": "Logged in!"
             },
             "unlogin": {
                 "noLog": "You are not logged in",
-                "succ":"Deauthed!"
+                "succ": "Deauthed!"
             },
             "addTags": {
                 "err": "Error",
@@ -525,6 +526,13 @@
                     "Tags added for post",
                     "Full list"
                 ]
+            },
+            "setDesc": {
+                "err": "Error",
+                "noPost": "No such post",
+                "editRestr": "You cant edit this post description",
+                "writeTags": "Write description",
+                "descAdded": "Description set for post"
             }
         }
     }
