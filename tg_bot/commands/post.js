@@ -80,7 +80,7 @@ module.exports = async (bot, chatId, msgId, userdata, ...args) => {
             await tgBotController.sendMessage(chatId, `${lpack.post.postMissing[0]} ${postId} ${lpack.post.postMissing[1]}`, msgId);
             continue;
         }
-
+        console.log(postData)
         const filePath = path.join(__dirname, `../../storage/file_storage/${postData.post.file}`);
         const fileType = getFileType(postData.post.file);
         let typeToSend = isDoc ? 'document' : fileType;
@@ -132,6 +132,7 @@ module.exports = async (bot, chatId, msgId, userdata, ...args) => {
 
         if (userdata.login == postData.post.author || sysController.config.static.user_status[userdata.status] > 1) {
             postActions.push({ text: lpack.msgButtons.addPostTags, data: `addTags:${postId}` })
+            postActions.push({ text: lpack.msgButtons.setPostDesc, data: `setDesc:${postId}` })
         }
 
         const buttons = new tgBotController.inlineConstr(postActions)

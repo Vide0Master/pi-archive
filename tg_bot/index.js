@@ -58,7 +58,8 @@ bot.on('message', async (msg) => {
         const result = await sysController.fileProcessor(filePath, { type: 'TGBOT', key: chatId });
         const options =
             new tgBotController.inlineConstr([
-                { text: lpack.msgButtons.addPostTags, data: `addTags:${result.postID}` }
+                { text: lpack.msgButtons.addPostTags, data: `addTags:${result.postID}` },
+                { text: lpack.msgButtons.setPostDesc, data: `setDesc:${result.postID}` },
             ])
         tgBotController.sendMessage(chatId, result.msg, msg.message_id, options);
         return
