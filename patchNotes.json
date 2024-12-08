@@ -1,0 +1,59 @@
+[
+    {
+        "versions": {
+            "Server": "b0.1.9",
+            "DB": "",
+            "Webpage": "b0.2.6",
+            "TGbot": "b0.2.4"
+        },
+        "date":"09.12.2024",
+        "updates": [
+            {
+                "text": "Created patch-notes to unerstand what was changed",
+                "tag": "new",
+                "services":[
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Patch notes backend functionality",
+                "tag": "new",
+                "services":[
+                    "Server"
+                ]
+            },
+            {
+                "text": "Button to send <a href=\"/messages\" title=\"Go to messages page\">messages</a>",
+                "tag": "new",
+                "services":[
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Message sync between multiple clients of one user",
+                "tag": "fix",
+                "services":[
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Version list and status button (will be back in future updates)",
+                "tag": "removed",
+                "services":[
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Button for messages which gives ability to set post description",
+                "tag": "new",
+                "users": [
+                    "user",
+                    "admin"
+                ],
+                "services":[
+                    "TGbot"
+                ]
+            }
+        ]
+    }
+]

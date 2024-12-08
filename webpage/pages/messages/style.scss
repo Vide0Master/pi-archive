@@ -210,7 +210,7 @@ main {
                         }
                     }
 
-                    .post-row{
+                    .post-row {
                         display: flex;
                         flex-direction: row;
                         align-items: center;
@@ -221,6 +221,12 @@ main {
         }
 
         .writer-line {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5em;
+
             textarea {
                 width: 100%;
                 box-sizing: border-box;

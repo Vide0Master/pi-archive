@@ -31,6 +31,19 @@ async function MessageProcessor() {
         }
     })
 
+    const sendBtn = createButton(Language.messages.sendBtn, writerLine)
+    sendBtn.addEventListener('click', () => {
+        if (activeDM == '') {
+            alert('w/' + Language.messages.chSel, 3000)
+            return
+        }
+        WSSend('sendDMMessage', {
+            message: formatUserText(textInput.value),
+            to: activeDM
+        })
+        textInput.value = ''
+    })
+
     const DMs = await request('controlUserDM', { type: 'getUserDMs' })
     for (const DM of DMs) {
         const userData = await request('getUserProfileData', { userKey: localStorage.getItem('userKey') || sessionStorage.getItem('userKey'), login: DM.login })
