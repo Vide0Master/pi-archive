@@ -1,0 +1,20 @@
+{
+    "Server": {},
+    "DB": {},
+    "Webpage": {},
+    "TGbot": [
+        {
+            "version": "b0.2.3",
+            "updates": [
+                {
+                    "text": "Added button to post cards to set post description",
+                    "tag": "new",
+                    "for": [
+                        "user",
+                        "admin"
+                    ]
+                }
+            ]
+        }
+    ]
+}

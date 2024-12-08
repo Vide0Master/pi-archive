@@ -586,6 +586,50 @@ img {
     }
 }
 
+.patchNotesContainer {
+    background-color: #fff;
+    color: #000;
+    border-radius: 1em;
+    padding: 1em;
+    overflow: hidden;
+
+    min-width: 30%;
+    min-height: 30%;
+
+    position: relative;
+
+    .component-container {
+        .label{
+            font-size: 1.25em;
+        }
+    }
+
+    .closeCont {
+        height: 1em;
+        width: 1em;
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 0.25em;
+        border-bottom-left-radius: 0.25em;
+        transition: 0.2s;
+        cursor: pointer;
+
+        img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        &:hover {
+            background-color: #000;
+
+            img {
+                filter: invert(1);
+            }
+        }
+    }
+}
+
 .sortable-container {
     background: var(--color2);
     padding: 20px;

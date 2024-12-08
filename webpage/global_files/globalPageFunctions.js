@@ -391,6 +391,28 @@ function setFooterText() {
         window.open('https://t.me/pi_archive_bot', '_blank').focus();
     }).title = footerLang.tgbot[1]
 
+    createAction(footerLang.pathNotes, actions, async () => {
+        const overlay = createBlurOverlay()
+        overlay.addEventListener('click', (e) => {
+            if (e.target == overlay) overlay.remove()
+        })
+
+        const pInfo = await request('getPatchNotes')
+        console.log(pInfo)
+
+        const vcont = createDiv('patchNotesContainer', overlay)
+        const closeCont = createDiv('closeCont', vcont)
+        const xSymb = document.createElement('img')
+        closeCont.appendChild(xSymb)
+        xSymb.src = 'x-mark.svg'
+
+        for (const compName in pInfo) {
+            const compCont = createDiv('component-container', vcont)
+
+            const compLabel = createDiv('label', compCont)
+            compLabel.innerHTML = compName
+        }
+    })
     //createIndicator('g', sysLabel)
 
     const sysHealthInfoContainer = createDiv('sys-health-container', footer)

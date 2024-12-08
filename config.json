@@ -5,7 +5,7 @@
         "Server": "b0.1.8",
         "DB": "b1.1",
         "Webpage": "b0.2.5",
-        "TGbot": "PRE-b0.2.2"
+        "TGbot": "b0.2.3"
     },
     "user_status": {
         "unconfirmed": 0,
@@ -22,6 +22,7 @@
             "checkLoginAvailability": 0,
             "sessionController": 0,
             "getLangsList": 0,
+            "getPatchNotes": 1,
             "getVersionInfo": 1,
             "getWelcomeText": 1,
             "getUserProfileData": 1,

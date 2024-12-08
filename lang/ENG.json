@@ -41,6 +41,7 @@
                     "Telegram bot",
                     "More access to Archive with bot, sending and loading more content through it"
                 ],
+                "pathNotes":"Patch notes",
                 "status": {
                     "label": "Archive status",
                     "vLabel": "Versions",
