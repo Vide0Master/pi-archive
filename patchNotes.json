@@ -1,7 +1,7 @@
 [
     {
         "versions": {
-            "Server": "",
+            "Server": "b0.1.9",
             "DB": "",
             "Webpage": "b0.2.6",
             "TGbot": "b0.2.4"
@@ -9,21 +9,17 @@
         "date":"09.12.2024",
         "updates": [
             {
-                "text": "Button for messages which gives ability to set post description",
-                "tag": "new",
-                "users": [
-                    "user",
-                    "admin"
-                ],
-                "services":[
-                    "TGbot"
-                ]
-            },
-            {
                 "text": "Created patch-notes to unerstand what was changed",
                 "tag": "new",
                 "services":[
                     "Webpage"
+                ]
+            },
+            {
+                "text": "Patch notes backend functionality",
+                "tag": "new",
+                "services":[
+                    "Server"
                 ]
             },
             {
@@ -45,6 +41,17 @@
                 "tag": "removed",
                 "services":[
                     "Webpage"
+                ]
+            },
+            {
+                "text": "Button for messages which gives ability to set post description",
+                "tag": "new",
+                "users": [
+                    "user",
+                    "admin"
+                ],
+                "services":[
+                    "TGbot"
                 ]
             }
         ]
