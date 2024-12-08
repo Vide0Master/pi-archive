@@ -396,49 +396,113 @@ function setFooterText() {
         overlay.addEventListener('click', (e) => {
             if (e.target == overlay) overlay.remove()
         })
-
+        const versInfo = await request('getVersionInfo')
         const pInfo = await request('getPatchNotes')
-        console.log(pInfo)
 
         const vcont = createDiv('patchNotesContainer', overlay)
         const closeCont = createDiv('closeCont', vcont)
         const xSymb = document.createElement('img')
         closeCont.appendChild(xSymb)
         xSymb.src = 'x-mark.svg'
+        closeCont.addEventListener('click', (e) => {
+            overlay.remove()
+        })
 
-        for (const compName in pInfo) {
-            const compCont = createDiv('component-container', vcont)
+        const labelList = createDiv('label-list', vcont)
+        for (const compName in versInfo) {
+            const compLabel = createDiv('v-label', labelList)
+            compLabel.innerHTML = compName + ' ' + versInfo[compName]
+            compLabel.classList.add(compName)
+        }
 
-            const compLabel = createDiv('label', compCont)
-            compLabel.innerHTML = compName
+        console.log(pInfo)
+
+        const updateList = createDiv('update-list', vcont)
+        for (const update of pInfo) {
+            const updateContainer = createDiv('update-container', updateList)
+
+            const versionsRow = createDiv('version-row', updateContainer)
+            
+            const updDate = createDiv('update-date', versionsRow)
+            updDate.innerHTML=update.date
+
+            for (const versionLabel in update.versions) {
+                if (update.versions[versionLabel] != '') {
+                    const versionContainer = createDiv('version-container', versionsRow)
+                    if (update.versions[versionLabel] == versInfo[versionLabel]) {
+                        const currentLabel = createDiv('current-label', versionContainer)
+                        currentLabel.innerHTML = 'CURRENT'
+                    }
+                    const verValue = createDiv('v-label', versionContainer)
+                    verValue.innerHTML = update.versions[versionLabel]
+                    verValue.classList.add(versionLabel)
+                }
+            }
+
+
+            
+            const updatesCol = createDiv('updates-list', updateContainer)
+            for (const upd of update.updates) {
+                const lineContainer = createDiv('line-cont', updatesCol)
+
+                const label = createDiv('line-label', lineContainer)
+
+                const tagLine = createDiv('tag-line', label)
+                if (upd.services && upd.services.length > 0) {
+                    for (const service of upd.services) {
+                        const servLabel = createDiv('v-label', tagLine)
+                        servLabel.innerHTML = service
+                        servLabel.classList.add(service)
+                    }
+                }
+
+                if (upd.tag) {
+                    const tag = createDiv('line-tag', tagLine)
+                    tag.innerHTML = upd.tag.toUpperCase()
+                    tag.classList.add(upd.tag)
+                }
+
+                label.innerHTML += upd.text
+
+
+                if (upd.users && upd.users.length > 0) {
+                    const appliesToCont = createDiv('applies-to-cont', lineContainer)
+                    createDiv('intro', appliesToCont).innerHTML = 'For:'
+
+                    for (const lvl of upd.users) {
+                        createDiv(lvl, appliesToCont).innerHTML = capitalizeFirstLetter(lvl)
+                    }
+                }
+            }
         }
     })
+
     //createIndicator('g', sysLabel)
 
-    const sysHealthInfoContainer = createDiv('sys-health-container', footer)
+    // const sysHealthInfoContainer = createDiv('sys-health-container', footer)
 
-    const sysHealthSizer = createDiv('sys-health-sizer', sysHealthInfoContainer)
-    const sysLabelSizer = createDiv('', sysHealthSizer)
-    sysLabelSizer.innerHTML = footerLang.status.label
+    // const sysHealthSizer = createDiv('sys-health-sizer', sysHealthInfoContainer)
+    // const sysLabelSizer = createDiv('', sysHealthSizer)
+    // sysLabelSizer.innerHTML = footerLang.status.label
 
-    const sysHealth = createDiv('sys-healt-info', sysHealthInfoContainer)
-    const sysLabel = createDiv('', sysHealth)
-    sysLabel.innerHTML = footerLang.status.label
+    // const sysHealth = createDiv('sys-healt-info', sysHealthInfoContainer)
+    // const sysLabel = createDiv('', sysHealth)
+    // sysLabel.innerHTML = footerLang.status.label
 
-    const elementCont = createDiv('elements-container', sysHealth)
+    // const elementCont = createDiv('elements-container', sysHealth)
 
-    const versions = createDiv('version-list', elementCont)
-    const verLabel = createDiv('vlabel', versions)
-    verLabel.innerHTML = footerLang.status.vLabel
+    // const versions = createDiv('version-list', elementCont)
+    // const verLabel = createDiv('vlabel', versions)
+    // verLabel.innerHTML = footerLang.status.vLabel
 
-    async function getVers() {
-        const versInfo = await request('getVersionInfo')
-        for (const ver in versInfo) {
-            const verBlock = createDiv('', versions)
-            verBlock.innerHTML = `${ver}: ${versInfo[ver]}`
-        }
-    }
-    getVers()
+    // async function getVers() {
+    //     const versInfo = await request('getVersionInfo')
+    //     for (const ver in versInfo) {
+    //         const verBlock = createDiv('', versions)
+    //         verBlock.innerHTML = `${ver}: ${versInfo[ver]}`
+    //     }
+    // }
+    // getVers()
 
     // const systemRepots = createDiv('sysRepCont', elementCont)
     // const sysRepLabel = createDiv('label',systemRepots)
@@ -567,10 +631,6 @@ function parseUserLogin(login, elem, showCircle = true) {
 
         userNameBlock.innerHTML = user.data.username
 
-        function capitalizeFirstLetter(string) {
-            return string.charAt(0).toUpperCase() + string.slice(1);
-        }
-
         userDiv.title = capitalizeFirstLetter(Language.user_status_translation[user.data.status])
         elem.appendChild(userDiv)
 
@@ -584,6 +644,11 @@ function parseUserLogin(login, elem, showCircle = true) {
             WSSend('getUserActivity', { user: user.data.login })
         }
     })()
+}
+
+//region capitalaze
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 //region create group

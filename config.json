@@ -4,8 +4,8 @@
     "vesion": {
         "Server": "b0.1.8",
         "DB": "b1.1",
-        "Webpage": "b0.2.5",
-        "TGbot": "b0.2.3"
+        "Webpage": "b0.2.6",
+        "TGbot": "b0.2.4"
     },
     "user_status": {
         "unconfirmed": 0,

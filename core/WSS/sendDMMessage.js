@@ -9,13 +9,11 @@ module.exports = async (activeClients, userWS, userData, requestData) => {
         msgtype: "DM"
     })
     if (sendrslt.rslt != 'e') {
-        userWS.send(JSON.stringify(
-            {
-                type: "transmitMessage",
-                target: sendrslt.message.to,
-                data: { msg: sendrslt.message }
-            }
-        ))
+        activeClients[sendrslt.message.from].send(
+            "transmitMessage",
+            sendrslt.message.to,
+            { msg: sendrslt.message }
+        )
 
 
         const user = activeClients[sendrslt.message.to]

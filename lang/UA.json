@@ -469,7 +469,8 @@
             "messages": {
                 "you": "Ви",
                 "chSel": "Оберіть чат",
-                "enterMessage": "Введіть повідомлення"
+                "enterMessage": "Введіть повідомлення",
+                "sendBtn": "Відправити"
             }
         },
         "TGBOT": {

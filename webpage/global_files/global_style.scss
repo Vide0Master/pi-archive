@@ -589,7 +589,7 @@ img {
 .patchNotesContainer {
     background-color: #fff;
     color: #000;
-    border-radius: 1em;
+    border-radius: 0.5em;
     padding: 1em;
     overflow: hidden;
 
@@ -598,9 +598,185 @@ img {
 
     position: relative;
 
-    .component-container {
-        .label{
-            font-size: 1.25em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+
+    .v-label {
+        font-weight: bold;
+        padding: 0.2em 0.4em;
+        transform: skew(-13deg);
+
+        &.Server {
+            background-color: #228B22;
+            color: #FFD700;
+        }
+
+        &.DB {
+            background-color: #696969;
+            color: #ffffff;
+        }
+
+        &.Webpage {
+            background-color: #4682B4;
+            color: #FFFFFF;
+        }
+
+        &.TGbot {
+            background-color: #0088CC;
+            color: #FFFFFF;
+        }
+    }
+
+    .label-list {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.3em;
+    }
+
+    .update-list {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5em;
+
+        .update-container {
+            border: solid 0.1em transparent;
+            border-left-color: #000;
+            padding: 0.5em;
+
+            display: flex;
+            flex-direction: column;
+            gap: 0.5em;
+
+            .version-row {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 0.5em;
+
+                .version-container {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+
+                    .current-label {
+                        font-weight: bold;
+                        padding: 0.2em;
+                        transform: skew(-13deg);
+                        background-color: #b00b69;
+                        color: #fff;
+                    }
+                }
+
+                .update-date {
+                    font-weight: bold;
+                    padding: 0.2em 0.4em;
+                    transform: skew(-13deg);
+                    background-color: #000;
+                    color: #fff;
+                }
+            }
+
+            .updates-list {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5em;
+
+                .line-cont {
+                    padding-left: 0.5em;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.25em;
+
+                    .line-label {
+                        display: inline;
+                        flex-direction: row;
+                        align-items: center;
+                        gap: 0.5em;
+
+                        a{
+                            color: #000;
+                            
+                            &:hover{
+                                color: #0077ff;
+                            }
+                        }
+
+                        .tag-line {
+                            display: inline-flex;
+                            flex-direction: row;
+                            align-items: center;
+                            padding-right: 0.25em;
+
+                            .line-tag {
+                                display: inline;
+                                font-weight: bold;
+                                padding: 0.2em;
+                                transform: skew(-13deg);
+
+                                &.new {
+                                    background-color: #f00;
+                                    color: #fff;
+                                }
+
+                                &.fix {
+                                    background-color: orange;
+                                    color: #000000;
+                                }
+
+                                &.rework {
+                                    background-color: #0077ff;
+                                    color: #000000;
+                                }
+
+                                &.removed {
+                                    background-color: #000;
+                                    color: #fff;
+                                }
+                            }
+                        }
+                    }
+
+                    .applies-to-cont {
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+
+
+                        color: #fff;
+                        font-size: 0.7em;
+
+                        &>* {
+                            display: inline;
+                            font-weight: bold;
+                            padding: 0.2em;
+                            transform: skew(-13deg);
+                        }
+
+                        .intro {
+                            background-color: #000;
+                        }
+
+                        .user {
+                            background-color: #b00b69;
+                        }
+
+                        .moderator {
+                            background-color: rgb(62, 62, 224);
+                        }
+
+                        .admin {
+                            background-color: rgb(201, 31, 31);
+                        }
+
+                        .owner {
+                            background-color: gold;
+                        }
+                    }
+                }
+            }
         }
     }
 
