@@ -6,16 +6,16 @@ class SysController {
 
     static parseTimestamp(timestamp) {
         let currentdate = new Date(Math.floor(timestamp));
-    
+
         const padZero = (num) => num.toString().padStart(2, '0');
-    
+
         let datetime = padZero(currentdate.getDate()) + "."
             + padZero(currentdate.getMonth() + 1) + "."
             + currentdate.getFullYear() + " "
             + padZero(currentdate.getHours()) + ":"
             + padZero(currentdate.getMinutes()) + ":"
             + padZero(currentdate.getSeconds());
-    
+
         return datetime;
     }
 
@@ -39,8 +39,8 @@ class SysController {
 
     static WSS = require('./WSS/WSSController.js')
 
-    static async APIcontroller(action, user, request) {
-        return await require('./API/APIcontroller.js')(action, user, request)
+    static async APIcontroller(action, user, request, secOverride) {
+        return await require('./API/APIcontroller.js')(action, user, request, secOverride)
     }
 
     static async APIprocessorWEB(req, res) {
