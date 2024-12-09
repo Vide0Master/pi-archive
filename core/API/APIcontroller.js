@@ -6,7 +6,7 @@ const APIrestrictions = require('../systemController.js').config.static.restrict
 const consoleLogger = require('../consoleLogger.js')
 const config = require('../systemController.js').config
 
-module.exports = async (action, user, request) => {
+module.exports = async (action, user, request, secOverride = false) => {
     return new Promise(async resolve => {
         let user_data = null;
         let user_permission = 0
@@ -32,6 +32,10 @@ module.exports = async (action, user, request) => {
                     return
                 }
             }
+        }
+
+        if(secOverride){
+            user_permission=5
         }
 
         if (user_permission >= APIrestrictions[action]) {

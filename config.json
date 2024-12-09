@@ -2,7 +2,7 @@
     "DEVMODE": false,
     "AUDITCONTROL": "MOVE",
     "vesion": {
-        "Server": "b0.1.9",
+        "Server": "b0.1.10",
         "DB": "b1.1",
         "Webpage": "b0.2.6",
         "TGbot": "b0.2.4"
@@ -20,7 +20,7 @@
             "register": 0,
             "login": 0,
             "checkLoginAvailability": 0,
-            "sessionController": 0,
+            "sessionController": 1,
             "getLangsList": 0,
             "getPatchNotes": 1,
             "getVersionInfo": 1,
