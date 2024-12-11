@@ -1,17 +1,75 @@
 [
     {
         "versions": {
+            "Server": "b0.1.11",
+            "DB": "",
+            "Webpage": "b0.2.7",
+            "TGbot": ""
+        },
+        "date": "09.12.2024",
+        "updates": [
+            {
+                "text": "Added new query parameter \"h\" to /file route. Used to specify height of resolable image<br>This enables ability to preprocess images for user in smaller sizes to transport and display<br>So this also fixes perfomance with gigantic post images",
+                "tag": "new",
+                "users": [
+                    "user",
+                    "admin",
+                    "owner"
+                ],
+                "services": [
+                    "Server"
+                ]
+            },
+            {
+                "text": "Server side caching of shrunken images<br>In result - better perfomance for multiple request of website from different clients",
+                "tag": "new",
+                "services": [
+                    "Server"
+                ]
+            },
+            {
+                "text": "Added \"fit\" selector on post images (does not apply to videos)<br>Can be changed for all pages via profile settings",
+                "tag": "new",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Collection page has now a switch to enable or disable image fitting to screen size<br>Faster loading, less quality",
+                "tag": "new",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Little redesign of favs section in profile",
+                "tag": "rework",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Made patch-notes list more dimm",
+                "tag": "fix",
+                "services": [
+                    "Webpage"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
             "Server": "b0.1.10",
             "DB": "",
             "Webpage": "",
             "TGbot": ""
         },
-        "date":"09.12.2024",
+        "date": "09.12.2024",
         "updates": [
             {
                 "text": "Updated API control to prevent unathorized access to sessionController API path",
                 "tag": "rework",
-                "services":[
+                "services": [
                     "Server"
                 ]
             }
@@ -24,40 +82,40 @@
             "Webpage": "b0.2.6",
             "TGbot": "b0.2.4"
         },
-        "date":"09.12.2024",
+        "date": "09.12.2024",
         "updates": [
             {
                 "text": "Created patch-notes to unerstand what was changed",
                 "tag": "new",
-                "services":[
+                "services": [
                     "Webpage"
                 ]
             },
             {
                 "text": "Patch notes backend functionality",
                 "tag": "new",
-                "services":[
+                "services": [
                     "Server"
                 ]
             },
             {
                 "text": "Button to send <a href=\"/messages\" title=\"Go to messages page\">messages</a>",
                 "tag": "new",
-                "services":[
+                "services": [
                     "Webpage"
                 ]
             },
             {
                 "text": "Message sync between multiple clients of one user",
                 "tag": "fix",
-                "services":[
+                "services": [
                     "Webpage"
                 ]
             },
             {
                 "text": "Version list and status button (will be back in future updates)",
                 "tag": "removed",
-                "services":[
+                "services": [
                     "Webpage"
                 ]
             },
@@ -68,7 +126,7 @@
                     "user",
                     "admin"
                 ],
-                "services":[
+                "services": [
                     "TGbot"
                 ]
             }

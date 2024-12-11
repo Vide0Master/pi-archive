@@ -221,7 +221,7 @@ async function showActions(userData, activeUser) {
         ]
 
         container.appendChild(
-            createSelect(postsPerPages, profileLang.actions.PPP + `: ${userData.data.usersettings.posts_per_page||50}`, async (sel) => {
+            createSelect(postsPerPages, profileLang.actions.PPP + `: ${userData.data.usersettings.posts_per_page || 50}`, async (sel) => {
                 const rslt = await request('controlUserSettings', { type: 'update', update: { posts_per_page: sel } })
                 alert(rslt.msg, 5000)
             })
@@ -254,6 +254,15 @@ async function showActions(userData, activeUser) {
                 setTheme()
             })
         )
+
+        container.appendChild(
+            createSelect(
+                [
+                    { name: Language.view.fit.fits.normal + '(700px)', value: 'normal' },
+                    { name: Language.view.fit.fits.horizontal, value: 'horizontal' },
+                    { name: Language.view.fit.fits.vertical, value: 'vertical' }
+                ],
+                Language.view.fit.userSetsLabel, (result) => localStorage.setItem('imageFit', result)))
     } else {
         //region wr msg
         createAction(profileLang.actions.sendDM.btn, container, async () => {

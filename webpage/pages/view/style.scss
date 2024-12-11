@@ -18,11 +18,14 @@ main {
     gap: 1em;
 
     .file {
-        max-height: 700px;
         width: auto;
         position: relative;
+        box-sizing: border-box;
 
-        img,
+        img {
+            max-width: 100%;
+        }
+
         video {
             max-width: 100%;
             max-height: 700px;
@@ -30,6 +33,10 @@ main {
 
         &:hover {
             .full-scree-view-button {
+                opacity: 0.2;
+            }
+
+            .resolution-selector {
                 opacity: 0.2;
             }
         }
@@ -51,6 +58,22 @@ main {
 
             img {
                 height: 2em;
+            }
+        }
+
+        .resolution-selector {
+            position: absolute;
+            background-color: #000;
+            padding: 0.5em;
+            left: 0;
+            top: 0;
+            border-bottom-right-radius: 0.5em;
+            opacity: 0;
+            transition: 0.3s;
+            cursor: pointer;
+
+            &:hover {
+                opacity: 1;
             }
         }
     }

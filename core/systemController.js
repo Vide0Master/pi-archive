@@ -37,6 +37,8 @@ class SysController {
 
     static queryConstructor = require('./userSearchQueryProcessor.js')
 
+    static fileCacheController = require('./cacheController.js')
+
     static WSS = require('./WSS/WSSController.js')
 
     static async APIcontroller(action, user, request, secOverride) {

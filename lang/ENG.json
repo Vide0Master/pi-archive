@@ -117,7 +117,8 @@
                     "toGroup": {
                         "btn": "Set group mode",
                         "conf": "Confirm setting group mode for collection"
-                    }
+                    },
+                    "fitToScreen":"Fit pages to screen size"
                 }
             },
             "defaultTags": "Tags",
@@ -270,6 +271,15 @@
                         "btn": "Delete comment",
                         "conf": "Confirm deleting comment"
                     }
+                },
+                "fit":{
+                    "label":"Fit",
+                    "fits":{
+                        "normal":"Normal",
+                        "horizontal":"Horizontal",
+                        "vertical":"Vertical"
+                    },
+                    "userSetsLabel":"Posts view fit"
                 }
             },
             "profile": {

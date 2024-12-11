@@ -80,7 +80,6 @@ module.exports = async (bot, chatId, msgId, userdata, ...args) => {
             await tgBotController.sendMessage(chatId, `${lpack.post.postMissing[0]} ${postId} ${lpack.post.postMissing[1]}`, msgId);
             continue;
         }
-        console.log(postData)
         const filePath = path.join(__dirname, `../../storage/file_storage/${postData.post.file}`);
         const fileType = getFileType(postData.post.file);
         let typeToSend = isDoc ? 'document' : fileType;
