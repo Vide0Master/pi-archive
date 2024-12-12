@@ -9,7 +9,7 @@
         "date": "09.12.2024",
         "updates": [
             {
-                "text": "Added new query parameter \"h\" to /file route. Used to specify height of resolable image<br>This enables ability to preprocess images for user in smaller sizes to transport and display<br>So this also fixes perfomance with gigantic post images",
+                "text": "Added new query parameter \"h\" to /file route. Used to specify height of resolvable image<br>This enables ability to preprocess images for user in smaller sizes to transport and display<br>So this also fixes perfomance with gigantic post images",
                 "tag": "new",
                 "users": [
                     "user",
