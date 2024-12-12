@@ -415,8 +415,6 @@ function setFooterText() {
             compLabel.classList.add(compName)
         }
 
-        console.log(pInfo)
-
         const updateList = createDiv('update-list', vcont)
         for (const update of pInfo) {
             const updateContainer = createDiv('update-container', updateList)

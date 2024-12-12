@@ -63,6 +63,7 @@ function setMediaSource(url, contentType) {
         case 'image':
             const image = createImageElement();
             image.src = url;
+            setImageFit(localStorage.getItem('imageFit') || 'normal')
             break;
         case 'video':
             const video = createVideoElement();
@@ -480,12 +481,15 @@ async function initialize() {
         process_LDF()
         if (post_data.postGroupData) {
             processGroupData(post_data.postGroupData)
-        }else{
+        } else {
             document.querySelector('.group-info').remove()
         }
         createComments()
         fetchAndDisplayFile(file_link, contentType)
-        if (contentType == 'image') addOpenFullScreenView(file_link)
+        if (contentType == 'image') {
+            addOpenFullScreenView(file_link)
+            addResSwitch()
+        }
     } catch (error) {
         console.error(error);
     }
@@ -741,7 +745,13 @@ function addOpenFullScreenView(file_link) {
     openFullScrView.appendChild(img)
     img.src = 'full-screen-view.svg'
 
-    openFullScrView.addEventListener('click', () => {
+    openFullScrView.addEventListener('mousedown', (e) => {
+        e.preventDefault()
+        if (e.ctrlKey || e.button == 1) {
+            window.open(file_link, '_blank').focus();
+            return
+        }
+
         document.querySelector('html').style.overflow = 'hidden'
 
         const overlay = createBlurOverlay()
@@ -857,4 +867,33 @@ passSearchTagsToSearchField()
 function processGroupData(postGroup) {
     const container = document.querySelector('.group-info')
     container.appendChild(createGroup(postGroup))
+}
+
+//region resolution switch
+
+function addResSwitch() {
+    const fileContainer = document.querySelector('.file')
+
+    const resSelect = createDiv('resolution-selector', fileContainer)
+
+    const dropDown = createSelect(
+        [
+            { name: Language.view.fit.fits.normal + '(700px)', value: 'normal' },
+            { name: Language.view.fit.fits.horizontal, value: 'horizontal' },
+            { name: Language.view.fit.fits.vertical, value: 'vertical' }
+        ],
+        Language.view.fit.label, (result) => setImageFit(result))
+    resSelect.appendChild(dropDown)
+}
+
+function setImageFit(fit) {
+    const img = document.querySelector('.file').querySelector('img')
+
+    const postBaseLink = get_file_link(post_data.id)
+
+    switch (fit) {
+        case 'normal': img.src = postBaseLink + `&h=700`; break;
+        case 'horizontal': img.src = postBaseLink; break;
+        case 'vertical': img.src = postBaseLink + `&h=${screen.height}`; break;
+    }
 }

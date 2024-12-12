@@ -35,14 +35,6 @@ async function processCollection(id) {
 
     document.querySelector('title').innerHTML = collectionInfo.name
 
-    async function fetchPostData(id) {
-        const pdata = await request('getPostData', { id });
-        if (pdata.rslt != 's') {
-            alert(`${pdata.rslt}/${pdata.msg}`, 5000)
-        }
-        return pdata.post;
-    }
-
     const background = createDiv('comic-container', document.querySelector('.norma-page-container'))
     background.style.display = 'none'
 
@@ -187,7 +179,7 @@ async function processCollection(id) {
     for (const post of collectionInfo.group) {
         const page = document.createElement('img')
         pages_container.appendChild(page)
-        page.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${post}`
+        page.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${post}${localStorage.getItem('fitCollectionPages') ? `&h=${screen.height}` : ''}`
         page.style.display = 'none'
         page.id = 'ID' + post
         pages.push(page)
@@ -242,7 +234,7 @@ async function processCollection(id) {
         })
 
         const post_img = document.createElement('img')
-        post_img.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${post.id}`
+        post_img.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${post.id}&h=300`
         page_container.appendChild(post_img)
 
         const page_num_cont = createDiv('page-number-counter-container', page_container)
@@ -305,7 +297,7 @@ async function processCollection(id) {
                                     type: 'deleteGroup',
                                     groupID: collectionInfo.id
                                 })
-                                
+
                                 if (deleteResult.rslt == 'e') alert(`${deleteResult.rslt}/${deleteResult.msg}`)
 
                                 if (deleteResult.rslt == 's') {
@@ -368,6 +360,22 @@ async function processCollection(id) {
                     }
                 }
             )
+            createSwitch(Language.collection.actions.fitToScreen, document.querySelector('.post-actions'), (state) => {
+                localStorage.setItem('fitCollectionPages', true)
+                const pages = Array.from(document.querySelector('.pages-container').childNodes)
+                for (const page of pages) {
+                    console.log(page.src)
+                    const link = new URL(page.src)
+                    link.searchParams.delete('h')
+                    if (state) {
+                        link.searchParams.append('h', screen.height)
+                        page.src=link.href
+                    } else {
+                        page.src=link.href
+                        localStorage.removeItem('fitCollectionPages')
+                    }
+                }
+            }, localStorage.getItem('fitCollectionPages'))
         }
     }
     await setActions()

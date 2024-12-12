@@ -161,7 +161,14 @@ app.get('/file', async (req, res) => {
         return res.status(500).send('<h1>500</h1>Server error!');
     }
 
-    const file = await sysController.dbinteract.getFileNameByPostID(postID);
+    const postData = await sysController.dbinteract.getPostData(postID)
+    if (postData.rslt == 'e') {
+        res.status(500).send('<h1>500</h1>Server error: ' + postData.msg);
+    }
+    if (!postData.post) {
+        res.status(404).send(`<h1>404</h1>Post <b>${postID}</b> not found in DB!`);
+    }
+    const file = postData.post.file
 
     if (!file) {
         return res.status(500).send('<h1>500</h1>Record data missing!\nReport to admin ASAP!');
@@ -179,15 +186,20 @@ app.get('/file', async (req, res) => {
     res.set('Expires', new Date(Date.now() + 604800000).toUTCString());
 
     // Проверка параметра thumb
-    const generateThumbnail = (req.query.thumb === 'true' && !tempKey);
+    const generateThumbnail = (req.query.thumb === 'true' && !tempKey)
 
     if (generateThumbnail) {
         if (mimeType.startsWith('image/')) {
-            const resizedImage = await sharp(filepath)
-                .resize({ height: 200, fit: 'inside' })
-                .toBuffer();
+            const cacheName = 'thumb@' + filepath
+            if (!sysController.fileCacheController.checkAvailabilty(cacheName)) {
+                const resizedImage = await sharp(filepath)
+                    .resize({ height: 200, fit: 'inside' })
+                    .toBuffer();
+                sysController.fileCacheController.createRecord(cacheName, resizedImage, 24)
+            }
+            const cachedFile = sysController.fileCacheController.getRecordData(cacheName)
             res.set('Content-Type', mimeType);
-            res.send(resizedImage);
+            res.send(cachedFile);
         } else if (mimeType.startsWith('video/')) {
             const thumbnailPath = path.join(__dirname, '../storage/video_thumbnails', `THUMBFOR-${path.parse(filepath).name}.jpg`);
 
@@ -200,6 +212,25 @@ app.get('/file', async (req, res) => {
             res.status(400).send('<h1>400</h1>Unsopported filetype for preview!');
         }
         return;
+    }
+
+    const heightQuery = parseInt(req.query.h)
+
+    if (!!heightQuery && heightQuery < JSON.parse(postData.post.size).y) {
+        if (mimeType.startsWith('image/')) {
+            const cacheName = 'h' + heightQuery + '@' + filepath
+            if (!sysController.fileCacheController.checkAvailabilty(cacheName)) {
+                const resizedImage = await sharp(filepath)
+                    .resize({ height: heightQuery, fit: 'inside' })
+                    .toBuffer();
+                sysController.fileCacheController.createRecord(cacheName, resizedImage, 24)
+            }
+            const cachedFile = sysController.fileCacheController.getRecordData(cacheName)
+            res.set('Content-Type', mimeType);
+            res.send(cachedFile);
+        } else {
+            res.status(400).send('<h1>400</h1>Unsopported filetype height query!');
+        }
     }
 
     if (range) {
