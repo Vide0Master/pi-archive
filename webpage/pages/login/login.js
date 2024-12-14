@@ -11,8 +11,8 @@ async function login() {
     }
     const login_result = await Authy.login(login_data)
     if (login_result.rslt == 's') {
-        localStorage.setItem('theme',login_result.usersettings.theme)
-        localStorage.setItem('lang',login_result.usersettings.lang)
+        localStorage.setItem('theme',login_result.usersettings.theme||'default')
+        localStorage.setItem('lang',login_result.usersettings.lang||'ENG')
         window.location.href = '/'
     } else {
         alert(login_result.msg, 5000)
