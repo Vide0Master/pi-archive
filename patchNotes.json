@@ -1,4 +1,21 @@
-[
+[{
+    "versions": {
+        "Server": "",
+        "DB": "",
+        "Webpage": "b0.2.8",
+        "TGbot": ""
+    },
+    "date": "09.12.2024",
+    "updates": [
+        {
+            "text": "No theme and language error preventing use of page after login without language and theme records in DB (for old migrated users)",
+            "tag": "fix",
+            "services": [
+                "Webpage"
+            ]
+        }
+    ]
+},
     {
         "versions": {
             "Server": "b0.1.11",
