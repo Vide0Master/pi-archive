@@ -17,6 +17,10 @@ button {
     cursor: pointer;
     transition: 0.2s;
 
+    white-space: normal;
+    word-wrap: break-word;
+    text-align: center;
+
     &:focus {
         outline: 2px solid var(--interact-focus);
     }
@@ -943,6 +947,12 @@ img {
     width: 200px;
     height: 200px;
 
+
+    @media screen and (max-width:700px) {
+        width: 150px;
+        height: 150px;
+    }
+
     .group-info-container {
         border: solid 0.13em var(--color3);
         background-color: var(--color1);
@@ -979,6 +989,12 @@ img {
             &:hover {
                 color: var(--font-hover);
             }
+        }
+
+        .group-name {
+            white-space: normal;
+            word-wrap: break-word;
+            text-align: center;
         }
     }
 }
@@ -1067,6 +1083,10 @@ input[type=color] {
     justify-content: center;
     position: relative;
 
+    @media screen and (max-width:700px) {
+        width: 150px;
+        height: 150px;
+    }
 
     .group-outline {
         position: absolute;
@@ -1306,6 +1326,11 @@ input[type=color] {
 
                 max-height: 200px;
                 max-width: 100%;
+
+                @media screen and (max-width:700px) {
+                    max-width: 150px;
+                    max-height: 150px;
+                }
             }
         }
 
