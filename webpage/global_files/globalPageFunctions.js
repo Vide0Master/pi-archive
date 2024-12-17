@@ -232,9 +232,9 @@ function createPostCard(postData, noClickReaction) {
     }
 
     const postCardLang = Language.postCard
-    const postCard = document.createElement('div')
 
-    postCard.className = 'post-card'
+    const postCardContainer = createDiv('post-card-container')
+    const postCard = createDiv('post-card',postCardContainer)
 
     if (!noClickReaction) {
         const lnkElem = document.createElement('a')
@@ -350,7 +350,7 @@ function createPostCard(postData, noClickReaction) {
         }
     }
 
-    return postCard
+    return postCardContainer
 }
 
 try {
@@ -653,39 +653,32 @@ async function createGroup(groupData, parentElem) {
 
     const postCardList = []
     const outlines = []
-    post_list.forEach(postData => {
-        const groupElemCont = createDiv('group-element-container', parentElem)
-        postCardList.push(groupElemCont)
-        groupElemCont.style.setProperty('--borderclr', groupData.color)
-        const postCard = createPostCard(postData)
-        const outline = createDiv('outline', groupElemCont)
-        outlines.push(outline)
-        groupElemCont.append(postCard)
-        groupElemCont.addEventListener('mouseenter', () => {
+
+    function regOutlineTrigger(elem){
+        elem.addEventListener('mouseenter', () => {
             outlines.forEach(ln => {
                 ln.classList.add('active')
             })
         })
-        groupElemCont.addEventListener('mouseleave', () => {
+        elem.addEventListener('mouseleave', () => {
             outlines.forEach(ln => {
                 ln.classList.remove('active')
             })
         })
-    })
+    }
 
-    postCardList.forEach((cont, i) => {
-        if (i >= 5) cont.style.display = 'none'
-    })
 
     const groupControlCont = createDiv('group-element-container', parentElem)
+    regOutlineTrigger(groupControlCont)
     groupControlCont.style.setProperty('--borderclr', groupData.color)
     const infoContainer = createDiv('group-info-container', groupControlCont)
+    outlines.push(infoContainer)
     const groupNameLine = createDiv('group-name', infoContainer)
     groupNameLine.innerText = groupData.name
 
-    if (postCardList.length > 5) {
+    if (post_list.length > 5) {
         const additinalCardsController = createDiv('additional-cards', infoContainer)
-        additinalCardsController.innerText = `+${postCardList.length - 5}`
+        additinalCardsController.innerText = `+${post_list.length - 5}`
         let isOpen = false
         additinalCardsController.addEventListener('click', () => {
             if (isOpen) {
@@ -716,62 +709,19 @@ async function createGroup(groupData, parentElem) {
         window.location.href = Link
     })
 
-    // for (let i = 0; i <= 4; i++) {
-    //     const post = post_list.shift()
-    //     if (post)
-    //         list.append(createPostCard(post))
-    // }
-    // if (groupData.type == 'collection') {
-    //     const additionals = createDiv('additional', list)
+    post_list.forEach(postData => {
+        const postCard = createPostCard(postData)
+        parentElem.appendChild(postCard)
+        postCardList.push(postCard)
+        postCard.style.setProperty('--borderclr', groupData.color)
+        const outline = createDiv('group-outline', postCard)
+        outlines.push(outline)
+        regOutlineTrigger(postCard)
+    })
 
-    //     const gname = createDiv('groupName', additionals)
-    //     gname.innerHTML = groupData.name
-
-    //     if (post_list.length > 0) {
-    //         const lpages = createDiv('lost-pages', additionals)
-    //         lpages.innerHTML = '+' + post_list.length
-    //         lpages.title = `${Language.group.VAP[0]} ${post_list.length + 5} ${Language.group.VAP[1]}`
-    //         lpages.addEventListener('click', () => {
-    //             while (post_list.length > 0) {
-    //                 list.append(createPostCard(post_list.shift()))
-    //             }
-    //             list.append(additionals)
-    //             lpages.remove()
-    //         })
-    //     }
-
-    //     const colview = createButton(Language.group.colView, additionals)
-    //     colview.addEventListener('mousedown', (event) => {
-    //         const sTags = new URLSearchParams(window.location.search).get('tags')
-    //         const Link = `/collection?id=${groupData.id}${sTags ? `&tags=${sTags}` : ''}`
-    //         if (event.button === 1)
-    //             event.preventDefault()
-    //         if ((event.button === 0 && event.ctrlKey) || event.button === 1) {
-    //             window.open(Link, '_blank').focus();
-    //             return
-    //         }
-    //         window.location.href = Link
-    //     })
-
-    // } else {
-    //     const additionals = createDiv('additional', list)
-
-    //     const gname = createDiv('groupName', additionals)
-    //     gname.innerHTML = groupData.name
-
-    //     if (post_list.length > 0) {
-    //         const lpages = createDiv('lost-pages', additionals)
-    //         lpages.innerHTML = '+' + post_list.length
-    //         lpages.title = `${Language.group.VAP[0]} ${post_list.length + 5} ${Language.group.VAP[1]}`
-    //         lpages.addEventListener('click', () => {
-    //             while (post_list.length > 0) {
-    //                 list.append(createPostCard(post_list.shift()))
-    //             }
-    //             list.append(additionals)
-    //             lpages.remove()
-    //         })
-    //     }
-    // }
+    postCardList.forEach((cont, i) => {
+        if (i >= 5) cont.style.display = 'none'
+    })
 }
 
 //region cr select
