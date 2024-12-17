@@ -3,6 +3,31 @@
         "versions": {
             "Server": "",
             "DB": "",
+            "Webpage": "b0.2.11",
+            "TGbot": ""
+        },
+        "date": "17.12.2024",
+        "updates": [
+            {
+                "text": "Search page now uses grid layout",
+                "tag": "rework",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Some visual changes to groups in post cards list",
+                "tag": "rework",
+                "services": [
+                    "Webpage"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
+            "Server": "",
+            "DB": "",
             "Webpage": "b0.2.10",
             "TGbot": ""
         },
