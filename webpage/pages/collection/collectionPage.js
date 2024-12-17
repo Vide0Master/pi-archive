@@ -257,6 +257,23 @@ async function processCollection(id) {
     async function setActions() {
         const actionCol = document.querySelector('.post-actions')
 
+        createSwitch(Language.collection.actions.fitToScreen, document.querySelector('.post-actions'), (state) => {
+            localStorage.setItem('fitCollectionPages', true)
+            const pages = Array.from(document.querySelector('.pages-container').childNodes)
+            for (const page of pages) {
+                console.log(page.src)
+                const link = new URL(page.src)
+                link.searchParams.delete('h')
+                if (state) {
+                    link.searchParams.append('h', screen.height)
+                    page.src=link.href
+                } else {
+                    page.src=link.href
+                    localStorage.removeItem('fitCollectionPages')
+                }
+            }
+        }, localStorage.getItem('fitCollectionPages'))
+
         if (await ownerVerify(collectionInfo.owner) || await adminVerify()) {
             createAction(collectionLang.actions.editColl.btn, actionCol, () => {
                 const container = createBlurOverlay()
@@ -360,22 +377,6 @@ async function processCollection(id) {
                     }
                 }
             )
-            createSwitch(Language.collection.actions.fitToScreen, document.querySelector('.post-actions'), (state) => {
-                localStorage.setItem('fitCollectionPages', true)
-                const pages = Array.from(document.querySelector('.pages-container').childNodes)
-                for (const page of pages) {
-                    console.log(page.src)
-                    const link = new URL(page.src)
-                    link.searchParams.delete('h')
-                    if (state) {
-                        link.searchParams.append('h', screen.height)
-                        page.src=link.href
-                    } else {
-                        page.src=link.href
-                        localStorage.removeItem('fitCollectionPages')
-                    }
-                }
-            }, localStorage.getItem('fitCollectionPages'))
         }
     }
     await setActions()
