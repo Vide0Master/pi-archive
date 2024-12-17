@@ -455,13 +455,13 @@ async function initialize() {
             }
         )
 
-        if (contentType != 'video') {
-            // region set avatar
-            createAction(viewLang.actions.setPostAsAvatar, document.querySelector('.post-actions'), async () => {
-                const rslt = await request('controlUserSettings', { type: 'update', update: { ProfileAvatarPostID: post_data.id } })
-                alert(rslt.msg, 5000)
-            })
+        // region set avatar
+        createAction(viewLang.actions.setPostAsAvatar, document.querySelector('.post-actions'), async () => {
+            const rslt = await request('controlUserSettings', { type: 'update', update: { ProfileAvatarPostID: post_data.id } })
+            alert(rslt.msg, 5000)
+        })
 
+        if (contentType != 'video') {
             // region set background
             createAction(viewLang.actions.setPostAsProfileBackground, document.querySelector('.post-actions'), async () => {
                 const rslt = await request('controlUserSettings', { type: 'update', update: { ProfileBackgroundPostID: post_data.id } })
@@ -476,6 +476,12 @@ async function initialize() {
 
             alert(`${rslt.rslt}/${rslt.msg}`, 5000)
         })
+
+        //TODO
+        // createAction('Send report', document.querySelector('.post-actions'), async () => {
+
+        // })
+
         await handleAdminActions();
 
         process_LDF()
@@ -547,13 +553,8 @@ async function createComments() {
             parseUserLogin(comment.from, comment_author)
 
             const userData = await request('getUserProfileData', { login: comment.from })
-            const userAvatarID = userData.data.usersettings.ProfileAvatarPostID
-            if (userAvatarID) {
-                const userAvatar = document.createElement('img')
-                user_data_container.appendChild(userAvatar)
-                userAvatar.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${userAvatarID}&thumb=true`
-                userAvatar.setAttribute('onclick', `window.location.href='/view?id=${userAvatarID}'`)
-            }
+
+            createUserAvatarElem(userData.data.usersettings.ProfileAvatarPostID, user_data_container)
 
             const comment_creation_date = createDiv('creation-date', user_data_container)
             comment_creation_date.innerHTML = parseTimestamp(comment.timestamp)
@@ -866,7 +867,7 @@ passSearchTagsToSearchField()
 
 function processGroupData(postGroup) {
     const container = document.querySelector('.group-info')
-    container.appendChild(createGroup(postGroup))
+    createGroup(postGroup, container)
 }
 
 //region resolution switch

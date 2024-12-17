@@ -69,16 +69,7 @@ function showUserData(userData) {
         label.innerText = `${profileLang.userData.label[0]} ${userData.data.login}`
     }
 
-    if (userData.data.usersettings.ProfileAvatarPostID) {
-        const avatar_block = createDiv('avatar-block')
-        container.appendChild(avatar_block)
-
-        const avatar = document.createElement('img')
-        avatar_block.appendChild(avatar)
-        avatar.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${userData.data.usersettings.ProfileAvatarPostID}&thumb=true`
-        avatar.setAttribute('onclick', `window.location.href='/view?id=${userData.data.usersettings.ProfileAvatarPostID}'`)
-        avatar.title = `${profileLang.userData.avatarPost} ${userData.data.usersettings.ProfileAvatarPostID}`
-    }
+    createUserAvatarElem(userData.data.usersettings.ProfileAvatarPostID, container, true)
 
     if (userData.data.usersettings.ProfileBackgroundPostID) {
         const imgContainer = createDiv('imgContainer')

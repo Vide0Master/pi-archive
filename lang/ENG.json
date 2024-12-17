@@ -219,7 +219,7 @@
                         "timeLabel": "Time",
                         "TLCopied": "Temporary link copied to clipboard"
                     },
-                    "setPostAsAvatar": "Set post as profile picture",
+                    "setPostAsAvatar": "Set post as profile avatar",
                     "setPostAsProfileBackground": "Set post as profile background",
                     "sendPostToTg": "Send post through TG bot to DM",
                     "editTags": {

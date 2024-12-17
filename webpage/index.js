@@ -195,7 +195,7 @@ app.get('/file', async (req, res) => {
                 const resizedImage = await sharp(filepath)
                     .resize({ height: 200, fit: 'inside' })
                     .toBuffer();
-                sysController.fileCacheController.createRecord(cacheName, resizedImage, 24)
+                sysController.fileCacheController.createRecord(cacheName, resizedImage, 170)
             }
             const cachedFile = sysController.fileCacheController.getRecordData(cacheName)
             res.set('Content-Type', mimeType);
@@ -223,7 +223,7 @@ app.get('/file', async (req, res) => {
                 const resizedImage = await sharp(filepath)
                     .resize({ height: heightQuery, fit: 'inside' })
                     .toBuffer();
-                sysController.fileCacheController.createRecord(cacheName, resizedImage, 24)
+                sysController.fileCacheController.createRecord(cacheName, resizedImage, 170)
             }
             const cachedFile = sysController.fileCacheController.getRecordData(cacheName)
             res.set('Content-Type', mimeType);
