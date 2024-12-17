@@ -3,6 +3,24 @@
         "versions": {
             "Server": "",
             "DB": "",
+            "Webpage": "b0.2.13",
+            "TGbot": ""
+        },
+        "date": "17.12.2024",
+        "updates": [
+            {
+                "text": "Button to select fit was not displayed in collections if you was not admin or owner of group/collection",
+                "tag": "fix",
+                "services": [
+                    "Webpage"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
+            "Server": "",
+            "DB": "",
             "Webpage": "b0.2.12",
             "TGbot": ""
         },
