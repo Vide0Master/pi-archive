@@ -3,6 +3,24 @@
         "versions": {
             "Server": "",
             "DB": "",
+            "Webpage": "b0.2.12",
+            "TGbot": ""
+        },
+        "date": "17.12.2024",
+        "updates": [
+            {
+                "text": "\"View as collection\" button displayed on all groups",
+                "tag": "fix",
+                "services": [
+                    "Webpage"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
+            "Server": "",
+            "DB": "",
             "Webpage": "b0.2.11",
             "TGbot": ""
         },

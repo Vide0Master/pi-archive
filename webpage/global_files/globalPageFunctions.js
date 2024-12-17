@@ -234,7 +234,7 @@ function createPostCard(postData, noClickReaction) {
     const postCardLang = Language.postCard
 
     const postCardContainer = createDiv('post-card-container')
-    const postCard = createDiv('post-card',postCardContainer)
+    const postCard = createDiv('post-card', postCardContainer)
 
     if (!noClickReaction) {
         const lnkElem = document.createElement('a')
@@ -654,7 +654,7 @@ async function createGroup(groupData, parentElem) {
     const postCardList = []
     const outlines = []
 
-    function regOutlineTrigger(elem){
+    function regOutlineTrigger(elem) {
         elem.addEventListener('mouseenter', () => {
             outlines.forEach(ln => {
                 ln.classList.add('active')
@@ -696,18 +696,20 @@ async function createGroup(groupData, parentElem) {
         })
     }
 
-    const colview = createButton(Language.group.colView, infoContainer)
-    colview.addEventListener('mousedown', (event) => {
-        const sTags = new URLSearchParams(window.location.search).get('tags')
-        const Link = `/collection?id=${groupData.id}${sTags ? `&tags=${sTags}` : ''}`
-        if (event.button === 1)
-            event.preventDefault()
-        if ((event.button === 0 && event.ctrlKey) || event.button === 1) {
-            window.open(Link, '_blank').focus();
-            return
-        }
-        window.location.href = Link
-    })
+    if (groupData.type == 'collection') {
+        const colview = createButton(Language.group.colView, infoContainer)
+        colview.addEventListener('mousedown', (event) => {
+            const sTags = new URLSearchParams(window.location.search).get('tags')
+            const Link = `/collection?id=${groupData.id}${sTags ? `&tags=${sTags}` : ''}`
+            if (event.button === 1)
+                event.preventDefault()
+            if ((event.button === 0 && event.ctrlKey) || event.button === 1) {
+                window.open(Link, '_blank').focus();
+                return
+            }
+            window.location.href = Link
+        })
+    }
 
     post_list.forEach(postData => {
         const postCard = createPostCard(postData)
