@@ -251,13 +251,13 @@
                 },
                 "headerNm": "Пост",
                 "fit": {
-                    "label": "Сжатие",
+                    "label": "Сжаття",
                     "fits": {
-                        "normal": "Нормальное",
-                        "horizontal": "По горизонтали",
-                        "vertical": "По вертикали"
+                        "normal": "Нормальне",
+                        "horizontal": "По горизонталі",
+                        "vertical": "По вертикалі"
                     },
-                    "userSetsLabel": "Сжатие просмотра постов"
+                    "userSetsLabel": "Сжаття перегляду постів"
                 }
             },
             "profile": {
