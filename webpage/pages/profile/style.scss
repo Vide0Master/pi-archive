@@ -45,7 +45,12 @@
             }
 
             .avatar-block {
-                img {
+                max-height: 200px;
+
+                img,
+                video {
+                    max-height: 200px;
+                    max-width: 200px;
                     cursor: pointer;
                 }
             }
@@ -71,7 +76,7 @@
                     border-color: deepskyblue;
                 }
 
-                .action-bar{
+                .action-bar {
                     display: flex;
                     flex-direction: row;
                     align-items: center;

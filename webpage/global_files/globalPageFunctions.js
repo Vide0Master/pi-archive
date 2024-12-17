@@ -236,22 +236,13 @@ function createPostCard(postData, noClickReaction) {
 
     postCard.className = 'post-card'
 
-    if (!noClickReaction)
-        postCard.addEventListener('mousedown', (event) => {
-            event.preventDefault()
-            const sTags = new URLSearchParams(window.location.search).get('tags')
-            const Link = `/view?id=${postData.id}${sTags ? `&tags=${sTags}` : ''}`
-
-            if (event.button == 0 && event.ctrlKey) {
-                window.open(Link, '_blank').focus()
-                return
-            }
-            if (event.button == 1) {
-                window.open(Link, '_blank')
-                return
-            }
-            window.location.href = Link
-        })
+    if (!noClickReaction) {
+        const lnkElem = document.createElement('a')
+        postCard.appendChild(lnkElem)
+        lnkElem.className = 'link'
+        const sTags = new URLSearchParams(window.location.search).get('tags')
+        lnkElem.href = `/view?id=${postData.id}${sTags ? `&tags=${sTags}` : ''}`
+    }
 
     const postDataCont = createDiv('post-data-container', postCard)
 
@@ -420,9 +411,9 @@ function setFooterText() {
             const updateContainer = createDiv('update-container', updateList)
 
             const versionsRow = createDiv('version-row', updateContainer)
-            
+
             const updDate = createDiv('update-date', versionsRow)
-            updDate.innerHTML=update.date
+            updDate.innerHTML = update.date
 
             for (const versionLabel in update.versions) {
                 if (update.versions[versionLabel] != '') {
@@ -438,7 +429,7 @@ function setFooterText() {
             }
 
 
-            
+
             const updatesCol = createDiv('updates-list', updateContainer)
             for (const upd of update.updates) {
                 const lineContainer = createDiv('line-cont', updatesCol)
@@ -650,81 +641,137 @@ function capitalizeFirstLetter(string) {
 }
 
 //region create group
-function createGroup(groupData) {
-    const groupElem = createDiv('group-line')
-    groupElem.style.setProperty('--borderclr', groupData.color)
-    createDiv('outline', groupElem)
+async function createGroup(groupData, parentElem) {
 
-    const list = createDiv('list', groupElem)
-    async function Grouper() {
-        const post_list = await request('getPosts',
-            {
-                query: `id:${groupData.group.join(',')}`,
-                page: 1,
-                postsCount: 9999,
-                grpOverride: true
+    const post_list = await request('getPosts',
+        {
+            query: `id:${groupData.group.join(',')}`,
+            page: 1,
+            postsCount: 9999,
+            grpOverride: true
+        })
+
+    const postCardList = []
+    const outlines = []
+    post_list.forEach(postData => {
+        const groupElemCont = createDiv('group-element-container', parentElem)
+        postCardList.push(groupElemCont)
+        groupElemCont.style.setProperty('--borderclr', groupData.color)
+        const postCard = createPostCard(postData)
+        const outline = createDiv('outline', groupElemCont)
+        outlines.push(outline)
+        groupElemCont.append(postCard)
+        groupElemCont.addEventListener('mouseenter', () => {
+            outlines.forEach(ln => {
+                ln.classList.add('active')
             })
-
-        for (let i = 0; i <= 4; i++) {
-            const post = post_list.shift()
-            if (post)
-                list.append(createPostCard(post))
-        }
-        if (groupData.type == 'collection') {
-            const additionals = createDiv('additional', list)
-
-            const gname = createDiv('groupName', additionals)
-            gname.innerHTML = groupData.name
-
-            if (post_list.length > 0) {
-                const lpages = createDiv('lost-pages', additionals)
-                lpages.innerHTML = '+' + post_list.length
-                lpages.title = `${Language.group.VAP[0]} ${post_list.length + 5} ${Language.group.VAP[1]}`
-                lpages.addEventListener('click', () => {
-                    while (post_list.length > 0) {
-                        list.append(createPostCard(post_list.shift()))
-                    }
-                    list.append(additionals)
-                    lpages.remove()
-                })
-            }
-
-            const colview = createButton(Language.group.colView, additionals)
-            colview.addEventListener('mousedown', (event) => {
-                const sTags = new URLSearchParams(window.location.search).get('tags')
-                const Link = `/collection?id=${groupData.id}${sTags ? `&tags=${sTags}` : ''}`
-                if (event.button === 1)
-                    event.preventDefault()
-                if ((event.button === 0 && event.ctrlKey) || event.button === 1) {
-                    window.open(Link, '_blank').focus();
-                    return
-                }
-                window.location.href = Link
+        })
+        groupElemCont.addEventListener('mouseleave', () => {
+            outlines.forEach(ln => {
+                ln.classList.remove('active')
             })
+        })
+    })
 
-        } else {
-            const additionals = createDiv('additional', list)
+    postCardList.forEach((cont, i) => {
+        if (i >= 5) cont.style.display = 'none'
+    })
 
-            const gname = createDiv('groupName', additionals)
-            gname.innerHTML = groupData.name
+    const groupControlCont = createDiv('group-element-container', parentElem)
+    groupControlCont.style.setProperty('--borderclr', groupData.color)
+    const infoContainer = createDiv('group-info-container', groupControlCont)
+    const groupNameLine = createDiv('group-name', infoContainer)
+    groupNameLine.innerText = groupData.name
 
-            if (post_list.length > 0) {
-                const lpages = createDiv('lost-pages', additionals)
-                lpages.innerHTML = '+' + post_list.length
-                lpages.title = `${Language.group.VAP[0]} ${post_list.length + 5} ${Language.group.VAP[1]}`
-                lpages.addEventListener('click', () => {
-                    while (post_list.length > 0) {
-                        list.append(createPostCard(post_list.shift()))
-                    }
-                    list.append(additionals)
-                    lpages.remove()
+    if (postCardList.length > 5) {
+        const additinalCardsController = createDiv('additional-cards', infoContainer)
+        additinalCardsController.innerText = `+${postCardList.length - 5}`
+        let isOpen = false
+        additinalCardsController.addEventListener('click', () => {
+            if (isOpen) {
+                postCardList.forEach((elm, i) => {
+                    if (i >= 5) elm.style.display = 'none'
                 })
+                additinalCardsController.innerText = `+${postCardList.length - 5}`
+            } else {
+                postCardList.forEach((elm) => {
+                    elm.style.display = ''
+                })
+                additinalCardsController.innerText = `-${postCardList.length - 5}`
             }
-        }
+            isOpen = !isOpen
+        })
     }
-    Grouper()
 
-    return groupElem
+    const colview = createButton(Language.group.colView, infoContainer)
+    colview.addEventListener('mousedown', (event) => {
+        const sTags = new URLSearchParams(window.location.search).get('tags')
+        const Link = `/collection?id=${groupData.id}${sTags ? `&tags=${sTags}` : ''}`
+        if (event.button === 1)
+            event.preventDefault()
+        if ((event.button === 0 && event.ctrlKey) || event.button === 1) {
+            window.open(Link, '_blank').focus();
+            return
+        }
+        window.location.href = Link
+    })
+
+    // for (let i = 0; i <= 4; i++) {
+    //     const post = post_list.shift()
+    //     if (post)
+    //         list.append(createPostCard(post))
+    // }
+    // if (groupData.type == 'collection') {
+    //     const additionals = createDiv('additional', list)
+
+    //     const gname = createDiv('groupName', additionals)
+    //     gname.innerHTML = groupData.name
+
+    //     if (post_list.length > 0) {
+    //         const lpages = createDiv('lost-pages', additionals)
+    //         lpages.innerHTML = '+' + post_list.length
+    //         lpages.title = `${Language.group.VAP[0]} ${post_list.length + 5} ${Language.group.VAP[1]}`
+    //         lpages.addEventListener('click', () => {
+    //             while (post_list.length > 0) {
+    //                 list.append(createPostCard(post_list.shift()))
+    //             }
+    //             list.append(additionals)
+    //             lpages.remove()
+    //         })
+    //     }
+
+    //     const colview = createButton(Language.group.colView, additionals)
+    //     colview.addEventListener('mousedown', (event) => {
+    //         const sTags = new URLSearchParams(window.location.search).get('tags')
+    //         const Link = `/collection?id=${groupData.id}${sTags ? `&tags=${sTags}` : ''}`
+    //         if (event.button === 1)
+    //             event.preventDefault()
+    //         if ((event.button === 0 && event.ctrlKey) || event.button === 1) {
+    //             window.open(Link, '_blank').focus();
+    //             return
+    //         }
+    //         window.location.href = Link
+    //     })
+
+    // } else {
+    //     const additionals = createDiv('additional', list)
+
+    //     const gname = createDiv('groupName', additionals)
+    //     gname.innerHTML = groupData.name
+
+    //     if (post_list.length > 0) {
+    //         const lpages = createDiv('lost-pages', additionals)
+    //         lpages.innerHTML = '+' + post_list.length
+    //         lpages.title = `${Language.group.VAP[0]} ${post_list.length + 5} ${Language.group.VAP[1]}`
+    //         lpages.addEventListener('click', () => {
+    //             while (post_list.length > 0) {
+    //                 list.append(createPostCard(post_list.shift()))
+    //             }
+    //             list.append(additionals)
+    //             lpages.remove()
+    //         })
+    //     }
+    // }
 }
 
 //region cr select
@@ -1223,3 +1270,43 @@ function setTheme() {
 }
 
 setTheme()
+
+function createUserAvatarElem(postID, parent, isLinkToPost) {
+    if (postID) {
+        const avatar_block = createDiv('avatar-elem')
+        if (parent) parent.appendChild(avatar_block)
+
+        async function processAvatar() {
+            const avatarPostData = await request('getPostData', { id: postID })
+            if (avatarPostData.rslt == 's') {
+                let avatar
+                switch (true) {
+                    case ['.jpg', '.jpeg', '.png', '.webp', '.gif'].some(end => avatarPostData.post.file.endsWith(end)): {
+                        avatar = document.createElement('img')
+                        avatar_block.appendChild(avatar)
+                        avatar.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${postID}${avatarPostData.post.file.endsWith('.gif') ? '' : "&thumb=true"}`
+                    }; break;
+                    case ['.mp4', '.mov', '.avi', '.mkv'].some(end => avatarPostData.post.file.endsWith(end)): {
+                        avatar = document.createElement('video');
+                        avatar.controls = false;
+                        avatar.autoplay = true;
+                        avatar.loop = true;
+                        avatar.volume = 0
+                        avatar.alt = 'video preview';
+                        avatar.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${postID}`
+                        avatar_block.appendChild(avatar)
+                    }; break;
+                    default: return
+                }
+                if (isLinkToPost) {
+                    avatar.setAttribute('onclick', `window.location.href='/view?id=${postID}'`)
+                    avatar.style.cursor = 'pointer'
+                }
+                avatar.title = `${profileLang.userData.avatarPost} ${postID}`
+                avatar_block.appendChild(avatar)
+            }
+        }
+        processAvatar()
+        return avatar_block
+    }
+}

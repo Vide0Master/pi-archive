@@ -149,7 +149,6 @@ async function get_posts(page) {
     while (postIndex < post_list.length) {
         const post = post_list[postIndex]
 
-        let elm;
         switch (true) {
             case !!post.postGroupData: {
                 post.postGroupData.group.forEach(id => {
@@ -158,17 +157,15 @@ async function get_posts(page) {
                         post_list.splice(index, 1);
                     }
                 });
-                elm = createGroup(post.postGroupData)
+                await createGroup(post.postGroupData, posts_block)
             }; break;
             default: {
-                elm = createPostCard(post)
+                posts_block.appendChild(createPostCard(post))
                 postIndex++
             }; break;
         }
-
-        posts_block.appendChild(elm)
     }
-    
+
     document.querySelector('header').scrollIntoView({
         behavior: 'smooth',
         block: 'start'

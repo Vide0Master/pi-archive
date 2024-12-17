@@ -1,21 +1,64 @@
-[{
-    "versions": {
-        "Server": "",
-        "DB": "",
-        "Webpage": "b0.2.8",
-        "TGbot": ""
+[
+    {
+        "versions": {
+            "Server": "",
+            "DB": "",
+            "Webpage": "b0.2.9",
+            "TGbot": ""
+        },
+        "date": "17.12.2024",
+        "updates": [
+            {
+                "text": "Edited release dates of old patches(not accurate even now :D)",
+                "tag": "fix",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Post with video and GIF as profile avatar support<br>Works in: profile, DMs, comments of posts",
+                "tag": "new",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Remade how post groups display, they are now inline with all posts and do not break posts list with big chunky blocks!",
+                "tag": "rework",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Post cards link works now like \"a\" tag, middle mouse button opens post in new page without focusing on it",
+                "tag": "rework",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Warning! all these features also in test, as version of Archive does NOT leave beta phase<br>So please - report all your issues to GitHub!<br>T.Y. very much! &lt;3"
+            }
+        ]
     },
-    "date": "09.12.2024",
-    "updates": [
-        {
-            "text": "No theme and language error preventing use of page after login without language and theme records in DB (for old migrated users)",
-            "tag": "fix",
-            "services": [
-                "Webpage"
-            ]
-        }
-    ]
-},
+    {
+        "versions": {
+            "Server": "",
+            "DB": "",
+            "Webpage": "b0.2.8",
+            "TGbot": ""
+        },
+        "date": "11.12.2024",
+        "updates": [
+            {
+                "text": "No theme and language error preventing use of page after login without language and theme records in DB (for old migrated users)",
+                "tag": "fix",
+                "services": [
+                    "Webpage"
+                ]
+            }
+        ]
+    },
     {
         "versions": {
             "Server": "b0.1.11",
@@ -23,7 +66,7 @@
             "Webpage": "b0.2.7",
             "TGbot": ""
         },
-        "date": "09.12.2024",
+        "date": "10.12.2024",
         "updates": [
             {
                 "text": "Added new query parameter \"h\" to /file route. Used to specify height of resolvable image<br>This enables ability to preprocess images for user in smaller sizes to transport and display<br>So this also fixes perfomance with gigantic post images",

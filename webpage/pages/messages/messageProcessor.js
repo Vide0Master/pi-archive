@@ -52,14 +52,9 @@ async function MessageProcessor() {
         if (userData.data.usersettings.ProfileAvatarPostID) {
             const avatar_block = createDiv('pfp-cont', userRow)
             avatar_block.style.borderRadius = '1.5em'
-
-            const avatar = document.createElement('img')
-            avatar_block.appendChild(avatar)
-            avatar.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${userData.data.usersettings.ProfileAvatarPostID}&thumb=true`
+            createUserAvatarElem(userData.data.usersettings.ProfileAvatarPostID, avatar_block)
         } else {
-            const avatar_block = createDiv('pfp-cont')
-            userRow.appendChild(avatar_block)
-
+            const avatar_block = createDiv('pfp-cont', userRow)
             const TN = createDiv('temp-name', avatar_block)
             TN.innerHTML = userData.data.username.substring(0, 2)
         }
