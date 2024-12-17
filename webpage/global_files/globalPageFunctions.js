@@ -1271,6 +1271,7 @@ function setTheme() {
 
 setTheme()
 
+//region create avatar element
 function createUserAvatarElem(postID, parent, isLinkToPost) {
     if (postID) {
         const avatar_block = createDiv('avatar-elem')
@@ -1294,6 +1295,11 @@ function createUserAvatarElem(postID, parent, isLinkToPost) {
                         avatar.volume = 0
                         avatar.alt = 'video preview';
                         avatar.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${postID}`
+                        avatar.addEventListener('timeupdate', () => {
+                            if (video.currentTime > 30) {
+                                video.currentTime = 0;
+                            }
+                        });
                         avatar_block.appendChild(avatar)
                     }; break;
                     default: return
