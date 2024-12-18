@@ -1,6 +1,24 @@
 [
     {
         "versions": {
+            "Server": "",
+            "DB": "",
+            "Webpage": "b0.2.14",
+            "TGbot": ""
+        },
+        "date": "18.12.2024",
+        "updates": [
+            {
+                "text": "Group/collection display is now less blocky and inline with all other elements and is prettified to unfiy list of all post cards",
+                "tag": "rework",
+                "services": [
+                    "Webpage"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
             "Server": "b0.1.12",
             "DB": "",
             "Webpage": "",

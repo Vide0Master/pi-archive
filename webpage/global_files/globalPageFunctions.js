@@ -653,6 +653,7 @@ async function createGroup(groupData, parentElem) {
 
     const postCardList = []
     const outlines = []
+    let lastCardUnopened
 
     function regOutlineTrigger(elem) {
         elem.addEventListener('mouseenter', () => {
@@ -666,7 +667,6 @@ async function createGroup(groupData, parentElem) {
             })
         })
     }
-
 
     const groupControlCont = createDiv('group-element-container', parentElem)
     regOutlineTrigger(groupControlCont)
@@ -686,11 +686,13 @@ async function createGroup(groupData, parentElem) {
                     if (i >= 5) elm.style.display = 'none'
                 })
                 additinalCardsController.innerText = `+${postCardList.length - 5}`
+                lastCardUnopened.classList.add('group-last-border')
             } else {
                 postCardList.forEach((elm) => {
                     elm.style.display = ''
                 })
                 additinalCardsController.innerText = `-${postCardList.length - 5}`
+                lastCardUnopened.classList.remove('group-last-border')
             }
             isOpen = !isOpen
         })
@@ -711,15 +713,24 @@ async function createGroup(groupData, parentElem) {
         })
     }
 
-    post_list.forEach(postData => {
+    post_list.forEach((postData, cardN) => {
         const postCard = createPostCard(postData)
+        if(cardN==post_list.length-1){
+            postCard.classList.add('group-last-border')
+        }
         parentElem.appendChild(postCard)
         postCardList.push(postCard)
         postCard.style.setProperty('--borderclr', groupData.color)
-        const outline = createDiv('group-outline', postCard)
+        const outline = createDiv('group-outline')
+        postCard.insertBefore(outline, Array.from(postCard.childNodes)[0])
         outlines.push(outline)
         regOutlineTrigger(postCard)
     })
+
+    if(post_list.length>5){
+        lastCardUnopened = postCardList[4]
+        lastCardUnopened.classList.add('group-last-border')
+    }
 
     postCardList.forEach((cont, i) => {
         if (i >= 5) cont.style.display = 'none'
