@@ -974,13 +974,6 @@ img {
         transition: 0.2s;
         box-sizing: border-box;
 
-        &.active {
-            border: solid 0.13em var(--borderclr);
-            min-height: calc(100% + 0.6em);
-            min-width: calc(100% + 0.6em);
-            border-radius: 0.2em;
-        }
-
         .additional-cards {
             font-size: 2em;
             font-weight: bolder;
@@ -997,6 +990,26 @@ img {
             white-space: normal;
             word-wrap: break-word;
             text-align: center;
+            font-size: 1.1em;
+            color: var(--borderclr);
+            transition: 0.2s;
+        }
+
+        &.active {
+            border: solid 0.13em var(--borderclr);
+            min-height: calc(100% + 0.6em);
+            min-width: calc(100% + 0.6em);
+            border-radius: 0.2em;
+            border-top-left-radius: 1em;
+            border-bottom-left-radius: 1em;
+            border-right-color: transparent;
+            background-color: transparent;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+
+            .group-name{
+                color: var(--font-color1);
+            }
         }
     }
 }
@@ -1095,8 +1108,8 @@ input[type=color] {
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 90%;
-        height: 90%;
+        width: 0%;
+        height: 100%;
         box-sizing: border-box;
         transition: 0.2s;
         border-radius: 0.2em;
@@ -1104,16 +1117,29 @@ input[type=color] {
         pointer-events: none;
 
         border: solid 0.1em color-mix(in srgb, var(--borderclr), transparent 50%);
-
+        border-right-color: transparent;
+        border-left-color: transparent;
         opacity: 0;
 
         &.active {
             top: 50%;
             left: 50%;
-            width: calc(100% + 0.6em);
+            width: calc(100% + 1.2em);
             height: calc(100% + 0.6em);
             border: solid 0.1em var(--borderclr);
+            border-right-color: transparent;
+            border-left-color: transparent;
+            border-radius: 0;
             opacity: 1;
+        }
+    }
+
+    &.group-last-border{
+        .group-outline{
+            border-top-right-radius: 1em;
+            border-bottom-right-radius: 1em;
+            border-right-color: var(--borderclr);
+            left: calc(50% - 0.15em);
         }
     }
 
