@@ -886,6 +886,8 @@ img {
     gap: 0.5em;
 
     max-width: 100vw;
+    max-height: 100vh;
+    overflow: auto;
 
     .label {
         font-size: 1.2em;

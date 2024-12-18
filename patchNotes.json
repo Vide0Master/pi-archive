@@ -1,6 +1,31 @@
 [
     {
         "versions": {
+            "Server": "b0.1.12",
+            "DB": "",
+            "Webpage": "",
+            "TGbot": ""
+        },
+        "date": "17.12.2024",
+        "updates": [
+            {
+                "text": "Crash on sending post in TG DM while not authed from a single TG account",
+                "tag": "fix",
+                "services": [
+                    "Server"
+                ]
+            },
+            {
+                "text": "Updated serverside caching system to cache anything that is requested from it to lower load on physical storage<br>Moved all requestable files to cache that stores files for 7 days<br>Clientside (website) cache saves cached files for 7 days<br>Made all cache requests multipart(HTTP response 206) to give ability to slow but steady load images (images that are NOT posts or preview images of video posts are sent to client via single file due to small size)<br>Multipart is best thing for users with slow internet speeds, enjoy!",
+                "tag": "rework",
+                "services": [
+                    "Server"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
             "Server": "",
             "DB": "",
             "Webpage": "b0.2.13",

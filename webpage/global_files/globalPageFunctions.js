@@ -787,7 +787,7 @@ function reorderOverlay(group, callback) {
         let draggedItem = null;
         let selectedItem = null;
 
-        const pcardClass = '.post-card'
+        const pcardClass = '.post-card-container'
 
         reorderContainer.addEventListener('dragstart', (e) => {
             if (e.target.closest(pcardClass)) {
