@@ -160,10 +160,6 @@ app.get('/file', async (req, res) => {
         return res.status(403).send('<h1>403</h1>Access rejected!');
     }
 
-    // if (user_perm === 'e') {
-    //     return res.status(500).send('<h1>500</h1>Server error!');
-    // }
-
     const postData = await sysController.dbinteract.getPostData(postID);
     if (postData.rslt === 'e') {
         return res.status(500).send('<h1>500</h1>Server error: ' + postData.msg);
@@ -219,9 +215,11 @@ app.get('/file', async (req, res) => {
 
     let processedFileBuffer;
 
+    const fileBuffer = fs.readFileSync(filepath);
+
     if (generateThumbnail) {
         if (mimeType.startsWith('image/')) {
-            processedFileBuffer = await sharp(filepath).resize({ height: 200, fit: 'inside' }).toBuffer();
+            processedFileBuffer = await sharp(fileBuffer).resize({ height: 200, fit: 'inside' }).toBuffer();
         } else if (mimeType.startsWith('video/')) {
             const thumbnailPath = path.join(__dirname, '../storage/video_thumbnails', `THUMBFOR-${path.parse(filepath).name}.jpg`);
             if (fs.existsSync(thumbnailPath)) {
@@ -234,12 +232,12 @@ app.get('/file', async (req, res) => {
         }
     } else if (!!heightQuery && heightQuery < JSON.parse(postData.post.size).y) {
         if (mimeType.startsWith('image/')) {
-            processedFileBuffer = await sharp(filepath).resize({ height: heightQuery, fit: 'inside' }).toBuffer();
+            processedFileBuffer = await sharp(fileBuffer).resize({ height: heightQuery, fit: 'inside' }).toBuffer();
         } else {
             return res.status(400).send('<h1>400</h1>Unsupported filetype height query!');
         }
     } else {
-        processedFileBuffer = fs.readFileSync(filepath);
+        processedFileBuffer = fileBuffer;
     }
 
     sysController.fileCacheController.createRecord(fileCacheKey, processedFileBuffer, 170);
@@ -267,7 +265,6 @@ app.get('/file', async (req, res) => {
     res.writeHead(206, head);
     res.end(chunk);
 });
-
 
 app.use(`/eula`, express.static(globalFilesPath));
 app.get('/eula', async (req, res) => {

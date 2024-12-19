@@ -1,6 +1,24 @@
 [
     {
         "versions": {
+            "Server": "b0.1.13",
+            "DB": "",
+            "Webpage": "",
+            "TGbot": ""
+        },
+        "date": "19.12.2024",
+        "updates": [
+            {
+                "text": "Post, which file was requested with compression cannot be deleted because of sharp library didnt closed file descriptor of posts file",
+                "tag": "fix",
+                "services": [
+                    "Server"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
             "Server": "",
             "DB": "",
             "Webpage": "b0.2.14",
