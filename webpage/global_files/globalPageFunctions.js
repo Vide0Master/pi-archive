@@ -715,7 +715,7 @@ async function createGroup(groupData, parentElem) {
 
     post_list.forEach((postData, cardN) => {
         const postCard = createPostCard(postData)
-        if(cardN==post_list.length-1){
+        if (cardN == post_list.length - 1) {
             postCard.classList.add('group-last-border')
         }
         parentElem.appendChild(postCard)
@@ -727,7 +727,7 @@ async function createGroup(groupData, parentElem) {
         regOutlineTrigger(postCard)
     })
 
-    if(post_list.length>5){
+    if (post_list.length > 5) {
         lastCardUnopened = postCardList[4]
         lastCardUnopened.classList.add('group-last-border')
     }
@@ -1278,4 +1278,40 @@ function createUserAvatarElem(postID, parent, isLinkToPost) {
         processAvatar()
         return avatar_block
     }
+}
+
+function createChristmasSnowflakes(count = 100) {
+    const snowflakesContainer = createDiv('snowflakes', document.querySelector('.norma-page-container'));
+
+    for (let i = 0; i < count; i++) {
+        const snowflake = createDiv('snowflake', snowflakesContainer);
+        snowflake.innerHTML = '❄';
+
+        function animateSnowflake() {
+            const randPos = Math.random() * 100;
+            const randTime = Math.random() * 10 + 20;
+
+            let vars = ''
+            vars += `--pos-x: ${randPos}%; `
+            for (let i = 0; i <= 10; i++) {
+                vars += `--pos-x-${i}: ${Math.random() * 1000 - 500}%; `
+            }
+            vars += `animation: snowFall ${randTime}s linear infinite; animation-delay: ${Math.random() * 15}s; `
+            const colorGrad = Math.random() * 100 + 155
+            vars += `color: rgb(${colorGrad}, ${colorGrad}, 255); `
+            vars += `--SF-size: ${Math.random() * 100 + 80}%; `
+            snowflake.setAttribute('style', vars);
+
+            snowflake.addEventListener('animationend', () => {
+                snowflake.removeAttribute('style');
+                animateSnowflake();
+            });
+        }
+        animateSnowflake();
+    }
+}
+
+
+if ([11, 0, 1].includes(new Date().getMonth())) {
+    createChristmasSnowflakes();
 }
