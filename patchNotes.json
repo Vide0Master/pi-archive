@@ -1,6 +1,24 @@
 [
     {
         "versions": {
+            "Server": "",
+            "DB": "",
+            "Webpage": "b0.2.15",
+            "TGbot": ""
+        },
+        "date": "19.12.2024",
+        "updates": [
+            {
+                "text": "Jingle bells, jingle bells, jingle all the way! Oh what fun it is to ride in a one horse open sleigh! Hey!",
+                "tag": "new",
+                "services": [
+                    "Webpage"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
             "Server": "b0.1.13",
             "DB": "",
             "Webpage": "",
