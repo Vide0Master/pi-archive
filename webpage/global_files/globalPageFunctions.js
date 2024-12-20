@@ -1280,8 +1280,34 @@ function createUserAvatarElem(postID, parent, isLinkToPost) {
     }
 }
 
-function createChristmasSnowflakes(count = 100) {
+//region snowflakes
+function createChristmasSnowflakes() {
     const snowflakesContainer = createDiv('snowflakes', document.querySelector('.norma-page-container'));
+
+    function getDeviceType() {
+        const userAgent = navigator.userAgent;
+
+        if (/Mobi|Android/i.test(userAgent)) {
+            return 'Mobile';
+        } else if (/Tablet|iPad/i.test(userAgent)) {
+            return 'Tablet';
+        } else {
+            return 'Desktop';
+        }
+    }
+
+    let count = 0
+    switch (getDeviceType()) {
+        case 'Mobile': {
+            count = 30
+        }; break;
+        case 'Tablet': {
+            count = 50
+        };break
+        case 'Desktop': {
+            count = 70
+        };break;
+    }
 
     for (let i = 0; i < count; i++) {
         const snowflake = createDiv('snowflake', snowflakesContainer);
