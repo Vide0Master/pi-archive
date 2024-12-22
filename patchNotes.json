@@ -3,6 +3,24 @@
         "versions": {
             "Server": "",
             "DB": "",
+            "Webpage": "b0.2.16",
+            "TGbot": ""
+        },
+        "date": "19.12.2024",
+        "updates": [
+            {
+                "text": "Group/collection cards are now loaded asyncronously to prevent page from freezing on big collections",
+                "tag": "rework",
+                "services": [
+                    "Webpage"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
+            "Server": "",
+            "DB": "",
             "Webpage": "b0.2.15",
             "TGbot": ""
         },
