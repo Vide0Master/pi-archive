@@ -157,7 +157,7 @@ async function get_posts(page) {
                         post_list.splice(index, 1);
                     }
                 });
-                await createGroup(post.postGroupData, posts_block)
+                posts_block.appendChild(createGroup(post.postGroupData))
             }; break;
             default: {
                 posts_block.appendChild(createPostCard(post))

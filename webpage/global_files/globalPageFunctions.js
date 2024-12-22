@@ -641,100 +641,113 @@ function capitalizeFirstLetter(string) {
 }
 
 //region create group
-async function createGroup(groupData, parentElem) {
+function createGroup(groupData) {
+    const tempCont = createDiv('temp-container')
+    tempCont.style.display = 'none'
 
-    const post_list = await request('getPosts',
-        {
-            query: `id:${groupData.group.join(',')}`,
-            page: 1,
-            postsCount: 9999,
-            grpOverride: true
-        })
-
-    const postCardList = []
-    const outlines = []
-    let lastCardUnopened
-
-    function regOutlineTrigger(elem) {
-        elem.addEventListener('mouseenter', () => {
-            outlines.forEach(ln => {
-                ln.classList.add('active')
+    async function process() {
+        const post_list = await request('getPosts',
+            {
+                query: `id:${groupData.group.join(',')}`,
+                page: 1,
+                postsCount: 9999,
+                grpOverride: true
             })
-        })
-        elem.addEventListener('mouseleave', () => {
-            outlines.forEach(ln => {
-                ln.classList.remove('active')
+
+        const postCardList = []
+        const outlines = []
+        let lastCardUnopened
+
+        function regOutlineTrigger(elem) {
+            elem.addEventListener('mouseenter', () => {
+                outlines.forEach(ln => {
+                    ln.classList.add('active')
+                })
             })
-        })
-    }
-
-    const groupControlCont = createDiv('group-element-container', parentElem)
-    regOutlineTrigger(groupControlCont)
-    groupControlCont.style.setProperty('--borderclr', groupData.color)
-    const infoContainer = createDiv('group-info-container', groupControlCont)
-    outlines.push(infoContainer)
-    const groupNameLine = createDiv('group-name', infoContainer)
-    groupNameLine.innerText = groupData.name
-
-    if (post_list.length > 5) {
-        const additinalCardsController = createDiv('additional-cards', infoContainer)
-        additinalCardsController.innerText = `+${post_list.length - 5}`
-        let isOpen = false
-        additinalCardsController.addEventListener('click', () => {
-            if (isOpen) {
-                postCardList.forEach((elm, i) => {
-                    if (i >= 5) elm.style.display = 'none'
+            elem.addEventListener('mouseleave', () => {
+                outlines.forEach(ln => {
+                    ln.classList.remove('active')
                 })
-                additinalCardsController.innerText = `+${postCardList.length - 5}`
-                lastCardUnopened.classList.add('group-last-border')
-            } else {
-                postCardList.forEach((elm) => {
-                    elm.style.display = ''
-                })
-                additinalCardsController.innerText = `-${postCardList.length - 5}`
-                lastCardUnopened.classList.remove('group-last-border')
-            }
-            isOpen = !isOpen
-        })
-    }
-
-    if (groupData.type == 'collection') {
-        const colview = createButton(Language.group.colView, infoContainer)
-        colview.addEventListener('mousedown', (event) => {
-            const sTags = new URLSearchParams(window.location.search).get('tags')
-            const Link = `/collection?id=${groupData.id}${sTags ? `&tags=${sTags}` : ''}`
-            if (event.button === 1)
-                event.preventDefault()
-            if ((event.button === 0 && event.ctrlKey) || event.button === 1) {
-                window.open(Link, '_blank').focus();
-                return
-            }
-            window.location.href = Link
-        })
-    }
-
-    post_list.forEach((postData, cardN) => {
-        const postCard = createPostCard(postData)
-        if (cardN == post_list.length - 1) {
-            postCard.classList.add('group-last-border')
+            })
         }
-        parentElem.appendChild(postCard)
-        postCardList.push(postCard)
-        postCard.style.setProperty('--borderclr', groupData.color)
-        const outline = createDiv('group-outline')
-        postCard.insertBefore(outline, Array.from(postCard.childNodes)[0])
-        outlines.push(outline)
-        regOutlineTrigger(postCard)
-    })
 
-    if (post_list.length > 5) {
-        lastCardUnopened = postCardList[4]
-        lastCardUnopened.classList.add('group-last-border')
+        const groupControlCont = createDiv('group-element-container', tempCont)
+        regOutlineTrigger(groupControlCont)
+        groupControlCont.style.setProperty('--borderclr', groupData.color)
+        const infoContainer = createDiv('group-info-container', groupControlCont)
+        outlines.push(infoContainer)
+        const groupNameLine = createDiv('group-name', infoContainer)
+        groupNameLine.innerText = groupData.name
+
+        if (post_list.length > 5) {
+            const additinalCardsController = createDiv('additional-cards', infoContainer)
+            additinalCardsController.innerText = `+${post_list.length - 5}`
+            let isOpen = false
+            additinalCardsController.addEventListener('click', () => {
+                if (isOpen) {
+                    postCardList.forEach((elm, i) => {
+                        if (i >= 5) elm.style.display = 'none'
+                    })
+                    additinalCardsController.innerText = `+${postCardList.length - 5}`
+                    lastCardUnopened.classList.add('group-last-border')
+                } else {
+                    postCardList.forEach((elm) => {
+                        elm.style.display = ''
+                    })
+                    additinalCardsController.innerText = `-${postCardList.length - 5}`
+                    lastCardUnopened.classList.remove('group-last-border')
+                }
+                isOpen = !isOpen
+            })
+        }
+
+        if (groupData.type == 'collection') {
+            const colview = createButton(Language.group.colView, infoContainer)
+            colview.addEventListener('mousedown', (event) => {
+                const sTags = new URLSearchParams(window.location.search).get('tags')
+                const Link = `/collection?id=${groupData.id}${sTags ? `&tags=${sTags}` : ''}`
+                if (event.button === 1)
+                    event.preventDefault()
+                if ((event.button === 0 && event.ctrlKey) || event.button === 1) {
+                    window.open(Link, '_blank').focus();
+                    return
+                }
+                window.location.href = Link
+            })
+        }
+
+        post_list.forEach((postData, cardN) => {
+            const postCard = createPostCard(postData)
+            if (cardN == post_list.length - 1) {
+                postCard.classList.add('group-last-border')
+            }
+            tempCont.appendChild(postCard)
+            postCardList.push(postCard)
+            postCard.style.setProperty('--borderclr', groupData.color)
+            const outline = createDiv('group-outline')
+            postCard.insertBefore(outline, Array.from(postCard.childNodes)[0])
+            outlines.push(outline)
+            regOutlineTrigger(postCard)
+        })
+
+        if (post_list.length > 5) {
+            lastCardUnopened = postCardList[4]
+            lastCardUnopened.classList.add('group-last-border')
+        }
+
+        postCardList.forEach((cont, i) => {
+            if (i >= 5) cont.style.display = 'none'
+        })
+
+        let parent = tempCont
+        Array.from(tempCont.children).forEach((child) => {
+            parent.parentNode.insertBefore(child, parent.nextSibling);
+            parent = child;
+        })
     }
+    process()
 
-    postCardList.forEach((cont, i) => {
-        if (i >= 5) cont.style.display = 'none'
-    })
+    return tempCont
 }
 
 //region cr select
@@ -1303,10 +1316,10 @@ function createChristmasSnowflakes() {
         }; break;
         case 'Tablet': {
             count = 50
-        };break
+        }; break;
         case 'Desktop': {
             count = 70
-        };break;
+        }; break;
     }
 
     for (let i = 0; i < count; i++) {
@@ -1322,7 +1335,8 @@ function createChristmasSnowflakes() {
             for (let i = 0; i <= 10; i++) {
                 vars += `--pos-x-${i}: ${Math.random() * 1000 - 500}%; `
             }
-            vars += `animation: snowFall ${randTime}s linear infinite; animation-delay: ${Math.random() * 15}s; `
+
+            vars += `animation: snowFall ${randTime}s linear forwards; animation-delay: ${Math.random() * 15}s; `
             const colorGrad = Math.random() * 100 + 155
             vars += `color: rgb(${colorGrad}, ${colorGrad}, 255); `
             vars += `--SF-size: ${Math.random() * 100 + 80}%; `
