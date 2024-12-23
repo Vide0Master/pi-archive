@@ -428,8 +428,6 @@ function setFooterText() {
                 }
             }
 
-
-
             const updatesCol = createDiv('updates-list', updateContainer)
             for (const upd of update.updates) {
                 const lineContainer = createDiv('line-cont', updatesCol)
@@ -466,6 +464,9 @@ function setFooterText() {
         }
     })
 
+    createAction('R.I.P.', actions, () => {
+        openRIP()
+    })
     //createIndicator('g', sysLabel)
 
     // const sysHealthInfoContainer = createDiv('sys-health-container', footer)
@@ -1354,4 +1355,25 @@ function createChristmasSnowflakes() {
 
 if ([11, 0, 1].includes(new Date().getMonth())) {
     createChristmasSnowflakes();
+}
+
+//region RIP
+function openRIP() {
+    const overlay = createBlurOverlay()
+    overlay.addEventListener('click', (e) => {
+        if (e.target == overlay) overlay.remove()
+    })
+    const ripCont = createDiv('rip-cont', overlay)
+
+    const ripTitle = createDiv('rip-title', ripCont)
+    ripTitle.innerHTML = 'Rest in peace...'
+
+    const list = [
+        { date: 2024, name: "кішка Попільничка" }
+    ]
+
+    for (const item of list) {
+        const itemCont = createDiv('rip-line', ripCont)
+        itemCont.innerHTML = `${item.date} - ${item.name}`
+    }
 }
