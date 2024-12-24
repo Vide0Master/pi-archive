@@ -957,7 +957,7 @@ img {
     }
 
     .group-info-container {
-        border: solid 0.13em var(--color3);
+        border: solid 3px var(--color3);
         background-color: var(--color1);
         color: var(--font-color1);
         min-height: 50px;
@@ -1117,7 +1117,7 @@ input[type=color] {
 
         pointer-events: none;
 
-        border: solid 0.1em color-mix(in srgb, var(--borderclr), transparent 50%);
+        border: solid 3px color-mix(in srgb, var(--borderclr), transparent 50%);
         border-right-color: transparent;
         border-left-color: transparent;
         opacity: 0;
@@ -1127,7 +1127,7 @@ input[type=color] {
             left: 50%;
             width: calc(100% + 1.2em);
             height: calc(100% + 0.6em);
-            border: solid 0.1em var(--borderclr);
+            border: solid 2px var(--borderclr);
             border-right-color: transparent;
             border-left-color: transparent;
             border-radius: 0;

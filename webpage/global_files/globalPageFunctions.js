@@ -1369,7 +1369,7 @@ function openRIP() {
     ripTitle.innerHTML = 'Rest in peace...'
 
     const list = [
-        { date: 2024, name: "кішка Попільничка" }
+        { date: 2024, name: "Кіт Пузирь" }
     ]
 
     for (const item of list) {
