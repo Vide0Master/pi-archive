@@ -1560,9 +1560,9 @@ input[type=checkbox] {
 
         @keyframes snowFall {
             0% {
-                top: calc(0% + (var(--pos-x-0) / 250));
+                top: calc(-30px + (var(--pos-x-0) / 250));
                 transform: translateX(var(--pos-x-0)) scale(var(--SF-size));
-                opacity: 0;
+                opacity: 1;
             }
 
             10% {

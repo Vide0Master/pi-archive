@@ -1310,47 +1310,51 @@ function createChristmasSnowflakes() {
         }
     }
 
-    let count = 0
+    let maxcount = 0
     switch (getDeviceType()) {
         case 'Mobile': {
-            count = 30
+            maxcount = 30
         }; break;
         case 'Tablet': {
-            count = 50
+            maxcount = 50
         }; break;
         case 'Desktop': {
-            count = 70
+            maxcount = 70
         }; break;
     }
 
-    for (let i = 0; i < count; i++) {
+    function animateSnowflake() {
         const snowflake = createDiv('snowflake', snowflakesContainer);
-        snowflake.innerHTML = '❄';
 
-        function animateSnowflake() {
-            const randPos = Math.random() * 100;
-            const randTime = Math.random() * 10 + 20;
+        const weight = Math.floor(Math.random() * 4)
 
-            let vars = ''
-            vars += `--pos-x: ${randPos}%; `
-            for (let i = 0; i <= 10; i++) {
-                vars += `--pos-x-${i}: ${Math.random() * 1000 - 500}%; `
-            }
+        snowflake.innerHTML = ['•', '❅', '❄', '❆',][weight];
 
-            vars += `animation: snowFall ${randTime}s linear forwards; animation-delay: ${Math.random() * 15}s; `
-            const colorGrad = Math.random() * 100 + 155
-            vars += `color: rgb(${colorGrad}, ${colorGrad}, 255); `
-            vars += `--SF-size: ${Math.random() * 100 + 80}%; `
-            snowflake.setAttribute('style', vars);
+        const randPos = Math.random() * 100;
+        const randTime = Math.random() * 3 + (7 * (weight + 1));
 
-            snowflake.addEventListener('animationend', () => {
-                snowflake.removeAttribute('style');
-                snowflake.offsetHeight;
-                animateSnowflake();
-            });
+        let vars = ''
+        vars += `--pos-x: ${randPos}%; `
+        for (let i = 0; i <= 10; i++) {
+            vars += `--pos-x-${i}: ${Math.random() * 1000 - 500}%; `
         }
-        animateSnowflake();
+
+        vars += `animation: snowFall ${randTime}s linear forwards; `
+        const colorGrad = Math.random() * 100 + 155
+        vars += `color: rgb(${colorGrad}, ${colorGrad}, 255); `
+        vars += `--SF-size: ${Math.random() * 10 + (weight+1)*50}%; `
+        snowflake.setAttribute('style', vars);
+
+        snowflake.addEventListener('animationend', () => {
+            snowflake.remove();
+        });
     }
+
+    setInterval(() => {
+        if (Array.from(snowflakesContainer.children).length < maxcount) { 
+            animateSnowflake();
+        }
+    }, 500);
 }
 
 
