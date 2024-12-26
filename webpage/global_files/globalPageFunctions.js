@@ -1345,6 +1345,7 @@ function createChristmasSnowflakes() {
 
             snowflake.addEventListener('animationend', () => {
                 snowflake.removeAttribute('style');
+                el.offsetHeight;
                 animateSnowflake();
             });
         }
