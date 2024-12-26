@@ -1,6 +1,24 @@
 [
     {
         "versions": {
+            "Server": "b0.1.14",
+            "DB": "",
+            "Webpage": "",
+            "TGbot": ""
+        },
+        "date": "19.12.2024",
+        "updates": [
+            {
+                "text": "<a href=\"https://github.com/Vide0Master/pi-archive/issues/160\">Issue #160</a> - Server crash on resizing corrupted image files",
+                "tag": "fix",
+                "services": [
+                    "Server"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
             "Server": "",
             "DB": "",
             "Webpage": "b0.2.16",

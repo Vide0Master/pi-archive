@@ -219,7 +219,12 @@ app.get('/file', async (req, res) => {
 
     if (generateThumbnail) {
         if (mimeType.startsWith('image/')) {
-            processedFileBuffer = await sharp(fileBuffer).resize({ height: 200, fit: 'inside' }).toBuffer();
+            try{
+                processedFileBuffer = await sharp(fileBuffer).resize({ height: 200, fit: 'inside' }).toBuffer();
+            }catch(e){
+                cmd(`e/Failed to generate thumbnail for ${filepath}`)
+                return res.status(500).send('<h1>500</h1>Failed to generate thumbnail!\nError stack: ' + e);
+            }
         } else if (mimeType.startsWith('video/')) {
             const thumbnailPath = path.join(__dirname, '../storage/video_thumbnails', `THUMBFOR-${path.parse(filepath).name}.jpg`);
             if (fs.existsSync(thumbnailPath)) {
@@ -232,7 +237,12 @@ app.get('/file', async (req, res) => {
         }
     } else if (!!heightQuery && heightQuery < JSON.parse(postData.post.size).y) {
         if (mimeType.startsWith('image/')) {
-            processedFileBuffer = await sharp(fileBuffer).resize({ height: heightQuery, fit: 'inside' }).toBuffer();
+            try{
+                processedFileBuffer = await sharp(fileBuffer).resize({ height: heightQuery, fit: 'inside' }).toBuffer();
+            }catch(e){
+                cmd(`e/Failed to resize image for ${filepath}`)
+                return res.status(500).send('<h1>500</h1>Failed to resize image!\nError stack: ' + e);
+            }
         } else {
             return res.status(400).send('<h1>400</h1>Unsupported filetype height query!');
         }
