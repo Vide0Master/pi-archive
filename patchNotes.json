@@ -3,7 +3,7 @@
         "versions": {
             "Server": "b0.1.14",
             "DB": "",
-            "Webpage": "",
+            "Webpage": "b0.2.17",
             "TGbot": ""
         },
         "date": "19.12.2024",
@@ -13,6 +13,13 @@
                 "tag": "fix",
                 "services": [
                     "Server"
+                ]
+            },
+            {
+                "text": "Snowflakes was not looped",
+                "tag": "fix",
+                "services": [
+                    "Webpage"
                 ]
             }
         ]
