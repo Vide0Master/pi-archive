@@ -1328,7 +1328,7 @@ function createChristmasSnowflakes() {
 
         const weight = Math.floor(Math.random() * 4)
 
-        snowflake.innerHTML = ['•', '❅', '❄', '❆',][weight];
+        snowflake.innerHTML = ['•', '❅', '❄', '❆'][weight];
 
         const randPos = Math.random() * 100;
         const randTime = Math.random() * 3 + (7 * (weight + 1));
