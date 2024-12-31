@@ -1,12 +1,42 @@
 [
     {
         "versions": {
+            "Server": "b0.1.16",
+            "DB": "",
+            "Webpage": "b0.2.18",
+            "TGbot": ""
+        },
+        "date": "31.12.2024",
+        "updates": [
+            {
+                "text": "Collections page to view all avilable collections",
+                "tag": "new",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Admin page colors does not match with themes",
+                "tag": "fix",
+                "services": [
+                    "Webpage"
+                ],
+                "users": [
+                    "moderator",
+                    "admin",
+                    "owner"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
             "Server": "b0.1.15",
             "DB": "",
             "Webpage": "",
             "TGbot": ""
         },
-        "date": "19.12.2024",
+        "date": "30.12.2024",
         "updates": [
             {
                 "text": "No ability to download posts",

@@ -48,6 +48,7 @@ async function setHeaderButtrons() {
     })
     const pages = [
         { name: headerLang[0], link: '/search', restr: 1 },
+        { name: headerLang[5], link: '/collection', restr: 1 },
         { name: headerLang[1], link: '/post', restr: 1 },
         { name: headerLang[3], link: '/messages', restr: 1 },
         { name: headerLang[2], link: '/profile', restr: 1 },
@@ -236,14 +237,6 @@ function createPostCard(postData, noClickReaction) {
     const postCardContainer = createDiv('post-card-container')
     const postCard = createDiv('post-card', postCardContainer)
 
-    if (!noClickReaction) {
-        const lnkElem = document.createElement('a')
-        postCard.appendChild(lnkElem)
-        lnkElem.className = 'link'
-        const sTags = new URLSearchParams(window.location.search).get('tags')
-        lnkElem.href = `/view?id=${postData.id}${sTags ? `&tags=${sTags}` : ''}`
-    }
-
     const postDataCont = createDiv('post-data-container', postCard)
 
     const postIdCont = createDiv('post-id-container', postDataCont)
@@ -288,6 +281,14 @@ function createPostCard(postData, noClickReaction) {
     }
 
     const imageContainer = createDiv('image-container', postCard)
+
+    if (!noClickReaction) {
+        const lnkElem = document.createElement('a')
+        imageContainer.appendChild(lnkElem)
+        lnkElem.className = 'link'
+        const sTags = new URLSearchParams(window.location.search).get('tags')
+        lnkElem.href = `/view?id=${postData.id}${sTags ? `&tags=${sTags}` : ''}`
+    }
 
     const previewImg = document.createElement('img')
     imageContainer.appendChild(previewImg)

@@ -31,7 +31,8 @@
                 "Upload",
                 "Profile",
                 "Messages",
-                "Admin panel"
+                "Admin panel",
+                "Collections"
             ],
             "footer": {
                 "disclaimer": "Developed by VideoMaster. System with limited access. Any decisions made by owner is undeniable.",

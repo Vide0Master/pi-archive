@@ -2,9 +2,9 @@
     "DEVMODE": false,
     "AUDITCONTROL": "MOVE",
     "vesion": {
-        "Server": "b0.1.15",
+        "Server": "b0.1.16",
         "DB": "b1.1",
-        "Webpage": "b0.2.17",
+        "Webpage": "b0.2.18",
         "TGbot": "b0.2.4"
     },
     "user_status": {

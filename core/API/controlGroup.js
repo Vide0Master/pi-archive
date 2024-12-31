@@ -92,15 +92,23 @@ module.exports = (request, userData) => {
                 resolve(deleteResult)
             }; break;
 
+            //region setGroupType
             case 'setGroupType': {
                 const setGroupTypeResult = await sysController.dbinteract.setGroupType(request.groupID, request.newGroupType)
                 resolve(setGroupTypeResult)
             }; break;
 
+            //region setGroupColor
             case 'setGroupColor': {
                 const setGroupColorResult = await sysController.dbinteract.setGroupColor(request.groupID, request.newColor)
                 resolve(setGroupColorResult)
             }
+
+            //region getAllCollections
+            case 'getAllCollections': {
+                const allCollections = await sysController.dbinteract.getAllCollections()
+                resolve(allCollections)
+            }; break;
         }
     })
 }
