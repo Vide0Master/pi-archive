@@ -1201,7 +1201,7 @@ function showPopupInput(title = 'Title', defaultText = '', cb) {
     blurryBackground.appendChild(popup)
 
     function closePopup() {
-        document.body.removeChild(blurryBackground)
+        blurryBackground.remove()
     }
 
     blurryBackground.addEventListener('click', (event) => {

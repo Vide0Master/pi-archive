@@ -1,6 +1,24 @@
 [
     {
         "versions": {
+            "Server": "",
+            "DB": "",
+            "Webpage": "b0.2.19",
+            "TGbot": ""
+        },
+        "date": "31.12.2024",
+        "updates": [
+            {
+                "text": "Multiple post tags adding and removing for collection page",
+                "tag": "new",
+                "services": [
+                    "Webpage"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
             "Server": "b0.1.16",
             "DB": "",
             "Webpage": "b0.2.18",

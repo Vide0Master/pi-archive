@@ -5,6 +5,7 @@ postInfoCont.querySelector('.label').innerHTML = collectionLang.postInfoLabel
 document.querySelector('.post-actions .label').innerHTML = collectionLang.postActionsLabel
 document.querySelector('.search-row #taglist').placeholder = Language.defaultTags
 
+//region process collection
 async function processCollection(id) {
     const collectionInfo = (await request('controlGroup', { type: 'getGroupByID', id })).group
 
@@ -48,12 +49,16 @@ async function processCollection(id) {
     const pages = []
 
     let currentpage = 1
+
+    //region comic navigation
     function displayComic(pg) {
         background.removeAttribute('style')
         document.querySelector('html').style.overflow = 'hidden'
         currentpage = pg
         switchPage()
     }
+
+    //region switch page
     function switchPage() {
         for (const elem of document.querySelectorAll('.pages-container *')) {
             elem.style.display = 'none'
@@ -62,6 +67,8 @@ async function processCollection(id) {
         page.removeAttribute('style')
         update_pages(currentpage)
     }
+
+    //region next page
     function nextPage(event) {
         if (event.shiftKey) {
             currentpage = collectionInfo.group.length
@@ -73,6 +80,8 @@ async function processCollection(id) {
             }
         }
     }
+
+    //region previous page
     function prevPage(event) {
         if (event.shiftKey) {
             currentpage = 1
@@ -84,11 +93,14 @@ async function processCollection(id) {
             }
         }
     }
+
+    //region close overlay
     function closeOverlay() {
         background.style.display = 'none'
         document.querySelector('html').removeAttribute('style')
     }
 
+    //region update pages
     async function update_pages(currentPage) {
         const pageButtonsLimit = 6
 
@@ -191,6 +203,7 @@ async function processCollection(id) {
     nextPageElem.appendChild(right_arrow)
     right_arrow.src = 'right-arrow.svg'
 
+    //region key navigation
     document.addEventListener(
         "keyup",
         (event) => {
@@ -275,6 +288,8 @@ async function processCollection(id) {
         }, localStorage.getItem('fitCollectionPages'))
 
         if (await ownerVerify(collectionInfo.owner) || await adminVerify()) {
+
+            //region edit collection
             createAction(collectionLang.actions.editColl.btn, actionCol, () => {
                 const container = createBlurOverlay()
 
@@ -362,6 +377,8 @@ async function processCollection(id) {
                 })
                 container.appendChild(reord_over)
             })
+
+            //region add to group
             createAction(
                 collectionLang.actions.toGroup.btn,
                 document.querySelector('.post-actions'),
@@ -377,6 +394,148 @@ async function processCollection(id) {
                     }
                 }
             )
+
+            //region add tags
+            createAction(collectionLang.actions.tags.add.btn, actionCol, async () => {
+                const { txtArea, txtAreaCont } = showPopupInput(collectionLang.actions.tags.add.label , '', async (taglist) => {
+                    if (taglist) {
+                        const new_tags = taglist.split(/\s+|\n+/).filter(val => val !== '');
+
+                        const blur = createBlurOverlay()
+
+                        const postContainer = createDiv('posts-update-container', blur)
+
+                        const postLabels = createDiv('post-labels-cont', postContainer)
+
+                        const progressContainer = createDiv('progress-container', postContainer)
+                        const progressLabel = createDiv('progress-label', progressContainer)
+                        const progressBarContainer = createDiv('progress-bar-container', progressContainer)
+                        const progressBar = createDiv('progress-bar', progressBarContainer)
+
+                        progressLabel.innerHTML = `${collectionLang.actions.tags.completed}: 0 / ${collectionInfo.group.length}`
+
+                        let counter = 0
+                        function updateCounter() {
+                            counter++
+                            progressLabel.innerHTML = `${collectionLang.actions.tags.completed}: ${counter} / ${collectionInfo.group.length}`
+                            progressBar.style.width = `${(counter / collectionInfo.group.length) * 100}%`
+                            if (counter == collectionInfo.group.length) {
+                                const btn = createButton(collectionLang.actions.tags.close, postContainer)
+                                btn.addEventListener('click', () => {
+                                    blur.remove()
+                                })
+                                alert(`s/${collectionLang.actions.tags.actionComp}`, 5000)
+                            }
+                        }
+
+                        async function setPostUpdate(id) {
+                            const postElem = createDiv('post', postLabels)
+                            postElem.innerHTML = id
+
+                            postElem.classList.add('waiting')
+                            postElem.title = collectionLang.actions.tags.processing
+                            const post_data = await request('getPostData', { id });
+
+                            if (post_data.rslt == 'e') {
+                                postElem.classList.add('error')
+                                return
+                            }
+
+                            postElem.title = collectionLang.actions.tags.add.adding
+
+                            const rslt = await request('updateTags', {
+                                post: id,
+                                newTags: post_data.post.tags.concat(new_tags.filter(tag => !post_data.post.tags.includes(tag)))
+                            });
+
+                            if (rslt.rslt == 's') {
+                                postElem.title = collectionLang.actions.tags.add.added
+                                postElem.classList.add('success')
+                            } else {
+                                postElem.title = collectionLang.actions.tags.add.error
+                                postElem.classList.add('error')
+                            }
+                            updateCounter()
+                        }
+
+                        for (const post of collectionInfo.group) {
+                            setPostUpdate(post)
+                        }
+
+                    }
+                });
+                addTagsAutofill(txtArea, txtAreaCont, true)
+            })
+
+            //region remove tags
+            createAction(collectionLang.actions.tags.remove.btn, actionCol, async () => {
+                const { txtArea, txtAreaCont } = showPopupInput(collectionLang.actions.tags.remove.label, '', async (taglist) => {
+                    if (taglist) {
+                        const new_tags = taglist.split(/\s+|\n+/).filter(val => val !== '');
+
+                        const blur = createBlurOverlay()
+
+                        const postContainer = createDiv('posts-update-container', blur)
+
+                        const postLabels = createDiv('post-labels-cont', postContainer)
+
+                        const progressContainer = createDiv('progress-container', postContainer)
+                        const progressLabel = createDiv('progress-label', progressContainer)
+                        const progressBarContainer = createDiv('progress-bar-container', progressContainer)
+                        const progressBar = createDiv('progress-bar', progressBarContainer)
+
+                        progressLabel.innerHTML = `${collectionLang.actions.tags.completed}: 0 / ${collectionInfo.group.length}`
+
+                        let counter = 0
+                        function updateCounter() {
+                            counter++
+                            progressLabel.innerHTML = `${collectionLang.actions.tags.completed}: ${counter} / ${collectionInfo.group.length}`
+                            progressBar.style.width = `${(counter / collectionInfo.group.length) * 100}%`
+                            if (counter == collectionInfo.group.length) {
+                                const btn = createButton(collectionLang.actions.tags.close, postContainer)
+                                btn.addEventListener('click', () => {
+                                    blur.remove()
+                                })
+                                alert(`s/${collectionLang.actions.tags.actionComp}`, 5000)
+                            }
+                        }
+
+                        async function setPostUpdate(id) {
+                            const postElem = createDiv('post', postLabels)
+                            postElem.innerHTML = id
+
+                            postElem.classList.add('waiting')
+                            postElem.title = collectionLang.actions.tags.processing
+                            const post_data = await request('getPostData', { id });
+
+                            if (post_data.rslt == 'e') {
+                                postElem.classList.add('error')
+                                return
+                            }
+
+                            postElem.title = collectionLang.actions.tags.remove.removing
+
+                            const post_tags = post_data.post.tags.filter(tag => !new_tags.includes(tag))
+
+                            const rslt = await request('updateTags', { post: id, newTags: post_tags });
+
+                            if (rslt.rslt == 's') {
+                                postElem.title = collectionLang.actions.tags.remove.removed
+                                postElem.classList.add('success')
+                            } else {
+                                postElem.title = collectionLang.actions.tags.remove.error
+                                postElem.classList.add('error')
+                            }
+                            updateCounter()
+                        }
+
+                        for (const post of collectionInfo.group) {
+                            setPostUpdate(post)
+                        }
+                    }
+                });
+                addTagsAutofill(txtArea, txtAreaCont, true)
+            })
         }
     }
     await setActions()
