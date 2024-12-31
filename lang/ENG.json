@@ -42,7 +42,7 @@
                     "Telegram bot",
                     "More access to Archive with bot, sending and loading more content through it"
                 ],
-                "pathNotes":"Patch notes",
+                "pathNotes": "Patch notes",
                 "status": {
                     "label": "Archive status",
                     "vLabel": "Versions",
@@ -90,7 +90,7 @@
                 "you": "You",
                 "chSel": "Select chat",
                 "enterMessage": "Enter message",
-                "sendBtn":"Send"
+                "sendBtn": "Send"
             },
             "collection": {
                 "postInfoLabel": "Collection info",
@@ -119,7 +119,27 @@
                         "btn": "Set group mode",
                         "conf": "Confirm setting group mode for collection"
                     },
-                    "fitToScreen":"Fit pages to screen size"
+                    "fitToScreen": "Fit pages to screen size",
+                    "tags": {
+                        "add": {
+                            "btn": "Add tags",
+                            "label": "Write new tags to add",
+                            "adding": "Adding tags",
+                            "added": "Tags added",
+                            "error": "Error adding tags"
+                        },
+                        "remove": {
+                            "btn": "Remove tags",
+                            "label": "Write tags to remove",
+                            "removing": "Removing tags",
+                            "removed": "Tags removed",
+                            "error": "Error removing tags"
+                        },
+                        "processing": "Processing",
+                        "completed": "Completed",
+                        "actionComp": "All actions completed",
+                        "close": "Close"
+                    }
                 }
             },
             "defaultTags": "Tags",
@@ -273,14 +293,14 @@
                         "conf": "Confirm deleting comment"
                     }
                 },
-                "fit":{
-                    "label":"Fit",
-                    "fits":{
-                        "normal":"Normal",
-                        "horizontal":"Horizontal",
-                        "vertical":"Vertical"
+                "fit": {
+                    "label": "Fit",
+                    "fits": {
+                        "normal": "Normal",
+                        "horizontal": "Horizontal",
+                        "vertical": "Vertical"
                     },
-                    "userSetsLabel":"Posts view fit"
+                    "userSetsLabel": "Posts view fit"
                 }
             },
             "profile": {
