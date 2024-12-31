@@ -5,8 +5,7 @@ module.exports = function (textQuery = '', from, count, ignoreGroupLimit = false
     // Если не игнорируем лимит групп
     if (!ignoreGroupLimit) {
         DBquery += `
-FROM (
-    -- Посты из групп с ограничением 5 постов на группу (если не игнорируем)
+    FROM (
     SELECT p.*, 
            ROW_NUMBER() OVER (PARTITION BY pg."group" ORDER BY p.id) AS row_num,
            NULL AS group_id -- Добавляем поле group_id для соответствия
@@ -17,7 +16,6 @@ FROM (
 
     UNION ALL
 
-    -- Посты вне групп
     SELECT p.*, NULL AS row_num, NULL AS group_id
     FROM posts p
     WHERE NOT EXISTS (
@@ -26,23 +24,22 @@ FROM (
         WHERE json_each.value = p.id
     )
 ) AS combined_posts
-WHERE (row_num <= 5 OR row_num IS NULL)
+WHERE (row_num <= 5 OR row_num IS NULL)`;
 
-        `;
     } else {
-        DBquery += ' FROM posts'; // Если лимит групп игнорируется, просто берем все посты
+        DBquery += ' FROM posts';
     }
 
     let params = [];
     let customOrder = '';
 
-    // Если текстовый запрос задан, добавляем условия фильтрации
+    
     if (textQuery.length > 0) {
         try {
             if (!ignoreGroupLimit) {
-                DBquery += ' AND ';  // Добавляем AND, если уже есть WHERE
+                DBquery += ' AND ';
             } else {
-                DBquery += ' WHERE ';  // В противном случае начинаем с WHERE
+                DBquery += ' WHERE ';
             }
 
             const queryArray = [];
@@ -89,11 +86,9 @@ WHERE (row_num <= 5 OR row_num IS NULL)
         }
     }
 
-    // Добавляем кастомный порядок, если есть
     if (customOrder !== '') {
         DBquery += customOrder;
     } else {
-        // Добавляем ORDER BY по id после обработки подзапроса
         DBquery += ' ORDER BY id DESC';
     }
 
