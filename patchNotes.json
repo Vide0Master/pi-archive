@@ -1,6 +1,24 @@
 [
     {
         "versions": {
+            "Server": "b0.1.15",
+            "DB": "",
+            "Webpage": "",
+            "TGbot": ""
+        },
+        "date": "19.12.2024",
+        "updates": [
+            {
+                "text": "No ability to download posts",
+                "tag": "fix",
+                "services": [
+                    "Server"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
             "Server": "b0.1.14",
             "DB": "",
             "Webpage": "b0.2.17",

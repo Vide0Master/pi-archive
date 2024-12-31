@@ -190,27 +190,35 @@ app.get('/file', async (req, res) => {
         const cachedFile = sysController.fileCacheController.getRecordData(fileCacheKey);
         const fileSize = cachedFile.length;
 
-        const range = req.headers.range || `bytes=0-${fileSize - 1}`;
-        const parts = range.replace(/bytes=/, "").split("-");
-        const start = parseInt(parts[0], 10);
-        const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+        const range = req.headers.range;
 
-        if (start >= fileSize || end >= fileSize) {
-            return res.status(416).send('Requested range not satisfiable\n' + start + ' >= ' + fileSize);
+        if (range) {
+            const parts = range.replace(/bytes=/, "").split("-");
+            const start = parseInt(parts[0], 10);
+            const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+
+            if (start >= fileSize || end >= fileSize) {
+                return res.status(416).send('Requested range not satisfiable\n' + start + ' >= ' + fileSize);
+            }
+
+            const chunk = cachedFile.slice(start, end + 1);
+            const head = {
+                'Content-Range': `bytes ${start}-${end}/${fileSize}`,
+                'Accept-Ranges': 'bytes',
+                'Content-Length': chunk.length,
+                'Content-Type': mimeType,
+                'Cache-Control': `public, max-age=${fileCacheTTL}`,
+                'ETag': `"${fileCacheKey}-${fileSize}"`,
+            };
+
+            res.writeHead(206, head);
+            return res.end(chunk);
+        } else {
+            res.setHeader('Content-Type', mimeType);
+            res.setHeader('Cache-Control', `public, max-age=${fileCacheTTL}`);
+            res.setHeader('ETag', `"${fileCacheKey}-${fileSize}"`);
+            return res.end(cachedFile);
         }
-
-        const chunk = cachedFile.slice(start, end + 1);
-        const head = {
-            'Content-Range': `bytes ${start}-${end}/${fileSize}`,
-            'Accept-Ranges': 'bytes',
-            'Content-Length': chunk.length,
-            'Content-Type': mimeType,
-            'Cache-Control': `public, max-age=${fileCacheTTL}`,
-            'ETag': `"${fileCacheKey}-${fileSize}"`,
-        };
-
-        res.writeHead(206, head);
-        return res.end(chunk);
     }
 
     let processedFileBuffer;
@@ -219,10 +227,10 @@ app.get('/file', async (req, res) => {
 
     if (generateThumbnail) {
         if (mimeType.startsWith('image/')) {
-            try{
+            try {
                 processedFileBuffer = await sharp(fileBuffer).resize({ height: 200, fit: 'inside' }).toBuffer();
-            }catch(e){
-                cmd(`e/Failed to generate thumbnail for ${filepath}`)
+            } catch (e) {
+                cmd(`e/Failed to generate thumbnail for ${filepath}`);
                 return res.status(500).send('<h1>500</h1>Failed to generate thumbnail!\nError stack: ' + e);
             }
         } else if (mimeType.startsWith('video/')) {
@@ -237,10 +245,10 @@ app.get('/file', async (req, res) => {
         }
     } else if (!!heightQuery && heightQuery < JSON.parse(postData.post.size).y) {
         if (mimeType.startsWith('image/')) {
-            try{
+            try {
                 processedFileBuffer = await sharp(fileBuffer).resize({ height: heightQuery, fit: 'inside' }).toBuffer();
-            }catch(e){
-                cmd(`e/Failed to resize image for ${filepath}`)
+            } catch (e) {
+                cmd(`e/Failed to resize image for ${filepath}`);
                 return res.status(500).send('<h1>500</h1>Failed to resize image!\nError stack: ' + e);
             }
         } else {
@@ -253,27 +261,35 @@ app.get('/file', async (req, res) => {
     sysController.fileCacheController.createRecord(fileCacheKey, processedFileBuffer, 170);
 
     const fileSize = processedFileBuffer.length;
-    const range = req.headers.range || `bytes=0-${fileSize - 1}`;
-    const parts = range.replace(/bytes=/, "").split("-");
-    const start = parseInt(parts[0], 10);
-    const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+    const range = req.headers.range;
 
-    if (start >= fileSize || end >= fileSize) {
-        return res.status(416).send('Requested range not satisfiable\n' + start + ' >= ' + fileSize);
+    if (range) {
+        const parts = range.replace(/bytes=/, "").split("-");
+        const start = parseInt(parts[0], 10);
+        const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+
+        if (start >= fileSize || end >= fileSize) {
+            return res.status(416).send('Requested range not satisfiable\n' + start + ' >= ' + fileSize);
+        }
+
+        const chunk = processedFileBuffer.subarray(start, end + 1);
+        const head = {
+            'Content-Range': `bytes ${start}-${end}/${fileSize}`,
+            'Accept-Ranges': 'bytes',
+            'Content-Length': chunk.length,
+            'Content-Type': mimeType,
+            'Cache-Control': `public, max-age=${fileCacheTTL}`,
+            'ETag': `"${fileCacheKey}-${fileSize}"`,
+        };
+
+        res.writeHead(206, head);
+        res.end(chunk);
+    } else {
+        res.setHeader('Content-Type', mimeType);
+        res.setHeader('Cache-Control', `public, max-age=${fileCacheTTL}`);
+        res.setHeader('ETag', `"${fileCacheKey}-${fileSize}"`);
+        res.end(processedFileBuffer);
     }
-
-    const chunk = processedFileBuffer.slice(start, end + 1);
-    const head = {
-        'Content-Range': `bytes ${start}-${end}/${fileSize}`,
-        'Accept-Ranges': 'bytes',
-        'Content-Length': chunk.length,
-        'Content-Type': mimeType,
-        'Cache-Control': `public, max-age=${fileCacheTTL}`,
-        'ETag': `"${fileCacheKey}-${fileSize}"`,
-    };
-
-    res.writeHead(206, head);
-    res.end(chunk);
 });
 
 app.use(`/eula`, express.static(globalFilesPath));
