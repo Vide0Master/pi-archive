@@ -874,7 +874,7 @@ passSearchTagsToSearchField()
 
 function processGroupData(postGroup) {
     const container = document.querySelector('.group-info')
-    createGroup(postGroup, container)
+    container.appendChild(createGroup(postGroup))
 }
 
 //region resolution switch
