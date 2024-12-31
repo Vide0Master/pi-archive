@@ -342,9 +342,9 @@
     justify-content: space-evenly;
     flex-wrap: wrap;
     gap: 1em;
-    cursor: pointer;
 
     .collection-cont {
+        cursor: pointer;
         position: relative;
         display: flex;
         flex-direction: column;
