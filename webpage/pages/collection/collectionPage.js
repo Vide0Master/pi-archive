@@ -266,9 +266,9 @@ async function processCollection(id) {
                 link.searchParams.delete('h')
                 if (state) {
                     link.searchParams.append('h', screen.height)
-                    page.src=link.href
+                    page.src = link.href
                 } else {
-                    page.src=link.href
+                    page.src = link.href
                     localStorage.removeItem('fitCollectionPages')
                 }
             }
@@ -382,13 +382,42 @@ async function processCollection(id) {
     await setActions()
 }
 
-const params = new URLSearchParams(window.location.search)
-processCollection(params.get('id'))
+//region show collections
+async function showCollections() {
+    const collectionsElem = createDiv('collections-list', document.querySelector('main'))
 
+    const collectionsList = await request('controlGroup', { type: 'getAllCollections' })
+    console.log(collectionsList)
+
+    for (const collection of collectionsList.collections) {
+        const collectionCont = createDiv('collection-cont', collectionsElem)
+        collectionCont.setAttribute('style', '--border-color: ' + collection.color)
+
+        const colImgCont = createDiv('collection-img-cont', collectionCont)
+        const colImg = document.createElement('img')
+        colImgCont.appendChild(colImg)
+        colImg.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${collection.group[0]}&h=350`
+
+        const collectionName = createDiv('collection-name', collectionCont)
+        collectionName.innerHTML = collection.name
+
+        collectionCont.addEventListener('click', () => {
+            window.location.href = `/collection?id=${collection.id}`
+        })
+    }
+}
 
 //region P S T SF
 function passSearchTagsToSearchField() {
     document.getElementById('taglist').value = new URLSearchParams(window.location.search).get('tags')
 }
 
-passSearchTagsToSearchField()
+const params = new URLSearchParams(window.location.search)
+const collId = params.get('id')
+if (collId != null) {
+    processCollection(collId)
+    passSearchTagsToSearchField()
+} else {
+    document.querySelector('.content-container').remove()
+    showCollections()
+}
