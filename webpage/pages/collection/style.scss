@@ -97,6 +97,7 @@
             img {
                 max-height: 300px;
                 max-width: 100%;
+                display: block;
 
                 @media screen and (max-width:700px) {
                     max-height: 200px;
@@ -143,7 +144,7 @@
 
             &:hover {
                 .page-number-counter-container {
-                    bottom: -50%;
+                    bottom: -51%;
                     width: 101%;
                     height: 101%;
                     border-radius: 0;
