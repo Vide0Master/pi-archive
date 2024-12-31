@@ -393,9 +393,8 @@ async function showCollections() {
         const collectionCont = createDiv('collection-cont', collectionsElem)
         collectionCont.setAttribute('style', '--border-color: ' + collection.color)
 
-        const colImgCont = createDiv('collection-img-cont', collectionCont)
         const colImg = document.createElement('img')
-        colImgCont.appendChild(colImg)
+        collectionCont.appendChild(colImg)
         colImg.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${collection.group[0]}&h=350`
 
         const collectionName = createDiv('collection-name', collectionCont)
