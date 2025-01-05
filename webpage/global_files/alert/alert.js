@@ -18,7 +18,7 @@ function createNotification(str, timeout = 0) {
     }
 
     if (timeout == 0) {
-        message+=`<br><br>${Language.alert.remove}`
+        message += `<br><br>${Language.alert.remove}`
     }
 
     const container = document.getElementById('notification-container');
@@ -38,8 +38,6 @@ function createNotification(str, timeout = 0) {
             removeNotification(notification);
         }, timeout);
     }
-
-    
 
     if (!timeout >= 0) {
         notification.addEventListener('click', () => {

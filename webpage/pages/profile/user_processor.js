@@ -151,7 +151,7 @@ async function showActions(userData, activeUser) {
         createAction(profileLang.actions.changeUserName.btn, container, async () => {
             const new_name = prompt(profileLang.actions.changeUserName.conf, userData.data.username)
             if (new_name) {
-                const rslt = await request('changeUserName', { userKey: localStorage.getItem('userKey') || sessionStorage.getItem('userKey'), newName: new_name })
+                const rslt = await request('changeUserName', { newName: new_name })
 
                 if (rslt.rslt == 's') {
                     window.location.href = `/profile?alert=${rslt.rslt}/${rslt.msg.split(' ').join('+')}/5000`

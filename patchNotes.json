@@ -1,6 +1,25 @@
 [
     {
         "versions": {
+            "Server": "b0.1.17",
+            "DB": "",
+            "Webpage": "b0.2.19",
+            "TGbot": ""
+        },
+        "date": "02.01.2025",
+        "updates": [
+            {
+                "text": "Username can`t be changed in profile settings",
+                "tag": "fix",
+                "services": [
+                    "Webpage",
+                    "Server"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
             "Server": "",
             "DB": "",
             "Webpage": "b0.2.19",
