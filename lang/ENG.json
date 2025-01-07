@@ -325,7 +325,9 @@
                     },
                     "changePass": {
                         "btn": "Change password",
-                        "conf": "Enter new password"
+                        "conf": "Enter new password",
+                        "confS":"Confirm new passowrd",
+                        "passNotMatched":"Passwords does not match!"
                     },
                     "changeBl": {
                         "btn": "Change blacklist",

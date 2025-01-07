@@ -189,6 +189,9 @@ async function addTagsAutofill(field, parent, preventSearch = false) {
     field.addEventListener('keydown', (e) => {
         process(e)
     })
+    field.addEventListener('input', (e) => {
+        process(e)
+    })
     field.addEventListener('click', (e) => {
         process(e)
     })
@@ -1159,63 +1162,9 @@ function formatUserText(input) {
     return formattedText;
 }
 
-//region popinp
-function showPopupInput(title = 'Title', defaultText = '', cb) {
-    const blurryBackground = createBlurOverlay()
-
-    const popup = document.createElement('div')
-    popup.className = 'popup'
-
-    const popupTitle = document.createElement('h2')
-    popupTitle.textContent = title
-
-    const textarea = document.createElement('textarea')
-    textarea.value = defaultText
-
-    const btn_row = createDiv('button_row')
-
-    const btnD = createButton(Language.popup.cancel)
-    btn_row.appendChild(btnD)
-    const btnC = createButton(Language.popup.accept)
-    btn_row.appendChild(btnC)
-
-    btnC.addEventListener('click', () => {
-        closePopup()
-        const text = textarea.value
-        if (text != defaultText) {
-            cb(text)
-        } else {
-            cb(false)
-        }
-    })
-
-    btnD.addEventListener('click', () => {
-        closePopup()
-        cb(false)
-    })
-
-    popup.appendChild(popupTitle)
-    const txtCont = createDiv('textarea-container', popup)
-    txtCont.appendChild(textarea)
-    popup.appendChild(btn_row)
-    blurryBackground.appendChild(popup)
-
-    function closePopup() {
-        blurryBackground.remove()
-    }
-
-    blurryBackground.addEventListener('click', (event) => {
-        if (event.target === blurryBackground) {
-            closePopup()
-            cb(false)
-        }
-    });
-
-    textarea.focus()
-    document.body.classList.add('blurred')
-
-    return { txtArea: textarea, txtAreaCont: txtCont }
-}
+//region popup input
+//! MOVED TO alert.js FUNCTIONALITY
+//endregion
 
 //region themes
 const colorSchemesList = [

@@ -1,115 +1,174 @@
 .notification-container {
     z-index: 9999;
-
     position: fixed;
     top: 0;
     right: 50%;
     transform: translateX(+50%);
-    padding: 1em;
+    padding: 0.5em;
+    max-width: 100vw;
+    max-height: 100vh;
+
+    display: flex;
     flex-direction: column;
-    justify-content: space-between;
     align-items: center;
     gap: 0.5em;
-    pointer-events: none;
-    background-color: rgba(221, 221, 221, 0.3);
-    border: 0.15em solid rgba(181, 181, 181, 0.3);
-    border-radius: 0.7em;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    border-top: none;
-    backdrop-filter: blur(0.3em);
-    width: 40vw;
-
-    @media screen and (max-width: 700px) {
-        max-width: 90vw;
-    }
-
-    &:empty {
-        display: none;
-    }
-
-    &:not(:empty) {
-        display: flex;
-    }
 
     .notification {
-        pointer-events: all;
-        opacity: 0;
-        animation: slideIn 0.5s ease-in-out forwards, fadeIn 0.5s ease-in-out forwards;
-        padding: 0.7em;
-        border: 0.15em solid #ccc;
-        background-color: #fff;
-        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-        border-radius: 0.7em;
-        transform-origin: top;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: 0.3s;
-        max-width: 100%;
+        position: relative;
+        color: #fff;
+        border: solid 0.2em var(--notification-color);
+        padding: 1em;
+        border-radius: 0.5em;
+        background-color: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(0.3em);
 
-        &.e {
-            background-color: #FFCDD2;
-            border-color: #E57373;
+        &.msg {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 1em;
         }
 
-        &.w {
-            background-color: #FFF9C4;
-            border-color: #FFD54F;
+        &.confirm-text {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 1em;
         }
 
-        &.s {
-            background-color: #C8E6C9;
-            border-color: #81C784;
+        &.input-short {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5em;
+
+            .input-container {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 0.5em;
+            }
         }
 
-        &.i {
-            background-color: #c8dce6;
-            border-color: #80afc6;
+        &.input-long {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5em;
+
+            .text-input-container {
+                position: relative;
+            }
+
+            .input-container {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 0.5em;
+            }
         }
 
-        span {
+        .cancel-button {
+            background-color: #fff;
+            color: #000;
+            width: fit-content;
+            padding: 0.1em 0.3em;
+            border-radius: 0.2em;
             user-select: none;
-            flex-grow: 1;
-            overflow-wrap: break-word;
-            font-family: Arial, Helvetica, sans-serif;
-            align-self: center;
-            justify-self: center;
-            text-align: center;
-        }
+            cursor: pointer;
+            transition: 0.1s;
 
-        &.removing-element {
-            animation: shrink 0.5s forwards;
-        }
-
-        @keyframes shrink {
-            from {
-                opacity: 1;
-            }
-
-            to {
-                opacity: 0;
+            &:hover {
+                background-color: rgb(169, 0, 0);
+                color: #fff;
             }
         }
 
-        @keyframes slideIn {
-            from {
-                transform: translateY(-100%);
-            }
+        .confirm-button {
+            background-color: #fff;
+            color: #000;
+            width: fit-content;
+            padding: 0.1em 0.3em;
+            border-radius: 0.2em;
+            user-select: none;
+            cursor: pointer;
+            transition: 0.1s;
 
-            to {
-                transform: translateY(0);
+            &:hover {
+                background-color: rgb(0, 169, 0);
+                color: #fff;
             }
         }
 
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
+        .timer-bar {
+            height: 0.2em;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: greenyellow;
+
+            @keyframes timer {
+                from {
+                    width: 100%;
+                }
+
+                to {
+                    width: 0%;
+                }
             }
         }
 
-        &:hover {
-            box-shadow: 0.2em 0.1em 0.4em #000;
+        input {
+            background-color: #fff;
+            color: #000;
+
+            &::placeholder {
+                color: #000;
+            }
+        }
+
+        textarea {
+            background-color: #fff;
+            color: #000;
+            width: 300px;
+            overflow: hidden;
+            box-sizing: border-box;
+
+            &::placeholder {
+                color: #000;
+            }
+        }
+
+        &.highlight {
+            animation: highAnim 1s linear forwards;
+
+            @keyframes highAnim {
+                0% {
+                    border-color: var(--notification-color);
+                    box-shadow: 0 0 0 var(--font-hover);
+                }
+
+                25% {
+                    border-color: var(--font-hover);
+                    box-shadow: 0 0 1em var(--font-hover);
+                }
+
+                50% {
+                    border-color: var(--notification-color);
+                    box-shadow: 0 0 0 var(--font-hover);
+                }
+
+                75% {
+                    border-color: var(--font-hover);
+                    box-shadow: 0 0 1em var(--font-hover);
+                }
+
+                100% {
+                    border-color: var(--notification-color);
+                    box-shadow: 0 0 0 var(--font-hover);
+                }
+            }
         }
     }
 }

@@ -1,6 +1,62 @@
 [
     {
         "versions": {
+            "Server": "",
+            "DB": "",
+            "Webpage": "b0.3.1",
+            "TGbot": ""
+        },
+        "date": "07.01.2025",
+        "updates": [
+            {
+                "text": "New visuals for alert messages",
+                "tag": "rework",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "New popup inputs (integrated with alers)<br><i>Not all popup inputs are updated, like adding to group.</i>",
+                "tag": "rework",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "New prompt inputs (integrated with alers)",
+                "tag": "new",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "New password inputs (integrated with alers)",
+                "tag": "new",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "New places with tags tags autocomplete (blacklist, tag editors for groups)",
+                "tag": "rework",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "New password change algorithm for users",
+                "tag": "rework",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "This update was huge. But there always be some bugs, be kind to report them all to GitHub(link in page footer)"
+            }
+        ]
+    },
+    {
+        "versions": {
             "Server": "b0.1.17",
             "DB": "",
             "Webpage": "b0.2.19",

@@ -305,40 +305,45 @@ async function processCollection(id) {
                             container.remove()
                         }; break;
                         case 'delete': {
-                            if (confirm(`${collectionLang.actions.editColl.delete.grp} "${collectionInfo.name}"`)) {
-                                const deleteResult = await request('controlGroup',
-                                    {
+                            new Notify(`${collectionLang.actions.editColl.delete.grp} "${collectionInfo.name}"`, null, '#f00', 'inputConfirm', async (result) => {
+                                if (result) {
+                                    const deleteResult = await request('controlGroup',
+                                        {
+                                            type: 'deleteGroup',
+                                            groupID: collectionInfo.id
+                                        })
+                                    if (deleteResult.rslt == 's') {
+                                        container.remove()
+                                        alert(`s/${collectionLang.actions.editColl.delete.grps}`)
+                                    } else {
+                                        alert(`${deleteResult.rslt}/${deleteResult.msg}`, 5000)
+                                    }
+                                }
+                            })
+                        }; break;
+                        case 'fullDelete': {
+                            new Notify(`${collectionLang.actions.editColl.delete.psts} "${collectionInfo.name}"`, null, '#f00', 'inputConfirm', async (result) => {
+                                if (result) {
+                                    for (const post of collectionInfo.group) {
+                                        const rslt = await request('deletePost', { post: post });
+                                        if (rslt.rslt == 'e') alert(rslt.rslt + '/' + rslt.msg)
+                                    }
+                                    const deleteResult = await request('controlGroup', {
                                         type: 'deleteGroup',
                                         groupID: collectionInfo.id
                                     })
-                                if (deleteResult.rslt == 's') {
-                                    container.remove()
-                                    alert(`s/${collectionLang.actions.editColl.delete.grps}`)
-                                } else {
-                                    alert(`${deleteResult.rslt}/${deleteResult.msg}`, 5000)
-                                }
-                            }
-                        }; break;
-                        case 'fullDelete': {
-                            if (confirm(`${collectionLang.actions.editColl.delete.psts} "${collectionInfo.name}"`)) {
-                                for (const post of collectionInfo.group) {
-                                    const rslt = await request('deletePost', { post: post });
-                                    if (rslt.rslt == 'e') alert(rslt.rslt + '/' + rslt.msg)
-                                }
-                                const deleteResult = await request('controlGroup', {
-                                    type: 'deleteGroup',
-                                    groupID: collectionInfo.id
-                                })
 
-                                if (deleteResult.rslt == 'e') alert(`${deleteResult.rslt}/${deleteResult.msg}`)
+                                    if (deleteResult.rslt == 'e') alert(`${deleteResult.rslt}/${deleteResult.msg}`)
 
-                                if (deleteResult.rslt == 's') {
-                                    container.remove()
-                                    alert(`s/${collectionLang.actions.editColl.delete.pstss}`)
+                                    if (deleteResult.rslt == 's') {
+                                        container.remove()
+                                        alert(`s/${collectionLang.actions.editColl.delete.pstss}`)
+                                    }
                                 }
-                            }
+                            })
                         }; break;
                         case 'reorder': {
+
                             const reorderResult = await request('controlGroup',
                                 {
                                     type: 'reorderGroup',
@@ -352,7 +357,7 @@ async function processCollection(id) {
                         }; break;
                         case 'rename': {
                             container.remove()
-                            showPopupInput(collectionLang.actions.editColl.rename, collectionInfo.name, async (value) => {
+                            new Notify(collectionLang.actions.editColl.rename, null, '#0ff', 'inputShort', async (value) => {
                                 if (value) {
                                     const rename_result = await request('controlGroup',
                                         {
@@ -362,7 +367,7 @@ async function processCollection(id) {
                                         })
                                     alert(`${rename_result.rslt}/${rename_result.msg}`, 5000)
                                 }
-                            })
+                            },{value:collectionInfo.name})
                         }; break;
                         case 'color': {
                             const color_result = await request('controlGroup',
@@ -383,21 +388,23 @@ async function processCollection(id) {
                 collectionLang.actions.toGroup.btn,
                 document.querySelector('.post-actions'),
                 async () => {
-                    if (confirm(`${collectionLang.actions.toGroup.btn} "${collectionInfo.name}"`)) {
-                        const convResult = await request('controlGroup',
-                            {
-                                type: 'setGroupType',
-                                newGroupType: 'group',
-                                groupID: collectionInfo.group.id
-                            })
-                        alert(`${convResult.rslt}/${convResult.msg}`)
-                    }
+                    new Notify(`${collectionLang.actions.toGroup.btn} "${collectionInfo.name}"`, null, '#f00', 'inputConfirm', async (result) => {
+                        if (result) {
+                            const convResult = await request('controlGroup',
+                                {
+                                    type: 'setGroupType',
+                                    newGroupType: 'group',
+                                    groupID: collectionInfo.group.id
+                                })
+                            alert(`${convResult.rslt}/${convResult.msg}`)
+                        }
+                    })
                 }
             )
 
             //region add tags
             createAction(collectionLang.actions.tags.add.btn, actionCol, async () => {
-                const { txtArea, txtAreaCont } = showPopupInput(collectionLang.actions.tags.add.label , '', async (taglist) => {
+                const notf = new Notify(collectionLang.actions.tags.add.label, null, '#0f0', 'inputLong',async (taglist) => {
                     if (taglist) {
                         const new_tags = taglist.split(/\s+|\n+/).filter(val => val !== '');
 
@@ -461,15 +468,14 @@ async function processCollection(id) {
                         for (const post of collectionInfo.group) {
                             setPostUpdate(post)
                         }
-
                     }
-                });
-                addTagsAutofill(txtArea, txtAreaCont, true)
+                })
+                addTagsAutofill(notf.inputField, notf.textInputContainer, true)
             })
 
             //region remove tags
             createAction(collectionLang.actions.tags.remove.btn, actionCol, async () => {
-                const { txtArea, txtAreaCont } = showPopupInput(collectionLang.actions.tags.remove.label, '', async (taglist) => {
+                const notf = new Notify(collectionLang.actions.tags.remove.label, null, '#f00', 'inputLong', async (taglist) => {
                     if (taglist) {
                         const new_tags = taglist.split(/\s+|\n+/).filter(val => val !== '');
 
@@ -533,8 +539,8 @@ async function processCollection(id) {
                             setPostUpdate(post)
                         }
                     }
-                });
-                addTagsAutofill(txtArea, txtAreaCont, true)
+                })
+                addTagsAutofill(notf.inputField, notf.textInputContainer, true)
             })
         }
     }

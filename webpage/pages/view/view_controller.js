@@ -112,15 +112,15 @@ async function displayPostData(post_data) {
                 break;
             case 'description':
                 const desc = document.querySelector('.desc');
-                if (!line_val) {
-                    desc.remove()
-                } else {
-                    const descLabel = createDiv('desc-label', desc)
-                    descLabel.innerHTML = viewLang.postData.descLabel
-                    createDiv('desc-splitter', desc)
-                    const descText = createDiv('desc-text', desc)
-                    descText.innerText = line_val;
-                }
+                if (!line_val)
+                    desc.style.display = 'none'
+
+                const descLabel = createDiv('desc-label', desc)
+                descLabel.innerHTML = viewLang.postData.descLabel
+                createDiv('desc-splitter', desc)
+                const descText = createDiv('desc-text', desc)
+                descText.innerText = line_val;
+
                 elm.remove()
                 break;
             case 'file':
@@ -163,7 +163,7 @@ async function handleAdminActions() {
     if (isOwner || isAdmin) {
         createAction(viewLang.actions.editTags.btn, document.querySelector('.post-actions'), async () => {
             let tagline = post_data.tags.join(' ');
-            const { txtArea, txtAreaCont } = showPopupInput(viewLang.actions.editTags.poptext, tagline, async (taglist) => {
+            new Notify(viewLang.actions.editTags.poptext, null, 'var(--font-color1)', 'inputLong', async (taglist) => {
                 if (taglist) {
                     const new_tags = taglist.split(/\s+|\n+/).filter(val => val !== '');
                     const rslt = await request('updateTags', { post: post_data.id, newTags: new_tags });
@@ -172,29 +172,34 @@ async function handleAdminActions() {
                     const pData = await fetchPostData(post_data.id)
                     createTagSelector(pData.tags, document.querySelector('.tags'));
                 }
-            });
-            addTagsAutofill(txtArea, txtAreaCont, true)
+            }, { value: tagline });
+            addTagsAutofill(editTagsAlert.inputField, editTagsAlert.textInputContainer, true)
         });
 
         createAction(viewLang.actions.editDesc.btn, document.querySelector('.post-actions'), async () => {
-            showPopupInput(viewLang.actions.editDesc.poptext, post_data.description, async (newDesc) => {
-                if (newDesc) {
-                    const updateResult = await request('updatePostDesc', { postID: post_data.id, newDesc: newDesc })
-                    alert(`${updateResult.rslt}/${updateResult.msg}`, 5000)
-                    if (updateResult.rslt == 's') {
-                        document.querySelector('.view-container .desc').innerText = newDesc
-                        post_data.description = newDesc
+            new Notify(viewLang.actions.editDesc.poptext, null, 'var(--font-color1)', 'inputLong', async (newDesc) => {
+                if (newDesc === false) return
+                const updateResult = await request('updatePostDesc', { postID: post_data.id, newDesc: newDesc })
+                alert(`${updateResult.rslt}/${updateResult.msg}`, 5000)
+                if (updateResult.rslt == 's') {
+                    if (newDesc == post_data.description) return
+                    post_data.description = newDesc
+                    document.querySelector('.view-container .desc .desc-text').innerText = newDesc
+                    if (newDesc === '') {
+                        document.querySelector('.view-container .desc').style.display = 'none'
+                    }else{
+                        document.querySelector('.view-container .desc').removeAttribute('style')
                     }
                 }
-            })
+            }, { value: post_data.description })
         })
 
         if (post_data.postGroupData) {
             createAction(
                 `${viewLang.actions.rmFromGroup.btn}\n"${post_data.postGroupData.name}"`,
                 document.querySelector('.post-actions'),
-                async () => {
-                    if (confirm(`${viewLang.actions.rmFromGroup.poptext} "${post_data.postGroupData.name}"`)) {
+                () => new Notify(`${viewLang.actions.rmFromGroup.poptext} "${post_data.postGroupData.name}"`, null, '#f00', 'inputConfirm', async (result) => {
+                    if (result) {
                         const removeResult = await request('controlGroup',
                             {
                                 type: 'removePost',
@@ -204,6 +209,7 @@ async function handleAdminActions() {
                         alert(`${removeResult.rslt}/${removeResult.msg}`, 5000)
                     }
                 })
+            )
             createAction(
                 viewLang.actions.editGroup.actName,
                 document.querySelector('.post-actions'),
@@ -222,38 +228,42 @@ async function handleAdminActions() {
                                 container.remove()
                             }; break;
                             case 'delete': {
-                                if (confirm(`${viewLang.actions.editGroup.delete.grp} ${post_data.postGroupData.name}`)) {
-                                    const deleteResult = await request('controlGroup',
-                                        {
+                                new Notify(`${viewLang.actions.editGroup.delete.grp} ${post_data.postGroupData.name}`, null, '#f00', 'inputConfirm', async (result) => {
+                                    if (result) {
+                                        const deleteResult = await request('controlGroup',
+                                            {
+                                                type: 'deleteGroup',
+                                                groupID: post_data.postGroupData.id
+                                            })
+                                        if (deleteResult.rslt == 's') {
+                                            container.remove()
+                                            alert(`s/${viewLang.actions.editGroup.delete.grps}`)
+                                        } else {
+                                            alert(`${deleteResult.rslt}/${deleteResult.msg}`, 5000)
+                                        }
+                                    }
+                                })
+                            }; break;
+                            case 'fullDelete': {
+                                new Notify(`${viewLang.actions.editGroup.delete.psts} "${post_data.postGroupData.name}"`, null, '#f00', 'inputConfirm', async (result) => {
+                                    if (result) {
+                                        for (const post of post_data.postGroupData.group) {
+                                            const rslt = await request('deletePost', { post: post });
+                                            if (rslt.rslt == 'e') alert(rslt.rslt + '/' + rslt.msg)
+                                        }
+                                        const deleteResult = await request('controlGroup', {
                                             type: 'deleteGroup',
                                             groupID: post_data.postGroupData.id
                                         })
-                                    if (deleteResult.rslt == 's') {
-                                        container.remove()
-                                        alert(`s/${viewLang.actions.editGroup.delete.grps}`)
-                                    } else {
-                                        alert(`${deleteResult.rslt}/${deleteResult.msg}`, 5000)
-                                    }
-                                }
-                            }; break;
-                            case 'fullDelete': {
-                                if (confirm(`${viewLang.actions.editGroup.delete.psts} "${post_data.postGroupData.name}"`)) {
-                                    for (const post of post_data.postGroupData.group) {
-                                        const rslt = await request('deletePost', { post: post });
-                                        if (rslt.rslt == 'e') alert(rslt.rslt + '/' + rslt.msg)
-                                    }
-                                    const deleteResult = await request('controlGroup', {
-                                        type: 'deleteGroup',
-                                        groupID: post_data.postGroupData.id
-                                    })
 
-                                    if (deleteResult.rslt == 'e') alert(`${deleteResult.rslt}/${deleteResult.msg}`)
+                                        if (deleteResult.rslt == 'e') alert(`${deleteResult.rslt}/${deleteResult.msg}`)
 
-                                    if (deleteResult.rslt == 's') {
-                                        container.remove()
-                                        alert(`s/${viewLang.actions.editGroup.delete.pstss}`)
+                                        if (deleteResult.rslt == 's') {
+                                            container.remove()
+                                            alert(`s/${viewLang.actions.editGroup.delete.pstss}`)
+                                        }
                                     }
-                                }
+                                })
                             }; break;
                             case 'reorder': {
                                 const reorderResult = await request('controlGroup',
@@ -269,7 +279,7 @@ async function handleAdminActions() {
                             }; break;
                             case 'rename': {
                                 container.remove()
-                                showPopupInput(viewLang.actions.editGroup.rename, post_data.postGroupData.name, async (new_name) => {
+                                new Notify(viewLang.actions.editGroup.rename, null, '#0ff', 'inputShort', async (new_name) => {
                                     if (new_name) {
                                         const rename_result = await request('controlGroup',
                                             {
@@ -279,7 +289,7 @@ async function handleAdminActions() {
                                             })
                                         alert(`${rename_result.rslt}/${rename_result.msg}`, 5000)
                                     }
-                                })
+                                }, { value: post_data.postGroupData.name })
                             }; break;
                             case 'color': {
                                 const color_result = await request('controlGroup',
@@ -299,8 +309,8 @@ async function handleAdminActions() {
                 createAction(
                     viewLang.actions.editGroup.toColl.btn,
                     document.querySelector('.post-actions'),
-                    async () => {
-                        if (confirm(viewLang.actions.editGroup.toColl.conf)) {
+                    () => new Notify(viewLang.actions.editGroup.toColl.conf, null, '#0ff', 'inputConfirm', async (result) => {
+                        if (result) {
                             const convResult = await request('controlGroup',
                                 {
                                     type: 'setGroupType',
@@ -309,14 +319,14 @@ async function handleAdminActions() {
                                 })
                             alert(`${convResult.rslt}/${convResult.msg}`)
                         }
-                    }
+                    })
                 )
             } else {
                 createAction(
                     viewLang.actions.editGroup.toGroup.btn,
                     document.querySelector('.post-actions'),
-                    async () => {
-                        if (confirm(viewLang.actions.editGroup.toGroup.conf)) {
+                    () => new Notify(viewLang.actions.editGroup.toGroup.conf, null, '#0ff', 'inputConfirm', async (result) => {
+                        if (result) {
                             const convResult = await request('controlGroup',
                                 {
                                     type: 'setGroupType',
@@ -325,25 +335,24 @@ async function handleAdminActions() {
                                 })
                             alert(`${convResult.rslt}/${convResult.msg}`)
                         }
-                    }
+                    })
                 )
             }
-
         } else {
             createAction(viewLang.actions.editGroup.addToGroup, document.querySelector('.post-actions'), groupControl)
         }
 
         createAction(viewLang.actions.rmPost.btn, document.querySelector('.post-actions'), async () => {
-            if (!confirm(`${viewLang.actions.rmPost.conf} ID:${post_data.id}?`)) {
-                return
-            }
-            const rslt = await request('deletePost', { post: post_data.id });
+            new Notify(`${viewLang.actions.rmPost.conf} ID:${post_data.id}?`, null, '#f00', 'inputConfirm', async (result) => {
+                if (!result) return
+                const rslt = await request('deletePost', { post: post_data.id });
 
-            if (rslt.rslt == 's') {
-                search(document.getElementById('taglist').value, rslt)
-            } else {
-                alert(rslt.msg, 5000);
-            }
+                if (rslt.rslt == 's') {
+                    search(document.getElementById('taglist').value, rslt)
+                } else {
+                    alert(rslt.msg, 5000);
+                }
+            })
         });
     }
 }
@@ -377,9 +386,9 @@ function groupControl() {
         const group_selector = createSelect(groups_select, viewLang.actions.groupControl.selectGroupLabel, async (value) => {
             switch (value) {
                 case 'create_group': {
-                    showPopupInput(viewLang.actions.groupControl.newGroupNameLabel, "", async (groupName) => {
-                        if (groupName) {
-                            const group_create_result = await request('controlGroup', { type: 'createGroup', posts: [post_data.id], name: groupName })
+                    new Notify(viewLang.actions.groupControl.newGroupNameLabel, null, '#0f0', 'inputShort', async (result) => {
+                        if (result) {
+                            const group_create_result = await request('controlGroup', { type: 'createGroup', posts: [post_data.id], name: result })
                             alert(group_create_result.rslt + '/' + group_create_result.msg, 5000)
                             if (group_create_result.rslt != 'e') {
                                 overlay.remove()
@@ -574,22 +583,23 @@ async function createComments() {
 
             const comment_actions_row = createDiv('comment-actions', comment_data_container)
             if ((await ownerVerify(comment.from)) || (await adminVerify())) {
-                const comment_remove = createAction(viewLang.comments.deleteComment.btn, comment_actions_row, async () => {
-                    if (!confirm(viewLang.comments.deleteComment.conf)) {
-                        return
-                    }
-                    const rmResult = await request(
-                        'controlPostComments',
-                        {
-                            type: 'deleteComment',
-                            messageID: comment.messageid
+                const comment_remove = createAction(viewLang.comments.deleteComment.btn, comment_actions_row,
+                    () => new Notify(viewLang.comments.deleteComment.conf, null, '#f00', 'inputConfirm', async (result) => {
+                        if (!result) {
+                            return
                         }
-                    )
-                    if (rmResult.rslt == 's') {
-                        fetchComments()
-                    }
-                    alert(rmResult.rslt + '/' + rmResult.msg, 2000)
-                })
+                        const rmResult = await request(
+                            'controlPostComments',
+                            {
+                                type: 'deleteComment',
+                                messageID: comment.messageid
+                            }
+                        )
+                        if (rmResult.rslt == 's') {
+                            fetchComments()
+                        }
+                        alert(rmResult.rslt + '/' + rmResult.msg, 2000)
+                    }))
                 comment_remove.classList.add('delete-button')
             }
         }

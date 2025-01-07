@@ -148,40 +148,47 @@ async function showActions(userData, activeUser) {
         createAction(profileLang.actions.unlogin, container, () => Authy.unlogin())
 
         //region ch username
-        createAction(profileLang.actions.changeUserName.btn, container, async () => {
-            const new_name = prompt(profileLang.actions.changeUserName.conf, userData.data.username)
-            if (new_name) {
-                const rslt = await request('changeUserName', { newName: new_name })
+        createAction(profileLang.actions.changeUserName.btn, container,
+            () => new Notify(profileLang.actions.changeUserName.conf, null, '#0ff', 'inputShort', async (newName) => {
+                if (newName) {
+                    const rslt = await request('changeUserName', { newName: newName })
 
-                if (rslt.rslt == 's') {
-                    window.location.href = `/profile?alert=${rslt.rslt}/${rslt.msg.split(' ').join('+')}/5000`
-                } else {
-                    alert(rslt.rslt + '/' + rslt.msg, 5000)
+                    if (rslt.rslt == 's') {
+                        window.location.href = `/profile?alert=${rslt.rslt}/${rslt.msg.split(' ').join('+')}/5000`
+                    } else {
+                        alert(rslt.rslt + '/' + rslt.msg, 5000)
+                    }
                 }
-            }
-        })
+            }))
 
         //region ch pass
-        createAction(profileLang.actions.changePass.btn, container, async () => {
-            const new_pasas = prompt(profileLang.actions.changePass.conf)
-            if (new_pasas) {
-                const rslt = await request('changeUserPassword', { userKey: localStorage.getItem('userKey') || sessionStorage.getItem('userKey'), newPassword: CryptoJS.SHA256(new_pasas).toString() })
-                alert(rslt.rslt + '/' + rslt.msg, 5000)
-            }
-        })
+        createAction(profileLang.actions.changePass.btn, container,
+            () => new Notify(profileLang.actions.changePass.conf, null, '#0ff', 'inputPass', (newPass) => {
+                if (newPass) {
+                    new Notify(profileLang.actions.changePass.confS, null, '#0ff', 'inputPass', async (newPassConf) => {
+                        if (newPass != newPassConf) {
+                            new Notify(profileLang.actions.changePass.passNotMatched, 5000, '#f00')
+                        } else {
+                            const rslt = await request('changeUserPassword', { newPassword: CryptoJS.SHA256(newPassConf).toString() })
+                            alert(rslt.rslt + '/' + rslt.msg, 5000)
+                        }
+                    })
+                }
+            })
+        )
 
         //region ch blklist
         createAction(profileLang.actions.changeBl.btn, container, async () => {
             const blacklist = activeUser.data.blacklist.join('\n')
-            showPopupInput(profileLang.actions.changeBl.label, blacklist, async (new_blacklist) => {
-                if (blacklist != new_blacklist) {
+            const notf = new Notify(profileLang.actions.changeBl.label, null, '#000', 'inputLong', async (result) => {
+                if (blacklist != result) {
                     const result = await request('updateBlacklist', {
                         userKey: localStorage.getItem('userKey') || sessionStorage.getItem('userKey'),
-                        blacklist: new_blacklist.split(/\s+|\n+|\,/).filter(val => val !== '')
+                        blacklist: result.split(/\s+|\n+|\,/).filter(val => val !== '')
                     })
                     alert(result.msg)
                 }
-            })
+            }, { value: blacklist })
         })
 
         // region set avatar
@@ -257,10 +264,10 @@ async function showActions(userData, activeUser) {
     } else {
         //region wr msg
         createAction(profileLang.actions.sendDM.btn, container, async () => {
-            showPopupInput(profileLang.actions.sendDM.label, `${userData.data.username}!`, async (message_data) => {
-                if (message_data) {
+            new Notify(profileLang.actions.sendDM.label, null, '#092', 'inputLong', async (result) => {
+                if (result) {
                     const message_result = await request('sendMessage', {
-                        message: message_data,
+                        message: result,
                         from: activeUser.data.login,
                         to: userData.data.login,
                         msgtype: 'DM'
@@ -268,7 +275,7 @@ async function showActions(userData, activeUser) {
                     if (message_result.rslt != 's')
                         alert("e/" + message_result.msg, 5000)
                 }
-            })
+            }, { value: `${userData.data.username}!` })
         })
         if (activeUser.data.acc_level > 1) {
 

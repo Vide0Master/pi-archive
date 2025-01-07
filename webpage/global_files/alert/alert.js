@@ -1,63 +1,286 @@
 
-const bd = document.querySelector("body")
-const notf_cont = document.createElement('div')
-bd.appendChild(notf_cont)
-notf_cont.id = 'notification-container'
-notf_cont.className = 'notification-container'
-window.alert = function (message, timeout) {
-    return createNotification(message, timeout);
-};
+const body = document.querySelector("body")
+const notificationContainer = document.createElement('div')
+body.appendChild(notificationContainer)
 
-function createNotification(str, timeout = 0) {
-    let type = "";
-    let message = str;
+notificationContainer.className = 'notification-container'
 
-    if (str.split('')[1] == "/") {
-        type = str[0];
-        message = str.slice(2);
-    }
+const notifications = {}
 
-    if (timeout == 0) {
-        message += `<br><br>${Language.alert.remove}`
-    }
+class Notify {
+    constructor(message, timeout = 5000, color = '#fff', type, callBack, callBackParams = {}, callBackAfterTimer) {
+        if (notifications[message]) {
+            notifications[message].highlight()
+            return
+        } else {
+            notifications[message] = this
+        }
 
-    const container = document.getElementById('notification-container');
+        this.message = message
+        this.timeout = timeout
+        this.color = color
+        this.type = ''
+        this.callBack = callBack
+        this.callBackParams = callBackParams
+        this.isPresent = true
+        this.callBackAfterTimer = callBackAfterTimer
 
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.innerHTML = `<span>${message}</span>`;
+        this.notificationElem = document.createElement('div')
+        this.notificationElem.classList.add('notification')
+        this.notificationElem.setAttribute('style', `--notification-color: ${this.color};`)
+        notificationContainer.appendChild(this.notificationElem)
 
-    container.insertBefore(notification, container.firstChild);
+        this.remove = () => {
+            this.notificationElem.remove()
+            this.isPresent = false
+            delete notifications[this.message]
+        }
 
-    setTimeout(() => {
-        notification.classList.add('show');
-    }, 10);
+        this.initTimer = (time) => {
+            setTimeout(() => {
+                if (this.callBackAfterTimer) this.callBackAfterTimer()
+                this.remove()
+            }, time)
+            const timerBar = document.createElement('div')
+            timerBar.classList.add('timer-bar')
+            this.notificationElem.appendChild(timerBar)
+            timerBar.style.animation = `timer ${time}ms linear forwards`
+        }
 
-    if (timeout > 0) {
-        var timer = setTimeout(() => {
-            removeNotification(notification);
-        }, timeout);
-    }
+        this.highlight = () => {
+            this.notificationElem.classList.add('highlight')
+            this.notificationElem.addEventListener('animationend', () => {
+                this.notificationElem.classList.remove('highlight')
+            })
+        }
 
-    if (!timeout >= 0) {
-        notification.addEventListener('click', () => {
-            clearTimeout(timer)
-            removeNotification(notification)
-        })
-    }
+        switch (type) {
+            //region input conf
+            case 'inputConfirm': {
+                const textBlock = document.createElement('span')
+                textBlock.innerHTML = this.message
+                this.notificationElem.appendChild(textBlock)
+                this.notificationElem.classList.add('confirm-text')
 
-    return function () {
-        clearTimeout(timer)
-        removeNotification(notification)
+                const rejectButton = document.createElement('div')
+                this.notificationElem.appendChild(rejectButton)
+                rejectButton.classList.add('cancel-button')
+                rejectButton.innerHTML = '✖'
+
+                const confirmButton = document.createElement('div')
+                this.notificationElem.appendChild(confirmButton)
+                confirmButton.classList.add('confirm-button')
+                confirmButton.innerHTML = '✔'
+                confirmButton.focus()
+
+                rejectButton.onclick = () => {
+                    this.remove()
+                    this.callBack(false)
+                }
+
+                confirmButton.onclick = () => {
+                    this.remove()
+                    this.callBack(true)
+                }
+            }; break;
+            //region input short
+            case 'inputShort': {
+                const textBlock = document.createElement('span')
+                textBlock.innerHTML = this.message
+                this.notificationElem.appendChild(textBlock)
+                this.notificationElem.classList.add('input-short')
+
+                const inputContainer = document.createElement('div')
+                this.notificationElem.appendChild(inputContainer)
+                inputContainer.classList.add('input-container')
+
+                const inputLine = document.createElement('input')
+                inputContainer.appendChild(inputLine)
+                inputLine.type = 'text'
+                this.inputField = inputLine
+                inputLine.focus()
+
+                if (this.callBackParams.placeholder) {
+                    inputLine.placeholder = this.callBackParams.placeholder
+                }
+
+                if (this.callBackParams.value) {
+                    inputLine.value = this.callBackParams.value
+                }
+
+                const rejectButton = document.createElement('div')
+                inputContainer.appendChild(rejectButton)
+                rejectButton.classList.add('cancel-button')
+                rejectButton.innerHTML = '✖'
+
+                const confirmButton = document.createElement('div')
+                inputContainer.appendChild(confirmButton)
+                confirmButton.classList.add('confirm-button')
+                confirmButton.innerHTML = '✔'
+
+                rejectButton.onclick = () => {
+                    this.remove()
+                    this.callBack(false)
+                }
+
+                confirmButton.onclick = () => {
+                    this.remove()
+                    this.callBack(inputLine.value)
+                }
+
+                inputLine.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter' && document.activeElement === inputLine) {
+                        this.remove()
+                        this.callBack(inputLine.value)
+                    }
+                })
+            }; break;
+            //region input pass
+            case 'inputPass': {
+                const textBlock = document.createElement('span')
+                textBlock.innerHTML = this.message
+                this.notificationElem.appendChild(textBlock)
+                this.notificationElem.classList.add('input-short')
+
+                const inputContainer = document.createElement('div')
+                this.notificationElem.appendChild(inputContainer)
+                inputContainer.classList.add('input-container')
+
+                const inputLine = document.createElement('input')
+                inputContainer.appendChild(inputLine)
+                inputLine.type = 'password'
+                this.inputField = inputLine
+                inputLine.focus()
+
+                if (this.callBackParams.placeholder) {
+                    inputLine.placeholder = this.callBackParams.placeholder
+                }
+
+                const rejectButton = document.createElement('div')
+                inputContainer.appendChild(rejectButton)
+                rejectButton.classList.add('cancel-button')
+                rejectButton.innerHTML = '✖'
+
+                const confirmButton = document.createElement('div')
+                inputContainer.appendChild(confirmButton)
+                confirmButton.classList.add('confirm-button')
+                confirmButton.innerHTML = '✔'
+
+                rejectButton.onclick = () => {
+                    this.remove()
+                    this.callBack(false)
+                }
+
+                confirmButton.onclick = () => {
+                    this.remove()
+                    this.callBack(inputLine.value)
+                }
+                
+                inputLine.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter' && document.activeElement === inputLine) {
+                        this.remove()
+                        this.callBack(inputLine.value)
+                    }
+                })
+            }; break;
+            //region input long
+            case 'inputLong': {
+                const textBlock = document.createElement('span')
+                textBlock.innerHTML = this.message
+                this.notificationElem.appendChild(textBlock)
+                this.notificationElem.classList.add('input-long')
+
+                const textInputContainer = document.createElement('div')
+                textInputContainer.classList.add('text-input-container')
+                this.textInputContainer = textInputContainer
+                this.notificationElem.appendChild(textInputContainer)
+                const inputLine = document.createElement('textarea')
+                textInputContainer.appendChild(inputLine)
+                this.inputField = inputLine
+                inputLine.focus()
+
+                inputLine.addEventListener('input', function () {
+                    inputLine.style.minHeight = 'auto';
+                    inputLine.style.minHeight = `${inputLine.scrollHeight}px`;
+                });
+
+                if (this.callBackParams.placeholder) {
+                    inputLine.placeholder = this.callBackParams.placeholder
+                }
+
+                if (this.callBackParams.value) {
+                    inputLine.value = this.callBackParams.value
+                }
+
+                const inputContainer = document.createElement('div')
+                this.notificationElem.appendChild(inputContainer)
+                inputContainer.classList.add('input-container')
+
+                const rejectButton = document.createElement('div')
+                inputContainer.appendChild(rejectButton)
+                rejectButton.classList.add('cancel-button')
+                rejectButton.innerHTML = '✖'
+
+                const confirmButton = document.createElement('div')
+                inputContainer.appendChild(confirmButton)
+                confirmButton.classList.add('confirm-button')
+                confirmButton.innerHTML = '✔'
+
+                rejectButton.onclick = () => {
+                    this.remove()
+                    this.callBack(false)
+                }
+
+                confirmButton.onclick = () => {
+                    this.remove()
+                    this.callBack(inputLine.value)
+                }
+            }; break;
+            //region default
+            default: {
+                const textBlock = document.createElement('span')
+                textBlock.innerHTML = this.message
+                this.notificationElem.appendChild(textBlock)
+                this.notificationElem.classList.add('msg')
+
+                if (this.timeout > 0) {
+                    this.initTimer(this.timeout)
+                } else {
+                    const confirmButton = document.createElement('div')
+                    this.notificationElem.appendChild(rmbtn)
+                    confirmButton.classList.add('confirm-button')
+                    confirmButton.innerHTML = '✔'
+                    confirmButton.onclick = () => {
+                        this.remove()
+                    }
+                    confirmButton.focus()
+                }
+            }; break;
+        }
     }
 }
 
-function removeNotification(notification) {
-    notification.classList.add('removing-element')
-    setTimeout(() => {
-        const container = document.getElementById('notification-container');
-        container.removeChild(notification);
-    }, 700);
+// new Notify('Hello World', 5000, '#fff', 'inputLong', (result) => {
+//     new Notify(result, 5000, '#fff')
+// }, { placeholder: 'pass' })
+
+window.alert = (msg, time) => {
+    let type = "";
+    let message = msg;
+
+    if (msg.split('')[1] == "/") {
+        type = msg[0];
+        message = msg.slice(2);
+    }
+
+    const typeColors = {
+        'i': '#80afc6',
+        'w': '#FFD54F',
+        'e': '#E57373',
+        's': '#81C784',
+    }
+
+    new Notify(message, time, typeColors[type])
 }
 
 function alertFromQuery() {
