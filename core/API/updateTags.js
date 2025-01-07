@@ -1,6 +1,5 @@
 const sysController = require('../systemController.js')
 
-//экспорт функции
 module.exports = (request, user_data) => {
     return new Promise(async resolve => {
         const postData = await sysController.dbinteract.getPostData(request.post)

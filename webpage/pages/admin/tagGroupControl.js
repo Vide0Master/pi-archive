@@ -61,7 +61,7 @@ async function createTagGroupList() {
         }
 
         const add_btn = createAction('+', content, async () => {
-            showPopupInput(tagCLang.insrtTagName, '', (newTagsLine) => {
+            const notf = new Notify(tagCLang.insrtTagName,null,'#0f0','inputLong',(newTagsLine)=>{
                 if (!newTagsLine) return
                 const newTagsArray = newTagsLine.split(/\s+|\n+/).filter(val => val !== '')
                 for (const tagname of newTagsArray) {
@@ -72,6 +72,7 @@ async function createTagGroupList() {
                     tagElem.classList.add('new')
                 }
             })
+            addTagsAutofill(notf.inputField, notf.textInputContainer, true)
         })
 
         add_btn.classList.add('plus')
@@ -82,11 +83,12 @@ async function createTagGroupList() {
 
         remove_btn.style.backgroundColor = 'red'
         remove_btn.addEventListener('click', async () => {
-            if (!confirm(`${tagCLang.del.q} "${tagGroup.groupname}"?`)) return
-
-            const rmResult = await request('controlTagGroups', { type: 'removeGroup', groupName: tagGroup.groupname })
-
-            window.location.href = window.location.href + `?alert=${rmResult.rslt}/${rmResult.msg}`
+            new Notify(`${tagCLang.del.q} "${tagGroup.groupname}"?`, null, '#f00', 'inputConfirm', async (result) => {
+                if (result) {
+                    const rmResult = await request('controlTagGroups', { type: 'removeGroup', groupName: tagGroup.groupname })
+                    window.location.href = window.location.href + `?alert=${rmResult.rslt}/${rmResult.msg}`
+                }
+            })
         })
 
 
@@ -95,18 +97,21 @@ async function createTagGroupList() {
         })
 
         confirm_btn.addEventListener('click', async () => {
-            if (!confirm(`${tagCLang.acc.q} "${tagGroup.groupname}"?`)) return
-            const newGroupData = {
-                groupname: name.value,
-                priority: priority.value,
-                color: color.value,
-                relatedtags: localtags
-            }
+            new Notify(`${tagCLang.acc.q} "${tagGroup.groupname}"?`, null, '#ff0', 'inputConfirm', async (result) => {
+                if (result) {
+                    const newGroupData = {
+                        groupname: name.value,
+                        priority: priority.value,
+                        color: color.value,
+                        relatedtags: localtags
+                    }
 
-            const conf_result = await request('controlTagGroups', { type: 'updateGroup', group: tagGroup.groupname, newGroupData: newGroupData })
-            if (conf_result.rslt == 's')
-                window.location.href = window.location.href + `?alert=${conf_result.rslt}/${conf_result.msg}`
-            alert(`${conf_result.rslt}/${conf_result.msg}`, 5000)
+                    const conf_result = await request('controlTagGroups', { type: 'updateGroup', group: tagGroup.groupname, newGroupData: newGroupData })
+                    if (conf_result.rslt == 's')
+                        window.location.href = window.location.href + `?alert=${conf_result.rslt}/${conf_result.msg}`
+                    alert(`${conf_result.rslt}/${conf_result.msg}`, 5000)
+                }
+            })
         })
     }
 
@@ -120,10 +125,12 @@ async function createTagGroupList() {
     const crNewGroupBtn = createButton(tagCLang.NG.cr, crGroupCont)
 
     crNewGroupBtn.addEventListener('click', async () => {
-        if (!confirm(`${tagCLang.NG.q} "${newTagGropName.value}"`)) return
-
-        const crResult = await request('controlTagGroups', { type: 'createGroup', groupName: newTagGropName.value })
-        window.location.href = window.location.href + `?alert=${crResult.rslt}/${crResult.msg}`
+        new Notify(`${tagCLang.NG.q} "${newTagGropName.value}"`, null, '#ff0', 'inputConfirm', async (result) => {
+            if (result) {
+                const crResult = await request('controlTagGroups', { type: 'createGroup', groupName: newTagGropName.value })
+                window.location.href = window.location.href + `?alert=${crResult.rslt}/${crResult.msg}`
+            }
+        })
     })
 }
 createTagGroupList()
