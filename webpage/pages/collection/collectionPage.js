@@ -267,6 +267,28 @@ async function processCollection(id) {
 
     createTagSelector(tags, document.querySelector('.tags'))
 
+    async function updateTagsList() {
+        const post_list = await request('getPosts',
+            {
+                query: `id:${collectionInfo.group.join(',')}`,
+                page: 1,
+                postsCount: 9999,
+                grpOverride: true
+            })
+
+        const tags = []
+
+        for (const post of post_list) {
+            for (const tag of post.tags) {
+                if (tags.indexOf(tag) < 0) {
+                    tags.push(tag)
+                }
+            }
+        }
+
+        createTagSelector(tags, document.querySelector('.tags'))
+    }
+
     async function setActions() {
         const actionCol = document.querySelector('.post-actions')
 
@@ -367,7 +389,7 @@ async function processCollection(id) {
                                         })
                                     alert(`${rename_result.rslt}/${rename_result.msg}`, 5000)
                                 }
-                            },{value:collectionInfo.name})
+                            }, { value: collectionInfo.name })
                         }; break;
                         case 'color': {
                             const color_result = await request('controlGroup',
@@ -404,13 +426,13 @@ async function processCollection(id) {
 
             //region add tags
             createAction(collectionLang.actions.tags.add.btn, actionCol, async () => {
-                const notf = new Notify(collectionLang.actions.tags.add.label, null, '#0f0', 'inputLong',async (taglist) => {
+                const notf = new Notify(collectionLang.actions.tags.add.label, null, '#0f0', 'inputLong', async (taglist) => {
                     if (taglist) {
                         const new_tags = taglist.split(/\s+|\n+/).filter(val => val !== '');
 
-                        const blur = createBlurOverlay()
+                        const alertBlock = new Notify('', null, '#0f0', 'custom')
 
-                        const postContainer = createDiv('posts-update-container', blur)
+                        const postContainer = createDiv('posts-update-container', alertBlock.notificationElem)
 
                         const postLabels = createDiv('post-labels-cont', postContainer)
 
@@ -427,11 +449,8 @@ async function processCollection(id) {
                             progressLabel.innerHTML = `${collectionLang.actions.tags.completed}: ${counter} / ${collectionInfo.group.length}`
                             progressBar.style.width = `${(counter / collectionInfo.group.length) * 100}%`
                             if (counter == collectionInfo.group.length) {
-                                const btn = createButton(collectionLang.actions.tags.close, postContainer)
-                                btn.addEventListener('click', () => {
-                                    blur.remove()
-                                })
-                                alert(`s/${collectionLang.actions.tags.actionComp}`, 5000)
+                                updateTagsList()
+                                alertBlock.initTimer(5000)
                             }
                         }
 
@@ -479,9 +498,9 @@ async function processCollection(id) {
                     if (taglist) {
                         const new_tags = taglist.split(/\s+|\n+/).filter(val => val !== '');
 
-                        const blur = createBlurOverlay()
+                        const alertBlock = new Notify('', null, '#f00', 'custom')
 
-                        const postContainer = createDiv('posts-update-container', blur)
+                        const postContainer = createDiv('posts-update-container', alertBlock.notificationElem)
 
                         const postLabels = createDiv('post-labels-cont', postContainer)
 
@@ -498,11 +517,8 @@ async function processCollection(id) {
                             progressLabel.innerHTML = `${collectionLang.actions.tags.completed}: ${counter} / ${collectionInfo.group.length}`
                             progressBar.style.width = `${(counter / collectionInfo.group.length) * 100}%`
                             if (counter == collectionInfo.group.length) {
-                                const btn = createButton(collectionLang.actions.tags.close, postContainer)
-                                btn.addEventListener('click', () => {
-                                    blur.remove()
-                                })
-                                alert(`s/${collectionLang.actions.tags.actionComp}`, 5000)
+                                updateTagsList()
+                                alertBlock.initTimer(5000)
                             }
                         }
 

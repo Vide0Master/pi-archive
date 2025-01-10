@@ -3,6 +3,24 @@
         "versions": {
             "Server": "",
             "DB": "",
+            "Webpage": "b0.3.2",
+            "TGbot": ""
+        },
+        "date": "10.01.2025",
+        "updates": [
+            {
+                "text": "Integration of collection multi-tags into alert elements",
+                "tag": "rework",
+                "services": [
+                    "Webpage"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
+            "Server": "",
+            "DB": "",
             "Webpage": "b0.3.1",
             "TGbot": ""
         },
