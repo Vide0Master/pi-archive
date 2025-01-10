@@ -103,14 +103,16 @@
         .timer-bar {
             height: 0.2em;
             position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
+            bottom: 0.2em;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 0.4em);
             background-color: greenyellow;
+            border-radius: 0.1em;
 
             @keyframes timer {
                 from {
-                    width: 100%;
+                    width: calc(100% - 0.4em);
                 }
 
                 to {

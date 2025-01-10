@@ -55,6 +55,8 @@ class Notify {
         }
 
         switch (type) {
+            //region custom
+            case 'custom': break;
             //region input conf
             case 'inputConfirm': {
                 const textBlock = document.createElement('span')
@@ -175,7 +177,7 @@ class Notify {
                     this.remove()
                     this.callBack(inputLine.value)
                 }
-                
+
                 inputLine.addEventListener('keydown', (event) => {
                     if (event.key === 'Enter' && document.activeElement === inputLine) {
                         this.remove()
