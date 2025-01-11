@@ -1,6 +1,5 @@
 const sysController = require('../systemController.js')
 
-//экспорт функции
 module.exports = (request, user) => {
     return new Promise(async resolve => {
         switch (request.type) {

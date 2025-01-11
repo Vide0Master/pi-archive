@@ -47,6 +47,7 @@
             "controlUserSettings": 1,
             "getUserSessionList": 1,
             "controlGroup": 1,
+            "controlFlags": 1,
             "controlTagGroups": 2,
             "authTGUser": 0,
             "TGSendPostDM": 1,

@@ -187,7 +187,7 @@ async function handleAdminActions() {
                     document.querySelector('.view-container .desc .desc-text').innerText = newDesc
                     if (newDesc === '') {
                         document.querySelector('.view-container .desc').style.display = 'none'
-                    }else{
+                    } else {
                         document.querySelector('.view-container .desc').removeAttribute('style')
                     }
                 }
@@ -414,6 +414,8 @@ async function initialize() {
     const params = new URLSearchParams(window.location.search);
     const id = params.get('id');
     const file_link = get_file_link(id);
+
+    console.log(await request('controlFlags', { type: 'getPostFlags', postID: id }))
 
     try {
         const post_data = await fetchPostData(id);
