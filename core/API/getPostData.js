@@ -1,4 +1,5 @@
 0
+const { sysController } = require('../../tg_bot/tgBotController.js')
 const SysController = require('../systemController.js')
 
 module.exports = (request, user) => {
@@ -38,6 +39,10 @@ module.exports = (request, user) => {
         data.post.postRating = postRatings.scores
 
         data.post.postRating.faved = user.favs.includes(request.id)
+
+        const postFlags = await sysController.dbinteract.getPostFlags(request.id)
+
+        data.post.flags = postFlags.flags
 
         resolve(data)
     })

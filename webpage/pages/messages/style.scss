@@ -31,7 +31,7 @@ main {
             padding: 0.5em;
             border-radius: 0.5em;
             cursor: pointer;
-            border-right: 2px solid;
+            border-right: 2px solid transparent;
 
             .pfp-cont {
                 min-height: 3em;
@@ -47,6 +47,10 @@ main {
                     width: 100%;
                     height: 100%;
                     object-fit: contain;
+
+                    &.PI {
+                        filter: invert(1);
+                    }
                 }
 
                 .temp-name {
@@ -113,6 +117,58 @@ main {
                 }
             }
         }
+
+        .system-block {
+            background-color: var(--color1);
+            color: var(--font-color1);
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 0.5em;
+            padding: 0.5em;
+            border-radius: 0.5em;
+            cursor: pointer;
+            border-right: 2px solid transparent;
+
+            .pfp-cont {
+                min-height: 3em;
+                min-width: 3em;
+                max-height: 3em;
+                max-width: 3em;
+                overflow: hidden;
+                display: grid;
+                place-items: center;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain;
+
+                    &.PI {
+                        filter: invert(1);
+                    }
+                }
+
+                .temp-name {
+                    font-size: 2.25em;
+                    color: var(--font-color1);
+                }
+            }
+
+            &.active {
+                animation: smoothColorSys 0.2s forwards;
+
+                @keyframes smoothColorSys {
+                    from {
+                        border-color: transparent;
+                    }
+
+                    to {
+                        border-color: #f22;
+                    }
+                }
+            }
+        }
     }
 
     .messager-col {
@@ -137,7 +193,9 @@ main {
         }
 
         .messages-cont {
-            height: 600px;
+            min-height: 200px;
+            flex: 1;
+            max-height: 80vh;
             position: relative;
             display: flex;
             flex-direction: column-reverse;
@@ -216,6 +274,157 @@ main {
                         flex-direction: row;
                         align-items: center;
                         gap: 0.5em;
+                    }
+                }
+            }
+
+            .system-messsages {
+                display: flex;
+                flex-direction: column-reverse;
+                gap: 0.5em;
+
+                .sys-msg {
+                    background-color: var(--color2);
+                    display: flex;
+                    flex-direction: column;
+                    width: fit-content;
+                    border-radius: 0.5em;
+                    color: var(--font-color1);
+                    border: solid 2px var(--color3);
+
+                    .splitter {
+                        width: 100%;
+                        background-color: var(--color3);
+                        height: 2px;
+                        box-sizing: unset;
+                    }
+
+                    .header,
+                    .content,
+                    .actions {
+                        padding: 0.5em;
+                    }
+
+                    .header {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 0.5em;
+
+                        .report-name {
+                            font-size: 1.3em;
+                            font-weight: bold;
+                        }
+
+                        .initiator-cont {
+                            display: flex;
+                            flex-direction: row;
+                            gap: 0.25em;
+
+                            .user-name {
+                                display: flex;
+                                flex-direction: row;
+                                gap: 0.2em;
+                                align-items: center;
+                            }
+                        }
+
+                        .adressed-to-cont {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 0.3em;
+                        }
+
+                        .comment-cont {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 0.25em;
+
+                            .comment-text {
+                                background-color: #fff;
+                                color: #000;
+                                padding: 0.25em 0.5em;
+                                border-radius: 1em;
+                                border-top-left-radius: 0;
+                                width: fit-content;
+                            }
+                        }
+                    }
+
+                    .content {
+                        .tags-appeal-cont {
+                            display: flex;
+                            flex-direction: column;
+                            align-items: flex-start;
+                            gap: 0.2em;
+
+                            .tag-row {
+                                display: flex;
+                                flex-direction: row;
+                                align-items: center;
+                                gap: 0.2em;
+
+                                .tag-state {
+                                    font-weight: bold;
+
+                                    &.rm {
+                                        color: #ff0033;
+                                    }
+
+                                    &.n {
+                                        color: #808080;
+                                    }
+
+                                    &.add {
+                                        color: #1f1;
+                                    }
+                                }
+                            }
+
+                            .arrow {
+                                font-size: 1.5em;
+                            }
+
+                        }
+
+                        .group-info {
+                            width: fit-content;
+                            max-width: 100%;
+                            box-sizing: border-box;
+
+                            display: flex;
+                            flex-direction: row;
+                            flex-wrap: wrap;
+                            justify-content: center;
+                            align-items: center;
+                            gap: 0.75em;
+                        }
+                    }
+
+                    .actions {
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        gap: 0.5em;
+
+                        .reject-button {
+                            background-color: red;
+                            color: #fff;
+                            
+                            &:hover{
+                                background-color: #000;
+                                color: red;
+                            }
+                        }
+
+                        .acc-button {
+                            background-color: green;
+                            color: #fff;
+
+                            &:hover{
+                                background-color: #fff;
+                                color: green;
+                            }
+                        }
                     }
                 }
             }

@@ -90,7 +90,63 @@
                 "you": "You",
                 "chSel": "Select chat",
                 "enterMessage": "Enter message",
-                "sendBtn": "Send"
+                "sendBtn": "Send",
+                "appeal": {
+                    "system": "System",
+                    "appeal_header": {
+                        "label": "Appeal",
+                        "inappropriateContent": "inappropriate content",
+                        "tagEdit": "tags edit",
+                        "descEdit": "description edit",
+                        "addToGroup": "add to group",
+                        "replacePost": "replace post",
+                        "removePost": "remove post"
+                    },
+                    "initiator": "Initiator",
+                    "adressed_to": "Adressed to",
+                    "postLabel": "Post",
+                    "comment": "Comment from initiator",
+                    "description": "Description",
+                    "newDesc": "New description",
+                    "removeReason": "Reason to remove",
+                    "state": [
+                        "Rejected",
+                        "In progress",
+                        "Manually resolved",
+                        "Resolved automatically"
+                    ],
+                    "buttons": {
+                        "reject": "Reject",
+                        "auto": "Resolve automatically",
+                        "manual": "Resolved manually"
+                    },
+                    "action": {
+                        "tags": "Confirm updating tags",
+                        "desc": "Confirm updating description",
+                        "group": "Confirm adding post to group",
+                        "delete": "Confirm deleting post",
+                        "rejectAppeal":"Confirm rejecting appeal",
+                        "manuallyResolved":"Confirm resolving of appeal"
+                    },
+                    "alerts": {
+                        "succ": {
+                            "tags": "Tags updated",
+                            "desc": "Description updated",
+                            "group": "Post added to group",
+                            "delete": "Post deleted"
+                        },
+                        "err": {
+                            "postData": "Error getting post data",
+                            "tags": "Error updating tags",
+                            "desc": "Error updating description",
+                            "getGroupData": "Error retrieving group data",
+                            "group": "Error adding to group",
+                            "delete": "Error deleting post",
+                            "rejectAppeal":"Error rejecting appeal",
+                            "manuallyResolved":"Error confirming appeal"
+                        }
+                    }
+                }
             },
             "collection": {
                 "postInfoLabel": "Collection info",
@@ -283,6 +339,32 @@
                         "createNewGroup": "Create new group",
                         "selectGroupLabel": "Select group",
                         "newGroupNameLabel": "Enter group name"
+                    },
+                    "appeal":{
+                        "label":"Appeal",
+                        "addComment":"Add comment to appeal",
+                        "selectType":"Select report type",
+                        "types":{
+                            "inappropriateContent": "Inappropriate content",
+                            "tagEdit": "Request tags edit",
+                            "descEdit": "Request description edit",
+                            "addToGroup": "Request adding to group",
+                            "replacePost": "Request replacement of post with post",
+                            "removePost": "Request removal of post"
+                        },
+                        "comment":"Comment",
+                        "typePlaceholder":{
+                            "inappropriateContent": "Describe content",
+                            "tagEdit": "Enter tags",
+                            "descEdit": "Description",
+                            "addToGroup": "Group ID",
+                            "replacePost": "Post ID",
+                            "removePost": "Describe reason"
+                        },
+                        "commentMin":"You need to enter at least 5 words in comment",
+                        "commentMax":"Your comment is too long",
+                        "sent":"Appeal was sent",
+                        "err":"Encountered error when sending report"
                     }
                 },
                 "comments": {
@@ -326,8 +408,8 @@
                     "changePass": {
                         "btn": "Change password",
                         "conf": "Enter new password",
-                        "confS":"Confirm new passowrd",
-                        "passNotMatched":"Passwords does not match!"
+                        "confS": "Confirm new passowrd",
+                        "passNotMatched": "Passwords does not match!"
                     },
                     "changeBl": {
                         "btn": "Change blacklist",

@@ -2,9 +2,9 @@
     "DEVMODE": false,
     "AUDITCONTROL": "MOVE",
     "vesion": {
-        "Server": "b0.1.17",
-        "DB": "b1.1",
-        "Webpage": "b0.3.2",
+        "Server": "b0.1.18",
+        "DB": "b1.2",
+        "Webpage": "b0.4.1",
         "TGbot": "b0.2.4"
     },
     "user_status": {
@@ -47,6 +47,9 @@
             "controlUserSettings": 1,
             "getUserSessionList": 1,
             "controlGroup": 1,
+            "controlFlags": 1,
+            "controlSystemMessages": 1,
+            "controlReports": 1,
             "controlTagGroups": 2,
             "authTGUser": 0,
             "TGSendPostDM": 1,

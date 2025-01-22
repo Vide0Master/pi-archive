@@ -18,6 +18,7 @@ module.exports = (request, user_data) => {
 
                 for (const msg of msgs.messages) {
                     const contactLogin = msg.from === user_data.login ? msg.to : msg.from;
+                    if(contactLogin=='SYSTEM') continue
 
                     let DMUser = DMs.find(obj => obj.login === contactLogin);
 
@@ -72,7 +73,7 @@ module.exports = (request, user_data) => {
                         }
                         info.unreadPerUser[msg.from] += 1
                     }
-                    if (msg.msgtype.startsWith("ACTION")) {
+                    if (msg.msgtype.startsWith("SYSTEM_ACTION") && msg.read == 0) {
                         info.requiredAction = true
                     }
                 }

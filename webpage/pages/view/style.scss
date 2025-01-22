@@ -442,3 +442,31 @@ main {
         grid-column: 1;
     }
 }
+
+.report-alert{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5em;
+
+    .text-cont{
+        position: relative;
+    }
+
+    select{
+        background-color: #fff;
+        color: #000;
+    }
+
+    .switch-line .sw-label{
+        color: #fff;
+    }
+
+    .action-row{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5em;
+    }
+}

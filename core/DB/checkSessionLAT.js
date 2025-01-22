@@ -13,6 +13,14 @@ module.exports = (db, type, key) => {
                     return
                 }
 
+                if(!row){
+                    resolve(new sysController.createResponse(
+                        'w',
+                        'Session expired',
+                        { valid: false }
+                    ))
+                }
+
                 if (row.tslac < (Date.now() - sysController.config.static.restrictions.sessionTimeLimit)) {
                     resolve(new sysController.createResponse(
                         'w',

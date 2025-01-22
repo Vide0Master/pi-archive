@@ -161,9 +161,10 @@ async function handleAdminActions() {
     const isAdmin = await adminVerify();
 
     if (isOwner || isAdmin) {
+        //region edit tags
         createAction(viewLang.actions.editTags.btn, document.querySelector('.post-actions'), async () => {
             let tagline = post_data.tags.join(' ');
-            new Notify(viewLang.actions.editTags.poptext, null, 'var(--font-color1)', 'inputLong', async (taglist) => {
+            const notf = new Notify(viewLang.actions.editTags.poptext, null, 'var(--font-color1)', 'inputLong', async (taglist) => {
                 if (taglist) {
                     const new_tags = taglist.split(/\s+|\n+/).filter(val => val !== '');
                     const rslt = await request('updateTags', { post: post_data.id, newTags: new_tags });
@@ -173,9 +174,10 @@ async function handleAdminActions() {
                     createTagSelector(pData.tags, document.querySelector('.tags'));
                 }
             }, { value: tagline });
-            addTagsAutofill(editTagsAlert.inputField, editTagsAlert.textInputContainer, true)
+            addTagsAutofill(notf.inputField, notf.textInputContainer, true)
         });
 
+        //region edit desc
         createAction(viewLang.actions.editDesc.btn, document.querySelector('.post-actions'), async () => {
             new Notify(viewLang.actions.editDesc.poptext, null, 'var(--font-color1)', 'inputLong', async (newDesc) => {
                 if (newDesc === false) return
@@ -187,7 +189,7 @@ async function handleAdminActions() {
                     document.querySelector('.view-container .desc .desc-text').innerText = newDesc
                     if (newDesc === '') {
                         document.querySelector('.view-container .desc').style.display = 'none'
-                    }else{
+                    } else {
                         document.querySelector('.view-container .desc').removeAttribute('style')
                     }
                 }
@@ -195,6 +197,7 @@ async function handleAdminActions() {
         })
 
         if (post_data.postGroupData) {
+            //region rm from group
             createAction(
                 `${viewLang.actions.rmFromGroup.btn}\n"${post_data.postGroupData.name}"`,
                 document.querySelector('.post-actions'),
@@ -210,6 +213,8 @@ async function handleAdminActions() {
                     }
                 })
             )
+
+            //region edit group
             createAction(
                 viewLang.actions.editGroup.actName,
                 document.querySelector('.post-actions'),
@@ -305,6 +310,8 @@ async function handleAdminActions() {
                     container.appendChild(reord_over)
                 }
             )
+
+            //region conv to coll
             if (post_data.postGroupData.type == 'group') {
                 createAction(
                     viewLang.actions.editGroup.toColl.btn,
@@ -322,6 +329,7 @@ async function handleAdminActions() {
                     })
                 )
             } else {
+                //region conv to grp
                 createAction(
                     viewLang.actions.editGroup.toGroup.btn,
                     document.querySelector('.post-actions'),
@@ -342,6 +350,7 @@ async function handleAdminActions() {
             createAction(viewLang.actions.editGroup.addToGroup, document.querySelector('.post-actions'), groupControl)
         }
 
+        //region remove post
         createAction(viewLang.actions.rmPost.btn, document.querySelector('.post-actions'), async () => {
             new Notify(`${viewLang.actions.rmPost.conf} ID:${post_data.id}?`, null, '#f00', 'inputConfirm', async (result) => {
                 if (!result) return
@@ -415,6 +424,8 @@ async function initialize() {
     const id = params.get('id');
     const file_link = get_file_link(id);
 
+    //console.log(await request('controlFlags', { type: 'getPostFlags', postID: id }))
+
     try {
         const post_data = await fetchPostData(id);
 
@@ -471,21 +482,21 @@ async function initialize() {
             }
         )
 
-        // region set avatar
+        //region set avatar
         createAction(viewLang.actions.setPostAsAvatar, document.querySelector('.post-actions'), async () => {
             const rslt = await request('controlUserSettings', { type: 'update', update: { ProfileAvatarPostID: post_data.id } })
             alert(rslt.msg, 5000)
         })
 
+        //region set background
         if (contentType != 'video') {
-            // region set background
             createAction(viewLang.actions.setPostAsProfileBackground, document.querySelector('.post-actions'), async () => {
                 const rslt = await request('controlUserSettings', { type: 'update', update: { ProfileBackgroundPostID: post_data.id } })
                 alert(rslt.msg, 5000)
             })
         }
 
-        // region send post to tg
+        //region send post to tg
         createAction(viewLang.actions.sendPostToTg, document.querySelector('.post-actions'), async (event) => {
             event.preventDefault()
             const rslt = await request('TGSendPostDM', { postID: post_data.id, isFile: event.shiftKey })
@@ -493,10 +504,218 @@ async function initialize() {
             alert(`${rslt.rslt}/${rslt.msg}`, 5000)
         })
 
-        //TODO
-        // createAction('Send report', document.querySelector('.post-actions'), async () => {
+        const appealLang = viewLang.actions.appeal
+        //region reports
+        createAction(appealLang.label, document.querySelector('.post-actions'), async () => {
+            const notf = new Notify('report', null, '#f00', 'custom')
+            if (!notf.isPresent) return
 
-        // })
+            notf.notificationElem.classList.add('report-alert')
+
+            const headline = createDiv('label', notf.notificationElem)
+            headline.innerHTML = appealLang.label
+
+            const textReportCont = createDiv('text-cont')
+            const textReportField = document.createElement('textarea')
+            textReportCont.appendChild(textReportField)
+            function calculateHeightForTextInput() {
+                textReportCont.style.minHeight = 'auto';
+                textReportCont.style.minHeight = `${textReportCont.scrollHeight}px`;
+            }
+            textReportField.addEventListener('input', calculateHeightForTextInput);
+
+            const textReportFieldTags = document.createElement('textarea')
+            textReportCont.appendChild(textReportFieldTags)
+            addTagsAutofill(textReportFieldTags, textReportCont, true)
+            function calculateHeightForTags() {
+                textReportFieldTags.style.minHeight = 'auto';
+                textReportFieldTags.style.minHeight = `${textReportFieldTags.scrollHeight}px`;
+            }
+            textReportFieldTags.addEventListener('input', calculateHeightForTags);
+
+            const shortTextInput = document.createElement('input')
+            textReportCont.appendChild(shortTextInput)
+            shortTextInput.type = 'text'
+
+            const reportComment = document.createElement('textarea')
+            function calculateHeightForComment() {
+                reportComment.style.minHeight = 'auto';
+                reportComment.style.minHeight = `${reportComment.scrollHeight}px`;
+            }
+            reportComment.addEventListener('input', calculateHeightForComment);
+
+            const commentSwitch = createSwitch(appealLang.addComment, null, (state) => {
+                if (state) {
+                    reportComment.removeAttribute('style')
+                } else {
+                    reportComment.style.display = 'none'
+                }
+            })
+
+            const actionRow = createDiv('action-row')
+            const cncBtn = createDiv('cancel-button', actionRow)
+            cncBtn.innerHTML = '✖'
+            cncBtn.addEventListener('click', notf.remove)
+            const accBtn = createDiv('confirm-button', actionRow)
+            accBtn.innerHTML = '✔'
+            accBtn.style.display = 'none'
+
+            textReportCont.style.display = 'none'
+            textReportField.style.display = 'none'
+            textReportFieldTags.style.display = 'none'
+            shortTextInput.style.display = 'none'
+            reportComment.style.display = 'none'
+            commentSwitch.style.display = 'none'
+
+            let currentReportType = null
+            const typeSelector = createSelect([
+                { value: 'inappropriateContent', name: appealLang.types.inappropriateContent },
+                { value: 'tagEdit', name: appealLang.types.tagEdit },
+                { value: 'descEdit', name: appealLang.types.descEdit},
+                { value: 'addToGroup', name: appealLang.types.addToGroup },
+                //{ value: 'replacePost', name: appealLang.types.replacePost },
+                { value: 'removePost', name: appealLang.types.removePost }
+            ], appealLang.selectType, (value) => {
+                textReportCont.removeAttribute('style')
+                accBtn.removeAttribute('style')
+                reportComment.placeholder = appealLang.comment
+
+                currentReportType = value
+
+                const textDisp = {
+                    bigText: false,
+                    bigTags: false,
+                    smlText: false,
+                    comment: {
+                        sw: false,
+                        state: false
+                    }
+                }
+
+                const textPaceholder = {
+                    bigText: '',
+                    bigTags: '',
+                    smlText: ''
+                }
+
+                textReportField.value = ''
+                textReportFieldTags.value = ''
+                shortTextInput.value = ''
+                reportComment.value = ''
+
+                switch (value) {
+                    case 'inappropriateContent': {
+                        textDisp.bigText = true
+                        textPaceholder.bigText = appealLang.typePlaceholder.inappropriateContent
+                    }; break;
+                    case 'tagEdit': {
+                        textDisp.bigTags = true
+                        textPaceholder.bigTags = appealLang.typePlaceholder.tagEdit
+                        textReportFieldTags.value = post_data.tags.join(' ')
+                        textDisp.comment.sw = true
+                    }; break;
+                    case 'descEdit': {
+                        textDisp.bigText = true
+                        textPaceholder.bigText = appealLang.typePlaceholder.descEdit
+                        textReportField.value = post_data.description
+                        textDisp.comment.sw = true
+                    }; break;
+                    case 'addToGroup': {
+                        textDisp.smlText = true
+                        textPaceholder.smlText = appealLang.typePlaceholder.addToGroup
+                        textDisp.comment.sw = true
+                    }; break;
+                    case 'replacePost': {
+                        textDisp.smlText = true
+                        textPaceholder.smlText = appealLang.typePlaceholder.replacePost
+                        textDisp.comment.sw = true
+                    }; break;
+                    case 'removePost': {
+                        textDisp.bigText = true
+                        textPaceholder.bigText = appealLang.typePlaceholder.removePost
+                    }; break;
+                }
+
+                if (textDisp.comment.sw) {
+                    commentSwitch.removeAttribute('style')
+                } else {
+                    commentSwitch.style.display = 'none'
+                }
+
+                if (textDisp.comment.state) {
+                    commentSwitch.querySelector('input').checked = true
+                    reportComment.removeAttribute('style')
+                } else {
+                    commentSwitch.querySelector('input').checked = false
+                    reportComment.style.display = 'none'
+                }
+
+                textDisp.bigText ? textReportField.removeAttribute('style') : textReportField.style.display = 'none'
+                textDisp.bigTags ? textReportFieldTags.removeAttribute('style') : textReportFieldTags.style.display = 'none'
+                textDisp.smlText ? shortTextInput.removeAttribute('style') : shortTextInput.style.display = 'none'
+
+                textReportField.placeholder = textPaceholder.bigText
+                textReportFieldTags.placeholder = textPaceholder.bigTags
+                shortTextInput.placeholder = textPaceholder.smlText
+            })
+            notf.notificationElem.appendChild(typeSelector)
+            notf.notificationElem.appendChild(textReportCont)
+            notf.notificationElem.appendChild(commentSwitch)
+            notf.notificationElem.appendChild(reportComment)
+            notf.notificationElem.appendChild(actionRow)
+
+            accBtn.addEventListener('click', async () => {
+                //alert(currentReportType)
+                const reportData = {
+                    type: 'createReportForPost',
+                    postID: post_data.id,
+                    repType: currentReportType,
+                    postAuthor: post_data.author
+                }
+                switch (currentReportType) {
+                    case 'inappropriateContent': {
+                        reportData.comment=textReportField.value
+                    }; break;
+                    case 'tagEdit': {
+                        reportData.oldTagsList = post_data.tags
+                        reportData.newTagsList = textReportFieldTags.value.split(/\s+|\n+/).filter(val => val !== '');
+                    }; break;
+                    case 'descEdit': {
+                        reportData.description = textReportField.value
+                    }; break;
+                    case 'addToGroup': {
+                        reportData.groupID = shortTextInput.value
+                    }; break;
+                    case 'replacePost': {
+                        reportData.sourcePostID = shortTextInput.value
+                    }; break;
+                    case 'removePost': {
+                        reportData.comment=textReportField.value
+                    }; break;
+                }
+
+                if (commentSwitch.querySelector('input').checked) {
+                    if (reportComment.value.split(' ').length < 5) {
+                        alert(`e/${appealLang.commentMin}`, 5000)
+                        return
+                    }
+                    if (reportComment.value.length > 1000) {
+                        alert(`e/${appealLang.commentMax}`, 5000)
+                        return
+                    }
+                    reportData.comment = reportComment.value
+                }
+
+                const reqResult = await request('controlReports', reportData)
+
+                if (reqResult.rslt == 's') {
+                    alert(`s/${appealLang.sent}!`, 5000)
+                    notf.remove()
+                } else {
+                    alert(`e/${appealLang.err}:\n` + reqResult.msg)
+                }
+            })
+        })
 
         await handleAdminActions();
 

@@ -11,7 +11,7 @@ class Notify {
     constructor(message, timeout = 5000, color = '#fff', type, callBack, callBackParams = {}, callBackAfterTimer) {
         if (notifications[message]) {
             notifications[message].highlight()
-            return
+            return false
         } else {
             notifications[message] = this
         }
@@ -238,6 +238,63 @@ class Notify {
                     this.callBack(inputLine.value)
                 }
             }; break;
+            //region input drop down
+            case 'inputDropDown': {
+                const textBlock = document.createElement('span')
+                textBlock.innerHTML = this.message
+                this.notificationElem.appendChild(textBlock)
+                this.notificationElem.classList.add('input-dropdown')
+
+                const selectElement = document.createElement('select');
+                this.notificationElem.appendChild(selectElement)
+                selectElement.classList.add('drop-down')
+                selectElement.focus()
+
+                if (this.callBackParams.placeholder) {
+                    const placeholderOption = document.createElement('option');
+                    placeholderOption.value = '';
+                    placeholderOption.textContent = this.callBackParams.placeholder;
+                    placeholderOption.disabled = true;
+                    placeholderOption.selected = true;
+                    placeholderOption.hidden = true;
+                    selectElement.appendChild(placeholderOption);
+                }
+
+                if (this.callBackParams.value) {
+                    selectElement.value = this.callBackParams.value
+                }
+
+                this.callBackParams.list.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.value;
+                    option.textContent = item.name;
+                    selectElement.appendChild(option);
+                });
+
+                const inputContainer = document.createElement('div')
+                this.notificationElem.appendChild(inputContainer)
+                inputContainer.classList.add('input-container')
+
+                const rejectButton = document.createElement('div')
+                inputContainer.appendChild(rejectButton)
+                rejectButton.classList.add('cancel-button')
+                rejectButton.innerHTML = '✖'
+
+                const confirmButton = document.createElement('div')
+                inputContainer.appendChild(confirmButton)
+                confirmButton.classList.add('confirm-button')
+                confirmButton.innerHTML = '✔'
+
+                rejectButton.onclick = () => {
+                    this.remove()
+                    this.callBack(false)
+                }
+
+                confirmButton.onclick = () => {
+                    this.remove()
+                    this.callBack(selectElement.value)
+                }
+            };break;
             //region default
             default: {
                 const textBlock = document.createElement('span')
