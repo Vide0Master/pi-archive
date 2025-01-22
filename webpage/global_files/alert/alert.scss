@@ -68,6 +68,28 @@
             }
         }
 
+        &.input-dropdown {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5em;
+
+            .drop-down {
+                background-color: #fff;
+                color: #000;
+                transition: 0.2s;
+            }
+
+            .input-container {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 0.5em;
+            }
+        }
+
+        
+
         .cancel-button {
             background-color: #fff;
             color: #000;
@@ -121,7 +143,7 @@
             }
         }
 
-        input {
+        input:not([type="checkbox"]) {
             background-color: #fff;
             color: #000;
 

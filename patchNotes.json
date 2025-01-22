@@ -1,6 +1,32 @@
 [
     {
         "versions": {
+            "Server": "b0.1.18",
+            "DB": "b1.2",
+            "Webpage": "b0.4.1",
+            "TGbot": ""
+        },
+        "date": "23.01.2025",
+        "updates": [
+            {
+                "text": "Appeal system for reporting and changing posts based on appeals from other users",
+                "tag": "new",
+                "services": [
+                    "Webpage",
+                    "Server"
+                ]
+            },
+            {
+                "text": "Prepearing for new feature - FLAGS",
+                "tag": "new",
+                "services": [
+                    "DB"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
             "Server": "",
             "DB": "",
             "Webpage": "b0.3.2",

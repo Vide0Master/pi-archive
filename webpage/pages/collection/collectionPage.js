@@ -296,7 +296,6 @@ async function processCollection(id) {
             localStorage.setItem('fitCollectionPages', true)
             const pages = Array.from(document.querySelector('.pages-container').childNodes)
             for (const page of pages) {
-                console.log(page.src)
                 const link = new URL(page.src)
                 link.searchParams.delete('h')
                 if (state) {
@@ -568,7 +567,6 @@ async function showCollections() {
     const collectionsElem = createDiv('collections-list', document.querySelector('main'))
 
     const collectionsList = await request('controlGroup', { type: 'getAllCollections' })
-    console.log(collectionsList)
 
     for (const collection of collectionsList.collections) {
         const collectionCont = createDiv('collection-cont', collectionsElem)

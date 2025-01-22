@@ -1223,8 +1223,8 @@ function createUserAvatarElem(postID, parent, isLinkToPost) {
                         avatar.alt = 'video preview';
                         avatar.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${postID}`
                         avatar.addEventListener('timeupdate', () => {
-                            if (video.currentTime > 30) {
-                                video.currentTime = 0;
+                            if (avatar.currentTime > 30) {
+                                avatar.currentTime = 0;
                             }
                         });
                         avatar_block.appendChild(avatar)
@@ -1324,7 +1324,8 @@ function openRIP() {
     ripTitle.innerHTML = 'Rest in peace...'
 
     const list = [
-        { date: 2024, name: "Кіт Пузирь" }
+        { date: 2024, name: "Кіт Пузирь" },
+        { date: 2025, name: "Кіт Сьома" }
     ]
 
     for (const item of list) {
