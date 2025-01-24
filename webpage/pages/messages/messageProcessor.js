@@ -328,7 +328,7 @@ async function MessageProcessor() {
 
         const nameAndLastMessageCol = createDiv('NnLMC', userRow)
         const userName = createDiv('user-name', nameAndLastMessageCol)
-        createUserName(DM.login, userName, { link: true, popup: false, status: true })
+        createUserName(DM.login, userName, { link: false, popup: false, status: true })
 
         const lastMsgNcnt = createDiv('last-msg-n-cnt-row', nameAndLastMessageCol)
         const lastMessage = createDiv('last-msg', lastMsgNcnt)
