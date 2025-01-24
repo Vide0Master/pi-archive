@@ -50,7 +50,7 @@ async function showWelcomeText(login, isOwner) {
 
     welcomeMessageContainer.innerHTML += `, `
     if (isOwner) {
-        parseUserLogin(login, welcomeMessageContainer, false)
+        createUserName(login, welcomeMessageContainer, { link: false, popup: false, status: false })
     } else {
         welcomeMessageContainer.innerHTML += profileLang.visitor
     }
@@ -101,7 +101,7 @@ function showUserData(userData) {
             case 'username': {
                 if (!userData.isOwner) {
                     ln.innerHTML = usr_data_list[line]
-                    parseUserLogin(userData.data.login, ln, false)
+                    createUserName(userData.data.login, ln,{ link: false, popup: false, status: false })
                 } else {
                     ln.remove()
                 }

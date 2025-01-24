@@ -640,6 +640,95 @@ function parseUserLogin(login, elem, showCircle = true) {
     })()
 }
 
+function createUserName(login, elem, params = { link: true, popup: true, status: false },) {
+    const container = createDiv('user-name-container', elem)
+
+    async function processUserName() {
+        const userData = await request('getUserProfileData', { login })
+        if (userData.data) {
+            if (params.link) {
+                const link = document.createElement('a')
+                container.appendChild(link)
+                link.innerHTML = userData.data.username
+                link.href = '/profile?user=' + userData.data.login
+            } else {
+                container.innerHTML = userData.data.username
+            }
+
+            try {
+                if (userData.data.trueUserStatus) {
+                    container.classList.add(userData.data.trueUserStatus)
+                }
+            } catch { }
+
+            if (params.status){
+                const status = createDiv('ACTstatus', container)
+                WSListener('userStatusUpdate', userData.data.login, (data) => {
+                    status.classList.remove(...['online', 'afk', 'offline'])
+                    status.classList.add(data.state)
+                    status.title = Language.userActivityState[data.state]
+                })
+                WSSend('getUserActivity', { user: userData.data.login })
+            }
+
+            if (!params.popup) return
+
+            const popUp = createDiv('pop-up', container)
+
+            if (userData.data.usersettings.ProfileAvatarPostID) {
+                createUserAvatarElem(userData.data.usersettings.ProfileAvatarPostID, popUp, false)
+            }
+
+            if (!params.status) {
+                const status = createDiv('ACTstatus', popUp.querySelector('.avatar-elem'))
+                WSListener('userStatusUpdate', userData.data.login, (data) => {
+                    status.classList.remove(...['online', 'afk', 'offline'])
+                    status.classList.add(data.state)
+                    status.title = Language.userActivityState[data.state]
+                })
+                WSSend('getUserActivity', { user: userData.data.login })
+            }
+
+            const dataBlock = createDiv('data-block', popUp)
+
+            const userStatus = createDiv('user-status', dataBlock)
+            userStatus.innerHTML = capitalizeFirstLetter(Language.user_status_translation[userData.data.status])
+            userStatus.classList.add(userData.data.status)
+
+            const userJoin = createDiv('user-join', dataBlock)
+            userJoin.innerHTML = parseTimestamp(userData.data.creationdate)
+            userJoin.title = Language.profile.userData.creationdate
+
+            const userPosts = document.createElement('a')
+            dataBlock.appendChild(userPosts)
+            userPosts.classList.add('user-posts')
+            userPosts.innerHTML = Language.profile.userData.postsCount + ": " + userData.data.postsCount
+            userPosts.href = `/search?tags=author:${userData.data.login}`
+
+            switch (true) {
+                case userData.data.postsCount > 1000: {
+                    userPosts.classList.add('legend')
+                }; break;
+                case userData.data.postsCount > 400: {
+                    userPosts.classList.add('sentinel')
+                }; break;
+                case userData.data.postsCount > 20: {
+                    userPosts.classList.add('active-user')
+                }; break;
+                default: {
+                    userPosts.classList.add('newbie')
+                }; break;
+            }
+
+        } else {
+            container.innerHTML = 'No user'
+        }
+    }
+    processUserName()
+    return container
+}
+
+
 //region capitalaze
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -1292,7 +1381,7 @@ function createChristmasSnowflakes() {
         vars += `animation: snowFall ${randTime}s linear forwards; `
         const colorGrad = Math.random() * 100 + 155
         vars += `color: rgb(${colorGrad}, ${colorGrad}, 255); `
-        vars += `--SF-size: ${Math.random() * 10 + (weight+1)*50}%; `
+        vars += `--SF-size: ${Math.random() * 10 + (weight + 1) * 50}%; `
         snowflake.setAttribute('style', vars);
 
         snowflake.addEventListener('animationend', () => {
@@ -1301,7 +1390,7 @@ function createChristmasSnowflakes() {
     }
 
     setInterval(() => {
-        if (Array.from(snowflakesContainer.children).length < maxcount) { 
+        if (Array.from(snowflakesContainer.children).length < maxcount) {
             animateSnowflake();
         }
     }, 500);

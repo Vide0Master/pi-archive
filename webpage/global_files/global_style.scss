@@ -505,6 +505,9 @@ img {
     vertical-align: bottom;
     position: relative;
 
+}
+
+@mixin user-status {
     &.user {
         color: #b00b69;
     }
@@ -520,55 +523,190 @@ img {
     &.owner {
         color: gold;
     }
+}
 
-    .shine {
-        color: transparent;
-        display: block;
+.user-name-container {
+    position: relative;
+    display: inline;
+    display: inline-flex;
+    flex-direction: row;
+    gap: 0.25em;
+    align-items: center;
+
+    a {
+        color: inherit;
+        position: relative;
+    }
+
+    @include user-status();
+
+    .ACTstatus {
+        width: 0.5em;
+        height: 0.5em;
+        border-radius: 0.5em;
+        background-color: #fff;
+        border: solid 0.1em #000;
+
+        &.online {
+            background-color: greenyellow;
+        }
+
+        &.afk {
+            background-color: orange;
+        }
+
+        &.offline {
+            background-color: gray;
+        }
+    }
+
+    .pop-up {
+        z-index: 5;
+        cursor: default;
         position: absolute;
-        top: 0;
+        top: calc(100%);
         left: 0;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        background: linear-gradient(110deg, transparent 0, #fff 1em, transparent 2em);
-        background-repeat: no-repeat;
-        background-size: 200% 200%;
-        background-position: 100% 0;
-        background-clip: text;
-        pointer-events: none;
+        color: var(--font-color1);
+        background-color: var(--color2);
+        border: solid 0.1em var(--color3);
+        padding: 0.5em;
+        border-radius: 1em;
+        animation: popout 0.2s linear forwards;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.5em;
+
+        .avatar-elem {
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.5em;
+
+            img,
+            video {
+                max-height: 100px;
+            }
+
+            .ACTstatus {
+                position: absolute;
+                top: 0.25em;
+                left: 0.25em;
+                width: 0.5em;
+                height: 0.5em;
+                border-radius: 0.5em;
+                background-color: #fff;
+                border: solid 0.1em #000;
+
+                &.online {
+                    background-color: greenyellow;
+                }
+
+                &.afk {
+                    background-color: orange;
+                }
+
+                &.offline {
+                    background-color: gray;
+                }
+            }
+        }
+
+        .data-block {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5em;
+
+            &>* {
+                padding: 0.2em 0.4em;
+                border-radius: 1em;
+                width: fit-content;
+            }
+
+            .user-status {
+                color: #fff;
+
+                &.user {
+                    background-color: #b00b69;
+                }
+
+                &.moderator {
+                    background-color: rgb(62, 62, 224);
+                }
+
+                &.admin {
+                    background-color: rgb(201, 31, 31);
+                }
+
+                &.owner {
+                    background-color: gold;
+                    color: #000;
+                }
+            }
+
+            .user-join {
+                background-color: #fff;
+                color: #000;
+            }
+
+            .user-posts {
+                &.newbie {
+                    color: #fff;
+                    background-color: #3ede93;
+                }
+
+                &.active-user {
+                    color: #fff;
+                    background-color: #39e3e0;
+                }
+
+                &.sentinel {
+                    color: #fff;
+                    background-color: #3974e3;
+                }
+
+                &.legend {
+                    color: #000;
+                    background-color: #e3e339;
+                }
+            }
+        }
+
+        &:hover {
+            animation: popin 0.2s linear forwards;
+        }
     }
 
-    &:hover .shine {
-        animation: shine 1.5s forwards infinite;
+    &:hover {
+        .pop-up {
+            animation: popin 0.2s linear forwards;
+        }
     }
 
-    @keyframes shine {
+    @keyframes popin {
         0% {
-            background-position-x: 100%;
+            display: none;
+            opacity: 0;
+            transform: translateX(50%);
         }
 
         100% {
-            background-position-x: -100%;
+            opacity: 1;
+            transform: translateX(0%);
         }
     }
-}
 
-.ACTstatus {
-    width: 0.5em;
-    height: 0.5em;
-    border-radius: 0.25em;
-    background-color: #fff;
+    @keyframes popout {
+        0% {
+            opacity: 1;
+            transform: translateX(0%);
+        }
 
-    &.online {
-        background-color: greenyellow;
-    }
-
-    &.afk {
-        background-color: orange;
-    }
-
-    &.offline {
-        background-color: gray;
+        100% {
+            display: none;
+            opacity: 0;
+            transform: translateX(50%);
+        }
     }
 }
 

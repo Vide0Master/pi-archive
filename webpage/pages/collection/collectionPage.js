@@ -25,7 +25,7 @@ async function processCollection(id) {
                 const act = createAction('', lineElem, () => {
                     window.location.href = `/profile?user=${line_val}`
                 })
-                parseUserLogin(lval, act)
+                createUserName(lval, act)
             }; break;
             default: {
                 const lineElem = createDiv('', postInfoCont)
@@ -409,13 +409,14 @@ async function processCollection(id) {
                 collectionLang.actions.toGroup.btn,
                 document.querySelector('.post-actions'),
                 async () => {
+
                     new Notify(`${collectionLang.actions.toGroup.btn} "${collectionInfo.name}"`, null, '#f00', 'inputConfirm', async (result) => {
                         if (result) {
                             const convResult = await request('controlGroup',
                                 {
                                     type: 'setGroupType',
                                     newGroupType: 'group',
-                                    groupID: collectionInfo.group.id
+                                    groupID: collectionInfo.id
                                 })
                             alert(`${convResult.rslt}/${convResult.msg}`)
                         }
