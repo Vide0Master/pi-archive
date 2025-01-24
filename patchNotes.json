@@ -1,6 +1,24 @@
 [
     {
         "versions": {
+            "Server": "",
+            "DB": "b1.2",
+            "Webpage": "b0.4.2",
+            "TGbot": ""
+        },
+        "date": "24.01.2025",
+        "updates": [
+            {
+                "text": "User card on hover in all places involving user nicknames (exluding DMs)",
+                "tag": "new",
+                "services": [
+                    "Webpage"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
             "Server": "b0.1.18",
             "DB": "b1.2",
             "Webpage": "b0.4.1",
@@ -21,6 +39,13 @@
                 "tag": "new",
                 "services": [
                     "DB"
+                ]
+            },
+            {
+                "text": "Collection convertion to group does not work in collection view",
+                "tag": "fix",
+                "services": [
+                    "Webpage"
                 ]
             }
         ]

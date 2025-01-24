@@ -73,7 +73,7 @@ async function MessageProcessor() {
         const initiator_text = createDiv('initiator-text', initiator_field)
         initiator_text.innerHTML = `${appealLang.initiator}:`
         const userName = createDiv('user-name', initiator_field)
-        parseUserLogin(sysMsg.specialdata.initiator, userName)
+        createUserName(sysMsg.specialdata.initiator, userName)
 
         const adressed_to = createDiv('adressed-to-cont', header)
         const adressed_to_text = createDiv('label', adressed_to)
@@ -328,7 +328,7 @@ async function MessageProcessor() {
 
         const nameAndLastMessageCol = createDiv('NnLMC', userRow)
         const userName = createDiv('user-name', nameAndLastMessageCol)
-        parseUserLogin(DM.login, userName)
+        createUserName(DM.login, userName, { link: true, popup: false, status: true })
 
         const lastMsgNcnt = createDiv('last-msg-n-cnt-row', nameAndLastMessageCol)
         const lastMessage = createDiv('last-msg', lastMsgNcnt)

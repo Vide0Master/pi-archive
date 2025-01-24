@@ -105,10 +105,7 @@ async function displayPostData(post_data) {
                 break;
             case 'author':
                 elm.innerHTML = `${viewLang.postData.author}: `;
-                const act = createAction('', elm, () => {
-                    window.location.href = `/profile?user=${line_val}`
-                })
-                parseUserLogin(line_val, act)
+                elm.appendChild(createUserName(line_val, null))
                 break;
             case 'description':
                 const desc = document.querySelector('.desc');
@@ -506,6 +503,7 @@ async function initialize() {
 
         const appealLang = viewLang.actions.appeal
         //region reports
+        if(!await ownerVerify(post_data.author))
         createAction(appealLang.label, document.querySelector('.post-actions'), async () => {
             const notf = new Notify('report', null, '#f00', 'custom')
             if (!notf.isPresent) return
@@ -785,11 +783,10 @@ async function createComments() {
             const comment_author = createAction('', user_data_container, () => {
                 window.location.href = `/profile?user=${comment.from}`
             })
-            parseUserLogin(comment.from, comment_author)
+            createUserName(comment.from, comment_author,{ link: true, popup: true, status: false })
 
-            const userData = await request('getUserProfileData', { login: comment.from })
-
-            createUserAvatarElem(userData.data.usersettings.ProfileAvatarPostID, user_data_container)
+            //const userData = await request('getUserProfileData', { login: comment.from })
+            //createUserAvatarElem(userData.data.usersettings.ProfileAvatarPostID, user_data_container)
 
             const comment_creation_date = createDiv('creation-date', user_data_container)
             comment_creation_date.innerHTML = parseTimestamp(comment.timestamp)
