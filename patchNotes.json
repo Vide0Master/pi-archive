@@ -2,7 +2,25 @@
     {
         "versions": {
             "Server": "",
-            "DB": "b1.2",
+            "DB": "",
+            "Webpage": "b0.4.3",
+            "TGbot": ""
+        },
+        "date": "25.01.2025",
+        "updates": [
+            {
+                "text": "Collection ID in posts list view",
+                "tag": "new",
+                "services": [
+                    "Webpage"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
+            "Server": "",
+            "DB": "",
             "Webpage": "b0.4.2",
             "TGbot": ""
         },
