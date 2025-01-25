@@ -3,6 +3,24 @@
         "versions": {
             "Server": "",
             "DB": "",
+            "Webpage": "b0.4.4",
+            "TGbot": ""
+        },
+        "date": "25.01.2025",
+        "updates": [
+            {
+                "text": "No user activity indication when pop-up active but user does not have avatar selected",
+                "tag": "fix",
+                "services": [
+                    "Webpage"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
+            "Server": "",
+            "DB": "",
             "Webpage": "b0.4.3",
             "TGbot": ""
         },
