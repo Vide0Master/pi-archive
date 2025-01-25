@@ -3,6 +3,24 @@
         "versions": {
             "Server": "",
             "DB": "",
+            "Webpage": "b0.4.5",
+            "TGbot": ""
+        },
+        "date": "25.01.2025",
+        "updates": [
+            {
+                "text": "New look of collesctions list page",
+                "tag": "rework",
+                "services": [
+                    "Webpage"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
+            "Server": "",
+            "DB": "",
             "Webpage": "b0.4.4",
             "TGbot": ""
         },

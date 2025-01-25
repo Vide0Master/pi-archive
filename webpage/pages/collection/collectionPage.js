@@ -570,17 +570,29 @@ async function showCollections() {
     const collectionsList = await request('controlGroup', { type: 'getAllCollections' })
 
     for (const collection of collectionsList.collections) {
-        const collectionCont = createDiv('collection-cont', collectionsElem)
+        const hoverCont = createDiv('hover-cont',collectionsElem)
+
+        const collectionCont = createDiv('collection-cont', hoverCont)
         collectionCont.setAttribute('style', '--border-color: ' + collection.color)
+
+        const colInfoCol = createDiv('info-col',collectionCont)
+
+        const collectionID = createDiv('collection-id-cont',colInfoCol)
+        createDiv('contnt',collectionID).innerHTML=collection.id
+        collectionID.title='ID'
+
+        const collectionName = createDiv('collection-name', colInfoCol)
+        collectionName.innerHTML = collection.name
+
+        const collectionSize = createDiv('collection-size-cont',colInfoCol)
+        createDiv('contnt',collectionSize).innerHTML=collection.group.length
+        collectionSize.title=collectionLang.pages
 
         const colImg = document.createElement('img')
         collectionCont.appendChild(colImg)
         colImg.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${collection.group[0]}&h=350`
 
-        const collectionName = createDiv('collection-name', collectionCont)
-        collectionName.innerHTML = collection.name
-
-        collectionCont.addEventListener('click', () => {
+        hoverCont.addEventListener('click', () => {
             window.location.href = `/collection?id=${collection.id}`
         })
     }
