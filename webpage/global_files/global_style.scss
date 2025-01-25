@@ -1097,6 +1097,7 @@ img {
     }
 
     .group-info-container {
+        position: relative;
         border: solid 3px var(--color3);
         background-color: var(--color1);
         color: var(--font-color1);
@@ -1136,6 +1137,23 @@ img {
             transition: 0.2s;
         }
 
+        .group-id {
+            font-size: 0.8em;
+            font-weight: bold;
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 0.5em;
+            cursor: help;
+            border-bottom-right-radius: 0.75em;
+            border-top-left-radius: 0.75em;
+            border-right: solid 0.13em var(--borderclr);
+            border-bottom: solid 0.13em var(--borderclr);
+            display: none;
+            opacity: 0;
+            transition: 0.2s;
+        }
+
         &.active {
             border: solid 0.13em var(--borderclr);
             min-height: calc(100% + 0.6em);
@@ -1150,6 +1168,11 @@ img {
 
             .group-name {
                 color: var(--font-color1);
+            }
+
+            .group-id{
+                display: block;
+                opacity: 1;
             }
         }
     }

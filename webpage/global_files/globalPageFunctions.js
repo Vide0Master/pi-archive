@@ -661,7 +661,7 @@ function createUserName(login, elem, params = { link: true, popup: true, status:
                 }
             } catch { }
 
-            if (params.status){
+            if (params.status) {
                 const status = createDiv('ACTstatus', container)
                 WSListener('userStatusUpdate', userData.data.login, (data) => {
                     status.classList.remove(...['online', 'afk', 'offline'])
@@ -809,6 +809,10 @@ function createGroup(groupData) {
                 window.location.href = Link
             })
         }
+
+        const groupID = createDiv('group-id', infoContainer)
+        groupID.innerHTML=groupData.id
+        groupID.title='ID'
 
         post_list.forEach((postData, cardN) => {
             const postCard = createPostCard(postData)
