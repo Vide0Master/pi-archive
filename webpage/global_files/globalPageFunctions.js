@@ -606,40 +606,7 @@ async function getUserName(login) {
     return user.data.username
 }
 
-//region Parse user
-function parseUserLogin(login, elem, showCircle = true) {
-    (async () => {
-        const user = await request('getUserProfileData', { login })
-        let color = ''
-        try {
-            if (user.data.trueUserStatus) {
-                color = user.data.trueUserStatus
-            }
-        } catch { }
-
-        const userDiv = createDiv(`user-block ${color}`)
-        userDiv.innerHTML = user.data.username
-
-        const userNameBlock = createDiv('shine')
-        userDiv.appendChild(userNameBlock)
-
-        userNameBlock.innerHTML = user.data.username
-
-        userDiv.title = capitalizeFirstLetter(Language.user_status_translation[user.data.status])
-        elem.appendChild(userDiv)
-
-        if (showCircle) {
-            const status = createDiv('ACTstatus', elem)
-            WSListener('userStatusUpdate', user.data.login, (data) => {
-                status.classList.remove(...['online', 'afk', 'offline'])
-                status.classList.add(data.state)
-                status.title = Language.userActivityState[data.state]
-            })
-            WSSend('getUserActivity', { user: user.data.login })
-        }
-    })()
-}
-
+//region create user name
 function createUserName(login, elem, params = { link: true, popup: true, status: false },) {
     const container = createDiv('user-name-container', elem)
 
@@ -679,7 +646,9 @@ function createUserName(login, elem, params = { link: true, popup: true, status:
                 createUserAvatarElem(userData.data.usersettings.ProfileAvatarPostID, popUp, false)
             }
 
-            if (!params.status) {
+            const dataBlock = createDiv('data-block', popUp)
+
+            if (!params.status && userData.data.usersettings.ProfileAvatarPostID) {
                 const status = createDiv('ACTstatus', popUp.querySelector('.avatar-elem'))
                 WSListener('userStatusUpdate', userData.data.login, (data) => {
                     status.classList.remove(...['online', 'afk', 'offline'])
@@ -687,9 +656,15 @@ function createUserName(login, elem, params = { link: true, popup: true, status:
                     status.title = Language.userActivityState[data.state]
                 })
                 WSSend('getUserActivity', { user: userData.data.login })
+            }else{
+                const status = createDiv('ACTstatus', dataBlock)
+                WSListener('userStatusUpdate', userData.data.login, (data) => {
+                    status.classList.remove(...['online', 'afk', 'offline'])
+                    status.classList.add(data.state)
+                    status.innerHTML = Language.userActivityState[data.state]
+                })
+                WSSend('getUserActivity', { user: userData.data.login })
             }
-
-            const dataBlock = createDiv('data-block', popUp)
 
             const userStatus = createDiv('user-status', dataBlock)
             userStatus.innerHTML = capitalizeFirstLetter(Language.user_status_translation[userData.data.status])

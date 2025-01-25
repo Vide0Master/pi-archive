@@ -540,7 +540,7 @@ img {
 
     @include user-status();
 
-    .ACTstatus {
+    > .ACTstatus {
         width: 0.5em;
         height: 0.5em;
         border-radius: 0.5em;
@@ -589,7 +589,7 @@ img {
                 max-width: 150px;
             }
 
-            .ACTstatus {
+            > .ACTstatus {
                 position: absolute;
                 top: 0.25em;
                 left: 0.25em;
@@ -623,6 +623,24 @@ img {
                 border-radius: 1em;
                 width: fit-content;
                 white-space: nowrap;
+            }
+
+            > .ACTstatus {
+                background-color: #fff;
+                color: #000;
+
+                &.online {
+                    background-color: greenyellow;
+                }
+
+                &.afk {
+                    background-color: orange;
+                }
+
+                &.offline {
+                    background-color: gray;
+                    color: #fff;
+                }
             }
 
             .user-status {
