@@ -1149,7 +1149,6 @@ img {
             border-top-left-radius: 0.75em;
             border-right: solid 0.13em var(--borderclr);
             border-bottom: solid 0.13em var(--borderclr);
-            display: none;
             opacity: 0;
             transition: 0.2s;
         }
@@ -1171,7 +1170,6 @@ img {
             }
 
             .group-id{
-                display: block;
                 opacity: 1;
             }
         }
