@@ -3,6 +3,31 @@
         "versions": {
             "Server": "",
             "DB": "",
+            "Webpage": "b0.4.6",
+            "TGbot": ""
+        },
+        "date": "26.01.2025",
+        "updates": [
+            {
+                "text": "Minor fixes to collection page due to some large posts that can be there",
+                "tag": "fix",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "User profile cards now does not \"jitter\" in some ocassions where cursor is rapidly moved between card and nickname",
+                "tag": "fix",
+                "services": [
+                    "Webpage"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
+            "Server": "",
+            "DB": "",
             "Webpage": "b0.4.5",
             "TGbot": ""
         },
