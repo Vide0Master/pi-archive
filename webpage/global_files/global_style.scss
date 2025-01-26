@@ -571,7 +571,6 @@ img {
         border: solid 0.1em var(--color3);
         padding: 0.5em;
         border-radius: 1em;
-        animation: popout 0.2s linear forwards;
 
         display: flex;
         flex-direction: row;
@@ -690,16 +689,6 @@ img {
                     background-color: #e3e339;
                 }
             }
-        }
-
-        &:hover {
-            animation: popin 0.2s linear forwards;
-        }
-    }
-
-    &:hover {
-        .pop-up {
-            animation: popin 0.2s linear forwards;
         }
     }
 

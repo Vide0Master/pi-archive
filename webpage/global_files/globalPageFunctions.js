@@ -641,6 +641,36 @@ function createUserName(login, elem, params = { link: true, popup: true, status:
             if (!params.popup) return
 
             const popUp = createDiv('pop-up', container)
+            popUp.style.display = 'none';
+            const state = {
+                open: false,
+                close: true,
+                anend: true
+            }
+
+            container.addEventListener('mouseenter', () => {
+                popUp.attributeStyleMap.delete('display')
+
+                if (state.open || !state.anend) return
+                state.open = true
+                state.close = false
+                state.anend = false
+                popUp.style.animation = 'popin 0.2s linear forwards'
+                console.log('opening')
+            })
+
+            container.addEventListener('mouseleave', () => {
+                if (state.close || !state.anend) return
+                state.open = false
+                state.close = true
+                state.anend = false
+                popUp.style.animation = 'popout 0.2s linear forwards'
+                console.log('closing')
+            })
+
+            popUp.addEventListener('animationend', () => {
+                state.anend = true
+            })
 
             if (userData.data.usersettings.ProfileAvatarPostID) {
                 createUserAvatarElem(userData.data.usersettings.ProfileAvatarPostID, popUp, false)
@@ -656,7 +686,7 @@ function createUserName(login, elem, params = { link: true, popup: true, status:
                     status.title = Language.userActivityState[data.state]
                 })
                 WSSend('getUserActivity', { user: userData.data.login })
-            }else{
+            } else {
                 const status = createDiv('ACTstatus', dataBlock)
                 WSListener('userStatusUpdate', userData.data.login, (data) => {
                     status.classList.remove(...['online', 'afk', 'offline'])
@@ -786,8 +816,8 @@ function createGroup(groupData) {
         }
 
         const groupID = createDiv('group-id', infoContainer)
-        groupID.innerHTML=groupData.id
-        groupID.title='ID'
+        groupID.innerHTML = groupData.id
+        groupID.title = 'ID'
 
         post_list.forEach((postData, cardN) => {
             const postCard = createPostCard(postData)
