@@ -656,7 +656,6 @@ function createUserName(login, elem, params = { link: true, popup: true, status:
                 state.close = false
                 state.anend = false
                 popUp.style.animation = 'popin 0.2s linear forwards'
-                console.log('opening')
             })
 
             container.addEventListener('mouseleave', () => {
@@ -665,7 +664,6 @@ function createUserName(login, elem, params = { link: true, popup: true, status:
                 state.close = true
                 state.anend = false
                 popUp.style.animation = 'popout 0.2s linear forwards'
-                console.log('closing')
             })
 
             popUp.addEventListener('animationend', () => {

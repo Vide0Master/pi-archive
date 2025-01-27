@@ -1,6 +1,38 @@
 [
     {
         "versions": {
+            "Server": "",
+            "DB": "",
+            "Webpage": "b0.4.8",
+            "TGbot": ""
+        },
+        "date": "27.01.2025",
+        "updates": [
+            {
+                "text": "Appearance rework for \"books\" in collection listing",
+                "tag": "rework",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Display of groups (optionally enblable) in collections page",
+                "tag": "new",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Moving and zooming of images in collection comic view",
+                "tag": "new",
+                "services": [
+                    "Webpage"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
             "Server": "b0.1.19",
             "DB": "",
             "Webpage": "b0.4.7",
