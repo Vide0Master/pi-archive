@@ -666,6 +666,14 @@ async function showCollections() {
 
     const groupList = []
 
+    const navBar = document.querySelector('.nav-row')
+    createSwitch(collectionLang.displayGroups, navBar, (state) => {
+        for (const elem of groupList) {
+            state ? elem.removeAttribute('style') : elem.style.display = 'none'
+        }
+        localStorage.setItem('displayGroupsInCollectionsPage', state)
+    }, localStorage.getItem('displayGroupsInCollectionsPage') == 'true')
+
     for (const collection of collectionsList.groups) {
         const hoverCont = createDiv('hover-cont', collectionsElem)
 
@@ -749,15 +757,6 @@ async function showCollections() {
             hoverCont.classList.remove('anim-prevent')
         })
     }
-
-
-    const navBar = document.querySelector('.nav-row')
-    createSwitch(collectionLang.displayGroups, navBar, (state) => {
-        for (const elem of groupList) {
-            state ? elem.removeAttribute('style') : elem.style.display = 'none'
-        }
-        localStorage.setItem('displayGroupsInCollectionsPage', state)
-    }, localStorage.getItem('displayGroupsInCollectionsPage') == 'true')
 }
 
 //region P S T SF
