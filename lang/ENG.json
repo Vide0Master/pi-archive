@@ -403,7 +403,7 @@
                     "label": "Actions and settings",
                     "unlogin": "Log out",
                     "changeUserName": {
-                        "btn": "Change nickanme",
+                        "btn": "Change nickname",
                         "conf": "Enter new nickname"
                     },
                     "changePass": {

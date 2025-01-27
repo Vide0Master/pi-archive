@@ -594,6 +594,21 @@ async function showCollections() {
         colImgCont.appendChild(colImg)
         colImg.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${collection.group[0]}&h=350`
 
+        const scoreCont = createDiv('score', colImgCont)
+        const post_stats = await request('controlScoreAndFavs', { type: 'getPostScore', postID: "GROUP:" + collection.id })
+        const collMedian = post_stats.scores.likes - post_stats.scores.dislikes
+
+        if (collMedian === 0) {
+            scoreCont.style.display='none'
+        } else if (collMedian > 0) {
+            scoreCont.innerHTML = collMedian + '▲'
+            scoreCont.classList.add('up')
+        } else {
+            scoreCont.innerHTML = -collMedian + '▼'
+            scoreCont.classList.add('down')
+        }
+
+
         hoverCont.addEventListener('click', () => {
             window.location.href = `/collection?id=${collection.id}`
         })

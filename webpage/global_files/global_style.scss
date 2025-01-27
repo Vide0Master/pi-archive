@@ -540,7 +540,7 @@ img {
 
     @include user-status();
 
-    > .ACTstatus {
+    >.ACTstatus {
         width: 0.5em;
         height: 0.5em;
         border-radius: 0.5em;
@@ -588,7 +588,7 @@ img {
                 max-width: 150px;
             }
 
-            > .ACTstatus {
+            >.ACTstatus {
                 position: absolute;
                 top: 0.25em;
                 left: 0.25em;
@@ -624,7 +624,7 @@ img {
                 white-space: nowrap;
             }
 
-            > .ACTstatus {
+            >.ACTstatus {
                 background-color: #fff;
                 color: #000;
 
@@ -1116,7 +1116,7 @@ img {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 0.5em;
+        gap: 0.35em;
 
         border-radius: 0.75em;
 
@@ -1129,9 +1129,17 @@ img {
             transition: 0.2s;
             cursor: pointer;
             user-select: none;
+            position: relative;
 
             &:hover {
                 color: var(--font-hover);
+            }
+
+            .add-symb {
+                position: absolute;
+                right: 100%;
+                top: 50%;
+                transform: translateY(-50%);
             }
         }
 
@@ -1142,6 +1150,53 @@ img {
             font-size: 1.1em;
             color: var(--borderclr);
             transition: 0.2s;
+        }
+
+        .group-score {
+            user-select: none;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 0.5em;
+            transition: 0.2s;
+
+            &.hiddable {
+                display: none;
+                opacity: 0;
+            }
+
+            .score-up,
+            .score-down {
+                transition: 0.2s;
+                opacity: 0;
+                cursor: pointer;
+
+                &:hover {
+                    color: var(--interact-focus);
+                }
+            }
+
+            .score-up {
+                &.active {
+                    color: green;
+                }
+            }
+
+            .score-median {
+                &.down {
+                    color: #cb4700;
+                }
+
+                &.up {
+                    color: green;
+                }
+            }
+
+            .score-down {
+                &.active {
+                    color: #cb4700;
+                }
+            }
         }
 
         .group-id {
@@ -1176,8 +1231,20 @@ img {
                 color: var(--font-color1);
             }
 
-            .group-id{
+            .group-id {
                 opacity: 1;
+            }
+
+            .group-score {
+                &.hiddable {
+                    display: flex;
+                    opacity: 1;
+                }
+
+                .score-up,
+                .score-down {
+                    opacity: 1;
+                }
             }
         }
     }
