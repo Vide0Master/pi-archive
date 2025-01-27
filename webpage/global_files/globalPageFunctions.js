@@ -773,32 +773,135 @@ function createGroup(groupData) {
         const groupControlCont = createDiv('group-element-container', tempCont)
         regOutlineTrigger(groupControlCont)
         groupControlCont.style.setProperty('--borderclr', groupData.color)
+
         const infoContainer = createDiv('group-info-container', groupControlCont)
         outlines.push(infoContainer)
+
         const groupNameLine = createDiv('group-name', infoContainer)
         groupNameLine.innerText = groupData.name
 
+
         if (post_list.length > 5) {
             const additinalCardsController = createDiv('additional-cards', infoContainer)
-            additinalCardsController.innerText = `+${post_list.length - 5}`
+            additinalCardsController.innerText = `${post_list.length - 5}`
+            const additionalSymb = createDiv('add-symb', additinalCardsController)
+            additionalSymb.innerHTML = '+'
             let isOpen = false
             additinalCardsController.addEventListener('click', () => {
                 if (isOpen) {
                     postCardList.forEach((elm, i) => {
                         if (i >= 5) elm.style.display = 'none'
                     })
-                    additinalCardsController.innerText = `+${postCardList.length - 5}`
+                    additionalSymb.innerHTML = '+'
                     lastCardUnopened.classList.add('group-last-border')
                 } else {
                     postCardList.forEach((elm) => {
                         elm.style.display = ''
                     })
-                    additinalCardsController.innerText = `-${postCardList.length - 5}`
+                    additionalSymb.innerHTML = '−'
                     lastCardUnopened.classList.remove('group-last-border')
                 }
                 isOpen = !isOpen
             })
         }
+
+        const groupIDScores = 'GROUP:' + groupData.id
+
+        const userData = await request('controlScoreAndFavs', { type: 'getUserInfo' })
+
+        const groupScore = createDiv('group-score', infoContainer)
+        const scoreUp = createDiv('score-up', groupScore)
+        scoreUp.innerText = '▲'
+        if (userData.likes.includes(groupIDScores))
+            scoreUp.classList.add('active')
+
+        const scoreMedian = createDiv('score-median', groupScore)
+        scoreMedian.title=Language.postCard.rating
+        const scoreDown = createDiv('score-down', groupScore)
+        scoreDown.innerText = '▼'
+        if (userData.dislikes.includes(groupIDScores))
+            scoreDown.classList.add('active')
+
+        async function updateScore(scr) {
+            let groupMedian = scr
+            if (!scr) {
+                const post_stats = await request('controlScoreAndFavs', { type: 'getPostScore', postID: groupIDScores })
+                groupMedian = post_stats.scores.likes - post_stats.scores.dislikes
+            }
+
+            if (groupMedian === 0) {
+                groupScore.classList.add('hiddable')
+                scoreMedian.innerHTML = groupMedian
+                scoreMedian.classList.remove('down')
+                scoreMedian.classList.remove('up')
+            } else if (groupMedian > 0) {
+                groupScore.classList.remove('hiddable')
+                scoreMedian.innerHTML = groupMedian + '▲'
+                scoreMedian.classList.remove('down')
+                scoreMedian.classList.add('up')
+            } else {
+                groupScore.classList.remove('hiddable')
+                scoreMedian.innerHTML = -groupMedian + '▼'
+                scoreMedian.classList.remove('up')
+                scoreMedian.classList.add('down')
+            }
+        }
+        updateScore(groupData.scores.likes - groupData.scores.dislikes)
+
+        updateScore()
+        scoreUp.addEventListener('click', async () => {
+            if (scoreUp.classList.contains('active')) {
+                const likeResult = await request('controlScoreAndFavs', { type: 'removeLike', postID: groupIDScores })
+                if (likeResult.rslt == 'e') {
+                    alert(likeResult.rslt + '/' + likeResult.msg)
+                    return
+                }
+                scoreUp.classList.remove('active')
+            } else {
+                const likeResult = await request('controlScoreAndFavs', { type: 'setLike', postID: groupIDScores })
+                if (likeResult.rslt == 'e') {
+                    alert(likeResult.rslt + '/' + likeResult.msg)
+                    return
+                }
+                scoreUp.classList.add('active')
+                if (scoreDown.classList.contains('active')) {
+                    const unlikeResult = await request('controlScoreAndFavs', { type: 'removeDislike', postID: groupIDScores })
+                    if (unlikeResult.rslt == 'e') {
+                        alert(unlikeResult.rslt + '/' + unlikeResult.msg)
+                        return
+                    }
+                    scoreDown.classList.remove('active')
+                }
+            }
+            updateScore()
+        })
+
+        scoreDown.addEventListener('click', async () => {
+            if (scoreDown.classList.contains('active')) {
+                const unlikeResult = await request('controlScoreAndFavs', { type: 'removeDislike', postID: groupIDScores })
+                if (unlikeResult.rslt == 'e') {
+                    alert(unlikeResult.rslt + '/' + unlikeResult.msg)
+                    return
+                }
+                scoreDown.classList.remove('active')
+            } else {
+                const unlikeResult = await request('controlScoreAndFavs', { type: 'setDislike', postID: groupIDScores })
+                if (unlikeResult.rslt == 'e') {
+                    alert(unlikeResult.rslt + '/' + unlikeResult.msg)
+                    return
+                }
+                scoreDown.classList.add('active')
+                if (scoreUp.classList.contains('active')) {
+                    const likeResult = await request('controlScoreAndFavs', { type: 'removeLike', postID: groupIDScores })
+                    if (likeResult.rslt == 'e') {
+                        alert(likeResult.rslt + '/' + likeResult.msg)
+                        return
+                    }
+                    scoreUp.classList.remove('active')
+                }
+            }
+            updateScore()
+        })
 
         if (groupData.type == 'collection') {
             const colview = createButton(Language.group.colView, infoContainer)
@@ -1332,8 +1435,8 @@ function createUserAvatarElem(postID, parent, isLinkToPost) {
                 if (isLinkToPost) {
                     avatar.setAttribute('onclick', `window.location.href='/view?id=${postID}'`)
                     avatar.style.cursor = 'pointer'
+                    avatar.title = `${Language.profile.userData.avatarPost} ${postID}`
                 }
-                avatar.title = `${profileLang.userData.avatarPost} ${postID}`
                 avatar_block.appendChild(avatar)
             }
         }

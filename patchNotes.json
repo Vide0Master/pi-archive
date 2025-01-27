@@ -1,6 +1,25 @@
 [
     {
         "versions": {
+            "Server": "b0.1.19",
+            "DB": "",
+            "Webpage": "b0.4.7",
+            "TGbot": ""
+        },
+        "date": "27.01.2025",
+        "updates": [
+            {
+                "text": "Scores for post groups/collections\nTODO: score buttons in collection page, there are only display",
+                "tag": "new",
+                "services": [
+                    "Webpage",
+                    "Server"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
             "Server": "",
             "DB": "",
             "Webpage": "b0.4.6",

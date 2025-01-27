@@ -430,6 +430,21 @@
                 transform: translate3d(-50%, -50%, 0);
                 min-width: 100%;
             }
+
+            .score {
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                padding: 0.3em;
+
+                &.down {
+                    color: #cb4700;
+                }
+
+                &.up {
+                    color: green;
+                }
+            }
         }
     }
 }

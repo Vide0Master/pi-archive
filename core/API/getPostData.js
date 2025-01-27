@@ -1,5 +1,4 @@
-0
-const { sysController } = require('../../tg_bot/tgBotController.js')
+
 const SysController = require('../systemController.js')
 
 module.exports = (request, user) => {
@@ -28,6 +27,10 @@ module.exports = (request, user) => {
 
         if (postGroup.data) {
             data.post.postGroupData = postGroup.data
+            const groupScoreResult = await SysController.dbinteract.getPostLikesDislikesFavs("GROUP:" + postGroup.data.id)
+            if (groupScoreResult.rslt != 'e') {
+                post.postGroupData.scores = groupScoreResult.scores
+            }
         }
 
         const postComments = await SysController.dbinteract.getPostComments(request.id)
@@ -40,7 +43,7 @@ module.exports = (request, user) => {
 
         data.post.postRating.faved = user.favs.includes(request.id)
 
-        const postFlags = await sysController.dbinteract.getPostFlags(request.id)
+        const postFlags = await SysController.dbinteract.getPostFlags(request.id)
 
         data.post.flags = postFlags.flags
 
