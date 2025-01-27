@@ -29,7 +29,7 @@ module.exports = (request, user) => {
             data.post.postGroupData = postGroup.data
             const groupScoreResult = await SysController.dbinteract.getPostLikesDislikesFavs("GROUP:" + postGroup.data.id)
             if (groupScoreResult.rslt != 'e') {
-                post.postGroupData.scores = groupScoreResult.scores
+                data.post.postGroupData.scores = groupScoreResult.scores
             }
         }
 
