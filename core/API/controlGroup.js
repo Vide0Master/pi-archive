@@ -103,10 +103,10 @@ module.exports = (request, userData) => {
                 resolve(setGroupColorResult)
             }
 
-            //region getAllCollections
-            case 'getAllCollections': {
-                const allCollections = await sysController.dbinteract.getAllCollections()
-                resolve(allCollections)
+            //region getAllGroups
+            case 'getAllGroups': {
+                const allGroups = await sysController.dbinteract.getAllGroups()
+                resolve(allGroups)
             }; break;
         }
     })

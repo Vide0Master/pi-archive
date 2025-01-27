@@ -48,6 +48,8 @@ async function processCollection(id) {
 
     const pages = []
 
+    const pageInitiators = []
+
     let currentpage = 1
 
     //region comic navigation
@@ -64,7 +66,9 @@ async function processCollection(id) {
             elem.style.display = 'none'
         }
         const page = pages[currentpage - 1]
+        pageInitiators[currentpage - 1]()
         page.removeAttribute('style')
+
         update_pages(currentpage)
     }
 
@@ -192,9 +196,100 @@ async function processCollection(id) {
         const page = document.createElement('img')
         pages_container.appendChild(page)
         page.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${post}${localStorage.getItem('fitCollectionPages') ? `&h=${screen.height}` : ''}`
-        page.style.display = 'none'
-        page.id = 'ID' + post
+
         pages.push(page)
+
+        page.onload = () => {
+            if (!page.complete) return
+
+            page.setAttribute('draggable', 'false')
+
+            let baseX = 0
+            let baseY = 0
+
+            let isDragging = false;
+            let startX, startY, initialX, initialY, scale = 1;
+
+            pageInitiators.push(() => {
+                setTimeout(() => {
+                    baseX = page.getBoundingClientRect().width
+                    baseY = page.getBoundingClientRect().height
+                }, 1);
+                scale = 1
+            })
+
+            function startDrag(e) {
+                isDragging = true;
+                page.style.cursor = 'grabbing';
+
+                startX = e.type === 'mousedown' ? e.clientX : e.touches[0].clientX;
+                startY = e.type === 'mousedown' ? e.clientY : e.touches[0].clientY;
+
+                const style = window.getComputedStyle(page);
+                const matrix = new DOMMatrixReadOnly(style.transform);
+                initialX = matrix.m41;
+                initialY = matrix.m42;
+
+                page.addEventListener('mousemove', drag);
+                page.addEventListener('mouseup', stopDrag);
+                page.addEventListener('touchmove', drag);
+                page.addEventListener('touchend', stopDrag);
+            }
+
+            function drag(e) {
+                if (!isDragging) return;
+
+                const currentX = e.type === 'mousemove' ? e.clientX : e.touches[0].clientX;
+                const currentY = e.type === 'mousemove' ? e.clientY : e.touches[0].clientY;
+
+                const dx = currentX - startX;
+                const dy = currentY - startY;
+
+                page.style.transform = `translate(${initialX + dx}px, ${initialY + dy}px) scale(${scale})`;
+            }
+
+            function stopDrag() {
+                isDragging = false;
+                page.style.cursor = 'grab';
+
+                page.removeEventListener('mousemove', drag);
+                page.removeEventListener('mouseup', stopDrag);
+                page.removeEventListener('touchmove', drag);
+                page.removeEventListener('touchend', stopDrag);
+            }
+
+            function zoom(e) {
+                e.preventDefault();
+
+                const rect = page.getBoundingClientRect();
+                const mouseX = e.type === 'wheel' ? e.clientX : e.touches[0].clientX;
+                const mouseY = e.type === 'wheel' ? e.clientY : e.touches[0].clientY;
+
+                const offsetX = (mouseX - rect.left) / rect.width;
+                const offsetY = (mouseY - rect.top) / rect.height;
+
+                const zoomIntensity = 0.1;
+                const previousScale = scale;
+                scale += e.deltaY > 0 ? -zoomIntensity : zoomIntensity;
+                scale = Math.min(Math.max(0.1, scale), 3);
+
+                const dx = (offsetX - 0.5) * baseX * (scale - previousScale);
+                const dy = (offsetY - 0.5) * baseY * (scale - previousScale);
+
+                const style = window.getComputedStyle(page);
+                const matrix = new DOMMatrixReadOnly(style.transform);
+                const currentX = matrix.m41;
+                const currentY = matrix.m42;
+
+                page.style.transform = `translate(${currentX - dx}px, ${currentY - dy}px) scale(${scale})`;
+            }
+
+            page.addEventListener('mousedown', startDrag);
+            page.addEventListener('touchstart', startDrag);
+            page.addEventListener('wheel', zoom);
+
+            page.style.display = 'none'
+        }
     }
 
     const nextPageElem = createDiv('next-page', background)
@@ -567,10 +662,18 @@ async function processCollection(id) {
 async function showCollections() {
     const collectionsElem = createDiv('collections-list', document.querySelector('main'))
 
-    const collectionsList = await request('controlGroup', { type: 'getAllCollections' })
+    const collectionsList = await request('controlGroup', { type: 'getAllGroups' })
 
-    for (const collection of collectionsList.collections) {
+    const groupList = []
+
+    for (const collection of collectionsList.groups) {
         const hoverCont = createDiv('hover-cont', collectionsElem)
+
+        if (collection.type != 'collection') {
+            if (localStorage.getItem('displayGroupsInCollectionsPage') != 'true')
+                hoverCont.style.display = 'none'
+            groupList.push(hoverCont)
+        }
 
         const collectionCont = createDiv('collection-cont', hoverCont)
         collectionCont.setAttribute('style', '--border-color: ' + collection.color)
@@ -584,9 +687,17 @@ async function showCollections() {
         const collectionName = createDiv('collection-name', colInfoCol)
         collectionName.innerHTML = collection.name
 
-        const collectionSize = createDiv('collection-size-cont', colInfoCol)
-        createDiv('contnt', collectionSize).innerHTML = collection.group.length
-        collectionSize.title = collectionLang.pages
+        // const collectionSize = createDiv('collection-size-cont', colInfoCol)
+        // createDiv('contnt', collectionSize).innerHTML = collection.group.length
+        // collectionSize.title = collectionLang.pages
+
+        createDiv('collection-back-cover', colInfoCol)
+        createDiv('top-pages-cover', colInfoCol)
+        createDiv('bottom-pages-cover', colInfoCol)
+        const sideCover = createDiv('side-pages-cover', colInfoCol)
+        const colSize = createDiv('col-size', sideCover)
+        colSize.innerHTML = collection.group.length
+        colSize.title = collectionLang.pages
 
         const colImgCont = createDiv('col-img-cont', collectionCont)
 
@@ -594,23 +705,35 @@ async function showCollections() {
         colImgCont.appendChild(colImg)
         colImg.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${collection.group[0]}&h=350`
 
-        const scoreCont = createDiv('score', colImgCont)
         const post_stats = await request('controlScoreAndFavs', { type: 'getPostScore', postID: "GROUP:" + collection.id })
         const collMedian = post_stats.scores.likes - post_stats.scores.dislikes
+        if (collMedian !== 0) {
+            const scoreContElem = createDiv('collection-score-cont', colInfoCol)
+            const scoreCont = createDiv('score', scoreContElem)
+            scoreCont.title = Language.postCard.rating
 
-        if (collMedian === 0) {
-            scoreCont.style.display='none'
-        } else if (collMedian > 0) {
-            scoreCont.innerHTML = collMedian + '▲'
-            scoreCont.classList.add('up')
-        } else {
-            scoreCont.innerHTML = -collMedian + '▼'
-            scoreCont.classList.add('down')
+            if (collMedian > 0) {
+                scoreCont.innerHTML = collMedian + '▲'
+                scoreCont.classList.add('up')
+            } else {
+                scoreCont.innerHTML = -collMedian + '▼'
+                scoreCont.classList.add('down')
+            }
         }
-
 
         hoverCont.addEventListener('click', () => {
             window.location.href = `/collection?id=${collection.id}`
+        })
+
+        hoverCont.addEventListener('mousemove', (e) => {
+            const percentagePos = { x: 0, y: 0 };
+            const size = hoverCont.getBoundingClientRect();
+
+            percentagePos.x = -((e.clientX - size.left) / size.width - 0.5) * 2 * 60;
+            percentagePos.y = ((e.clientY - size.top) / size.height - 0.5) * 2 * 30;
+
+            hoverCont.attributeStyleMap.set('--rotation', percentagePos.y + "deg")
+            hoverCont.attributeStyleMap.set('--tilt', percentagePos.x + "deg")
         })
 
         hoverCont.addEventListener('mouseenter', () => {
@@ -618,9 +741,23 @@ async function showCollections() {
         })
 
         hoverCont.addEventListener('mouseleave', () => {
-            hoverCont.removeAttribute('style')
+            hoverCont.classList.add('anim-prevent')
+            hoverCont.attributeStyleMap.delete('z-index')
+        })
+
+        hoverCont.addEventListener('animationend', () => {
+            hoverCont.classList.remove('anim-prevent')
         })
     }
+
+
+    const navBar = document.querySelector('.nav-row')
+    createSwitch(collectionLang.displayGroups, navBar, (state) => {
+        for (const elem of groupList) {
+            state ? elem.removeAttribute('style') : elem.style.display = 'none'
+        }
+        localStorage.setItem('displayGroupsInCollectionsPage', state)
+    }, localStorage.getItem('displayGroupsInCollectionsPage') == 'true')
 }
 
 //region P S T SF

@@ -153,6 +153,7 @@
                 "postActionsLabel": "Actions",
                 "viewFrom": "View at<br>this page",
                 "pages":"Pages count",
+                "displayGroups":"Display groups",
                 "data": {
                     "name": "Name",
                     "id": "ID",
