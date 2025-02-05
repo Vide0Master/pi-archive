@@ -3,6 +3,9 @@
     "id": "ENG",
     "lang": {
         "WEB": {
+            "intro":{
+                "by":"By"
+            },
             "timestamps": {
                 "today": "Today",
                 "yesterday": "Yesterday"
@@ -35,7 +38,7 @@
                 "Collections"
             ],
             "footer": {
-                "disclaimer": "Developed by VideoMaster. System with limited access. Any decisions made by owner is undeniable.",
+                "disclaimer": "Pi-Archive by VMTech. App with limited access.",
                 "eula": "Here you can read what you can and can`t do.",
                 "github": "Here you can look on what is this thing running, and fill some bug reports.",
                 "tgbot": [
@@ -439,7 +442,8 @@
                             "pony": "Pony"
                         }
                     },
-                    "PPP": "Posts per page"
+                    "PPP": "Posts per page",
+                    "showIntro":"Show intro"
                 },
                 "favs": {
                     "label": "Favourites",

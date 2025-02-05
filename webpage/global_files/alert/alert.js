@@ -30,10 +30,25 @@ class Notify {
         this.notificationElem.setAttribute('style', `--notification-color: ${this.color};`)
         notificationContainer.appendChild(this.notificationElem)
 
+        this.notificationElem.classList.add('in-anim')
+        const notfInAnimRm = (e) => {
+            if (e.target != this.notificationElem) return
+            this.notificationElem.classList.remove('in-anim')
+            this.notificationElem.removeEventListener('animationend', notfInAnimRm)
+        }
+        this.notificationElem.addEventListener('animationend', notfInAnimRm)
+
         this.remove = () => {
-            this.notificationElem.remove()
             this.isPresent = false
             delete notifications[this.message]
+
+            this.notificationElem.classList.add('out-anim')
+            const notfOutAnimRm = (e) => {
+                if (e.target != this.notificationElem) return
+                this.notificationElem.remove()
+                this.notificationElem.removeEventListener('animationend', notfOutAnimRm)
+            }
+            this.notificationElem.addEventListener('animationend', notfOutAnimRm)
         }
 
         this.initTimer = (time) => {
@@ -285,6 +300,16 @@ class Notify {
                 confirmButton.classList.add('confirm-button')
                 confirmButton.innerHTML = '✔'
 
+                if (!selectElement.value) {
+                    confirmButton.style.display = 'none'
+                }
+
+                selectElement.addEventListener('change', () => {
+                    if (selectElement.value) {
+                        confirmButton.removeAttribute('style')
+                    }
+                })
+
                 rejectButton.onclick = () => {
                     this.remove()
                     this.callBack(false)
@@ -294,7 +319,7 @@ class Notify {
                     this.remove()
                     this.callBack(selectElement.value)
                 }
-            };break;
+            }; break;
             //region default
             default: {
                 const textBlock = document.createElement('span')

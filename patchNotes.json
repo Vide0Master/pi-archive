@@ -3,6 +3,52 @@
         "versions": {
             "Server": "",
             "DB": "",
+            "Webpage": "b0.4.9",
+            "TGbot": ""
+        },
+        "date": "27.01.2025",
+        "updates": [
+            {
+                "text": "Intro for opening Archive",
+                "tag": "new",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Changed appearance of page switching buttons",
+                "tag": "rework",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Changed temp link creation for posts, integrated into new notifications system",
+                "tag": "rework",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Added animations to alerts creation and removal",
+                "tag": "rework",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Hidden button \"Add to group\" from video posts (they are not supported by collections and can cause client-side issues)",
+                "tag": "fix",
+                "services": [
+                    "Webpage"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
+            "Server": "",
+            "DB": "",
             "Webpage": "b0.4.8",
             "TGbot": ""
         },

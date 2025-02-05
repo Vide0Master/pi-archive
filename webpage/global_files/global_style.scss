@@ -6,6 +6,203 @@ html {
     scroll-behavior: smooth;
 }
 
+.intro-overlay {
+    user-select: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: all;
+    background-color: #000;
+    z-index: 3000;
+    color: #fff;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    animation: introFadeOut 1s linear 6s forwards;
+
+    @keyframes introFadeOut {
+        from {
+            opacity: 1;
+        }
+
+        to {
+            opacity: 0;
+        }
+    }
+
+    .main-label-cont {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        .pi-logo {
+            filter: invert(1);
+            height: 100px;
+
+            animation: introPI 0.7s ease-in-out forwards;
+
+            @keyframes introPI {
+                0% {
+                    opacity: 0;
+                    transform: scale(0.5);
+                }
+
+                80% {
+                    transform: scale(1.1);
+                    opacity: 1;
+                }
+
+                100% {
+                    transform: scale(1);
+                    opacity: 1;
+                }
+            }
+        }
+
+        .label-text {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 100px;
+            overflow: hidden;
+            max-width: 0;
+            padding-left: 0px;
+
+            animation: introPILabel 0.3s ease-in-out 0.8s forwards;
+
+            @keyframes introPILabel {
+                0% {
+                    padding-left: 0px;
+                    max-width: 0;
+                }
+
+                100% {
+                    padding-left: 20px;
+                    max-width: 400px;
+                }
+            }
+        }
+    }
+
+    .vmtech-label-cont {
+        padding-top: 0px;
+        max-height: 0px;
+        display: inline;
+        font-size: 50px;
+
+        overflow: hidden;
+
+        animation: vmtechLabelContIntro 0.5s linear 1.5s forwards;
+
+        @keyframes vmtechLabelContIntro {
+            0% {
+                padding-top: 0px;
+                max-height: 0px;
+                padding-bottom: 0px;
+            }
+
+            100% {
+                padding-top: 25px;
+                max-height: 100px;
+                padding-bottom: 10px;
+            }
+        }
+
+        >* {
+            display: inline-flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .V {
+            color: rgb(255, 127, 127);
+
+            .ideo {
+                padding: 5px 0;
+                display: inline-flex;
+                max-width: 200px;
+                overflow: hidden;
+                animation: textShrink 1.5s ease-in 3.5s forwards;
+            }
+        }
+
+        .M {
+            color: rgb(49, 142, 255);
+
+            .aster {
+                padding: 5px 0;
+                display: inline-flex;
+                max-width: 200px;
+                overflow: hidden;
+                animation: textShrink 1.5s ease-in 3.5s forwards;
+            }
+        }
+
+        .TECH {
+            .nologies {
+                padding: 5px 0;
+                display: inline-flex;
+                max-width: 200px;
+                overflow: hidden;
+                animation: textShrink 1.5s ease-in 3.5s forwards;
+            }
+        }
+
+        .spacer {
+            height: 100%;
+            width: 0.25em;
+        }
+
+        @keyframes spacerShrink {
+            0% {}
+
+            50% {
+                width: 0.25em;
+            }
+
+            100% {
+                width: 0;
+            }
+        }
+
+        @keyframes textShrink {
+            0% {
+                max-width: 200px;
+            }
+
+            50% {
+                max-width: 200px;
+                color: #fff;
+            }
+
+            100% {
+                max-width: 0px;
+                color: #fff;
+            }
+        }
+    }
+
+    @media (max-width:700px) {
+
+        .main-label-cont {
+            .pi-logo {
+                height: 50px;
+            }
+
+            .label-text {
+                font-size: 50px;
+            }
+        }
+
+        .vmtech-label-cont {
+            font-size: 25px;
+        }
+    }
+}
+
 input[type=button],
 button {
     font-size: 13px;

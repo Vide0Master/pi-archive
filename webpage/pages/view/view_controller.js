@@ -344,7 +344,8 @@ async function handleAdminActions() {
                 )
             }
         } else {
-            createAction(viewLang.actions.editGroup.addToGroup, document.querySelector('.post-actions'), groupControl)
+            if (!['MP4', 'MOV', 'AVI', 'MKV'].includes(post_data.file.split('.').pop().toUpperCase()))
+                createAction(viewLang.actions.editGroup.addToGroup, document.querySelector('.post-actions'), groupControl)
         }
 
         //region remove post
@@ -436,46 +437,37 @@ async function initialize() {
         createAction(viewLang.actions.tempLink.btn,
             document.querySelector('.post-actions'),
             () => {
-                const overlay = createBlurOverlay()
+                new Notify(viewLang.actions.tempLink.btn, null, 'var(--color3)', 'inputDropDown', async (time) => {
+                    if (time) {
+                        const tempKeyRegisterRslt = await request('registerTempKey',
+                            {
+                                expires: time,
+                                post: post_data.id
+                            }
+                        )
 
-                overlay.addEventListener('click', (e) => {
-                    if (e.target === overlay) {
-                        overlay.remove()
+                        if (tempKeyRegisterRslt.rslt == 'e') {
+                            alert(`${tempKeyRegisterRslt.rslt}/${tempKeyRegisterRslt.msg}`)
+                        } else {
+                            const url = new URL(window.location.href)
+                            copyToClipboard(
+                                `${`${url.protocol}//${url.hostname}:${url.port}`}/file?tempKey=${tempKeyRegisterRslt.key}&id=${tempKeyRegisterRslt.post}`,
+                                viewLang.actions.tempLink.TLCopied
+                            )
+                        }
                     }
-                })
-
-                const sel = createSelect(
-                    [
+                }, {
+                    placeholder: viewLang.actions.tempLink.timeLabel,
+                    list: [
                         { name: `10 ${viewLang.actions.tempLink.times[0]}`, value: 1000 * 60 * 10 },
                         { name: `30 ${viewLang.actions.tempLink.times[1]}`, value: 1000 * 60 * 30 },
                         { name: `1 ${viewLang.actions.tempLink.times[2]}`, value: 1000 * 60 * 60 },
                         { name: `5 ${viewLang.actions.tempLink.times[3]}`, value: 1000 * 60 * 60 * 5 },
                         { name: `10 ${viewLang.actions.tempLink.times[4]}`, value: 1000 * 60 * 60 * 10 },
                         { name: `24 ${viewLang.actions.tempLink.times[5]}`, value: 1000 * 60 * 60 * 24 },
-                        { name: `${viewLang.actions.tempLink.times[6]}`, value: 'infinite' },
-                    ],
-                    placeholder = viewLang.actions.tempLink.timeLabel,
-                    async (time) => {
-                        if (time) {
-                            const tempKeyRegisterRslt = await request('registerTempKey',
-                                {
-                                    expires: time,
-                                    post: post_data.id
-                                }
-                            )
-                            if (tempKeyRegisterRslt.rslt == 'e') {
-                                alert(`${tempKeyRegisterRslt.rslt}/${tempKeyRegisterRslt.msg}`)
-                            } else {
-                                overlay.remove()
-                                const url = new URL(window.location.href)
-                                copyToClipboard(
-                                    `${`${url.protocol}//${url.hostname}:${url.port}`}/file?tempKey=${tempKeyRegisterRslt.key}&id=${tempKeyRegisterRslt.post}`,
-                                    viewLang.actions.tempLink.TLCopied
-                                )
-                            }
-                        }
-                    })
-                overlay.appendChild(sel)
+                        { name: `${viewLang.actions.tempLink.times[6]}`, value: 'infinite' }
+                    ]
+                })
             }
         )
 
@@ -503,217 +495,217 @@ async function initialize() {
 
         const appealLang = viewLang.actions.appeal
         //region reports
-        if(!await ownerVerify(post_data.author))
-        createAction(appealLang.label, document.querySelector('.post-actions'), async () => {
-            const notf = new Notify('report', null, '#f00', 'custom')
-            if (!notf.isPresent) return
+        if (!await ownerVerify(post_data.author))
+            createAction(appealLang.label, document.querySelector('.post-actions'), async () => {
+                const notf = new Notify('report', null, '#f00', 'custom')
+                if (!notf.isPresent) return
 
-            notf.notificationElem.classList.add('report-alert')
+                notf.notificationElem.classList.add('report-alert')
 
-            const headline = createDiv('label', notf.notificationElem)
-            headline.innerHTML = appealLang.label
+                const headline = createDiv('label', notf.notificationElem)
+                headline.innerHTML = appealLang.label
 
-            const textReportCont = createDiv('text-cont')
-            const textReportField = document.createElement('textarea')
-            textReportCont.appendChild(textReportField)
-            function calculateHeightForTextInput() {
-                textReportCont.style.minHeight = 'auto';
-                textReportCont.style.minHeight = `${textReportCont.scrollHeight}px`;
-            }
-            textReportField.addEventListener('input', calculateHeightForTextInput);
-
-            const textReportFieldTags = document.createElement('textarea')
-            textReportCont.appendChild(textReportFieldTags)
-            addTagsAutofill(textReportFieldTags, textReportCont, true)
-            function calculateHeightForTags() {
-                textReportFieldTags.style.minHeight = 'auto';
-                textReportFieldTags.style.minHeight = `${textReportFieldTags.scrollHeight}px`;
-            }
-            textReportFieldTags.addEventListener('input', calculateHeightForTags);
-
-            const shortTextInput = document.createElement('input')
-            textReportCont.appendChild(shortTextInput)
-            shortTextInput.type = 'text'
-
-            const reportComment = document.createElement('textarea')
-            function calculateHeightForComment() {
-                reportComment.style.minHeight = 'auto';
-                reportComment.style.minHeight = `${reportComment.scrollHeight}px`;
-            }
-            reportComment.addEventListener('input', calculateHeightForComment);
-
-            const commentSwitch = createSwitch(appealLang.addComment, null, (state) => {
-                if (state) {
-                    reportComment.removeAttribute('style')
-                } else {
-                    reportComment.style.display = 'none'
+                const textReportCont = createDiv('text-cont')
+                const textReportField = document.createElement('textarea')
+                textReportCont.appendChild(textReportField)
+                function calculateHeightForTextInput() {
+                    textReportCont.style.minHeight = 'auto';
+                    textReportCont.style.minHeight = `${textReportCont.scrollHeight}px`;
                 }
-            })
+                textReportField.addEventListener('input', calculateHeightForTextInput);
 
-            const actionRow = createDiv('action-row')
-            const cncBtn = createDiv('cancel-button', actionRow)
-            cncBtn.innerHTML = '✖'
-            cncBtn.addEventListener('click', notf.remove)
-            const accBtn = createDiv('confirm-button', actionRow)
-            accBtn.innerHTML = '✔'
-            accBtn.style.display = 'none'
+                const textReportFieldTags = document.createElement('textarea')
+                textReportCont.appendChild(textReportFieldTags)
+                addTagsAutofill(textReportFieldTags, textReportCont, true)
+                function calculateHeightForTags() {
+                    textReportFieldTags.style.minHeight = 'auto';
+                    textReportFieldTags.style.minHeight = `${textReportFieldTags.scrollHeight}px`;
+                }
+                textReportFieldTags.addEventListener('input', calculateHeightForTags);
 
-            textReportCont.style.display = 'none'
-            textReportField.style.display = 'none'
-            textReportFieldTags.style.display = 'none'
-            shortTextInput.style.display = 'none'
-            reportComment.style.display = 'none'
-            commentSwitch.style.display = 'none'
+                const shortTextInput = document.createElement('input')
+                textReportCont.appendChild(shortTextInput)
+                shortTextInput.type = 'text'
 
-            let currentReportType = null
-            const typeSelector = createSelect([
-                { value: 'inappropriateContent', name: appealLang.types.inappropriateContent },
-                { value: 'tagEdit', name: appealLang.types.tagEdit },
-                { value: 'descEdit', name: appealLang.types.descEdit},
-                { value: 'addToGroup', name: appealLang.types.addToGroup },
-                //{ value: 'replacePost', name: appealLang.types.replacePost },
-                { value: 'removePost', name: appealLang.types.removePost }
-            ], appealLang.selectType, (value) => {
-                textReportCont.removeAttribute('style')
-                accBtn.removeAttribute('style')
-                reportComment.placeholder = appealLang.comment
+                const reportComment = document.createElement('textarea')
+                function calculateHeightForComment() {
+                    reportComment.style.minHeight = 'auto';
+                    reportComment.style.minHeight = `${reportComment.scrollHeight}px`;
+                }
+                reportComment.addEventListener('input', calculateHeightForComment);
 
-                currentReportType = value
-
-                const textDisp = {
-                    bigText: false,
-                    bigTags: false,
-                    smlText: false,
-                    comment: {
-                        sw: false,
-                        state: false
+                const commentSwitch = createSwitch(appealLang.addComment, null, (state) => {
+                    if (state) {
+                        reportComment.removeAttribute('style')
+                    } else {
+                        reportComment.style.display = 'none'
                     }
-                }
+                })
 
-                const textPaceholder = {
-                    bigText: '',
-                    bigTags: '',
-                    smlText: ''
-                }
+                const actionRow = createDiv('action-row')
+                const cncBtn = createDiv('cancel-button', actionRow)
+                cncBtn.innerHTML = '✖'
+                cncBtn.addEventListener('click', notf.remove)
+                const accBtn = createDiv('confirm-button', actionRow)
+                accBtn.innerHTML = '✔'
+                accBtn.style.display = 'none'
 
-                textReportField.value = ''
-                textReportFieldTags.value = ''
-                shortTextInput.value = ''
-                reportComment.value = ''
+                textReportCont.style.display = 'none'
+                textReportField.style.display = 'none'
+                textReportFieldTags.style.display = 'none'
+                shortTextInput.style.display = 'none'
+                reportComment.style.display = 'none'
+                commentSwitch.style.display = 'none'
 
-                switch (value) {
-                    case 'inappropriateContent': {
-                        textDisp.bigText = true
-                        textPaceholder.bigText = appealLang.typePlaceholder.inappropriateContent
-                    }; break;
-                    case 'tagEdit': {
-                        textDisp.bigTags = true
-                        textPaceholder.bigTags = appealLang.typePlaceholder.tagEdit
-                        textReportFieldTags.value = post_data.tags.join(' ')
-                        textDisp.comment.sw = true
-                    }; break;
-                    case 'descEdit': {
-                        textDisp.bigText = true
-                        textPaceholder.bigText = appealLang.typePlaceholder.descEdit
-                        textReportField.value = post_data.description
-                        textDisp.comment.sw = true
-                    }; break;
-                    case 'addToGroup': {
-                        textDisp.smlText = true
-                        textPaceholder.smlText = appealLang.typePlaceholder.addToGroup
-                        textDisp.comment.sw = true
-                    }; break;
-                    case 'replacePost': {
-                        textDisp.smlText = true
-                        textPaceholder.smlText = appealLang.typePlaceholder.replacePost
-                        textDisp.comment.sw = true
-                    }; break;
-                    case 'removePost': {
-                        textDisp.bigText = true
-                        textPaceholder.bigText = appealLang.typePlaceholder.removePost
-                    }; break;
-                }
+                let currentReportType = null
+                const typeSelector = createSelect([
+                    { value: 'inappropriateContent', name: appealLang.types.inappropriateContent },
+                    { value: 'tagEdit', name: appealLang.types.tagEdit },
+                    { value: 'descEdit', name: appealLang.types.descEdit },
+                    { value: 'addToGroup', name: appealLang.types.addToGroup },
+                    //{ value: 'replacePost', name: appealLang.types.replacePost },
+                    { value: 'removePost', name: appealLang.types.removePost }
+                ], appealLang.selectType, (value) => {
+                    textReportCont.removeAttribute('style')
+                    accBtn.removeAttribute('style')
+                    reportComment.placeholder = appealLang.comment
 
-                if (textDisp.comment.sw) {
-                    commentSwitch.removeAttribute('style')
-                } else {
-                    commentSwitch.style.display = 'none'
-                }
+                    currentReportType = value
 
-                if (textDisp.comment.state) {
-                    commentSwitch.querySelector('input').checked = true
-                    reportComment.removeAttribute('style')
-                } else {
-                    commentSwitch.querySelector('input').checked = false
-                    reportComment.style.display = 'none'
-                }
-
-                textDisp.bigText ? textReportField.removeAttribute('style') : textReportField.style.display = 'none'
-                textDisp.bigTags ? textReportFieldTags.removeAttribute('style') : textReportFieldTags.style.display = 'none'
-                textDisp.smlText ? shortTextInput.removeAttribute('style') : shortTextInput.style.display = 'none'
-
-                textReportField.placeholder = textPaceholder.bigText
-                textReportFieldTags.placeholder = textPaceholder.bigTags
-                shortTextInput.placeholder = textPaceholder.smlText
-            })
-            notf.notificationElem.appendChild(typeSelector)
-            notf.notificationElem.appendChild(textReportCont)
-            notf.notificationElem.appendChild(commentSwitch)
-            notf.notificationElem.appendChild(reportComment)
-            notf.notificationElem.appendChild(actionRow)
-
-            accBtn.addEventListener('click', async () => {
-                //alert(currentReportType)
-                const reportData = {
-                    type: 'createReportForPost',
-                    postID: post_data.id,
-                    repType: currentReportType,
-                    postAuthor: post_data.author
-                }
-                switch (currentReportType) {
-                    case 'inappropriateContent': {
-                        reportData.comment=textReportField.value
-                    }; break;
-                    case 'tagEdit': {
-                        reportData.oldTagsList = post_data.tags
-                        reportData.newTagsList = textReportFieldTags.value.split(/\s+|\n+/).filter(val => val !== '');
-                    }; break;
-                    case 'descEdit': {
-                        reportData.description = textReportField.value
-                    }; break;
-                    case 'addToGroup': {
-                        reportData.groupID = shortTextInput.value
-                    }; break;
-                    case 'replacePost': {
-                        reportData.sourcePostID = shortTextInput.value
-                    }; break;
-                    case 'removePost': {
-                        reportData.comment=textReportField.value
-                    }; break;
-                }
-
-                if (commentSwitch.querySelector('input').checked) {
-                    if (reportComment.value.split(' ').length < 5) {
-                        alert(`e/${appealLang.commentMin}`, 5000)
-                        return
+                    const textDisp = {
+                        bigText: false,
+                        bigTags: false,
+                        smlText: false,
+                        comment: {
+                            sw: false,
+                            state: false
+                        }
                     }
-                    if (reportComment.value.length > 1000) {
-                        alert(`e/${appealLang.commentMax}`, 5000)
-                        return
+
+                    const textPaceholder = {
+                        bigText: '',
+                        bigTags: '',
+                        smlText: ''
                     }
-                    reportData.comment = reportComment.value
-                }
 
-                const reqResult = await request('controlReports', reportData)
+                    textReportField.value = ''
+                    textReportFieldTags.value = ''
+                    shortTextInput.value = ''
+                    reportComment.value = ''
 
-                if (reqResult.rslt == 's') {
-                    alert(`s/${appealLang.sent}!`, 5000)
-                    notf.remove()
-                } else {
-                    alert(`e/${appealLang.err}:\n` + reqResult.msg)
-                }
+                    switch (value) {
+                        case 'inappropriateContent': {
+                            textDisp.bigText = true
+                            textPaceholder.bigText = appealLang.typePlaceholder.inappropriateContent
+                        }; break;
+                        case 'tagEdit': {
+                            textDisp.bigTags = true
+                            textPaceholder.bigTags = appealLang.typePlaceholder.tagEdit
+                            textReportFieldTags.value = post_data.tags.join(' ')
+                            textDisp.comment.sw = true
+                        }; break;
+                        case 'descEdit': {
+                            textDisp.bigText = true
+                            textPaceholder.bigText = appealLang.typePlaceholder.descEdit
+                            textReportField.value = post_data.description
+                            textDisp.comment.sw = true
+                        }; break;
+                        case 'addToGroup': {
+                            textDisp.smlText = true
+                            textPaceholder.smlText = appealLang.typePlaceholder.addToGroup
+                            textDisp.comment.sw = true
+                        }; break;
+                        case 'replacePost': {
+                            textDisp.smlText = true
+                            textPaceholder.smlText = appealLang.typePlaceholder.replacePost
+                            textDisp.comment.sw = true
+                        }; break;
+                        case 'removePost': {
+                            textDisp.bigText = true
+                            textPaceholder.bigText = appealLang.typePlaceholder.removePost
+                        }; break;
+                    }
+
+                    if (textDisp.comment.sw) {
+                        commentSwitch.removeAttribute('style')
+                    } else {
+                        commentSwitch.style.display = 'none'
+                    }
+
+                    if (textDisp.comment.state) {
+                        commentSwitch.querySelector('input').checked = true
+                        reportComment.removeAttribute('style')
+                    } else {
+                        commentSwitch.querySelector('input').checked = false
+                        reportComment.style.display = 'none'
+                    }
+
+                    textDisp.bigText ? textReportField.removeAttribute('style') : textReportField.style.display = 'none'
+                    textDisp.bigTags ? textReportFieldTags.removeAttribute('style') : textReportFieldTags.style.display = 'none'
+                    textDisp.smlText ? shortTextInput.removeAttribute('style') : shortTextInput.style.display = 'none'
+
+                    textReportField.placeholder = textPaceholder.bigText
+                    textReportFieldTags.placeholder = textPaceholder.bigTags
+                    shortTextInput.placeholder = textPaceholder.smlText
+                })
+                notf.notificationElem.appendChild(typeSelector)
+                notf.notificationElem.appendChild(textReportCont)
+                notf.notificationElem.appendChild(commentSwitch)
+                notf.notificationElem.appendChild(reportComment)
+                notf.notificationElem.appendChild(actionRow)
+
+                accBtn.addEventListener('click', async () => {
+                    //alert(currentReportType)
+                    const reportData = {
+                        type: 'createReportForPost',
+                        postID: post_data.id,
+                        repType: currentReportType,
+                        postAuthor: post_data.author
+                    }
+                    switch (currentReportType) {
+                        case 'inappropriateContent': {
+                            reportData.comment = textReportField.value
+                        }; break;
+                        case 'tagEdit': {
+                            reportData.oldTagsList = post_data.tags
+                            reportData.newTagsList = textReportFieldTags.value.split(/\s+|\n+/).filter(val => val !== '');
+                        }; break;
+                        case 'descEdit': {
+                            reportData.description = textReportField.value
+                        }; break;
+                        case 'addToGroup': {
+                            reportData.groupID = shortTextInput.value
+                        }; break;
+                        case 'replacePost': {
+                            reportData.sourcePostID = shortTextInput.value
+                        }; break;
+                        case 'removePost': {
+                            reportData.comment = textReportField.value
+                        }; break;
+                    }
+
+                    if (commentSwitch.querySelector('input').checked) {
+                        if (reportComment.value.split(' ').length < 5) {
+                            alert(`e/${appealLang.commentMin}`, 5000)
+                            return
+                        }
+                        if (reportComment.value.length > 1000) {
+                            alert(`e/${appealLang.commentMax}`, 5000)
+                            return
+                        }
+                        reportData.comment = reportComment.value
+                    }
+
+                    const reqResult = await request('controlReports', reportData)
+
+                    if (reqResult.rslt == 's') {
+                        alert(`s/${appealLang.sent}!`, 5000)
+                        notf.remove()
+                    } else {
+                        alert(`e/${appealLang.err}:\n` + reqResult.msg)
+                    }
+                })
             })
-        })
 
         await handleAdminActions();
 
@@ -783,7 +775,7 @@ async function createComments() {
             const comment_author = createAction('', user_data_container, () => {
                 window.location.href = `/profile?user=${comment.from}`
             })
-            createUserName(comment.from, comment_author,{ link: true, popup: true, status: false })
+            createUserName(comment.from, comment_author, { link: true, popup: true, status: false })
 
             //const userData = await request('getUserProfileData', { login: comment.from })
             //createUserAvatarElem(userData.data.usersettings.ProfileAvatarPostID, user_data_container)
