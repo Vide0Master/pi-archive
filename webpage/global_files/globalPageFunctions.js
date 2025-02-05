@@ -36,8 +36,57 @@ function WSSend(type, data) {
     webSocket.send(JSON.stringify(request));
 }
 
-if (localStorage.getItem('userKey') || sessionStorage.getItem('userKey'))
-    setHeaderButtrons()
+if (localStorage.getItem('userKey') || sessionStorage.getItem('userKey')) setHeaderButtrons()
+
+if (localStorage.getItem('showIntro') == null) localStorage.setItem('showIntro', true)
+
+function tryIntro() {
+    if (parseInt(localStorage.getItem('introComplete')) > Date.now() - 1000 * 60 * 60 * 6) {
+        localStorage.setItem('introComplete', Date.now())
+        return
+    }
+    if (['/welcome/', '/login/', '/register/'].includes(window.location.pathname)) return
+
+    const html = document.querySelector('html')
+    html.style.overflow = 'hidden'
+    const container = createDiv('intro-overlay', document.querySelector('body'))
+
+    const mainLabelCont = createDiv('main-label-cont', container)
+
+    const piImg = document.createElement('img')
+    piImg.src = 'Pi-symbol.svg'
+    piImg.className = 'pi-logo'
+    mainLabelCont.appendChild(piImg)
+
+    const labelText = createDiv('label-text', mainLabelCont)
+    labelText.innerHTML = 'Archive'
+
+    const vmTechLabelCont = createDiv('vmtech-label-cont', container)
+
+    createDiv('by-text', vmTechLabelCont).innerHTML = Language.intro.by + " "
+    createDiv('spacer', vmTechLabelCont)
+    const vSymb = createDiv('V', vmTechLabelCont)
+    vSymb.innerHTML = 'V'
+    createDiv('ideo', vSymb).innerHTML = 'ideo'
+    const mSymb = createDiv('M', vmTechLabelCont)
+    mSymb.innerHTML = 'M'
+    createDiv('spacer', vmTechLabelCont).style.animation = 'spacerShrink 1.5s ease-in 3.5s forwards'
+    createDiv('aster', mSymb).innerHTML = 'aster '
+    const TECH = createDiv('TECH', vmTechLabelCont)
+    TECH.innerHTML = 'Tech'
+    createDiv('nologies', TECH).innerHTML = 'nologies'
+
+    container.addEventListener('animationend', (e) => {
+        if (e.target != container) return
+        html.removeAttribute('style')
+        container.remove()
+        localStorage.setItem('introComplete', Date.now())
+    })
+}
+
+if (localStorage.getItem('showIntro') === 'true') {
+    tryIntro()
+}
 
 //region head buttons
 async function setHeaderButtrons() {
@@ -295,8 +344,9 @@ function createPostCard(postData, noClickReaction) {
 
     const previewImg = document.createElement('img')
     imageContainer.appendChild(previewImg)
-    previewImg.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${postData.id}&thumb=true`
     previewImg.className = 'preview-image'
+    previewImg.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${postData.id}&thumb=true`
+
 
     const warningContainerContainer = createDiv('warning-container-container', postDataCont)
 
@@ -814,7 +864,7 @@ function createGroup(groupData) {
             scoreUp.classList.add('active')
 
         const scoreMedian = createDiv('score-median', groupScore)
-        scoreMedian.title=Language.postCard.rating
+        scoreMedian.title = Language.postCard.rating
         const scoreDown = createDiv('score-down', groupScore)
         scoreDown.innerText = '▼'
         if (userData.dislikes.includes(groupIDScores))
@@ -846,7 +896,6 @@ function createGroup(groupData) {
         }
         updateScore(groupData.scores.likes - groupData.scores.dislikes)
 
-        updateScore()
         scoreUp.addEventListener('click', async () => {
             if (scoreUp.classList.contains('active')) {
                 const likeResult = await request('controlScoreAndFavs', { type: 'removeLike', postID: groupIDScores })
@@ -1336,7 +1385,7 @@ function parseTimestamp(timestamp) {
 }
 
 //region elem vis obs
-function onElementFullyVisible(element, callback) {
+function onElementVisible(element, callback) {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting && entry.intersectionRatio === 1) {
@@ -1345,7 +1394,7 @@ function onElementFullyVisible(element, callback) {
             }
         });
     }, {
-        threshold: 0.9
+        threshold: 0.1
     });
 
     observer.observe(element);

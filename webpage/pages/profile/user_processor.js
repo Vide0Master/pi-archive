@@ -101,7 +101,7 @@ function showUserData(userData) {
             case 'username': {
                 if (!userData.isOwner) {
                     ln.innerHTML = usr_data_list[line]
-                    createUserName(userData.data.login, ln,{ link: false, popup: false, status: false })
+                    createUserName(userData.data.login, ln, { link: false, popup: false, status: false })
                 } else {
                     ln.remove()
                 }
@@ -209,6 +209,11 @@ async function showActions(userData, activeUser) {
             }
         })
 
+        //region show intro
+        createSwitch(profileLang.actions.showIntro, container, (state) => {
+            localStorage.setItem('showIntro', state)
+        }, localStorage.getItem('showIntro') == 'true')
+
         //region set PPP
         const postsPerPages = [
             { name: 25, value: 25 },
@@ -261,6 +266,7 @@ async function showActions(userData, activeUser) {
                     { name: Language.view.fit.fits.vertical, value: 'vertical' }
                 ],
                 Language.view.fit.userSetsLabel, (result) => localStorage.setItem('imageFit', result)))
+
     } else {
         //region wr msg
         createAction(profileLang.actions.sendDM.btn, container, async () => {
