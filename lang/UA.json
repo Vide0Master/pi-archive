@@ -276,7 +276,7 @@
                             "descEdit": "Запит на зміну опису",
                             "addToGroup": "Запит на додавання до групи",
                             "replacePost": "Запит на заміну посту",
-                            "removePost": "Запит на заміну посту"
+                            "removePost": "Запит на видалення посту"
                         },
                         "comment": "Коментар",
                         "typePlaceholder": {
