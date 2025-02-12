@@ -407,10 +407,32 @@ function createPostCard(postData, noClickReaction) {
     return postCardContainer
 }
 
+//region create video elem
+function createVideoPlayer(url, parent) {
+    const videoCont = createDiv('video-container',parent)
+
+    const videoElem = document.createElement('video');
+    videoCont.appendChild(videoElem)
+
+    const videoSrc = document.createElement('source');
+    videoElem.appendChild(videoSrc);
+    videoSrc.src = url
+
+    const savedVolume = localStorage.getItem('videoVolume');
+    videoElem.volume = savedVolume !== null ? parseFloat(savedVolume) : 0.2;
+
+    videoElem.addEventListener('volumechange', function () {
+        localStorage.setItem('videoVolume', videoElem.volume);
+    });
+
+    const controlBar = createDiv('control-bar', videoCont)
+
+    return videoCont;
+}
+
 try {
     setFooterText()
 } catch { }
-
 
 //region footer text
 function setFooterText() {
