@@ -1,12 +1,30 @@
 [
     {
         "versions": {
+            "Server": "b0.1.20",
+            "DB": "",
+            "Webpage": "",
+            "TGbot": ""
+        },
+        "date": "13.02.2025",
+        "updates": [
+            {
+                "text": "Added processing for videos to match them into single and widely accepted format (h.264 for video and aac for audio)",
+                "tag": "rework",
+                "services": [
+                    "Server"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
             "Server": "",
             "DB": "",
             "Webpage": "b0.4.9",
             "TGbot": ""
         },
-        "date": "27.01.2025",
+        "date": "12.02.2025",
         "updates": [
             {
                 "text": "Intro for opening Archive",
@@ -52,7 +70,7 @@
             "Webpage": "b0.4.8",
             "TGbot": ""
         },
-        "date": "27.01.2025",
+        "date": "10.02.2025",
         "updates": [
             {
                 "text": "Appearance rework for \"books\" in collection listing",
