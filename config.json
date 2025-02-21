@@ -2,9 +2,9 @@
     "DEVMODE": false,
     "AUDITCONTROL": "MOVE",
     "vesion": {
-        "Server": "b0.1.20",
+        "Server": "b0.1.21",
         "DB": "b1.2",
-        "Webpage": "b0.4.9",
+        "Webpage": "b0.4.10",
         "TGbot": "b0.2.4"
     },
     "user_status": {
@@ -84,7 +84,7 @@
             "setDesc": 1,
             "testCommand": 4
         },
-        "sessionTimeLimit": 259200000
+        "sessionTimeLimit": 604800000
     },
     "standartUserSettings": {
         "posts_per_page": 50,

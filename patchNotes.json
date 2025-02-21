@@ -1,6 +1,31 @@
 [
     {
         "versions": {
+            "Server": "b0.1.21",
+            "DB": "",
+            "Webpage": "b0.4.10",
+            "TGbot": ""
+        },
+        "date": "22.02.2025",
+        "updates": [
+            {
+                "text": "Increased session rewoke timer from 3 to 7 days",
+                "tag": "rework",
+                "services": [
+                    "Server"
+                ]
+            },
+            {
+                "text": "New video player that is in sync with selected theme",
+                "tag": "new",
+                "services": [
+                    "Webpage"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
             "Server": "b0.1.20",
             "DB": "",
             "Webpage": "",

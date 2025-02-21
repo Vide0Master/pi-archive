@@ -356,19 +356,213 @@ img {
     position: relative;
 
     .control-bar {
+        user-select: none;
         position: absolute;
         left: 0;
         bottom: 0;
         width: 100%;
-        height: 50px;
         background: linear-gradient(0deg, var(--color1), rgba(0, 0, 0, 0) 100%);
-        outline: 1px solid red;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5em;
+        padding: 0.5em;
+        box-sizing: border-box;
+
+        color: var(--font-color1);
+
+
+        @keyframes cbIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes cbOut {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
+        }
+
+        .slider-container {
+            position: relative;
+            width: 100%;
+            height: 8px;
+            background: #333;
+            cursor: pointer;
+
+            .slider-buffered {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                background: #555;
+                border-radius: 4px;
+            }
+
+            .buffered-segment {
+                position: absolute;
+                height: 100%;
+                background: #777;
+                border-radius: 4px;
+            }
+
+            .slider-played {
+                position: absolute;
+                height: 100%;
+                background: var(--font-color1);
+                width: 0%;
+                border-radius: 4px;
+            }
+
+            .slider-thumb {
+                position: absolute;
+                top: 50%;
+                width: 12px;
+                height: 12px;
+                background: var(--font-hover);
+                border-radius: 50%;
+                transform: translate(-50%, -50%);
+                transition: transform 0.1s ease;
+
+                .timing-control {
+                    position: absolute;
+                    bottom: calc(100% + 0.25em);
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background-color: rgba(0, 0, 0, 0.7);
+                    padding: 0.25em 0.5em;
+                    border-radius: 0.25em;
+                    user-select: none;
+                    display: none;
+                    white-space: nowrap;
+
+                    &.active {
+                        display: block;
+                    }
+                }
+            }
+        }
+
+        .additional-control-bar {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            width: 100%;
+            justify-content: space-between;
+
+            .left-bar {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 1em;
+
+                .play-pause {
+                    user-select: none;
+                    cursor: pointer;
+                    text-align: center;
+                    vertical-align: middle;
+
+                    mask-image: var(--lnk);
+                    mask-repeat: no-repeat;
+                    mask-size: contain;
+                    height: 2em;
+                    width: 2em;
+                    background-color: var(--font-color1);
+                }
+
+                .time-counter {
+                    height: fit-content;
+                }
+
+                .volume-cont {
+                    position: relative;
+                    width: 100px;
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: center;
+
+                    &:hover .volume-track .volume-thumb .volume-val-overly {
+                        display: block;
+                    }
+
+                    .volume-track {
+                        width: 100%;
+                        height: 8px;
+                        background-color: #555;
+                        border-radius: 4px;
+                        cursor: pointer;
+
+                        .volume-val {
+                            position: absolute;
+                            height: 8px;
+                            background: var(--font-color1);
+                            width: 0%;
+                            border-radius: 4px;
+                        }
+
+                        .volume-thumb {
+                            position: absolute;
+                            top: 50%;
+                            width: 12px;
+                            height: 12px;
+                            background: var(--font-hover);
+                            border-radius: 50%;
+                            transform: translate(-50%, -50%);
+                            transition: transform 0.1s ease;
+
+                            .volume-val-overly {
+                                position: absolute;
+                                bottom: calc(100% + 0.25em);
+                                left: 50%;
+                                transform: translateX(-50%);
+                                background-color: rgba(0, 0, 0, 0.7);
+                                padding: 0.25em 0.5em;
+                                border-radius: 0.25em;
+                                user-select: none;
+                                display: none;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .full-screen {
+                font-size: 1.5em;
+                user-select: none;
+                cursor: pointer;
+                text-align: center;
+                vertical-align: middle;
+                justify-self: end;
+
+                mask-image: url(video-fullscreen.svg);
+                mask-repeat: no-repeat;
+                mask-size: contain;
+                height: 1em;
+                width: 1em;
+                background-color: var(--font-color1);
+            }
+
+
+        }
     }
 
     video {
         display: block;
     }
 }
+
+
+
 
 .tagline {
     display: flex;

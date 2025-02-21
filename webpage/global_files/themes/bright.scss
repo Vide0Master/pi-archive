@@ -1,0 +1,37 @@
+:root {
+    //default colors
+    --color1: #ffffff;
+    --color2: #cccccc;
+    --color3: #8f8f8f;
+    --color4: #6f6f6f;
+
+    --font-color1: #000000;
+    --font-color2: #ffffff;
+    --font-color3: #808080;
+    --font-hover: var(--color4);
+
+    --interact-passive: var(--color2);
+    --interact-active: var(--color1);
+    --interact-focus: var(--color1);
+}
+
+//special styling
+
+.search-container {
+    .tags {
+        background-color: var(--color3);
+    }
+}
+
+.search-data-act >* {
+    background-color: var(--color3) !important;
+}
+
+.tag-quantity{
+    color: var(--color1) !important;
+}
+
+.page-number-counter-container{
+    border-color: var(--color2) !important;
+    color: var(--font-color2) !important;
+}

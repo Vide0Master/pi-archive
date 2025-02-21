@@ -3,8 +3,8 @@
     "id": "ENG",
     "lang": {
         "WEB": {
-            "intro":{
-                "by":"By"
+            "intro": {
+                "by": "By"
             },
             "timestamps": {
                 "today": "Today",
@@ -128,8 +128,8 @@
                         "desc": "Confirm updating description",
                         "group": "Confirm adding post to group",
                         "delete": "Confirm deleting post",
-                        "rejectAppeal":"Confirm rejecting appeal",
-                        "manuallyResolved":"Confirm resolving of appeal"
+                        "rejectAppeal": "Confirm rejecting appeal",
+                        "manuallyResolved": "Confirm resolving of appeal"
                     },
                     "alerts": {
                         "succ": {
@@ -145,8 +145,8 @@
                             "getGroupData": "Error retrieving group data",
                             "group": "Error adding to group",
                             "delete": "Error deleting post",
-                            "rejectAppeal":"Error rejecting appeal",
-                            "manuallyResolved":"Error confirming appeal"
+                            "rejectAppeal": "Error rejecting appeal",
+                            "manuallyResolved": "Error confirming appeal"
                         }
                     }
                 }
@@ -155,8 +155,8 @@
                 "postInfoLabel": "Collection info",
                 "postActionsLabel": "Actions",
                 "viewFrom": "View at<br>this page",
-                "pages":"Pages count",
-                "displayGroups":"Display groups",
+                "pages": "Pages count",
+                "displayGroups": "Display groups",
                 "data": {
                     "name": "Name",
                     "id": "ID",
@@ -345,11 +345,11 @@
                         "selectGroupLabel": "Select group",
                         "newGroupNameLabel": "Enter group name"
                     },
-                    "appeal":{
-                        "label":"Appeal",
-                        "addComment":"Add comment to appeal",
-                        "selectType":"Select report type",
-                        "types":{
+                    "appeal": {
+                        "label": "Appeal",
+                        "addComment": "Add comment to appeal",
+                        "selectType": "Select report type",
+                        "types": {
                             "inappropriateContent": "Inappropriate content",
                             "tagEdit": "Request tags edit",
                             "descEdit": "Request description edit",
@@ -357,8 +357,8 @@
                             "replacePost": "Request replacement of post with post",
                             "removePost": "Request removal of post"
                         },
-                        "comment":"Comment",
-                        "typePlaceholder":{
+                        "comment": "Comment",
+                        "typePlaceholder": {
                             "inappropriateContent": "Describe content",
                             "tagEdit": "Enter tags",
                             "descEdit": "Description",
@@ -366,10 +366,10 @@
                             "replacePost": "Post ID",
                             "removePost": "Describe reason"
                         },
-                        "commentMin":"You need to enter at least 5 words in comment",
-                        "commentMax":"Your comment is too long",
-                        "sent":"Appeal was sent",
-                        "err":"Encountered error when sending report"
+                        "commentMin": "You need to enter at least 5 words in comment",
+                        "commentMax": "Your comment is too long",
+                        "sent": "Appeal was sent",
+                        "err": "Encountered error when sending report"
                     }
                 },
                 "comments": {
@@ -443,7 +443,7 @@
                         }
                     },
                     "PPP": "Posts per page",
-                    "showIntro":"Show intro"
+                    "showIntro": "Show intro"
                 },
                 "favs": {
                     "label": "Favourites",
