@@ -44,26 +44,6 @@ function createImageElement() {
     return image;
 }
 
-//region create video
-function createVideoElement() {
-    const file_block = document.querySelector('.view-container .file');
-    const video_container = document.createElement('video');
-    file_block.appendChild(video_container);
-    video_container.setAttribute('controls', '');
-    video_container.setAttribute('loop', '');
-    const video = document.createElement('source');
-    video_container.appendChild(video);
-
-    const savedVolume = localStorage.getItem('videoVolume');
-    video_container.volume = savedVolume !== null ? parseFloat(savedVolume) : 0.2;
-
-    video_container.addEventListener('volumechange', function () {
-        localStorage.setItem('videoVolume', video_container.volume);
-    });
-
-    return video;
-}
-
 //region set media src
 function setMediaSource(url, contentType) {
     switch (contentType) {
@@ -73,8 +53,7 @@ function setMediaSource(url, contentType) {
             setImageFit(localStorage.getItem('imageFit') || 'normal')
             break;
         case 'video':
-            const video = createVideoElement();
-            video.src = url;
+            createVideoPlayer(url, document.querySelector('.view-container .file'));
             break;
         default:
             console.error('Unsupported file type:', contentType);

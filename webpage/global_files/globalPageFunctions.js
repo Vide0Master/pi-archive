@@ -407,10 +407,226 @@ function createPostCard(postData, noClickReaction) {
     return postCardContainer
 }
 
+// region create video elem
+function createVideoPlayer(url, parent) {
+    const videoCont = createDiv('video-container', parent);
+    const videoElem = document.createElement('video');
+    videoCont.appendChild(videoElem);
+
+    const videoSrc = document.createElement('source');
+    videoElem.appendChild(videoSrc);
+    videoSrc.src = url;
+
+    videoElem.innerHTML += 'This video is unsupported by your browser';
+
+    // Загружаем громкость из localStorage
+    const savedVolume = localStorage.getItem('videoVolume');
+    videoElem.volume = savedVolume !== null ? parseFloat(savedVolume) : 0.2;
+
+    videoElem.addEventListener('volumechange', function () {
+        localStorage.setItem('videoVolume', videoElem.volume);
+    });
+
+    let hourly = false
+    videoElem.addEventListener('loadedmetadata', () => {
+        hourly = videoElem.duration > 60 * 60
+        timeElem.innerText = `${formatTime(Math.floor(videoElem.currentTime), hourly)} / ${formatTime(Math.floor(videoElem.duration), hourly)}`
+    })
+
+    const controlBar = createDiv('control-bar', videoCont);
+
+    const sliderContainer = createDiv('slider-container', controlBar);
+    const sliderBuffered = createDiv('slider-buffered', sliderContainer);
+    const sliderPlayed = createDiv('slider-played', sliderContainer);
+    const sliderThumb = createDiv('slider-thumb', sliderContainer);
+    const timingControl = createDiv('timing-control', sliderThumb)
+    timingControl.innerText = '1'
+
+    let isVideoDragging = false;
+    let timing = 0
+
+    function setSliderPos(pos) {
+        sliderPlayed.style.width = `${pos * 100}%`;
+        sliderThumb.style.left = `${pos * 100}%`;
+    }
+
+    function moveSlider(e) {
+        const rect = sliderContainer.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const clampedX = Math.max(0, Math.min(mouseX, rect.width));
+        const newPos = (clampedX / rect.width)
+        timing = newPos * videoElem.duration
+        setSliderPos(newPos)
+    }
+
+    sliderContainer.addEventListener("mousedown", (e) => {
+        isVideoDragging = true;
+        timingControl.classList.add('active')
+        timingControl.innerText = formatTime(Math.floor(videoElem.currentTime))
+        videoElem.pause()
+        moveSlider(e);
+    });
+
+    document.addEventListener("mousemove", (e) => {
+        if (isVideoDragging) {
+            moveSlider(e);
+            if (timing > videoElem.currentTime) {
+                timingControl.innerText = `${formatTime(Math.floor(videoElem.currentTime))} → ${formatTime(Math.floor(timing))}`
+            } else {
+                timingControl.innerText = `${formatTime(Math.floor(timing))} ← ${formatTime(Math.floor(videoElem.currentTime))}`
+            }
+        }
+    });
+
+    document.addEventListener("mouseup", () => {
+        if (isVideoDragging) {
+            timingControl.classList.remove('active')
+            isVideoDragging = false;
+            videoElem.currentTime = timing
+        }
+    });
+
+    function updateBuffered() {
+        const duration = videoElem.duration;
+        if (!duration) return;
+        sliderBuffered.innerHTML = "";
+
+        for (let i = 0; i < videoElem.buffered.length; i++) {
+            const start = (videoElem.buffered.start(i) / duration) * 100;
+            const end = (videoElem.buffered.end(i) / duration) * 100;
+
+            const bufferedSegment = createDiv('buffered-segment', sliderBuffered);
+            bufferedSegment.style.left = `${start}%`;
+            bufferedSegment.style.width = `${end - start}%`;
+        }
+    }
+
+    function updateSlider() {
+        const duration = videoElem.duration;
+        const currentTime = videoElem.currentTime;
+        if (!duration) return;
+        setSliderPos(currentTime / duration)
+    }
+
+    videoElem.addEventListener('progress', updateBuffered);
+    videoElem.addEventListener('timeupdate', updateSlider);
+
+    const additionalControlBar = createDiv('additional-control-bar', controlBar)
+    const leftElems = createDiv('left-bar', additionalControlBar)
+
+    const playPauseButton = createDiv('play-pause', leftElems);
+    playPauseButton.attributeStyleMap.set('--lnk','url(video-play.svg)')
+
+    function videoPlayPause() {
+        if (videoElem.paused) {
+            videoElem.play();
+            playPauseButton.attributeStyleMap.set('--lnk','url(video-pause.svg)')
+        } else {
+            videoElem.pause();
+            playPauseButton.attributeStyleMap.set('--lnk','url(video-play.svg)')
+        }
+    }
+
+    playPauseButton.addEventListener("click", videoPlayPause);
+    videoElem.addEventListener('click', e => {
+        if (e.target != videoElem) return;
+        videoPlayPause();
+    });
+
+    const volumeCont = createDiv('volume-cont', leftElems)
+    const volumeTrack = createDiv('volume-track', volumeCont)
+    const volumeVal = createDiv('volume-val', volumeTrack)
+    const volumeThumb = createDiv('volume-thumb', volumeTrack)
+    const volumeValOverlay = createDiv('volume-val-overly', volumeThumb)
+
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    let isAudioDragging = false
+
+    let currentVolume = isMobile ? 0.5 : parseFloat(localStorage.getItem('videoVolume')) || 0.5;
+    videoElem.volume = currentVolume;
+
+    function setAudioSliderPos(pos) {
+        volumeValOverlay.innerHTML = Math.ceil(pos * 100)
+        volumeVal.style.width = `${pos * 100}%`;
+        volumeThumb.style.left = `${pos * 100}%`;
+    }
+
+    if (isMobile) {
+        volumeCont.remove()
+    } else {
+        setAudioSliderPos(videoElem.volume)
+
+        function moveAudioSlider(e) {
+            const rect = volumeTrack.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const clampedX = Math.max(0, Math.min(mouseX, rect.width));
+            const newVol = (clampedX / rect.width)
+            videoElem.volume = newVol
+            setAudioSliderPos(newVol)
+        }
+
+        volumeTrack.addEventListener('mousedown', (e) => {
+            isAudioDragging = true
+            moveAudioSlider(e)
+        })
+
+        document.addEventListener("mousemove", (e) => {
+            if (isAudioDragging) {
+                moveAudioSlider(e);
+            }
+        });
+
+        document.addEventListener("mouseup", () => {
+            if (isAudioDragging) {
+                isAudioDragging = false;
+            }
+        });
+    }
+
+    const timeElem = createDiv('time-counter', leftElems)
+
+    videoElem.addEventListener('timeupdate', () => {
+        timeElem.innerText = `${formatTime(Math.floor(videoElem.currentTime), hourly)} / ${formatTime(Math.floor(videoElem.duration), hourly)}`
+    });
+
+    function formatTime(seconds) {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const secs = seconds % 60;
+
+        if (hourly || hours > 0) {
+            return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+        return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    const FSV = createDiv('full-screen', additionalControlBar);
+
+    FSV.addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+            videoCont.requestFullscreen().catch(err => console.error("Error:", err));
+            videoElem.style.maxHeight = '100%';
+        } else {
+            document.exitFullscreen();
+            videoElem.removeAttribute('style');
+        }
+    });
+
+    document.addEventListener("fullscreenchange", () => {
+        if (!document.fullscreenElement) {
+            videoElem.removeAttribute('style');
+        }
+    });
+
+    return videoCont;
+}
+
+
+
+
 try {
     setFooterText()
 } catch { }
-
 
 //region footer text
 function setFooterText() {
@@ -1572,7 +1788,6 @@ function openRIP() {
     ripTitle.innerHTML = 'Rest in peace...'
 
     const list = [
-        { date: 2024, name: "Кіт Пузирь" },
         { date: 2025, name: "Кіт Сьома" }
     ]
 
