@@ -1,7 +1,7 @@
 {
     "DEVMODE": false,
     "AUDITCONTROL": "MOVE",
-    "vesion": {
+    "version": {
         "Server": "b0.1.21",
         "DB": "b1.2",
         "Webpage": "b0.4.10",

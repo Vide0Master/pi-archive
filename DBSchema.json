@@ -1,0 +1,481 @@
+{
+    "tables": [
+        {
+            "tableName": "config",
+            "columns": [
+                {
+                    "columnName": "key",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": null,
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "value",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": null,
+                    "isPrimaryKey": false
+                }
+            ],
+            "strict": true,
+            "withoutRowid": false
+        },
+        {
+            "tableName": "tags",
+            "columns": [
+                {
+                    "columnName": "tag",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": null,
+                    "isPrimaryKey": true
+                },
+                {
+                    "columnName": "count",
+                    "dataType": "INT",
+                    "isRequired": true,
+                    "defaultValue": null,
+                    "isPrimaryKey": false
+                }
+            ],
+            "strict": true,
+            "withoutRowid": true
+        },
+        {
+            "tableName": "temp_tags",
+            "columns": [
+                {
+                    "columnName": "tag",
+                    "dataType": "TEXT",
+                    "isRequired": false,
+                    "defaultValue": null,
+                    "isPrimaryKey": true
+                }
+            ],
+            "strict": false,
+            "withoutRowid": false
+        },
+        {
+            "tableName": "messages",
+            "columns": [
+                {
+                    "columnName": "messageid",
+                    "dataType": "INTEGER",
+                    "isRequired": true,
+                    "defaultValue": null,
+                    "isPrimaryKey": true
+                },
+                {
+                    "columnName": "message",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": null,
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "from",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": null,
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "to",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": null,
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "msgtype",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": "",
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "timestamp",
+                    "dataType": "INT",
+                    "isRequired": true,
+                    "defaultValue": null,
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "read",
+                    "dataType": "INTEGER",
+                    "isRequired": true,
+                    "defaultValue": "0",
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "specialdata",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": "{}",
+                    "isPrimaryKey": false
+                }
+            ],
+            "strict": true,
+            "withoutRowid": false
+        },
+        {
+            "tableName": "posts",
+            "columns": [
+                {
+                    "columnName": "id",
+                    "dataType": "INTEGER",
+                    "isRequired": true,
+                    "defaultValue": null,
+                    "isPrimaryKey": true
+                },
+                {
+                    "columnName": "file",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": null,
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "description",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": "",
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "tags",
+                    "dataType": "ANY",
+                    "isRequired": true,
+                    "defaultValue": "[]",
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "timestamp",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": null,
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "author",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": "",
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "source",
+                    "dataType": "ANY",
+                    "isRequired": true,
+                    "defaultValue": "[]",
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "size",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": "",
+                    "isPrimaryKey": false
+                }
+            ],
+            "strict": true,
+            "withoutRowid": false
+        },
+        {
+            "tableName": "temp_keys",
+            "columns": [
+                {
+                    "columnName": "key",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": null,
+                    "isPrimaryKey": true
+                },
+                {
+                    "columnName": "expires",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": null,
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "owner",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": null,
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "postID",
+                    "dataType": "INT",
+                    "isRequired": true,
+                    "defaultValue": null,
+                    "isPrimaryKey": false
+                }
+            ],
+            "strict": true,
+            "withoutRowid": false
+        },
+        {
+            "tableName": "tags_groups",
+            "columns": [
+                {
+                    "columnName": "groupname",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": null,
+                    "isPrimaryKey": true
+                },
+                {
+                    "columnName": "relatedtags",
+                    "dataType": "ANY",
+                    "isRequired": true,
+                    "defaultValue": "[]",
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "color",
+                    "dataType": "ANY",
+                    "isRequired": true,
+                    "defaultValue": "#ffffff",
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "priority",
+                    "dataType": "INT",
+                    "isRequired": true,
+                    "defaultValue": "0",
+                    "isPrimaryKey": false
+                }
+            ],
+            "strict": true,
+            "withoutRowid": true
+        },
+        {
+            "tableName": "sessions",
+            "columns": [
+                {
+                    "columnName": "user",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": null,
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "type",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": null,
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "key",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": null,
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "tslac",
+                    "dataType": "INT",
+                    "isRequired": true,
+                    "defaultValue": null,
+                    "isPrimaryKey": false
+                }
+            ],
+            "strict": true,
+            "withoutRowid": false
+        },
+        {
+            "tableName": "posts_groups",
+            "columns": [
+                {
+                    "columnName": "id",
+                    "dataType": "INTEGER",
+                    "isRequired": true,
+                    "defaultValue": null,
+                    "isPrimaryKey": true
+                },
+                {
+                    "columnName": "group",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": "[]",
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "name",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": "",
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "type",
+                    "dataType": "ANY",
+                    "isRequired": true,
+                    "defaultValue": "group",
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "owner",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": "",
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "color",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": "#fff",
+                    "isPrimaryKey": false
+                }
+            ],
+            "strict": true,
+            "withoutRowid": false
+        },
+        {
+            "tableName": "users",
+            "columns": [
+                {
+                    "columnName": "login",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": null,
+                    "isPrimaryKey": true
+                },
+                {
+                    "columnName": "password",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": null,
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "username",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": null,
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "status",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": null,
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "creationdate",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": null,
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "favs",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": "[]",
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "likes",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": "[]",
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "dislikes",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": "[]",
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "blacklist",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": "[]",
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "usersettings",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": "{}",
+                    "isPrimaryKey": false
+                }
+            ],
+            "strict": true,
+            "withoutRowid": true
+        },
+        {
+            "tableName": "flags",
+            "columns": [
+                {
+                    "columnName": "id",
+                    "dataType": "INTEGER",
+                    "isRequired": true,
+                    "defaultValue": null,
+                    "isPrimaryKey": true
+                },
+                {
+                    "columnName": "reference",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": null,
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "type",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": null,
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "flagdata",
+                    "dataType": "TEXT",
+                    "isRequired": true,
+                    "defaultValue": "{}",
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "timestamp",
+                    "dataType": "INT",
+                    "isRequired": true,
+                    "defaultValue": null,
+                    "isPrimaryKey": false
+                },
+                {
+                    "columnName": "user",
+                    "dataType": "ANY",
+                    "isRequired": true,
+                    "defaultValue": null,
+                    "isPrimaryKey": false
+                }
+            ],
+            "strict": true,
+            "withoutRowid": false
+        }
+    ],
+    "dbVersion": "b1.2",
+    "triggers": [
+        {
+            "triggerName": "after_delete_posts",
+            "definition": "CREATE TRIGGER after_delete_posts AFTER DELETE ON posts FOR EACH ROW BEGIN INSERT OR IGNORE INTO temp_tags (tag) SELECT json_each.value FROM json_each(OLD.tags); UPDATE tags SET count = count - 1 WHERE tag IN (SELECT tag FROM temp_tags); DELETE FROM tags WHERE count <= 0; DELETE FROM temp_tags; END"
+        },
+        {
+            "triggerName": "after_insert_posts",
+            "definition": "CREATE TRIGGER after_insert_posts AFTER INSERT ON posts FOR EACH ROW BEGIN INSERT OR IGNORE INTO temp_tags (tag) SELECT json_each.value FROM json_each(NEW.tags); INSERT OR IGNORE INTO tags (tag, count) SELECT tag, 0 FROM temp_tags; UPDATE tags SET count = count + 1 WHERE tag IN (SELECT tag FROM temp_tags); DELETE FROM temp_tags; END"
+        },
+        {
+            "triggerName": "after_update_posts",
+            "definition": "CREATE TRIGGER after_update_posts AFTER UPDATE OF tags ON posts FOR EACH ROW BEGIN INSERT OR IGNORE INTO temp_tags (tag) SELECT json_each.value FROM json_each(OLD.tags); UPDATE tags SET count = count - 1 WHERE tag IN (SELECT tag FROM temp_tags); DELETE FROM tags WHERE count <= 0; DELETE FROM temp_tags; INSERT OR IGNORE INTO temp_tags (tag) SELECT json_each.value FROM json_each(NEW.tags); INSERT OR IGNORE INTO tags (tag, count) SELECT tag, 0 FROM temp_tags; UPDATE tags SET count = count + 1 WHERE tag IN (SELECT tag FROM temp_tags); DELETE FROM temp_tags; END"
+        }
+    ]
+}
