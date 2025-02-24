@@ -1,0 +1,349 @@
+{
+    "DBversion": "b1.2",
+    "tables": {
+        "config": {
+            "strict": true,
+            "withoutRowID": false,
+            "columns": {
+                "key": {
+                    "type": "TEXT",
+                    "notNull": true
+                },
+                "value": {
+                    "type": "TEXT",
+                    "notNull": true
+                }
+            }
+        },
+        "tags": {
+            "strict": true,
+            "withoutRowID": true,
+            "columns": {
+                "tag": {
+                    "type": "TEXT",
+                    "notNull": true,
+                    "primaryKey": true,
+                    "unique": true
+                },
+                "count": {
+                    "type": "INT",
+                    "notNull": true
+                }
+            }
+        },
+        "temp_tags": {
+            "strict": false,
+            "withoutRowID": false,
+            "columns": {
+                "tag": {
+                    "type": "TEXT",
+                    "primaryKey": true
+                }
+            }
+        },
+        "messages": {
+            "strict": true,
+            "withoutRowID": false,
+            "columns": {
+                "messageid": {
+                    "type": "INTEGER",
+                    "notNull": true,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "unique": true
+                },
+                "message": {
+                    "type": "TEXT",
+                    "notNull": true
+                },
+                "from": {
+                    "type": "TEXT",
+                    "notNull": true
+                },
+                "to": {
+                    "type": "TEXT",
+                    "notNull": true
+                },
+                "msgtype": {
+                    "type": "TEXT",
+                    "notNull": true,
+                    "default": true
+                },
+                "timestamp": {
+                    "type": "INT",
+                    "notNull": true
+                },
+                "read": {
+                    "type": "INTEGER",
+                    "notNull": true,
+                    "default": true
+                },
+                "specialdata": {
+                    "type": "TEXT",
+                    "notNull": true,
+                    "default": true
+                }
+            }
+        },
+        "posts": {
+            "strict": true,
+            "withoutRowID": false,
+            "columns": {
+                "id": {
+                    "type": "INTEGER",
+                    "notNull": true,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "unique": true
+                },
+                "file": {
+                    "type": "TEXT",
+                    "notNull": true,
+                    "unique": true
+                },
+                "description": {
+                    "type": "TEXT",
+                    "notNull": true,
+                    "default": true
+                },
+                "tags": {
+                    "type": "ANY",
+                    "notNull": true,
+                    "default": true
+                },
+                "timestamp": {
+                    "type": "TEXT",
+                    "notNull": true
+                },
+                "author": {
+                    "type": "TEXT",
+                    "notNull": true,
+                    "default": true
+                },
+                "source": {
+                    "type": "ANY",
+                    "notNull": true,
+                    "default": true
+                },
+                "size": {
+                    "type": "TEXT",
+                    "notNull": true,
+                    "default": true
+                }
+            }
+        },
+        "temp_keys": {
+            "strict": true,
+            "withoutRowID": false,
+            "columns": {
+                "key": {
+                    "type": "TEXT",
+                    "notNull": true,
+                    "primaryKey": true,
+                    "unique": true
+                },
+                "expires": {
+                    "type": "TEXT",
+                    "notNull": true
+                },
+                "owner": {
+                    "type": "TEXT",
+                    "notNull": true
+                },
+                "postID": {
+                    "type": "INT",
+                    "notNull": true
+                }
+            }
+        },
+        "tags_groups": {
+            "strict": true,
+            "withoutRowID": true,
+            "columns": {
+                "groupname": {
+                    "type": "TEXT",
+                    "notNull": true,
+                    "primaryKey": true,
+                    "unique": true
+                },
+                "relatedtags": {
+                    "type": "ANY",
+                    "notNull": true,
+                    "default": true
+                },
+                "color": {
+                    "type": "ANY",
+                    "notNull": true,
+                    "default": true
+                },
+                "priority": {
+                    "type": "INT",
+                    "notNull": true,
+                    "default": true
+                }
+            }
+        },
+        "sessions": {
+            "strict": true,
+            "withoutRowID": false,
+            "columns": {
+                "user": {
+                    "type": "TEXT",
+                    "notNull": true
+                },
+                "type": {
+                    "type": "TEXT",
+                    "notNull": true
+                },
+                "key": {
+                    "type": "TEXT",
+                    "notNull": true
+                },
+                "tslac": {
+                    "type": "INT",
+                    "notNull": true
+                }
+            }
+        },
+        "posts_groups": {
+            "strict": true,
+            "withoutRowID": false,
+            "columns": {
+                "id": {
+                    "type": "INTEGER",
+                    "notNull": true,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "unique": true
+                },
+                "group": {
+                    "type": "TEXT",
+                    "notNull": true,
+                    "default": true
+                },
+                "name": {
+                    "type": "TEXT",
+                    "notNull": true,
+                    "default": true
+                },
+                "type": {
+                    "type": "ANY",
+                    "notNull": true,
+                    "default": true
+                },
+                "owner": {
+                    "type": "TEXT",
+                    "notNull": true,
+                    "default": true
+                },
+                "color": {
+                    "type": "TEXT",
+                    "notNull": true,
+                    "default": true
+                }
+            }
+        },
+        "users": {
+            "strict": true,
+            "withoutRowID": true,
+            "columns": {
+                "login": {
+                    "type": "TEXT",
+                    "notNull": true,
+                    "primaryKey": true,
+                    "unique": true
+                },
+                "password": {
+                    "type": "TEXT",
+                    "notNull": true
+                },
+                "username": {
+                    "type": "TEXT",
+                    "notNull": true
+                },
+                "status": {
+                    "type": "TEXT",
+                    "notNull": true
+                },
+                "creationdate": {
+                    "type": "TEXT",
+                    "notNull": true
+                },
+                "favs": {
+                    "type": "TEXT",
+                    "notNull": true,
+                    "default": true
+                },
+                "likes": {
+                    "type": "TEXT",
+                    "notNull": true,
+                    "default": true
+                },
+                "dislikes": {
+                    "type": "TEXT",
+                    "notNull": true,
+                    "default": true
+                },
+                "blacklist": {
+                    "type": "TEXT",
+                    "notNull": true,
+                    "default": true
+                },
+                "usersettings": {
+                    "type": "TEXT",
+                    "notNull": true,
+                    "default": true
+                }
+            }
+        },
+        "flags": {
+            "strict": true,
+            "withoutRowID": false,
+            "columns": {
+                "id": {
+                    "type": "INTEGER",
+                    "notNull": true,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "unique": true
+                },
+                "reference": {
+                    "type": "TEXT",
+                    "notNull": true
+                },
+                "type": {
+                    "type": "TEXT",
+                    "notNull": true
+                },
+                "flagdata": {
+                    "type": "TEXT",
+                    "notNull": true,
+                    "default": true
+                },
+                "timestamp": {
+                    "type": "INT",
+                    "notNull": true,
+                    "unique": true
+                },
+                "user": {
+                    "type": "ANY",
+                    "notNull": true
+                }
+            }
+        }
+    },
+    "triggers": {
+        "after_insert_posts": {
+            "sql": "CREATE TRIGGER after_insert_posts AFTER INSERT ON posts FOR EACH ROW BEGIN INSERT OR IGNORE INTO temp_tags (tag) SELECT json_each.value FROM json_each(NEW.tags); INSERT OR IGNORE INTO tags (tag, count) SELECT tag, 0 FROM temp_tags; UPDATE tags SET count = count + 1 WHERE tag IN (SELECT tag FROM temp_tags); DELETE FROM temp_tags; END",
+            "table": "posts"
+        },
+        "after_update_posts": {
+            "sql": "CREATE TRIGGER after_update_posts AFTER UPDATE OF tags ON posts FOR EACH ROW BEGIN INSERT OR IGNORE INTO temp_tags (tag) SELECT json_each.value FROM json_each(OLD.tags); UPDATE tags SET count = count - 1 WHERE tag IN (SELECT tag FROM temp_tags); DELETE FROM tags WHERE count <= 0; DELETE FROM temp_tags; INSERT OR IGNORE INTO temp_tags (tag) SELECT json_each.value FROM json_each(NEW.tags); INSERT OR IGNORE INTO tags (tag, count) SELECT tag, 0 FROM temp_tags; UPDATE tags SET count = count + 1 WHERE tag IN (SELECT tag FROM temp_tags); DELETE FROM temp_tags; END",
+            "table": "posts"
+        },
+        "after_delete_posts": {
+            "sql": "CREATE TRIGGER after_delete_posts AFTER DELETE ON posts FOR EACH ROW BEGIN INSERT OR IGNORE INTO temp_tags (tag) SELECT json_each.value FROM json_each(OLD.tags); UPDATE tags SET count = count - 1 WHERE tag IN (SELECT tag FROM temp_tags); DELETE FROM tags WHERE count <= 0; DELETE FROM temp_tags; END",
+            "table": "posts"
+        }
+    }
+}
