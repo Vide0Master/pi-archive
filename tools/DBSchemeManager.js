@@ -22,7 +22,7 @@ function generateCreateTableSQL(tableName, tableDef) {
         if (colDef.autoIncrement) parts.push('AUTOINCREMENT');
         if (colDef.notNull) parts.push('NOT NULL');
         if (colDef.unique) parts.push('UNIQUE');
-        if (colDef.default !== undefined) parts.push(`DEFAULT ${colDef.default}`);
+        if (colDef.default !== undefined) parts.push(`DEFAULT "${colDef.default}"`);
         columns.push(parts.join(' '));
     }
     const options = [];
