@@ -139,10 +139,10 @@ async function getCurrentSchema() {
                 }
             }
 
-            if (table.sql && new RegExp(`\\b${column.name}\\b\\s+[^,]+?\\s+UNIQUE`, 'i').test(table.sql)) {
+            if (table.sql && new RegExp(`\\b${column.name}\\b[^,]*?\\bUNIQUE\\b[^,]*?,`, 'i').test(table.sql)) {
                 params.unique = true;
             }
-
+            
             columns[column.name] = params;
         }
 

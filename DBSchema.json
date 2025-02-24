@@ -1,5 +1,5 @@
 {
-    "DBversion": "b1.3",
+    "DBversion": "b1.4",
     "tables": {
         "config": {
             "withoutRowID": false,
@@ -62,33 +62,6 @@
                 "postID": {
                     "type": "INT",
                     "notNull": true
-                }
-            }
-        },
-        "tags_groups": {
-            "withoutRowID": true,
-            "strict": true,
-            "columns": {
-                "groupname": {
-                    "type": "TEXT",
-                    "notNull": true,
-                    "primaryKey": true,
-                    "unique": true
-                },
-                "relatedtags": {
-                    "type": "ANY",
-                    "notNull": true,
-                    "default": "[]"
-                },
-                "color": {
-                    "type": "ANY",
-                    "notNull": true,
-                    "default": "#ffffff"
-                },
-                "priority": {
-                    "type": "INT",
-                    "notNull": true,
-                    "default": 0
                 }
             }
         },
@@ -167,49 +140,6 @@
                 }
             }
         },
-        "messages": {
-            "withoutRowID": false,
-            "strict": true,
-            "columns": {
-                "messageid": {
-                    "type": "INTEGER",
-                    "notNull": true,
-                    "primaryKey": true,
-                    "autoIncrement": true,
-                    "unique": true
-                },
-                "message": {
-                    "type": "TEXT",
-                    "notNull": true
-                },
-                "from": {
-                    "type": "TEXT",
-                    "notNull": true
-                },
-                "to": {
-                    "type": "TEXT",
-                    "notNull": true
-                },
-                "msgtype": {
-                    "type": "TEXT",
-                    "notNull": true
-                },
-                "timestamp": {
-                    "type": "INT",
-                    "notNull": true
-                },
-                "read": {
-                    "type": "INTEGER",
-                    "notNull": true,
-                    "default": 0
-                },
-                "specialdata": {
-                    "type": "TEXT",
-                    "notNull": true,
-                    "default": "{}"
-                }
-            }
-        },
         "posts_groups": {
             "withoutRowID": false,
             "strict": true,
@@ -224,7 +154,8 @@
                 "group": {
                     "type": "TEXT",
                     "notNull": true,
-                    "default": "[]"
+                    "default": "[]",
+                    "unique": true
                 },
                 "name": {
                     "type": "TEXT",
@@ -281,6 +212,75 @@
                 }
             }
         },
+        "tags_groups": {
+            "withoutRowID": true,
+            "strict": true,
+            "columns": {
+                "groupname": {
+                    "type": "TEXT",
+                    "notNull": true,
+                    "primaryKey": true,
+                    "unique": true
+                },
+                "relatedtags": {
+                    "type": "ANY",
+                    "notNull": true,
+                    "default": "[]"
+                },
+                "color": {
+                    "type": "ANY",
+                    "notNull": true,
+                    "default": "#ffffff"
+                },
+                "priority": {
+                    "type": "INT",
+                    "notNull": true,
+                    "default": "0"
+                }
+            }
+        },
+        "messages": {
+            "withoutRowID": false,
+            "strict": true,
+            "columns": {
+                "messageid": {
+                    "type": "INTEGER",
+                    "notNull": true,
+                    "primaryKey": true,
+                    "unique": true
+                },
+                "message": {
+                    "type": "TEXT",
+                    "notNull": true
+                },
+                "from": {
+                    "type": "TEXT",
+                    "notNull": true
+                },
+                "to": {
+                    "type": "TEXT",
+                    "notNull": true
+                },
+                "msgtype": {
+                    "type": "TEXT",
+                    "notNull": true
+                },
+                "timestamp": {
+                    "type": "INT",
+                    "notNull": true
+                },
+                "read": {
+                    "type": "INTEGER",
+                    "notNull": true,
+                    "default": "0"
+                },
+                "specialdata": {
+                    "type": "TEXT",
+                    "notNull": true,
+                    "default": "{}"
+                }
+            }
+        },
         "posts": {
             "withoutRowID": false,
             "strict": true,
@@ -298,8 +298,7 @@
                     "unique": true
                 },
                 "description": {
-                    "type": "TEXT",
-                    "notNull": true
+                    "type": "TEXT"
                 },
                 "tags": {
                     "type": "ANY",

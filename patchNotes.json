@@ -2,6 +2,24 @@
     {
         "versions": {
             "Server": "",
+            "DB": "b1.4",
+            "Webpage": "",
+            "TGbot": ""
+        },
+        "date": "24.02.2025",
+        "updates": [
+            {
+                "text": "Fixed blocker of ability to post anything because of DB restrictions created occasionally",
+                "tag": "fix",
+                "services": [
+                    "DB"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
+            "Server": "",
             "DB": "b1.3",
             "Webpage": "",
             "TGbot": ""

@@ -111,7 +111,7 @@ function checkActionRow(state = true) {
 
 document.querySelector('#file-upload').addEventListener('change', (e) => {
     uploadList = []
-    const fileList = Array.from(e.target.files)//(Array.from(e.target.files)).sort((a, b) => a.name.localeCompare(b.name))
+    const fileList = Array.from(e.target.files)
 
     fileListContainer.innerHTML = ""
 
@@ -234,6 +234,7 @@ document.querySelector('#file-upload').addEventListener('change', (e) => {
 
             async function load() {
                 const upload = await handleFileUpload(file, updateUploadProgressBar);
+                if (DEVMODE) console.log( upload)
                 if (upload.rslt != 'e') {
                     const fileFuncIndex = uploadList.indexOf(upload)
                     if (fileFuncIndex != -1) {

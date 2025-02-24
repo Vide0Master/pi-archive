@@ -376,27 +376,6 @@ img {
 
         color: var(--font-color1);
 
-
-        @keyframes cbIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes cbOut {
-            from {
-                opacity: 1;
-            }
-
-            to {
-                opacity: 0;
-            }
-        }
-
         .slider-container {
             position: relative;
             width: 100%;
@@ -481,6 +460,11 @@ img {
                     height: 2em;
                     width: 2em;
                     background-color: var(--font-color1);
+                    transition: 0.2s;
+
+                    &:hover {
+                        background-color: var(--font-hover);
+                    }
                 }
 
                 .time-counter {
@@ -554,9 +538,12 @@ img {
                 height: 1em;
                 width: 1em;
                 background-color: var(--font-color1);
+                transition: 0.2s;
+
+                &:hover {
+                    background-color: var(--font-hover);
+                }
             }
-
-
         }
     }
 
