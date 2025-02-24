@@ -17,7 +17,7 @@ async function dbRun(sql) {
 function generateCreateTableSQL(tableName, tableDef) {
     const columns = [];
     for (const [colName, colDef] of Object.entries(tableDef.columns)) {
-        const parts = [colName, colDef.type];
+        const parts = [`"${colName}"`, colDef.type];
         if (colDef.primaryKey) parts.push('PRIMARY KEY');
         if (colDef.autoIncrement) parts.push('AUTOINCREMENT');
         if (colDef.notNull) parts.push('NOT NULL');
