@@ -78,17 +78,17 @@
                 "relatedtags": {
                     "type": "ANY",
                     "notNull": true,
-                    "default": "\"[]\""
+                    "default": "[]"
                 },
                 "color": {
                     "type": "ANY",
                     "notNull": true,
-                    "default": "\"#ffffff\""
+                    "default": "#ffffff"
                 },
                 "priority": {
                     "type": "INT",
                     "notNull": true,
-                    "default": "0"
+                    "default": 0
                 }
             }
         },
@@ -143,27 +143,27 @@
                 "favs": {
                     "type": "TEXT",
                     "notNull": true,
-                    "default": "\"[]\""
+                    "default": "[]"
                 },
                 "likes": {
                     "type": "TEXT",
                     "notNull": true,
-                    "default": "\"[]\""
+                    "default": "[]"
                 },
                 "dislikes": {
                     "type": "TEXT",
                     "notNull": true,
-                    "default": "\"[]\""
+                    "default": "[]"
                 },
                 "blacklist": {
                     "type": "TEXT",
                     "notNull": true,
-                    "default": "\"[]\""
+                    "default": "[]"
                 },
                 "usersettings": {
                     "type": "TEXT",
                     "notNull": true,
-                    "default": "\"{}\""
+                    "default": "{}"
                 }
             }
         },
@@ -201,12 +201,12 @@
                 "read": {
                     "type": "INTEGER",
                     "notNull": true,
-                    "default": "0"
+                    "default": 0
                 },
                 "specialdata": {
                     "type": "TEXT",
                     "notNull": true,
-                    "default": "\"{}\""
+                    "default": "{}"
                 }
             }
         },
@@ -224,7 +224,7 @@
                 "group": {
                     "type": "TEXT",
                     "notNull": true,
-                    "default": "\"[]\""
+                    "default": "[]"
                 },
                 "name": {
                     "type": "TEXT",
@@ -233,7 +233,7 @@
                 "type": {
                     "type": "ANY",
                     "notNull": true,
-                    "default": "\"group\""
+                    "default": "group"
                 },
                 "owner": {
                     "type": "TEXT",
@@ -242,7 +242,7 @@
                 "color": {
                     "type": "TEXT",
                     "notNull": true,
-                    "default": "\"#fff\""
+                    "default": "#fff"
                 }
             }
         },
@@ -268,7 +268,7 @@
                 "flagdata": {
                     "type": "TEXT",
                     "notNull": true,
-                    "default": "\"{}\""
+                    "default": "{}"
                 },
                 "timestamp": {
                     "type": "INT",
@@ -304,7 +304,7 @@
                 "tags": {
                     "type": "ANY",
                     "notNull": true,
-                    "default": "\"[]\""
+                    "default": "[]"
                 },
                 "timestamp": {
                     "type": "TEXT",
@@ -317,7 +317,7 @@
                 "source": {
                     "type": "ANY",
                     "notNull": true,
-                    "default": "\"[]\""
+                    "default": "[]"
                 },
                 "size": {
                     "type": "TEXT",

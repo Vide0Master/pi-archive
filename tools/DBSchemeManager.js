@@ -130,7 +130,7 @@ async function getCurrentSchema() {
             };
 
             if (column.notnull) params.notNull = true;
-            if (column.dflt_value) params.default = `${column.dflt_value}`;
+            if (column.dflt_value) params.default = JSON.parse(column.dflt_value);
 
             if (column.pk) {
                 params.primaryKey = true;
