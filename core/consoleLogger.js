@@ -18,11 +18,11 @@ module.exports = function (text, tags = []) {
     const prefixes = tags.map(t => colorize(` ${t.txt} `, t.txtc, t.txtb)).join('');
 
     const typeStyles = {
-        e: [' ERROR ', 'white', 'red'],
+        e: [' ERR ', 'white', 'red'],
         ce: [' !CERR! ', 'red', 'black'],
         s: [' OK ', 'black', 'green'],
         w: [' WARN ', 'black', 'yellow'],
-        i: [' INFO ', 'white', 'blue'],
+        i: [' INF ', 'white', 'blue'],
         uwu: [' UWU ', 'magenta', 'white'],
         owo: [' OWO ', 'magenta', 'white']
     };

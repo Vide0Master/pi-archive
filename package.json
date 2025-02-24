@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "start": "start.bat",
-        "lines": "node countAllLines.js"
+        "lines": "node tools/countAllLines.js"
     },
     "author": "VideoMaster",
     "license": "ISC",

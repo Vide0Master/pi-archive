@@ -80,9 +80,9 @@ const CHECKS = [
         }
 
         // --- Database Schema Healing ---
-        cmd('i/Verifying database schema...', [hlthPREP]);
-        await require('./tools/DBSchemaHealer.js')();
-        cmd('s/Database schema verified', [hlthPREP]);
+        //cmd('i/Verifying database schema...', [hlthPREP]);
+        //await require('./tools/DBSchemaHealer.js')();
+        //cmd('s/Database schema verified', [hlthPREP]);
 
         // --- Service Initialization ---
         cmd('i/Starting services...', [hlthPREP]);
