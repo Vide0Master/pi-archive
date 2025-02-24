@@ -26,9 +26,9 @@ function generateCreateTableSQL(tableName, tableDef) {
         columns.push(parts.join(' '));
     }
     const options = [];
-    if (tableDef.strict) options.push('STRICT');
     if (tableDef.withoutRowID) options.push('WITHOUT ROWID');
-    return `CREATE TABLE ${tableName} (${columns.join(', ')}) ${options.join(' ')}`.trim();
+    if (tableDef.strict) options.push('STRICT');
+    return `CREATE TABLE ${tableName} (${columns.join(', ')}) ${options.join(', ')}`.trim();
 }
 
 // Generate INSERT statement for migrating data during table alteration
