@@ -73,19 +73,24 @@ async function getCurrentSchema() {
 
     const ver = await new Promise(resolve => {
         db.get(`SELECT * FROM config WHERE key = "DBVER"`, (err, row) => {
+            console.log(err, row)
             if (!err) resolve(row);
             else resolve(err);
         });
     });
 
-    if (typeof ver !== 'object') {
-        console.error(ver);
-        return;
-    } else {
-        cmd('s/Got current version: ' + ver.value);
+    if(ver==undefined){
+        cmd('w/DBVER is not present')
+        currentSchema.DBversion=''
+    }else{
+        if (typeof ver !== 'object') {
+            console.error(ver);
+            return;
+        } else {
+            cmd('s/Got current version: ' + ver.value);
+            currentSchema.DBversion = ver.value;
+        }
     }
-
-    currentSchema.DBversion = ver.value;
 
     // Retrieve tables
     const tables = await new Promise(resolve => {
@@ -284,8 +289,13 @@ async function setDBSchema() {
     }
 
     if (!isSameVersion) {
-        cmd(`i/Updating DB version record ${currentSchema.DBversion} -> ${newSchema.DBversion}`)
-        await dbRun(`UPDATE "config" SET "value" = "${newSchema.DBversion}" WHERE "key" = "DBVER"`)
+        if(currentSchema.DBversion==''){
+            cmd(`i/Setting DB version record to ${newSchema.DBversion}`)
+            await dbRun(`INSERT INTO "config" ("key", "value") VALUES ("DBVER", "${newSchema.DBversion}")`)
+        }else{
+            cmd(`i/Updating DB version record ${currentSchema.DBversion} -> ${newSchema.DBversion}`)
+            await dbRun(`UPDATE "config" SET "value" = "${newSchema.DBversion}" WHERE "key" = "DBVER"`)
+        }
     }
 
     cmd('s/Database schema updated successfully!');
