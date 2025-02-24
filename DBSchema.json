@@ -41,97 +41,6 @@
                 }
             }
         },
-        "messages": {
-            "strict": true,
-            "withoutRowID": false,
-            "columns": {
-                "messageid": {
-                    "type": "INTEGER",
-                    "notNull": true,
-                    "primaryKey": true,
-                    "autoIncrement": true,
-                    "unique": true
-                },
-                "message": {
-                    "type": "TEXT",
-                    "notNull": true
-                },
-                "from": {
-                    "type": "TEXT",
-                    "notNull": true
-                },
-                "to": {
-                    "type": "TEXT",
-                    "notNull": true
-                },
-                "msgtype": {
-                    "type": "TEXT",
-                    "notNull": true,
-                    "default": true
-                },
-                "timestamp": {
-                    "type": "INT",
-                    "notNull": true
-                },
-                "read": {
-                    "type": "INTEGER",
-                    "notNull": true,
-                    "default": true
-                },
-                "specialdata": {
-                    "type": "TEXT",
-                    "notNull": true,
-                    "default": true
-                }
-            }
-        },
-        "posts": {
-            "strict": true,
-            "withoutRowID": false,
-            "columns": {
-                "id": {
-                    "type": "INTEGER",
-                    "notNull": true,
-                    "primaryKey": true,
-                    "autoIncrement": true,
-                    "unique": true
-                },
-                "file": {
-                    "type": "TEXT",
-                    "notNull": true,
-                    "unique": true
-                },
-                "description": {
-                    "type": "TEXT",
-                    "notNull": true,
-                    "default": true
-                },
-                "tags": {
-                    "type": "ANY",
-                    "notNull": true,
-                    "default": true
-                },
-                "timestamp": {
-                    "type": "TEXT",
-                    "notNull": true
-                },
-                "author": {
-                    "type": "TEXT",
-                    "notNull": true,
-                    "default": true
-                },
-                "source": {
-                    "type": "ANY",
-                    "notNull": true,
-                    "default": true
-                },
-                "size": {
-                    "type": "TEXT",
-                    "notNull": true,
-                    "default": true
-                }
-            }
-        },
         "temp_keys": {
             "strict": true,
             "withoutRowID": false,
@@ -169,17 +78,17 @@
                 "relatedtags": {
                     "type": "ANY",
                     "notNull": true,
-                    "default": true
+                    "default": "\"[]\""
                 },
                 "color": {
                     "type": "ANY",
                     "notNull": true,
-                    "default": true
+                    "default": "\"#ffffff\""
                 },
                 "priority": {
                     "type": "INT",
                     "notNull": true,
-                    "default": true
+                    "default": "0"
                 }
             }
         },
@@ -202,44 +111,6 @@
                 "tslac": {
                     "type": "INT",
                     "notNull": true
-                }
-            }
-        },
-        "posts_groups": {
-            "strict": true,
-            "withoutRowID": false,
-            "columns": {
-                "id": {
-                    "type": "INTEGER",
-                    "notNull": true,
-                    "primaryKey": true,
-                    "autoIncrement": true,
-                    "unique": true
-                },
-                "group": {
-                    "type": "TEXT",
-                    "notNull": true,
-                    "default": true
-                },
-                "name": {
-                    "type": "TEXT",
-                    "notNull": true,
-                    "default": true
-                },
-                "type": {
-                    "type": "ANY",
-                    "notNull": true,
-                    "default": true
-                },
-                "owner": {
-                    "type": "TEXT",
-                    "notNull": true,
-                    "default": true
-                },
-                "color": {
-                    "type": "TEXT",
-                    "notNull": true,
-                    "default": true
                 }
             }
         },
@@ -272,27 +143,106 @@
                 "favs": {
                     "type": "TEXT",
                     "notNull": true,
-                    "default": true
+                    "default": "\"[]\""
                 },
                 "likes": {
                     "type": "TEXT",
                     "notNull": true,
-                    "default": true
+                    "default": "\"[]\""
                 },
                 "dislikes": {
                     "type": "TEXT",
                     "notNull": true,
-                    "default": true
+                    "default": "\"[]\""
                 },
                 "blacklist": {
                     "type": "TEXT",
                     "notNull": true,
-                    "default": true
+                    "default": "\"[]\""
                 },
                 "usersettings": {
                     "type": "TEXT",
                     "notNull": true,
-                    "default": true
+                    "default": "\"{}\""
+                }
+            }
+        },
+        "messages": {
+            "strict": true,
+            "withoutRowID": false,
+            "columns": {
+                "messageid": {
+                    "type": "INTEGER",
+                    "notNull": true,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "unique": true
+                },
+                "message": {
+                    "type": "TEXT",
+                    "notNull": true
+                },
+                "from": {
+                    "type": "TEXT",
+                    "notNull": true
+                },
+                "to": {
+                    "type": "TEXT",
+                    "notNull": true
+                },
+                "msgtype": {
+                    "type": "TEXT",
+                    "notNull": true
+                },
+                "timestamp": {
+                    "type": "INT",
+                    "notNull": true
+                },
+                "read": {
+                    "type": "INTEGER",
+                    "notNull": true,
+                    "default": "0"
+                },
+                "specialdata": {
+                    "type": "TEXT",
+                    "notNull": true,
+                    "default": "\"{}\""
+                }
+            }
+        },
+        "posts_groups": {
+            "strict": true,
+            "withoutRowID": false,
+            "columns": {
+                "id": {
+                    "type": "INTEGER",
+                    "notNull": true,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "unique": true
+                },
+                "group": {
+                    "type": "TEXT",
+                    "notNull": true,
+                    "default": "\"[]\""
+                },
+                "name": {
+                    "type": "TEXT",
+                    "notNull": true
+                },
+                "type": {
+                    "type": "ANY",
+                    "notNull": true,
+                    "default": "\"group\""
+                },
+                "owner": {
+                    "type": "TEXT",
+                    "notNull": true
+                },
+                "color": {
+                    "type": "TEXT",
+                    "notNull": true,
+                    "default": "\"#fff\""
                 }
             }
         },
@@ -318,7 +268,7 @@
                 "flagdata": {
                     "type": "TEXT",
                     "notNull": true,
-                    "default": true
+                    "default": "\"{}\""
                 },
                 "timestamp": {
                     "type": "INT",
@@ -327,6 +277,50 @@
                 },
                 "user": {
                     "type": "ANY",
+                    "notNull": true
+                }
+            }
+        },
+        "posts": {
+            "strict": true,
+            "withoutRowID": false,
+            "columns": {
+                "id": {
+                    "type": "INTEGER",
+                    "notNull": true,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "unique": true
+                },
+                "file": {
+                    "type": "TEXT",
+                    "notNull": true,
+                    "unique": true
+                },
+                "description": {
+                    "type": "TEXT",
+                    "notNull": true
+                },
+                "tags": {
+                    "type": "ANY",
+                    "notNull": true,
+                    "default": "\"[]\""
+                },
+                "timestamp": {
+                    "type": "TEXT",
+                    "notNull": true
+                },
+                "author": {
+                    "type": "TEXT",
+                    "notNull": true
+                },
+                "source": {
+                    "type": "ANY",
+                    "notNull": true,
+                    "default": "\"[]\""
+                },
+                "size": {
+                    "type": "TEXT",
                     "notNull": true
                 }
             }

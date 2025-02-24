@@ -130,7 +130,7 @@ async function getCurrentSchema() {
             };
 
             if (column.notnull) params.notNull = true;
-            if (column.dflt_value) params.default = true;
+            if (column.dflt_value) params.default = `${column.dflt_value}`;
 
             if (column.pk) {
                 params.primaryKey = true;
@@ -305,18 +305,18 @@ async function setDBSchema() {
     db.close()
 }
 
-module.exports = setDBSchema;
 
 // Command-line execution
 if (require.main === module) {
     const args = process.argv.slice(2);
     if (args.includes('-updateSchema')) {
-        updateSchema().then(() => db.close());
+        updateSchema();
     } else if (args.includes('-setDBSchema')) {
-        setDBSchema().then(() => db.close());
+        setDBSchema();
     } else {
         console.log('Usage: node filename.js -updateSchema | -setDBSchema');
     }
-} else {
-    // Module usage: Automatically set DB schema
 }
+
+
+module.exports = setDBSchema;
