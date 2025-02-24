@@ -73,16 +73,15 @@ async function getCurrentSchema() {
 
     const ver = await new Promise(resolve => {
         db.get(`SELECT * FROM config WHERE key = "DBVER"`, (err, row) => {
-            console.log(err, row)
             if (!err) resolve(row);
             else resolve(err);
         });
     });
 
-    if(ver==undefined){
+    if (ver == undefined) {
         cmd('w/DBVER is not present')
-        currentSchema.DBversion=''
-    }else{
+        currentSchema.DBversion = ''
+    } else {
         if (typeof ver !== 'object') {
             console.error(ver);
             return;
@@ -194,11 +193,15 @@ async function setDBSchema() {
     const newSchema = JSON.parse(await fs.readFile('./DBSCHEMA.json', 'utf8'));
     const currentSchema = await getCurrentSchema();
 
+
+
     const isSameVersion = currentSchema.DBversion === newSchema.DBversion;
     if (isSameVersion) {
         cmd(`w/DB version matches [${currentSchema.DBversion}], only displaying differences.`);
     } else {
         cmd(`i/DB version differs [${currentSchema.DBversion}] -> [${newSchema.DBversion}], applying changes.`);
+        cmd(`i/Making reserve copy of database...`)
+        await fs.copyFile('./storage/data.db', `./storage/DBCOPY-VER[${currentSchema.DBversion}].db`)
     }
 
     // Process tables
@@ -289,17 +292,20 @@ async function setDBSchema() {
     }
 
     if (!isSameVersion) {
-        if(currentSchema.DBversion==''){
+        if (currentSchema.DBversion == '') {
             cmd(`i/Setting DB version record to ${newSchema.DBversion}`)
             await dbRun(`INSERT INTO "config" ("key", "value") VALUES ("DBVER", "${newSchema.DBversion}")`)
-        }else{
+        } else {
             cmd(`i/Updating DB version record ${currentSchema.DBversion} -> ${newSchema.DBversion}`)
             await dbRun(`UPDATE "config" SET "value" = "${newSchema.DBversion}" WHERE "key" = "DBVER"`)
         }
     }
 
     cmd('s/Database schema updated successfully!');
+    db.close()
 }
+
+module.exports = setDBSchema;
 
 // Command-line execution
 if (require.main === module) {
@@ -313,5 +319,4 @@ if (require.main === module) {
     }
 } else {
     // Module usage: Automatically set DB schema
-    setDBSchema().then(() => db.close());
 }
