@@ -2,8 +2,8 @@
     "DBversion": "b1.2",
     "tables": {
         "config": {
-            "strict": true,
             "withoutRowID": false,
+            "strict": true,
             "columns": {
                 "key": {
                     "type": "TEXT",
@@ -16,8 +16,8 @@
             }
         },
         "tags": {
-            "strict": true,
             "withoutRowID": true,
+            "strict": true,
             "columns": {
                 "tag": {
                     "type": "TEXT",
@@ -32,8 +32,8 @@
             }
         },
         "temp_tags": {
-            "strict": false,
             "withoutRowID": false,
+            "strict": false,
             "columns": {
                 "tag": {
                     "type": "TEXT",
@@ -42,8 +42,8 @@
             }
         },
         "temp_keys": {
-            "strict": true,
             "withoutRowID": false,
+            "strict": true,
             "columns": {
                 "key": {
                     "type": "TEXT",
@@ -66,8 +66,8 @@
             }
         },
         "tags_groups": {
-            "strict": true,
             "withoutRowID": true,
+            "strict": true,
             "columns": {
                 "groupname": {
                     "type": "TEXT",
@@ -93,8 +93,8 @@
             }
         },
         "sessions": {
-            "strict": true,
             "withoutRowID": false,
+            "strict": true,
             "columns": {
                 "user": {
                     "type": "TEXT",
@@ -115,8 +115,8 @@
             }
         },
         "users": {
-            "strict": true,
             "withoutRowID": true,
+            "strict": true,
             "columns": {
                 "login": {
                     "type": "TEXT",
@@ -168,8 +168,8 @@
             }
         },
         "messages": {
-            "strict": true,
             "withoutRowID": false,
+            "strict": true,
             "columns": {
                 "messageid": {
                     "type": "INTEGER",
@@ -211,8 +211,8 @@
             }
         },
         "posts_groups": {
-            "strict": true,
             "withoutRowID": false,
+            "strict": true,
             "columns": {
                 "id": {
                     "type": "INTEGER",
@@ -247,8 +247,8 @@
             }
         },
         "flags": {
-            "strict": true,
             "withoutRowID": false,
+            "strict": true,
             "columns": {
                 "id": {
                     "type": "INTEGER",
@@ -282,8 +282,8 @@
             }
         },
         "posts": {
-            "strict": true,
             "withoutRowID": false,
+            "strict": true,
             "columns": {
                 "id": {
                     "type": "INTEGER",

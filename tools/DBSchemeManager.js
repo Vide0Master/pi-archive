@@ -147,8 +147,8 @@ async function getCurrentSchema() {
         }
 
         currentSchema.tables[table.name] = {
-            strict: table.sql?.includes('STRICT') || false,
             withoutRowID: table.sql?.includes('WITHOUT ROWID') || false,
+            strict: table.sql?.includes('STRICT') || false,
             columns: columns
         };
     }
