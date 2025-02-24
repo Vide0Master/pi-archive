@@ -92,6 +92,7 @@ const CHECKS = [
         
     } catch (e) {
         cmd(`ce/Process failed: ${e.message}`, [hlthPREP]);
+        console.log(e)
         process.exit(1);
     }
 })();

@@ -17,18 +17,18 @@ async function dbRun(sql) {
 function generateCreateTableSQL(tableName, tableDef) {
     const columns = [];
     for (const [colName, colDef] of Object.entries(tableDef.columns)) {
-        const parts = [colName, colDef.type];
+        const parts = [`"${colName}"`, colDef.type];
         if (colDef.primaryKey) parts.push('PRIMARY KEY');
         if (colDef.autoIncrement) parts.push('AUTOINCREMENT');
         if (colDef.notNull) parts.push('NOT NULL');
         if (colDef.unique) parts.push('UNIQUE');
-        if (colDef.default !== undefined) parts.push(`DEFAULT ${colDef.default}`);
+        if (colDef.default !== undefined) parts.push(`DEFAULT "${colDef.default}"`);
         columns.push(parts.join(' '));
     }
     const options = [];
-    if (tableDef.strict) options.push('STRICT');
     if (tableDef.withoutRowID) options.push('WITHOUT ROWID');
-    return `CREATE TABLE ${tableName} (${columns.join(', ')}) ${options.join(' ')}`.trim();
+    if (tableDef.strict) options.push('STRICT');
+    return `CREATE TABLE ${tableName} (${columns.join(', ')}) ${options.join(', ')}`.trim();
 }
 
 // Generate INSERT statement for migrating data during table alteration
@@ -36,9 +36,9 @@ function generateInsertSQL(newTableName, tempTableName, newColumns, oldColumns) 
     const insertColumns = [];
     const selectColumns = [];
     for (const colName in newColumns) {
-        insertColumns.push(colName);
+        insertColumns.push(`"${colName}"`);
         if (oldColumns[colName]) {
-            selectColumns.push(colName);
+            selectColumns.push(`"${colName}"`);
         } else {
             selectColumns.push(newColumns[colName].default !== undefined ? newColumns[colName].default : 'NULL');
         }
@@ -130,7 +130,7 @@ async function getCurrentSchema() {
             };
 
             if (column.notnull) params.notNull = true;
-            if (column.dflt_value) params.default = true;
+            if (column.dflt_value) params.default = JSON.parse(column.dflt_value);
 
             if (column.pk) {
                 params.primaryKey = true;
@@ -147,8 +147,8 @@ async function getCurrentSchema() {
         }
 
         currentSchema.tables[table.name] = {
-            strict: table.sql?.includes('STRICT') || false,
             withoutRowID: table.sql?.includes('WITHOUT ROWID') || false,
+            strict: table.sql?.includes('STRICT') || false,
             columns: columns
         };
     }
@@ -305,18 +305,18 @@ async function setDBSchema() {
     db.close()
 }
 
-module.exports = setDBSchema;
 
 // Command-line execution
 if (require.main === module) {
     const args = process.argv.slice(2);
     if (args.includes('-updateSchema')) {
-        updateSchema().then(() => db.close());
+        updateSchema();
     } else if (args.includes('-setDBSchema')) {
-        setDBSchema().then(() => db.close());
+        setDBSchema();
     } else {
         console.log('Usage: node filename.js -updateSchema | -setDBSchema');
     }
-} else {
-    // Module usage: Automatically set DB schema
 }
+
+
+module.exports = setDBSchema;
