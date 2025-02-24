@@ -36,9 +36,9 @@ function generateInsertSQL(newTableName, tempTableName, newColumns, oldColumns) 
     const insertColumns = [];
     const selectColumns = [];
     for (const colName in newColumns) {
-        insertColumns.push(colName);
+        insertColumns.push(`"${colName}"`);
         if (oldColumns[colName]) {
-            selectColumns.push(colName);
+            selectColumns.push(`"${colName}"`);
         } else {
             selectColumns.push(newColumns[colName].default !== undefined ? newColumns[colName].default : 'NULL');
         }
