@@ -1,6 +1,24 @@
 [
     {
         "versions": {
+            "Server": "",
+            "DB": "b1.3",
+            "Webpage": "",
+            "TGbot": ""
+        },
+        "date": "24.02.2025",
+        "updates": [
+            {
+                "text": "Database sync, feature for deploying Archive from zero and verifying/modifiying databases in any version of archive on the go",
+                "tag": "new",
+                "services": [
+                    "DB"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
             "Server": "b0.1.21",
             "DB": "",
             "Webpage": "b0.4.10",

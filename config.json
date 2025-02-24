@@ -3,7 +3,7 @@
     "AUDITCONTROL": "MOVE",
     "version": {
         "Server": "b0.1.21",
-        "DB": "b1.2",
+        "DB": "b1.3",
         "Webpage": "b0.4.10",
         "TGbot": "b0.2.4"
     },

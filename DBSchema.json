@@ -1,5 +1,5 @@
 {
-    "DBversion": "b1.2",
+    "DBversion": "b1.3",
     "tables": {
         "config": {
             "withoutRowID": false,
