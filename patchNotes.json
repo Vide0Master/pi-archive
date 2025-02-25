@@ -9,7 +9,7 @@
         "date": "24.02.2025",
         "updates": [
             {
-                "text": "Better player: highlits for play and FS buttons, W A S D space and arrows for controls, control bar hides from view after 5s of inactivity",
+                "text": "Better player: highlits for play and FS buttons, W A S D space and arrows for controls, control bar hides from view after 5s of inactivity, F for fullscreen",
                 "tag": "new",
                 "services": [
                     "Webpage"

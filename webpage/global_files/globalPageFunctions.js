@@ -621,7 +621,7 @@ function createVideoPlayer(url, parent) {
 
     const FSV = createDiv('full-screen', additionalControlBar);
 
-    FSV.addEventListener('click', () => {
+    function switchFullscreen() {
         if (!document.fullscreenElement) {
             videoCont.requestFullscreen().catch(err => console.error("Error:", err));
             videoElem.style.maxHeight = '100%';
@@ -629,7 +629,9 @@ function createVideoPlayer(url, parent) {
             document.exitFullscreen();
             videoElem.removeAttribute('style');
         }
-    });
+    }
+
+    FSV.addEventListener('click', switchFullscreen);
 
     document.addEventListener("fullscreenchange", () => {
         if (!document.fullscreenElement) {
@@ -660,6 +662,9 @@ function createVideoPlayer(url, parent) {
             }; break;
             case 'KeyD': {
                 videoElem.currentTime += 5
+            }; break;
+            case 'KeyF': {
+                switchFullscreen()
             }; break;
             case 'ArrowUp': {
                 videoElem.volume = Math.min(1, videoElem.volume + 0.05)
