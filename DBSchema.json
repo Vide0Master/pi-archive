@@ -247,6 +247,7 @@
                     "type": "INTEGER",
                     "notNull": true,
                     "primaryKey": true,
+                    "autoIncrement": true,
                     "unique": true
                 },
                 "message": {
