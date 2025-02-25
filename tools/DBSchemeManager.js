@@ -134,7 +134,7 @@ async function getCurrentSchema() {
 
             if (column.pk) {
                 params.primaryKey = true;
-                if (table.sql && new RegExp(`\\b${column.name}\\b\\s+.*?\\bAUTOINCREMENT\\b`, 'i').test(table.sql)) {
+                if (table.sql && new RegExp(`\\b${column.name}\\b[^,]*?\\bAUTOINCREMENT\\b[^,]*?,`, 'i').test(table.sql)) {
                     params.autoIncrement = true;
                 }
             }
