@@ -377,9 +377,7 @@ img {
         color: var(--font-color1);
 
         opacity: 1;
-        transition: opacity 0.5s ease-in-out;
-
-        
+        transition: opacity 0.2s ease-in-out;
 
         .slider-container {
             position: relative;
@@ -556,7 +554,6 @@ img {
         cursor: none;
         .control-bar{
             opacity: 0;
-            display: none;
         }
     }
 
