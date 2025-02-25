@@ -409,6 +409,9 @@ function createPostCard(postData, noClickReaction) {
 
 // region create video elem
 function createVideoPlayer(url, parent) {
+
+    let isVideoActive = false
+
     const videoCont = createDiv('video-container', parent);
     const videoElem = document.createElement('video');
     videoCont.appendChild(videoElem);
@@ -419,7 +422,6 @@ function createVideoPlayer(url, parent) {
 
     videoElem.innerHTML += 'This video is unsupported by your browser';
 
-    // Загружаем громкость из localStorage
     const savedVolume = localStorage.getItem('videoVolume');
     videoElem.volume = savedVolume !== null ? parseFloat(savedVolume) : 0.2;
 
@@ -435,12 +437,29 @@ function createVideoPlayer(url, parent) {
 
     const controlBar = createDiv('control-bar', videoCont);
 
+    const fadeOutAndHide = () => videoCont.classList.add('hidden');
+    const fadeIn = () => videoCont.classList.remove('hidden');
+    const rstAnim = () => {
+        clearTimeout(timeoutId);
+        fadeIn();
+        timeoutId = setTimeout(fadeOutAndHide, 5000);
+    }
+
+    let timeoutId = setTimeout(fadeOutAndHide, 5000);
+
+    videoCont.addEventListener('mouseenter', rstAnim);
+
+    videoCont.addEventListener('mousemove', rstAnim)
+
+    videoCont.addEventListener('mouseleave', () => {
+        timeoutId = setTimeout(fadeOutAndHide, 5000);
+    });
+
     const sliderContainer = createDiv('slider-container', controlBar);
     const sliderBuffered = createDiv('slider-buffered', sliderContainer);
     const sliderPlayed = createDiv('slider-played', sliderContainer);
     const sliderThumb = createDiv('slider-thumb', sliderContainer);
     const timingControl = createDiv('timing-control', sliderThumb)
-    timingControl.innerText = '1'
 
     let isVideoDragging = false;
     let timing = 0
@@ -515,15 +534,15 @@ function createVideoPlayer(url, parent) {
     const leftElems = createDiv('left-bar', additionalControlBar)
 
     const playPauseButton = createDiv('play-pause', leftElems);
-    playPauseButton.attributeStyleMap.set('--lnk','url(video-play.svg)')
+    playPauseButton.attributeStyleMap.set('--lnk', 'url(video-play.svg)')
 
     function videoPlayPause() {
         if (videoElem.paused) {
             videoElem.play();
-            playPauseButton.attributeStyleMap.set('--lnk','url(video-pause.svg)')
+            playPauseButton.attributeStyleMap.set('--lnk', 'url(video-pause.svg)')
         } else {
             videoElem.pause();
-            playPauseButton.attributeStyleMap.set('--lnk','url(video-play.svg)')
+            playPauseButton.attributeStyleMap.set('--lnk', 'url(video-play.svg)')
         }
     }
 
@@ -618,11 +637,52 @@ function createVideoPlayer(url, parent) {
         }
     });
 
+    document.addEventListener('click', (e) => {
+        isVideoActive = e.target == videoElem
+    })
+
+    document.addEventListener('keydown', (e) => {
+        if (!isVideoActive) return
+        switch (e.code) {
+            case 'Space': {
+                videoPlayPause()
+            }; break;
+            case 'KeyW': {
+                videoElem.volume = Math.min(1, videoElem.volume + 0.05)
+                setAudioSliderPos(videoElem.volume)
+            }; break;
+            case 'KeyS': {
+                videoElem.volume = Math.max(0, videoElem.volume - 0.05)
+                setAudioSliderPos(videoElem.volume)
+            }; break;
+            case 'KeyA': {
+                videoElem.currentTime -= 5
+            }; break;
+            case 'KeyD': {
+                videoElem.currentTime += 5
+            }; break;
+            case 'ArrowUp': {
+                videoElem.volume = Math.min(1, videoElem.volume + 0.05)
+                setAudioSliderPos(videoElem.volume)
+            }; break;
+            case 'ArrowDown': {
+                videoElem.volume = Math.max(0, videoElem.volume - 0.05)
+                setAudioSliderPos(videoElem.volume)
+            }; break;
+            case 'ArrowLeft': {
+                videoElem.currentTime -= 5
+            }; break;
+            case 'ArrowRight': {
+                videoElem.currentTime += 5;
+            } break;
+            default: return
+        }
+        e.preventDefault()
+        rstAnim()
+    })
+
     return videoCont;
 }
-
-
-
 
 try {
     setFooterText()

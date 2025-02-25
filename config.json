@@ -4,7 +4,7 @@
     "version": {
         "Server": "b0.1.21",
         "DB": "b1.4",
-        "Webpage": "b0.4.10",
+        "Webpage": "b0.4.11",
         "TGbot": "b0.2.4"
     },
     "user_status": {

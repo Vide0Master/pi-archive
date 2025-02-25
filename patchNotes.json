@@ -2,6 +2,24 @@
     {
         "versions": {
             "Server": "",
+            "DB": "",
+            "Webpage": "b0.4.11",
+            "TGbot": ""
+        },
+        "date": "24.02.2025",
+        "updates": [
+            {
+                "text": "Better player: highlits for play and FS buttons, W A S D space and arrows for controls, control bar hides from view after 5s of inactivity",
+                "tag": "new",
+                "services": [
+                    "Webpage"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
+            "Server": "",
             "DB": "b1.4",
             "Webpage": "",
             "TGbot": ""

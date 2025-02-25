@@ -376,6 +376,11 @@ img {
 
         color: var(--font-color1);
 
+        opacity: 1;
+        transition: opacity 0.5s ease-in-out;
+
+        
+
         .slider-container {
             position: relative;
             width: 100%;
@@ -547,13 +552,18 @@ img {
         }
     }
 
+    &.hidden {
+        cursor: none;
+        .control-bar{
+            opacity: 0;
+            display: none;
+        }
+    }
+
     video {
         display: block;
     }
 }
-
-
-
 
 .tagline {
     display: flex;
