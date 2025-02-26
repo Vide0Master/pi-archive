@@ -16,7 +16,6 @@ const PATHS = {
     STORAGE: 'storage',
     DB: path.join('storage', 'data.db'),
     FILE_STORAGE: path.join('storage', 'file_storage'),
-    THUMBNAILS: path.join('storage', 'video_thumbnails'),
     UNLINKED: path.join('storage', 'UNLINKED')
 };
 
@@ -39,12 +38,6 @@ const CHECKS = [
         type: 'ce',
         message: 'Posts folder missing',
         fix: async () => await safeMkdir(PATHS.FILE_STORAGE)
-    },
-    {
-        path: PATHS.THUMBNAILS,
-        type: 'e',
-        message: 'Video thumbnails folder missing',
-        fix: async () => await safeMkdir(PATHS.THUMBNAILS)
     },
     {
         path: PATHS.UNLINKED,
