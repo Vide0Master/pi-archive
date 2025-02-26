@@ -1,6 +1,45 @@
 [
     {
         "versions": {
+            "Server": "b0.2.1",
+            "DB": "",
+            "Webpage": "b0.4.12",
+            "TGbot": ""
+        },
+        "date": "27.02.2025",
+        "updates": [
+            {
+                "text": "Videos can now be part of collection or group!",
+                "tag": "new",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Post card link is not clickable trough warning container (low tags, video, e.t.c.)",
+                "tag": "fix",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Preview images of videos render on-the-go, no more file prerendered preview of video files<br>This also means that video posts now support different variations of heigt query for video post<br>So you can access preview of any video in any height until it does not exceed own video height(in result you will get preview of videos height itself)",
+                "tag": "rework",
+                "services": [
+                    "Server"
+                ]
+            },
+            {
+                "text": "Video preview is cached as all preview, video, and image files on server and client",
+                "tag": "new",
+                "services": [
+                    "Server"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
             "Server": "",
             "DB": "",
             "Webpage": "b0.4.11",

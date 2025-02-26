@@ -94,28 +94,6 @@ module.exports = (filePath, sessionData) => {
                     weight: fs.statSync(finalVideoPath).size
                 };
 
-                const thumbnailPath = path.join(__dirname, '../storage/video_thumbnails');
-                const preview_result = await new Promise((resolvePreview) => {
-                    ffmpeg(finalVideoPath)
-                        .screenshots({
-                            timestamps: ['1'],
-                            size: '?x200',
-                            count: 1,
-                            filename: 'THUMBFOR-' + save_file_name + '.jpg',
-                            folder: thumbnailPath
-                        })
-                        .on('end', () => resolvePreview({ rslt: 's' }))
-                        .on('error', (err) => {
-                            log(`e/Error executing FFMPEG[preview]: ${err.message}`);
-                            resolvePreview({ rslt: 'e', msg: `Error executing FFMPEG[preview]: ${err.message}` });
-                        });
-                });
-
-                if (preview_result.rslt === 'e') {
-                    resolve(preview_result);
-                    return;
-                }
-
                 const dbuser = (await dbinteract.getUserBySessionData(sessionData.type, sessionData.key)).user.login;
                 const result = await dbinteract.createPost(save_file_name + '.mp4', fileSize, dbuser);
 

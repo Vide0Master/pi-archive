@@ -29,7 +29,7 @@ module.exports = (request, user_data) => {
         const postGroup = await sysController.dbinteract.getPostGroup(request.post)
         if (postGroup.data) {
             const new_group = postGroup.data.group.filter(v => v != request.post)
-            new_group.forEach((v,i) => {
+            new_group.forEach((v, i) => {
                 new_group[i] = v.toString()
             });
             const grpUpdRslt = await sysController.dbinteract.updatePostGroup(postGroup.data.id, new_group)
@@ -57,15 +57,8 @@ module.exports = (request, user_data) => {
                     resolve({ rslt: 'e', msg: `e/Erorr deleting file [deletePost|video]: ${err}` })
                     return
                 } else {
-                    fs.rm(`./storage/video_thumbnails/THUMBFOR-${path.parse(postData.file).name}.jpg`, async (err) => {
-                        if (err) {
-                            sysController.log(`e/Erorr deleting file [deletePost|video|thumbnail]: ${err}`)
-                            resolve({ rslt: 'e', msg: `e/Erorr deleting file [deletePost|video|thumbnail]: ${err}` })
-                        } else {
-                            const result = await sysController.dbinteract.deletePost(request.post)
-                            resolve(result)
-                        }
-                    })
+                    const result = await sysController.dbinteract.deletePost(request.post)
+                    resolve(result)
                 }
             })
         }
