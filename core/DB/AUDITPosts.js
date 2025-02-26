@@ -42,24 +42,7 @@ module.exports = (db) => {
             return
         }
 
-        const thumbAudit = await new Promise(resolve => {
-            fs.readdir(path.join(__dirname, `../../storage/video_thumbnails`), (err, files) => {
-                resolve(new sysController.createResponse(
-                    's',
-                    `Got video thumbnails file list for audit`,
-                    { files: files },
-                    err,
-                    `Error while getting video thumbnails file list for audit`
-                ))
-            })
-        })
-
-        audLog(`${thumbAudit.rslt}/${thumbAudit.msg}`)
-        if (thumbAudit.rslt == 'e') {
-            return
-        }
-
-        const audit_list = { dbAud: [], postFiles: [], thumbs: [] }
+        const audit_list = { dbAud: [], postFiles: []}
 
         for (const postData of dbAudit.posts) {
             const audit_data = {
@@ -77,12 +60,6 @@ module.exports = (db) => {
                 }; break;
                 case ['.mp4', '.mov', '.avi', '.mkv'].includes(post_file_ext): {
                     audit_data.file.type = 'VIDEO'
-                    const thumbname = `THUMBFOR-${path.parse(audit_data.file.name).name}.jpg`
-                    if (thumbAudit.files.find(line => line == thumbname)) {
-                        audit_data.thumb = thumbname
-                    } else {
-                        audit_data.thumb = '!MISSING!'
-                    }
                 }; break;
                 default: {
                     audit_data.file.type = post_file_ext
@@ -95,15 +72,6 @@ module.exports = (db) => {
         for (const filename of fileAudit.files) {
             if (!dbAudit.posts.find(line => line.file == filename)) {
                 audit_list.postFiles.push({
-                    unlinked: true,
-                    filename: filename
-                })
-            }
-        }
-
-        for (const filename of thumbAudit.files) {
-            if (!dbAudit.posts.find(line => `THUMBFOR-${path.parse(line.file).name}.jpg` == filename)) {
-                audit_list.thumbs.push({
                     unlinked: true,
                     filename: filename
                 })
@@ -160,38 +128,10 @@ async function WriteAuditFile(data) {
         }
     }
 
-    if (data.thumbs.length > 0) {
-        auditText += ']THUMB FILE AUDIT[\n\n'
-        for (const line of data.thumbs) {
-            let auditTextLine = ''
-
-            if (line.unlinked) {
-                auditTextLine += `THUMB [${line.filename}] IS UNRELATED TO ANY VIDEO`
-
-                if (sysController.config.static.AUDITCONTROL == 'MOVE') {
-                    await new Promise(resolve => {
-                        fs.rename(
-                            path.join(__dirname, `../../storage/file_storage`, line.filename),
-                            path.join(__dirname, `../../storage/UNLINKED`, line.filename),
-                            (err) => {
-                                if (err) {
-                                    sysController.log(`e/Error moving file [${line.filename}] [AUDIT]`)
-                                }
-                                resolve()
-                            }
-                        )
-                    })
-                }
-            }
-            auditText += auditTextLine
-        }
-    }
-
     let auditFinalText = ''
     auditFinalText += '--==]SUMMARY[==--\n'
     auditFinalText += `CHECKED ${data.dbAud.length} POSTS\n`
     auditFinalText += `${data.postFiles.length} FILES UNRELATED TO ANY POST\n`
-    auditFinalText += `${data.thumbs.length} THUMBS UNRELATED TO ANY VIDEO\n`
     auditFinalText += `AUDIT ACTION METHOD [${sysController.config.static.AUDITCONTROL}]\n`
     auditFinalText += auditText
 
