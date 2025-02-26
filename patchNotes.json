@@ -9,8 +9,15 @@
         "date": "27.02.2025",
         "updates": [
             {
-                "text": "Videos can now be part of collection or group!",
+                "text": "Videos can now be part of collection or group!<br>Removed constraint that was hiding option to add to group video post",
                 "tag": "new",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Current page of /search is saved in history, so if you go back on /search page it well revert last viewed page",
+                "tag": "rework",
                 "services": [
                     "Webpage"
                 ]

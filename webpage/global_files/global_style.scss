@@ -2100,15 +2100,16 @@ input[type=color] {
                 }
             }
         }
+    }
 
-        &.dragging {
-            opacity: 0.5;
-            outline: solid 3px red;
-        }
+    &.dragging {
+        opacity: 0.5;
+        outline: solid 3px red;
 
-        &.over {
-            outline: solid 3px orange;
-        }
+    }
+
+    &.over {
+        outline: solid 3px orange;
     }
 }
 
