@@ -323,7 +323,7 @@ async function handleAdminActions() {
                 )
             }
         } else {
-            if (!['MP4', 'MOV', 'AVI', 'MKV'].includes(post_data.file.split('.').pop().toUpperCase()))
+            //region add to group
                 createAction(viewLang.actions.editGroup.addToGroup, document.querySelector('.post-actions'), groupControl)
         }
 

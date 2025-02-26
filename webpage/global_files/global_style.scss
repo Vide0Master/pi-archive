@@ -552,7 +552,8 @@ img {
 
     &.hidden {
         cursor: none;
-        .control-bar{
+
+        .control-bar {
             opacity: 0;
         }
     }
@@ -1903,6 +1904,7 @@ input[type=color] {
                     position: absolute;
                     top: 0;
                     width: 100%;
+                    pointer-events: none;
 
                     &>* {
                         font-weight: bold;
@@ -2098,15 +2100,16 @@ input[type=color] {
                 }
             }
         }
+    }
 
-        &.dragging {
-            opacity: 0.5;
-            outline: solid 3px red;
-        }
+    &.dragging {
+        opacity: 0.5;
+        outline: solid 3px red;
 
-        &.over {
-            outline: solid 3px orange;
-        }
+    }
+
+    &.over {
+        outline: solid 3px orange;
     }
 }
 

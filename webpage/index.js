@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const sassMiddleware = require('node-sass-middleware');
 
 const sharp = require('sharp');
+const ffmpeg = require('fluent-ffmpeg')
 
 const multer = require('multer');
 
@@ -178,17 +179,26 @@ app.get('/file', async (req, res) => {
         return res.status(404).send('<h1>404</h1>File not found!');
     }
 
-    const mimeType = mime.lookup(filepath);
+    let mimeType = mime.lookup(filepath);
 
     const fileCacheKey = generateThumbnail
         ? `thumb@${filepath}`
         : heightQuery
-        ? `h${heightQuery}@${filepath}`
-        : `full@${filepath}`;
+            ? `h${heightQuery}@${filepath}`
+            : `full@${filepath}`;
+
+
+    const isImage = mimeType.startsWith('image/');
+    const isVideo = mimeType.startsWith('video/');
+    const originalHeight = JSON.parse(postData.post.size).y;
 
     if (sysController.fileCacheController.checkAvailabilty(fileCacheKey)) {
         const cachedFile = sysController.fileCacheController.getRecordData(fileCacheKey);
         const fileSize = cachedFile.length;
+
+        const isThumbnail = fileCacheKey.startsWith('thumb@');
+        const isResized = fileCacheKey.startsWith('h')
+        const responseMimeType = isThumbnail || isResized ? 'image/jpeg' : mimeType
 
         const range = req.headers.range;
 
@@ -206,7 +216,7 @@ app.get('/file', async (req, res) => {
                 'Content-Range': `bytes ${start}-${end}/${fileSize}`,
                 'Accept-Ranges': 'bytes',
                 'Content-Length': chunk.length,
-                'Content-Type': mimeType,
+                'Content-Type': responseMimeType,
                 'Cache-Control': `public, max-age=${fileCacheTTL}`,
                 'ETag': `"${fileCacheKey}-${fileSize}"`,
             };
@@ -214,7 +224,7 @@ app.get('/file', async (req, res) => {
             res.writeHead(206, head);
             return res.end(chunk);
         } else {
-            res.setHeader('Content-Type', mimeType);
+            res.setHeader('Content-Type', responseMimeType);
             res.setHeader('Cache-Control', `public, max-age=${fileCacheTTL}`);
             res.setHeader('ETag', `"${fileCacheKey}-${fileSize}"`);
             return res.end(cachedFile);
@@ -225,37 +235,86 @@ app.get('/file', async (req, res) => {
 
     const fileBuffer = fs.readFileSync(filepath);
 
+    let needsProcessing = false;
+    let targetHeight = null;
+
     if (generateThumbnail) {
-        if (mimeType.startsWith('image/')) {
-            try {
-                processedFileBuffer = await sharp(fileBuffer).resize({ height: 200, fit: 'inside' }).toBuffer();
-            } catch (e) {
-                cmd(`e/Failed to generate thumbnail for ${filepath}`);
-                return res.status(500).send('<h1>500</h1>Failed to generate thumbnail!\nError stack: ' + e);
+        needsProcessing = true;
+        targetHeight = 200;
+        if (isVideo) {
+            if (200 > originalHeight) {
+                targetHeight = originalHeight
             }
-        } else if (mimeType.startsWith('video/')) {
-            const thumbnailPath = path.join(__dirname, '../storage/video_thumbnails', `THUMBFOR-${path.parse(filepath).name}.jpg`);
-            if (fs.existsSync(thumbnailPath)) {
-                processedFileBuffer = fs.readFileSync(thumbnailPath);
-            } else {
-                return res.status(404).send('<h1>404</h1>Preview not found!');
-            }
-        } else {
-            return res.status(400).send('<h1>400</h1>Unsupported filetype for preview!');
         }
-    } else if (!!heightQuery && heightQuery < JSON.parse(postData.post.size).y) {
-        if (mimeType.startsWith('image/')) {
-            try {
-                processedFileBuffer = await sharp(fileBuffer).resize({ height: heightQuery, fit: 'inside' }).toBuffer();
-            } catch (e) {
-                cmd(`e/Failed to resize image for ${filepath}`);
-                return res.status(500).send('<h1>500</h1>Failed to resize image!\nError stack: ' + e);
+    } else if (heightQuery) {
+        needsProcessing = true;
+        if (isImage) {
+            targetHeight = heightQuery;
+        } else if (isVideo) {
+            if (heightQuery < originalHeight) {
+                targetHeight = heightQuery
+            } else {
+                targetHeight = originalHeight
             }
         } else {
-            return res.status(400).send('<h1>400</h1>Unsupported filetype height query!');
+            return res.status(400).send('<h1>400</h1>Height queries only supported for images');
+        }
+    }
+
+    if (needsProcessing) {
+        try {
+            if (isImage) {
+                processedFileBuffer = await sharp(fileBuffer)
+                    .resize({ height: targetHeight, fit: 'inside' })
+                    .toBuffer();
+            }
+            else if (isVideo) {
+                processedFileBuffer = await new Promise((resolve, reject) => {
+                    const buffers = [];
+
+                    const ffmpegProcess = ffmpeg(filepath)
+                        .inputOptions('-ss 1')
+                        .videoFilters(`scale=-1:${targetHeight}`)
+                        .outputOptions('-vframes 1')
+                        .outputOptions('-c:v mjpeg')
+                        .outputFormat('image2pipe')
+                        .on('error', (err) => {
+                            console.error('FFmpeg error:', err);
+                            reject(new Error(`FFmpeg error: ${err.message}`));
+                        })
+                        .on('end', () => {
+                            if (buffers.length === 0) {
+                                reject(new Error('Empty video thumbnail generated'));
+                                return;
+                            }
+                            resolve(Buffer.concat(buffers));
+                        });
+
+                    ffmpegProcess.pipe()
+                        .on('data', (chunk) => buffers.push(chunk))
+                        .on('error', (err) => {
+                            console.error('Stream error:', err);
+                            reject(new Error(`Stream error: ${err.message}`));
+                        });
+                });
+
+                mimeType = 'image/jpeg';
+            }
+        } catch (e) {
+            const errorType = isImage ? 'image' : 'video';
+            cmd(`e/Failed to process ${errorType} for ${filepath}: ${e}`);
+            return res.status(500).send(
+                `<h1>500</h1>${generateThumbnail ? 'Preview' : 'Resize'} failed for ${errorType}!` +
+                `\nError: ${e.message}`
+            );
         }
     } else {
         processedFileBuffer = fileBuffer;
+    }
+
+    if (processedFileBuffer.length === 0) {
+        cmd(`e/Empty buffer generated for ${filepath}`);
+        return res.status(500).send('<h1>500</h1>Failed to generate preview');
     }
 
     sysController.fileCacheController.createRecord(fileCacheKey, processedFileBuffer, 170);

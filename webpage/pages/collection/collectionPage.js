@@ -9,6 +9,14 @@ document.querySelector('.search-row #taglist').placeholder = Language.defaultTag
 async function processCollection(id) {
     const collectionInfo = (await request('controlGroup', { type: 'getGroupByID', id })).group
 
+    const post_list = await request('getPosts',
+        {
+            query: `id:${collectionInfo.group.join(',')}`,
+            page: 1,
+            postsCount: 9999,
+            grpOverride: true
+        })
+
     const postDataTemplate = {
         name: collectionLang.data.name,
         id: collectionLang.data.id,
@@ -62,8 +70,12 @@ async function processCollection(id) {
 
     //region switch page
     function switchPage() {
-        for (const elem of document.querySelectorAll('.pages-container *')) {
+        for (const elem of document.querySelectorAll('.pages-container >*')) {
             elem.style.display = 'none'
+
+            if (elem.classList.contains('video-container')) {
+                elem.querySelector('video').pause()
+            }
         }
         const page = pages[currentpage - 1]
         pageInitiators[currentpage - 1]()
@@ -102,6 +114,14 @@ async function processCollection(id) {
     function closeOverlay() {
         background.style.display = 'none'
         document.querySelector('html').removeAttribute('style')
+        
+        for (const elem of document.querySelectorAll('.pages-container >*')) {
+            elem.style.display = 'none'
+
+            if (elem.classList.contains('video-container')) {
+                elem.querySelector('video').pause()
+            }
+        }
     }
 
     //region update pages
@@ -192,10 +212,19 @@ async function processCollection(id) {
     left_arrow.src = 'left-arrow.svg'
 
     const pages_container = createDiv('pages-container', background)
-    for (const post of collectionInfo.group) {
-        const page = document.createElement('img')
-        pages_container.appendChild(page)
-        page.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${post}${localStorage.getItem('fitCollectionPages') ? `&h=${screen.height}` : ''}`
+
+    for (const post of post_list) {
+        let page
+        if (['MP4', 'MOV', 'AVI', 'MKV'].includes(post.file.split('.').pop().toUpperCase())) {
+            page = createVideoPlayer(`/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${post.id}`, pages_container)
+            pages.push(page)
+            pageInitiators.push(() => { })
+            continue
+        } else {
+            page = document.createElement('img')
+            pages_container.appendChild(page)
+            page.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${post.id}${localStorage.getItem('fitCollectionPages') ? `&h=${screen.height}` : ''}`
+        }
 
         pages.push(page)
 
@@ -323,15 +352,6 @@ async function processCollection(id) {
     const tags = []
     const collectionContainer = createDiv('collection-container', document.querySelector('.content-container'))
     let counter = 1
-
-
-    const post_list = await request('getPosts',
-        {
-            query: `id:${collectionInfo.group.join(',')}`,
-            page: 1,
-            postsCount: 9999,
-            grpOverride: true
-        })
 
     for (const post of post_list) {
         const page_container = createDiv('col-page-container', collectionContainer)
@@ -694,10 +714,6 @@ async function showCollections() {
 
         const collectionName = createDiv('collection-name', colInfoCol)
         collectionName.innerHTML = collection.name
-
-        // const collectionSize = createDiv('collection-size-cont', colInfoCol)
-        // createDiv('contnt', collectionSize).innerHTML = collection.group.length
-        // collectionSize.title = collectionLang.pages
 
         createDiv('collection-back-cover', colInfoCol)
         createDiv('top-pages-cover', colInfoCol)

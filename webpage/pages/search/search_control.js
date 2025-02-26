@@ -128,6 +128,10 @@ function get_tags() {
 
 //region posts for page
 async function get_posts(page) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('p', page);
+    history.replaceState(null, '', url.toString());
+
     const taglist = get_tags()
     await update_pages(taglist, page)
 
@@ -173,7 +177,10 @@ async function get_posts(page) {
 }
 
 passSearchTagsToSearchField()
-get_posts(1)
+
+const searchParams = new URL(window.location.href).searchParams
+const pageN = searchParams.get('p')
+get_posts(pageN ? pageN : 1)
 
 //region Get glob tags
 async function getGlobalTags(lim) {
