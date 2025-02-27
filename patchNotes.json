@@ -1,6 +1,42 @@
 [
     {
         "versions": {
+            "Server": "",
+            "DB": "",
+            "Webpage": "b0.4.13",
+            "TGbot": ""
+        },
+        "date": "28.02.2025",
+        "updates": [
+            {
+                "text": "Pi letter on base pages are now link that can be opened in other tab<br>Also it now uses global color scheme and got little smaller",
+                "tag": "rework",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "User requests block was using ruzzian language",
+                "tag": "fix",
+                "services": [
+                    "Webpage"
+                ],
+                "users": [
+                    "admin",
+                    "owner"
+                ]
+            },
+            {
+                "text": "3 new experiments: inverted header bar, inverted header list, splitted header bar<br>Do your part, participate in experiments and give developer some feedback, it's not much, but very appreciated! <3",
+                "tag": "new",
+                "services": [
+                    "Webpage"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
             "Server": "b0.2.1",
             "DB": "",
             "Webpage": "b0.4.12",

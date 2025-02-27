@@ -689,6 +689,20 @@ img {
             gap: 0.5em;
         }
 
+        .pi-nav {
+            mask-image: url(Pi-symbol.svg);
+            mask-repeat: no-repeat;
+            mask-size: contain;
+            height: 1.5em;
+            width: 1.5em;
+            background-color: var(--font-color1);
+            transition: 0.2s;
+
+            &:hover {
+                background-color: var(--font-hover);
+            }
+        }
+
         .label {
             height: 3em;
             filter: invert(1);

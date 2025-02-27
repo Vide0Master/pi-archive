@@ -117,6 +117,19 @@ async function setHeaderButtrons() {
     getMessageCount()
 }
 
+if (localStorage.getItem('EXPERIMENT_invertHeaderBar') == 'true') {
+    const header = document.querySelector('.norma-page-container header')
+    header.style.flexDirection = 'row-reverse'
+}
+
+if (localStorage.getItem('EXPERIMENT_invertHeaderList') == 'true') {
+    document.querySelector('.norma-page-container header .nav-row').style.flexDirection = 'row-reverse'
+}
+
+if (localStorage.getItem('EXPERIMENT_splitHeaderBar') == 'true') {
+    document.querySelector('.norma-page-container header').style.justifyContent = 'space-between'
+}
+
 //region tag autofill
 async function addTagsAutofill(field, parent, preventSearch = false) {
     const autocomplete = createDiv('autocomplete', parent)
@@ -834,23 +847,11 @@ function setFooterText() {
     // sysRepLabel.innerHTML = footerLang.status.systemReports
 }
 
-try {
-    PInav()
-} catch { }
-
-
 //region circ ind
 function createIndicator(state, parent) {
     const elem = createDiv('indicator', parent)
     elem.classList.add(state)
     return elem
-}
-
-//region PI-nav
-function PInav() {
-    document.querySelector('header .label').addEventListener('click', () => {
-        window.location.href = '/search'
-    })
 }
 
 //region cr Div

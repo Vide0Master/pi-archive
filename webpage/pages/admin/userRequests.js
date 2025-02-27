@@ -20,7 +20,7 @@ async function updateRequestList() {
     request_list.innerHTML = ''
     const request_list_label = document.querySelector('.user-requests-block').querySelector('.label')
 
-    request_list_label.innerHTML = `Заявок пользователей: ${data.length}`
+    request_list_label.innerHTML = `${adminLang.labels.userReq}: ${data.length}`
 
     for (const user_request of data) {
 
