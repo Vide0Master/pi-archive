@@ -1,6 +1,60 @@
 [
     {
         "versions": {
+            "Server": "b0.2.2",
+            "DB": "b1.5",
+            "Webpage": "b0.4.14",
+            "TGbot": ""
+        },
+        "date": "03.03.2025",
+        "updates": [
+            {
+                "text": "New field for IDs of tag groups (old solution was name as it's ID)",
+                "tag": "rework",
+                "services": [
+                    "DB",
+                    "Server"
+                ]
+            },
+            {
+                "text": "Tag group translations for avalable languages",
+                "tag": "new",
+                "services": [
+                    "Server",
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Changed appearance of file resolution and added duration parameter to them (applied only to new videos that are uploaded)<br>Can be disabled in experiments panel on user profile page",
+                "tag": "rework",
+                "services": [
+                    "Server",
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Changed appearance of tag group editor in admin panel",
+                "tag": "rework",
+                "services": [
+                    "Webpage"
+                ],
+                "users": [
+                    "moderator",
+                    "admin",
+                    "owner"
+                ]
+            },
+            {
+                "text": "Duration parameter of post for new videos on view",
+                "tag": "new",
+                "services": [
+                    "Webpage"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
             "Server": "",
             "DB": "",
             "Webpage": "b0.4.13",
