@@ -1998,6 +1998,37 @@ input[type=color] {
                 }
             }
 
+            .a-hd-indicator {
+                position: absolute;
+                z-index: 1;
+                left: 50%;
+                transform: translateX(-50%) translateY(100%);
+                bottom: 0;
+                pointer-events: none;
+                user-select: none;
+                cursor: help;
+
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: space-between;
+
+                color: var(--font-color1);
+
+                font-weight: bold;
+
+                background-color: color-mix(in srgb, var(--color1), transparent 70%);
+                padding: 0.15em 0.3em;
+
+                border-top-right-radius: 0.5em;
+                border-top-left-radius: 0.5em;
+
+                opacity: 0;
+                transition: 0.2s;
+
+                text-align: center;
+            }
+
             img {
                 pointer-events: none;
                 height: 100%;
@@ -2030,6 +2061,12 @@ input[type=color] {
                             opacity: 1;
                         }
                     }
+                }
+
+                .a-hd-indicator {
+                    transform: translateX(-50%) translateY(0);
+                    opacity: 1;
+                    background-color: color-mix(in srgb, var(--color1), transparent 30%);
                 }
             }
 

@@ -326,6 +326,7 @@ function addHiddenExperiments() {
     label.innerText = "Experiment features"
 
     const expreimentsFuncs = [
+        { name: "Old post card resolution sticker", key: "oldPostSizesIndicator" },
         { name: "Inverted header bar", key: "invertHeaderBar" },
         { name: "Inverted header list", key: "invertHeaderList" },
         { name: "Splitted header bar", key: "splitHeaderBar" },

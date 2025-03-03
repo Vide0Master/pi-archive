@@ -35,6 +35,7 @@ module.exports = (request, userData) => {
                     tag: tag_array[tagN].tag,
                     count: tag_array[tagN].count,
                     group: {
+                        id: currentTagGroup.id,
                         name: currentTagGroup.groupname,
                         color: currentTagGroup.color,
                         priority: currentTagGroup.priority

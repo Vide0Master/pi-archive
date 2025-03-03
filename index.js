@@ -52,14 +52,13 @@ const CHECKS = [
         type: 'e',
         message: 'Private config missing',
         fix: async () => {
-            let privateConfTemplate = {
+            const  privateConfTemplate = {
                 "telegram_bot": {
                     "token": ""
                 }
             }
-            privateConfTemplate = JSON.stringify(privateConfTemplate)
 
-            await fs.promises.writeFile(PATHS.PRIVATECONF, privateConfTemplate)
+            await fs.promises.writeFile(PATHS.PRIVATECONF, JSON.stringify(privateConfTemplate))
         }
     }
 ];

@@ -74,8 +74,7 @@ async function displayPostData(post_data) {
 
     for (const data_line of post_arch) {
         const line_val = post_data[data_line];
-        const elm = document.createElement('div');
-        post_data_block.appendChild(elm);
+        const elm = createDiv('',post_data_block)
 
         switch (data_line) {
             case 'id':
@@ -111,7 +110,10 @@ async function displayPostData(post_data) {
                 });
                 break;
             case 'size':
-                elm.innerText = `${viewLang.postData.size}:\n${line_val.x}x${line_val.y} (${formatFileSize(line_val.weight)})`;
+                elm.innerText = `${viewLang.postData.size}:\n${line_val.x}✖${line_val.y} (${formatFileSize(line_val.weight)})`;
+                if(line_val.duration){
+                    createDiv('',post_data_block).innerText=`${viewLang.postData.duration}: ${Math.floor(line_val.duration)}${Language.postCard.duration}`
+                }
                 break;
             case 'file_format':
                 const fileFormat = post_data.file.split('.').pop().toUpperCase()

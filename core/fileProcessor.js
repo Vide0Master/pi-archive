@@ -91,6 +91,7 @@ module.exports = (filePath, sessionData) => {
                 const fileSize = {
                     x: updatedVideoStream.width,
                     y: updatedVideoStream.height,
+                    duration: metadata.format.duration,
                     weight: fs.statSync(finalVideoPath).size
                 };
 

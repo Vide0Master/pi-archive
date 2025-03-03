@@ -3,6 +3,12 @@ async function createTagGroupList() {
     const tagGroupResult = await request('controlTagGroups', { type: 'getAllGroups' })
     if (DEVMODE) console.log(tagGroupResult)
 
+    const langResult = await request('getLangsList')
+    const langlist = []
+    for (const lng of langResult.langs) {
+        langlist.push({ name: lng.name, id: lng.id })
+    }
+
     const tagGroupList = tagGroupResult.groups
 
     const tagGroupListBlock = document.getElementById('tag-groups-list')
@@ -15,10 +21,40 @@ async function createTagGroupList() {
         const buttons = createDiv('button-bar', tag_group_div)
 
         const groupNameCont = createDiv('group-name', header)
-        groupNameCont.innerHTML = tagCLang.groupN + ': '
-        const name = document.createElement('input')
-        name.type = 'text'
-        groupNameCont.appendChild(name)
+        createDiv('label', groupNameCont).innerHTML = tagCLang.groupN
+
+        const langNamesCont = createDiv('lang-names-cont', groupNameCont)
+
+        const nameFields = {}
+
+        function getNames() {
+            const names = {}
+            for (const field in nameFields) {
+                names[field] = nameFields[field].value
+            }
+            return names
+        }
+
+        for (const lang of langlist) {
+            const input = document.createElement('input')
+            langNamesCont.appendChild(input)
+            input.type = 'text'
+            input.placeholder = lang.name
+            nameFields[lang.id] = input
+        }
+
+        if (typeof tagGroup.groupname != 'object') {
+            nameFields.ENG.value = tagGroup.groupname
+            console.log('Fallback to english name triggered for ' + tagGroup.groupname + ' tag group')
+        } else {
+            for (const lngnm in tagGroup.groupname) {
+                nameFields[lngnm].value = tagGroup.groupname[lngnm]
+            }
+        }
+
+        // const name = document.createElement('input')
+        // name.type = 'text'
+        // groupNameCont.appendChild(name)
 
         const priorityCont = createDiv('priority', header)
         priorityCont.innerHTML = tagCLang.prior + ': '
@@ -61,7 +97,7 @@ async function createTagGroupList() {
         }
 
         const add_btn = createAction('+', content, async () => {
-            const notf = new Notify(tagCLang.insrtTagName,null,'#0f0','inputLong',(newTagsLine)=>{
+            const notf = new Notify(tagCLang.insrtTagName, null, '#0f0', 'inputLong', (newTagsLine) => {
                 if (!newTagsLine) return
                 const newTagsArray = newTagsLine.split(/\s+|\n+/).filter(val => val !== '')
                 for (const tagname of newTagsArray) {
@@ -97,16 +133,16 @@ async function createTagGroupList() {
         })
 
         confirm_btn.addEventListener('click', async () => {
-            new Notify(`${tagCLang.acc.q} "${tagGroup.groupname}"?`, null, '#ff0', 'inputConfirm', async (result) => {
+            new Notify(`${tagCLang.acc.q} "${getNames().ENG}"?`, null, '#ff0', 'inputConfirm', async (result) => {
                 if (result) {
                     const newGroupData = {
-                        groupname: name.value,
+                        groupname: getNames(),
                         priority: priority.value,
                         color: color.value,
                         relatedtags: localtags
                     }
 
-                    const conf_result = await request('controlTagGroups', { type: 'updateGroup', group: tagGroup.groupname, newGroupData: newGroupData })
+                    const conf_result = await request('controlTagGroups', { type: 'updateGroup', groupID: tagGroup.id, newGroupData: newGroupData })
                     if (conf_result.rslt == 's')
                         window.location.href = window.location.href + `?alert=${conf_result.rslt}/${conf_result.msg}`
                     alert(`${conf_result.rslt}/${conf_result.msg}`, 5000)

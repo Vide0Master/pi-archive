@@ -401,19 +401,32 @@ function createPostCard(postData, noClickReaction) {
         }
     }
 
-    const defins = [
-        { type: '4K<br>UHD', active: (postData.size.y >= 2160) },
-        { type: '1440<br>QHD', active: (postData.size.y >= 1440) },
-        { type: '1080<br>FHD', active: (postData.size.y >= 1080) },
-        { type: '720<br>HD', active: (postData.size.y >= 720) }
-    ]
+    if(localStorage.getItem('EXPERIMENT_oldPostSizesIndicator')!='true'){
+        const defLine = createDiv('a-hd-indicator',imageContainer)
+        const defin = createDiv('def',defLine)
+        defin.innerText=postData.size.x+'✖'+postData.size.y
+        defin.title=Language.view.postData.size
 
-    for (const res of defins) {
-        if (res.active) {
-            const hd_indicator_cont = createDiv('hd-indicator', imageContainer)
-            const hdText = createDiv('text', hd_indicator_cont)
-            hdText.innerHTML = res.type
-            break
+        if(postData.size.duration){
+            defin.innerText+=` ${Math.floor(postData.size.duration)}${postCardLang.duration}`
+        }
+    }else{
+        const defins = [
+            { type: '16K<br>UHD', active: (postData.size.y >= 8640) },
+            { type: '8K<br>UHD', active: (postData.size.y >= 4320) },
+            { type: '4K<br>UHD', active: (postData.size.y >= 2160) },
+            { type: '1440<br>QHD', active: (postData.size.y >= 1440) },
+            { type: '1080<br>FHD', active: (postData.size.y >= 1080) },
+            { type: '720<br>HD', active: (postData.size.y >= 720) }
+        ]
+    
+        for (const res of defins) {
+            if (res.active) {
+                const hd_indicator_cont = createDiv('hd-indicator', imageContainer)
+                const hdText = createDiv('text', hd_indicator_cont)
+                hdText.innerHTML = res.type
+                break
+            }
         }
     }
 
@@ -1601,14 +1614,14 @@ async function createTagSelector(tags, elem) {
 
     for (const tag of taglist) {
         if (tag.group) {
-            if (!groups.find(val => val.name == tag.group.name)) {
-                groups.push({ name: tag.group.name, priority: tag.group.priority, tags: [] })
+            if (!groups.find(val => val.id == tag.group.id)) {
+                groups.push({ id: tag.group.id, name: tag.group.name, priority: tag.group.priority, tags: [] })
             }
-            const defaultGroupIndex = groups.findIndex(val => val.name == tag.group.name)
+            const defaultGroupIndex = groups.findIndex(val => val.id == tag.group.id)
             groups[defaultGroupIndex].tags.push(tag)
         } else {
-            if (!groups.find(val => val.name == Language.defaultTags)) {
-                groups.push({ name: Language.defaultTags, priority: 0, tags: [] })
+            if (!groups.find(val => val.id == -1)) {
+                groups.push({id:-1, name: Language.defaultTags, priority: 0, tags: [] })
             }
             const defaultGroupIndex = groups.findIndex(val => val.name == Language.defaultTags)
             groups[defaultGroupIndex].tags.push(tag)
@@ -1623,7 +1636,11 @@ async function createTagSelector(tags, elem) {
         const groupelem = createDiv('tag-group', tagblock)
 
         const label = createDiv('label', groupelem)
-        label.innerText = group.name
+        if (typeof group.name != 'object') {
+            label.innerText = group.name
+        } else {
+            label.innerText = group.name[CURRENTLANG]
+        }
 
         for (const grTag of group.tags) {
             groupelem.appendChild(createTagline(grTag))
