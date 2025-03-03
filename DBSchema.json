@@ -1,5 +1,5 @@
 {
-    "DBversion": "b1.4",
+    "DBversion": "b1.5",
     "tables": {
         "config": {
             "withoutRowID": false,
@@ -212,33 +212,6 @@
                 }
             }
         },
-        "tags_groups": {
-            "withoutRowID": true,
-            "strict": true,
-            "columns": {
-                "groupname": {
-                    "type": "TEXT",
-                    "notNull": true,
-                    "primaryKey": true,
-                    "unique": true
-                },
-                "relatedtags": {
-                    "type": "ANY",
-                    "notNull": true,
-                    "default": "[]"
-                },
-                "color": {
-                    "type": "ANY",
-                    "notNull": true,
-                    "default": "#ffffff"
-                },
-                "priority": {
-                    "type": "INT",
-                    "notNull": true,
-                    "default": "0"
-                }
-            }
-        },
         "messages": {
             "withoutRowID": false,
             "strict": true,
@@ -322,6 +295,39 @@
                 "size": {
                     "type": "TEXT",
                     "notNull": true
+                }
+            }
+        },
+        "tags_groups": {
+            "withoutRowID": false,
+            "strict": true,
+            "columns": {
+                "id": {
+                    "type": "INTEGER",
+                    "notNull": true,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "unique": true
+                },
+                "groupname": {
+                    "type": "TEXT",
+                    "notNull": true,
+                    "default": "{}"
+                },
+                "relatedtags": {
+                    "type": "ANY",
+                    "notNull": true,
+                    "default": "[]"
+                },
+                "color": {
+                    "type": "ANY",
+                    "notNull": true,
+                    "default": "#ffffff"
+                },
+                "priority": {
+                    "type": "INT",
+                    "notNull": true,
+                    "default": "0"
                 }
             }
         }

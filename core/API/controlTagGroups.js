@@ -10,7 +10,7 @@ module.exports = (request) => {
                 resolve(await SysController.dbinteract.createTagGroup(request.groupName))
             }; break;
             case 'updateGroup': {
-                const groupRslt = await SysController.dbinteract.getTagGroup(request.group)
+                const groupRslt = await SysController.dbinteract.getTagGroup(request.groupID)
                 if (!groupRslt.group) {
                     resolve(new SysController.createResponse('e', 'No such group'))
                     return
@@ -18,7 +18,7 @@ module.exports = (request) => {
 
                 const replacementData = new groupData(groupRslt.group, request.newGroupData)
 
-                const updateResult = await SysController.dbinteract.updateTagGroup(request.group, replacementData)
+                const updateResult = await SysController.dbinteract.updateTagGroup(request.groupID, replacementData)
 
                 resolve(updateResult)
             }; break;

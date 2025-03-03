@@ -1,19 +1,23 @@
 const sysController = require('../systemController')
 
-module.exports = (db, name) => {
+module.exports = (db, id) => {
     return new Promise(async resolve => {
-        db.get(`SELECT * FROM tags_groups WHERE groupname = ?`,
-            [name],
+        db.get(`SELECT * FROM tags_groups WHERE id = ?`,
+            [id],
             (err, row) => {
                 if (row) {
                     row.relatedtags = JSON.parse(row.relatedtags)
+
+                    try {
+                        row.groupname = JSON.parse(row.groupname)
+                    } catch { }
 
                     resolve(new sysController.createResponse(
                         's',
                         `Got tag groups`,
                         { group: row },
                         err,
-                        `{{S_DB_GTG_e}}`
+                        `Error getting tag groups`
                     ))
                 } else {
                     resolve(new sysController.createResponse(

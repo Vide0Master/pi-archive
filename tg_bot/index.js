@@ -2,8 +2,14 @@ const sysController = require('../core/systemController.js');
 const TelegramBot = require('node-telegram-bot-api');
 const tgBotController = require('./tgBotController.js');
 
-sysController.log('i/Starting Telegram bot', [{ txt: 'TGBot', txtb: 'blue', txtc: 'white' }]);
 const token = sysController.config.private.telegram_bot.token;
+if (token) {
+    sysController.log('i/Starting Telegram bot', [{ txt: 'TGBot', txtb: 'blue', txtc: 'white' }]);
+} else {
+    sysController.log('w/TG bot token not found in config-PRIVATE.json, bot will not be launched', [{ txt: 'TGBot', txtb: 'blue', txtc: 'white' }])
+    return
+}
+
 const bot = new TelegramBot(token, { polling: true });
 tgBotController.initialize(bot);
 

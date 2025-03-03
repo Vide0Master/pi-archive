@@ -1,10 +1,11 @@
 let Language = {}
 let LangData = {}
+const CURRENTLANG = localStorage.getItem('lang')
 function getLang() {
-    if (!localStorage.getItem('lang')) {
-        localStorage.setItem('lang', 'ENG')
+    if (!CURRENTLANG) {
+        setLang('ENG')
     }
-    const langDataFromServer = loadJSONSync(`/lang/${localStorage.getItem('lang')}.json`)
+    const langDataFromServer = loadJSONSync(`/lang/${CURRENTLANG}.json`)
     Language = langDataFromServer.lang.WEB
     LangData = { name:langDataFromServer.name}
 }

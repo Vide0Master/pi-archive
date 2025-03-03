@@ -6,6 +6,10 @@ module.exports = (db) => {
             if (rows) {
                 for (const row of rows) {
                     row.relatedtags = JSON.parse(row.relatedtags)
+
+                    try {
+                        row.groupname = JSON.parse(row.groupname)
+                    } catch { }
                 }
 
                 resolve(new sysController.createResponse(

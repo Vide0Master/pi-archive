@@ -2,6 +2,7 @@ const cmd = require('./core/consoleLogger.js');
 const cfg = require('./config.json');
 const fs = require('fs');
 const path = require('path');
+const SysController = require('./core/systemController.js');
 
 // Fixed version reporting
 for (const [name, value] of Object.entries(cfg.version)) {
@@ -16,18 +17,19 @@ const PATHS = {
     STORAGE: 'storage',
     DB: path.join('storage', 'data.db'),
     FILE_STORAGE: path.join('storage', 'file_storage'),
-    UNLINKED: path.join('storage', 'UNLINKED')
+    UNLINKED: path.join('storage', 'UNLINKED'),
+    PRIVATECONF: 'config-PRIVATE.json'
 };
 
 // Health check configuration
 const CHECKS = [
-    { 
-        path: PATHS.STORAGE, 
-        type: 'ce', 
+    {
+        path: PATHS.STORAGE,
+        type: 'ce',
         message: 'Storage folder missing',
         fix: async () => await safeMkdir(PATHS.STORAGE)
     },
-    { 
+    {
         path: PATHS.DB,
         type: 'ce',
         message: 'Database missing',
@@ -44,6 +46,20 @@ const CHECKS = [
         type: 'e',
         message: 'Unlinked files folder missing',
         fix: async () => await safeMkdir(PATHS.UNLINKED)
+    },
+    {
+        path: PATHS.PRIVATECONF,
+        type: 'e',
+        message: 'Private config missing',
+        fix: async () => {
+            const  privateConfTemplate = {
+                "telegram_bot": {
+                    "token": ""
+                }
+            }
+
+            await fs.promises.writeFile(PATHS.PRIVATECONF, JSON.stringify(privateConfTemplate))
+        }
     }
 ];
 
@@ -51,7 +67,7 @@ const CHECKS = [
 (async () => {
     try {
         cmd('w/Starting health check!', [hlthPREP]);
-        
+
         for (const check of CHECKS) {
             if (!await fileExists(check.path)) {
                 cmd(`${check.type}/${check.message}`, [hlthPREP]);
@@ -59,13 +75,11 @@ const CHECKS = [
                 healthCheckErrors++;
                 cmd(`i/Fixed: ${check.message}`, [hlthPREP]);
             }
-            // Add delay between checks if needed
-            // await new Promise(r => setTimeout(r, 100));
         }
 
         // --- Post-Check Operations ---
         cmd('i/End of health check!', [hlthPREP]);
-        
+
         if (healthCheckErrors > 0) {
             cmd(`w/Fixed ${healthCheckErrors} issues`, [hlthPREP]);
         } else {
@@ -77,12 +91,38 @@ const CHECKS = [
         await require('./tools/DBSchemeManager.js')();
         cmd('s/Database schema verified', [hlthPREP]);
 
+        cmd('i/Getting users list...', [hlthPREP])
+        const users = await SysController.dbinteract.getUsersList()
+        if (users.users.length == 0) {
+            cmd('e/No users in db!', [hlthPREP])
+
+            cmd('i/Testing admin account presence...', [hlthPREP])
+            const adminResult = await SysController.dbinteract.getUserByLogin('ADMIN')
+            if (adminResult.user) {
+                cmd('g/Admin user found', [hlthPREP])
+            } else {
+                cmd('e/Admin user not found', [hlthPREP])
+                const registerResult = await SysController.dbinteract.createUser({
+                    login: 'ADMIN',
+                    password: SysController.hashString('12345678'),
+                    username: 'ADMIN',
+                })
+                if (registerResult.rslt == 's') {
+                    cmd('g/ADMIN user registered with password "12345678"')
+                } else {
+                    cmd(`e/Error registering admin user\n${registerResult.msg}`)
+                }
+            }
+        } else {
+            cmd(`i/Found ${users.users.length} users in DB`, [hlthPREP])
+        }
+
         // --- Service Initialization ---
         cmd('i/Starting services...', [hlthPREP]);
         await require('./core/languageVerify.js');
         await require('./webpage/index.js');
         await require('./tg_bot/index.js');
-        
+
     } catch (e) {
         cmd(`ce/Process failed: ${e.message}`, [hlthPREP]);
         console.log(e)
@@ -93,8 +133,8 @@ const CHECKS = [
 // --- Async Helper Functions ---
 async function fileExists(filePath) {
     return fs.promises.access(path.join(__dirname, filePath), fs.constants.F_OK)
-           .then(() => true)
-           .catch(() => false);
+        .then(() => true)
+        .catch(() => false);
 }
 
 async function safeMkdir(dirPath) {
@@ -108,7 +148,7 @@ async function safeMkdir(dirPath) {
 
 async function createDatabase() {
     const dbPath = path.join(__dirname, PATHS.DB);
-    
+
     // Create parent directory first
     await safeMkdir(path.dirname(PATHS.DB));
 
