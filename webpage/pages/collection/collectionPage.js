@@ -114,7 +114,7 @@ async function processCollection(id) {
     function closeOverlay() {
         background.style.display = 'none'
         document.querySelector('html').removeAttribute('style')
-        
+
         for (const elem of document.querySelectorAll('.pages-container >*')) {
             elem.style.display = 'none'
 
@@ -217,6 +217,11 @@ async function processCollection(id) {
         let page
         if (['MP4', 'MOV', 'AVI', 'MKV'].includes(post.file.split('.').pop().toUpperCase())) {
             page = createMeadiaPlayer(`/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${post.id}`, pages_container)
+            pages.push(page)
+            pageInitiators.push(() => { })
+            continue
+        } else if (['MP3', 'OGG', 'WAV', 'FLAC'].includes(post.file.split('.').pop().toUpperCase())) {
+            page = createMeadiaPlayer(`/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${post.id}`, pages_container, 'audio')
             pages.push(page)
             pageInitiators.push(() => { })
             continue
