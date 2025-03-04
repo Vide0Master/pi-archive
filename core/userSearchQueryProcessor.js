@@ -72,7 +72,7 @@ WHERE (row_num <= 5 OR row_num IS NULL)`;
                     default: {
                         qLine.fp = `tags`;
                         qLine.sp = `LIKE ?`;
-                        params.push(`%${tagName}%`);
+                        params.push(`%"${tagName}"%`);
                     }; break;
                 }
 

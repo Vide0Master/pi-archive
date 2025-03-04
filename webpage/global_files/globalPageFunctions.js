@@ -293,6 +293,8 @@ function createAction(name, parentElement, cb) {
 //region cr Pcard
 function createPostCard(postData, noClickReaction) {
 
+    const fileExt = getFileExtension(postData.file)
+
     if (!postData) {
         return createDiv()
     }
@@ -355,11 +357,16 @@ function createPostCard(postData, noClickReaction) {
         lnkElem.href = `/view?id=${postData.id}${sTags ? `&tags=${sTags}` : ''}`
     }
 
-    const previewImg = document.createElement('img')
-    imageContainer.appendChild(previewImg)
-    previewImg.className = 'preview-image'
-    previewImg.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${postData.id}&thumb=true`
-
+    if (['mp3', 'ogg', 'wav', 'flac'].includes(fileExt)) {
+        const audioPlaceholder = createDiv('audio-placeholder-cont', imageContainer)
+        const symbCont = createDiv('symb-cont', audioPlaceholder)
+        createDiv('symb', symbCont).innerHTML = `▶ ${fileExt.toUpperCase()}`
+    } else {
+        const previewImg = document.createElement('img')
+        imageContainer.appendChild(previewImg)
+        previewImg.className = 'preview-image'
+        previewImg.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${postData.id}&thumb=true`
+    }
 
     const warningContainerContainer = createDiv('warning-container-container', postDataCont)
 
@@ -391,7 +398,6 @@ function createPostCard(postData, noClickReaction) {
         const parts = filename.split('.');
         return parts.length > 1 ? parts.pop() : '';
     }
-    const fileExt = getFileExtension(postData.file)
     if (['mp4', 'mov', 'avi', 'mkv', 'gif'].includes(fileExt)) {
         const video_ind_cont = createDiv('video-warning', warningContainer)
         if (fileExt != 'gif') {
@@ -401,16 +407,24 @@ function createPostCard(postData, noClickReaction) {
         }
     }
 
-    if(localStorage.getItem('EXPERIMENT_oldPostSizesIndicator')!='true'){
-        const defLine = createDiv('a-hd-indicator',imageContainer)
-        const defin = createDiv('def',defLine)
-        defin.innerText=postData.size.x+'✖'+postData.size.y
-        defin.title=Language.view.postData.size
+    if (['mp3', 'ogg', 'wav', 'flac'].includes(fileExt)) {
+        const audio_ind_cont = createDiv('audio-warning', warningContainer)
+        audio_ind_cont.innerHTML = `▶ ${postCardLang.audio}`
+    }
 
-        if(postData.size.duration){
-            defin.innerText+=` ${Math.floor(postData.size.duration)}${postCardLang.duration}`
+    if (localStorage.getItem('EXPERIMENT_oldPostSizesIndicator') != 'true') {
+        const defLine = createDiv('a-hd-indicator', imageContainer)
+        const defin = createDiv('def', defLine)
+
+        if (!!postData.size.x && !!postData.size.y) {
+            defin.innerText = postData.size.x + '✖' + postData.size.y
+            defin.title = Language.view.postData.size
         }
-    }else{
+
+        if (postData.size.duration) {
+            defin.innerText += ` ${Math.floor(postData.size.duration)}${postCardLang.duration}`
+        }
+    } else {
         const defins = [
             { type: '16K<br>UHD', active: (postData.size.y >= 8640) },
             { type: '8K<br>UHD', active: (postData.size.y >= 4320) },
@@ -419,7 +433,7 @@ function createPostCard(postData, noClickReaction) {
             { type: '1080<br>FHD', active: (postData.size.y >= 1080) },
             { type: '720<br>HD', active: (postData.size.y >= 720) }
         ]
-    
+
         for (const res of defins) {
             if (res.active) {
                 const hd_indicator_cont = createDiv('hd-indicator', imageContainer)
@@ -433,53 +447,60 @@ function createPostCard(postData, noClickReaction) {
     return postCardContainer
 }
 
-// region create video elem
-function createVideoPlayer(url, parent) {
+// region create media player
+function createMeadiaPlayer(url, parent, type='video', slim = false) {
+    let isMediaActive = false
 
-    let isVideoActive = false
+    const mediaCont = createDiv('media-container', parent);
+    const mediaElem = document.createElement(type);
+    mediaCont.appendChild(mediaElem);
 
-    const videoCont = createDiv('video-container', parent);
-    const videoElem = document.createElement('video');
-    videoCont.appendChild(videoElem);
+    const source = document.createElement('source');
+    mediaElem.appendChild(source);
+    source.src = url;
 
-    const videoSrc = document.createElement('source');
-    videoElem.appendChild(videoSrc);
-    videoSrc.src = url;
-
-    videoElem.innerHTML += 'This video is unsupported by your browser';
+    mediaElem.innerHTML += 'This media is unsupported by your browser';
 
     const savedVolume = localStorage.getItem('videoVolume');
-    videoElem.volume = savedVolume !== null ? parseFloat(savedVolume) : 0.2;
+    mediaElem.volume = savedVolume !== null ? parseFloat(savedVolume) : 0.2;
 
-    videoElem.addEventListener('volumechange', function () {
-        localStorage.setItem('videoVolume', videoElem.volume);
+    mediaElem.addEventListener('volumechange', function () {
+        localStorage.setItem('videoVolume', mediaElem.volume);
     });
 
-    let hourly = false
-    videoElem.addEventListener('loadedmetadata', () => {
-        hourly = videoElem.duration > 60 * 60
-        timeElem.innerText = `${formatTime(Math.floor(videoElem.currentTime), hourly)} / ${formatTime(Math.floor(videoElem.duration), hourly)}`
-    })
-
-    const controlBar = createDiv('control-bar', videoCont);
-
-    const fadeOutAndHide = () => videoCont.classList.add('hidden');
-    const fadeIn = () => videoCont.classList.remove('hidden');
-    const rstAnim = () => {
-        clearTimeout(timeoutId);
-        fadeIn();
-        timeoutId = setTimeout(fadeOutAndHide, 5000);
+    if(slim){
+        mediaCont.classList.add('slim')
     }
 
-    let timeoutId = setTimeout(fadeOutAndHide, 5000);
+    let hourly = false
+    mediaElem.addEventListener('loadedmetadata', () => {
+        hourly = mediaElem.duration > 60 * 60
+        timeElem.innerText = `${formatTime(Math.floor(mediaElem.currentTime), hourly)} / ${formatTime(Math.floor(mediaElem.duration), hourly)}`
+    })
 
-    videoCont.addEventListener('mouseenter', rstAnim);
+    const controlBar = createDiv('control-bar', mediaCont);
 
-    videoCont.addEventListener('mousemove', rstAnim)
-
-    videoCont.addEventListener('mouseleave', () => {
-        timeoutId = setTimeout(fadeOutAndHide, 5000);
-    });
+    if(type=='audio'){
+        mediaCont.classList.add('audio-player');
+    }else{
+        const fadeOutAndHide = () => mediaCont.classList.add('hidden');
+        const fadeIn = () => mediaCont.classList.remove('hidden');
+        const rstAnim = () => {
+            clearTimeout(timeoutId);
+            fadeIn();
+            timeoutId = setTimeout(fadeOutAndHide, 5000);
+        }
+    
+        let timeoutId = setTimeout(fadeOutAndHide, 5000);
+    
+        mediaCont.addEventListener('mouseenter', rstAnim);
+    
+        mediaCont.addEventListener('mousemove', rstAnim)
+    
+        mediaCont.addEventListener('mouseleave', () => {
+            timeoutId = setTimeout(fadeOutAndHide, 5000);
+        });
+    }
 
     const sliderContainer = createDiv('slider-container', controlBar);
     const sliderBuffered = createDiv('slider-buffered', sliderContainer);
@@ -487,7 +508,7 @@ function createVideoPlayer(url, parent) {
     const sliderThumb = createDiv('slider-thumb', sliderContainer);
     const timingControl = createDiv('timing-control', sliderThumb)
 
-    let isVideoDragging = false;
+    let isTimeDragging = false;
     let timing = 0
 
     function setSliderPos(pos) {
@@ -500,45 +521,45 @@ function createVideoPlayer(url, parent) {
         const mouseX = e.clientX - rect.left;
         const clampedX = Math.max(0, Math.min(mouseX, rect.width));
         const newPos = (clampedX / rect.width)
-        timing = newPos * videoElem.duration
+        timing = newPos * mediaElem.duration
         setSliderPos(newPos)
     }
 
     sliderContainer.addEventListener("mousedown", (e) => {
-        isVideoDragging = true;
+        isTimeDragging = true;
         timingControl.classList.add('active')
-        timingControl.innerText = formatTime(Math.floor(videoElem.currentTime))
-        videoElem.pause()
+        timingControl.innerText = formatTime(Math.floor(mediaElem.currentTime))
+        mediaElem.pause()
         moveSlider(e);
     });
 
     document.addEventListener("mousemove", (e) => {
-        if (isVideoDragging) {
+        if (isTimeDragging) {
             moveSlider(e);
-            if (timing > videoElem.currentTime) {
-                timingControl.innerText = `${formatTime(Math.floor(videoElem.currentTime))} → ${formatTime(Math.floor(timing))}`
+            if (timing > mediaElem.currentTime) {
+                timingControl.innerText = `${formatTime(Math.floor(mediaElem.currentTime))} → ${formatTime(Math.floor(timing))}`
             } else {
-                timingControl.innerText = `${formatTime(Math.floor(timing))} ← ${formatTime(Math.floor(videoElem.currentTime))}`
+                timingControl.innerText = `${formatTime(Math.floor(timing))} ← ${formatTime(Math.floor(mediaElem.currentTime))}`
             }
         }
     });
 
     document.addEventListener("mouseup", () => {
-        if (isVideoDragging) {
+        if (isTimeDragging) {
             timingControl.classList.remove('active')
-            isVideoDragging = false;
-            videoElem.currentTime = timing
+            isTimeDragging = false;
+            mediaElem.currentTime = timing
         }
     });
 
     function updateBuffered() {
-        const duration = videoElem.duration;
+        const duration = mediaElem.duration;
         if (!duration) return;
         sliderBuffered.innerHTML = "";
 
-        for (let i = 0; i < videoElem.buffered.length; i++) {
-            const start = (videoElem.buffered.start(i) / duration) * 100;
-            const end = (videoElem.buffered.end(i) / duration) * 100;
+        for (let i = 0; i < mediaElem.buffered.length; i++) {
+            const start = (mediaElem.buffered.start(i) / duration) * 100;
+            const end = (mediaElem.buffered.end(i) / duration) * 100;
 
             const bufferedSegment = createDiv('buffered-segment', sliderBuffered);
             bufferedSegment.style.left = `${start}%`;
@@ -547,38 +568,35 @@ function createVideoPlayer(url, parent) {
     }
 
     function updateSlider() {
-        const duration = videoElem.duration;
-        const currentTime = videoElem.currentTime;
+        const duration = mediaElem.duration;
+        const currentTime = mediaElem.currentTime;
         if (!duration) return;
         setSliderPos(currentTime / duration)
     }
 
-    videoElem.addEventListener('progress', updateBuffered);
-    videoElem.addEventListener('timeupdate', updateSlider);
+    mediaElem.addEventListener('progress', updateBuffered);
+    mediaElem.addEventListener('timeupdate', updateSlider);
 
-    const additionalControlBar = createDiv('additional-control-bar', controlBar)
-    const leftElems = createDiv('left-bar', additionalControlBar)
-
-    const playPauseButton = createDiv('play-pause', leftElems);
+    const playPauseButton = createDiv('play-pause', controlBar);
     playPauseButton.attributeStyleMap.set('--lnk', 'url(video-play.svg)')
 
     function videoPlayPause() {
-        if (videoElem.paused) {
-            videoElem.play();
+        if (mediaElem.paused) {
+            mediaElem.play();
             playPauseButton.attributeStyleMap.set('--lnk', 'url(video-pause.svg)')
         } else {
-            videoElem.pause();
+            mediaElem.pause();
             playPauseButton.attributeStyleMap.set('--lnk', 'url(video-play.svg)')
         }
     }
 
     playPauseButton.addEventListener("click", videoPlayPause);
-    videoElem.addEventListener('click', e => {
-        if (e.target != videoElem) return;
+    mediaElem.addEventListener('click', e => {
+        if (e.target != mediaElem) return;
         videoPlayPause();
     });
 
-    const volumeCont = createDiv('volume-cont', leftElems)
+    const volumeCont = createDiv('volume-cont', controlBar)
     const volumeTrack = createDiv('volume-track', volumeCont)
     const volumeVal = createDiv('volume-val', volumeTrack)
     const volumeThumb = createDiv('volume-thumb', volumeTrack)
@@ -588,7 +606,7 @@ function createVideoPlayer(url, parent) {
     let isAudioDragging = false
 
     let currentVolume = isMobile ? 0.5 : parseFloat(localStorage.getItem('videoVolume')) || 0.5;
-    videoElem.volume = currentVolume;
+    mediaElem.volume = currentVolume;
 
     function setAudioSliderPos(pos) {
         volumeValOverlay.innerHTML = Math.ceil(pos * 100)
@@ -599,14 +617,14 @@ function createVideoPlayer(url, parent) {
     if (isMobile) {
         volumeCont.remove()
     } else {
-        setAudioSliderPos(videoElem.volume)
+        setAudioSliderPos(mediaElem.volume)
 
         function moveAudioSlider(e) {
             const rect = volumeTrack.getBoundingClientRect();
             const mouseX = e.clientX - rect.left;
             const clampedX = Math.max(0, Math.min(mouseX, rect.width));
             const newVol = (clampedX / rect.width)
-            videoElem.volume = newVol
+            mediaElem.volume = newVol
             setAudioSliderPos(newVol)
         }
 
@@ -628,10 +646,10 @@ function createVideoPlayer(url, parent) {
         });
     }
 
-    const timeElem = createDiv('time-counter', leftElems)
+    const timeElem = createDiv('time-counter', controlBar)
 
-    videoElem.addEventListener('timeupdate', () => {
-        timeElem.innerText = `${formatTime(Math.floor(videoElem.currentTime), hourly)} / ${formatTime(Math.floor(videoElem.duration), hourly)}`
+    mediaElem.addEventListener('timeupdate', () => {
+        timeElem.innerText = `${formatTime(Math.floor(mediaElem.currentTime), hourly)} / ${formatTime(Math.floor(mediaElem.duration), hourly)}`
     });
 
     function formatTime(seconds) {
@@ -645,15 +663,15 @@ function createVideoPlayer(url, parent) {
         return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
     }
 
-    const FSV = createDiv('full-screen', additionalControlBar);
+    const FSV = createDiv('full-screen', controlBar);
 
     function switchFullscreen() {
         if (!document.fullscreenElement) {
-            videoCont.requestFullscreen().catch(err => console.error("Error:", err));
-            videoElem.style.maxHeight = '100%';
+            mediaCont.requestFullscreen().catch(err => console.error("Error:", err));
+            mediaElem.style.maxHeight = '100%';
         } else {
             document.exitFullscreen();
-            videoElem.removeAttribute('style');
+            mediaElem.removeAttribute('style');
         }
     }
 
@@ -661,50 +679,50 @@ function createVideoPlayer(url, parent) {
 
     document.addEventListener("fullscreenchange", () => {
         if (!document.fullscreenElement) {
-            videoElem.removeAttribute('style');
+            mediaElem.removeAttribute('style');
         }
     });
 
     document.addEventListener('click', (e) => {
-        isVideoActive = e.target == videoElem
+        isMediaActive = e.target == mediaElem
     })
 
     document.addEventListener('keydown', (e) => {
-        if (!isVideoActive) return
+        if (!isMediaActive) return
         switch (e.code) {
             case 'Space': {
                 videoPlayPause()
             }; break;
             case 'KeyW': {
-                videoElem.volume = Math.min(1, videoElem.volume + 0.05)
-                setAudioSliderPos(videoElem.volume)
+                mediaElem.volume = Math.min(1, mediaElem.volume + 0.05)
+                setAudioSliderPos(mediaElem.volume)
             }; break;
             case 'KeyS': {
-                videoElem.volume = Math.max(0, videoElem.volume - 0.05)
-                setAudioSliderPos(videoElem.volume)
+                mediaElem.volume = Math.max(0, mediaElem.volume - 0.05)
+                setAudioSliderPos(mediaElem.volume)
             }; break;
             case 'KeyA': {
-                videoElem.currentTime -= 5
+                mediaElem.currentTime -= 5
             }; break;
             case 'KeyD': {
-                videoElem.currentTime += 5
+                mediaElem.currentTime += 5
             }; break;
             case 'KeyF': {
                 switchFullscreen()
             }; break;
             case 'ArrowUp': {
-                videoElem.volume = Math.min(1, videoElem.volume + 0.05)
-                setAudioSliderPos(videoElem.volume)
+                mediaElem.volume = Math.min(1, mediaElem.volume + 0.05)
+                setAudioSliderPos(mediaElem.volume)
             }; break;
             case 'ArrowDown': {
-                videoElem.volume = Math.max(0, videoElem.volume - 0.05)
-                setAudioSliderPos(videoElem.volume)
+                mediaElem.volume = Math.max(0, mediaElem.volume - 0.05)
+                setAudioSliderPos(mediaElem.volume)
             }; break;
             case 'ArrowLeft': {
-                videoElem.currentTime -= 5
+                mediaElem.currentTime -= 5
             }; break;
             case 'ArrowRight': {
-                videoElem.currentTime += 5;
+                mediaElem.currentTime += 5;
             } break;
             default: return
         }
@@ -712,7 +730,7 @@ function createVideoPlayer(url, parent) {
         rstAnim()
     })
 
-    return videoCont;
+    return mediaCont;
 }
 
 try {
@@ -1621,7 +1639,7 @@ async function createTagSelector(tags, elem) {
             groups[defaultGroupIndex].tags.push(tag)
         } else {
             if (!groups.find(val => val.id == -1)) {
-                groups.push({id:-1, name: Language.defaultTags, priority: 0, tags: [] })
+                groups.push({ id: -1, name: Language.defaultTags, priority: 0, tags: [] })
             }
             const defaultGroupIndex = groups.findIndex(val => val.name == Language.defaultTags)
             groups[defaultGroupIndex].tags.push(tag)

@@ -53,8 +53,9 @@ function setMediaSource(url, contentType) {
             setImageFit(localStorage.getItem('imageFit') || 'normal')
             break;
         case 'video':
-            createVideoPlayer(url, document.querySelector('.view-container .file'));
-            break;
+        case 'audio':
+            createMeadiaPlayer(url, document.querySelector('.view-container .file'),contentType)
+            break
         default:
             console.error('Unsupported file type:', contentType);
             break;
@@ -74,7 +75,7 @@ async function displayPostData(post_data) {
 
     for (const data_line of post_arch) {
         const line_val = post_data[data_line];
-        const elm = createDiv('',post_data_block)
+        const elm = createDiv('', post_data_block)
 
         switch (data_line) {
             case 'id':
@@ -110,9 +111,14 @@ async function displayPostData(post_data) {
                 });
                 break;
             case 'size':
-                elm.innerText = `${viewLang.postData.size}:\n${line_val.x}✖${line_val.y} (${formatFileSize(line_val.weight)})`;
-                if(line_val.duration){
-                    createDiv('',post_data_block).innerText=`${viewLang.postData.duration}: ${Math.floor(line_val.duration)}${Language.postCard.duration}`
+                if (!!line_val.x && !!line_val.y) {
+                    elm.innerText = `${viewLang.postData.size}:\n${line_val.x}✖${line_val.y} (${formatFileSize(line_val.weight)})`;
+                } else {
+                    elm.innerText = `${viewLang.postData.size}: ${formatFileSize(line_val.weight)}`;
+                }
+
+                if (line_val.duration) {
+                    createDiv('', post_data_block).innerText = `${viewLang.postData.duration}: ${Math.floor(line_val.duration)}${Language.postCard.duration}`
                 }
                 break;
             case 'file_format':
@@ -326,7 +332,7 @@ async function handleAdminActions() {
             }
         } else {
             //region add to group
-                createAction(viewLang.actions.editGroup.addToGroup, document.querySelector('.post-actions'), groupControl)
+            createAction(viewLang.actions.editGroup.addToGroup, document.querySelector('.post-actions'), groupControl)
         }
 
         //region remove post

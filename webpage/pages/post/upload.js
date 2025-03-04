@@ -2,7 +2,8 @@ const uploadLang = Language.upload
 
 const fSizeLimits = {
     video: 1024 * 1024 * 1024 * 5,
-    image: 1024 * 1024 * 100
+    image: 1024 * 1024 * 100,
+    audio: 1024 * 1024 * 25
 }
 
 function getelem(selector) {
@@ -121,6 +122,7 @@ document.querySelector('#file-upload').addEventListener('change', (e) => {
         let preventUpload = false
         const inVideoLimit = file.size < fSizeLimits.video
         const inImageLimit = file.size < fSizeLimits.image
+        const inAudioLimit = file.size < fSizeLimits.audio
 
         if (file.type.startsWith('video/')) {
             if (!inVideoLimit) {
@@ -130,7 +132,13 @@ document.querySelector('#file-upload').addEventListener('change', (e) => {
             if (!inImageLimit) {
                 preventUpload = 'image'
             }
-        } else {
+        }
+        else if (file.type.startsWith('audio/')) {
+            if (!inAudioLimit) {
+                preventUpload = 'audio'
+            }
+        }
+        else {
             preventUpload = 'special'
         }
 
@@ -150,6 +158,8 @@ document.querySelector('#file-upload').addEventListener('change', (e) => {
             } else if (file.type.startsWith('image/')) {
                 previewElement = document.createElement('img');
                 previewElement.alt = 'file preview';
+            } else if (file.type.startsWith('audio/')) {
+
             }
             previewElement.className = 'preview-elem'
             filePreview.appendChild(previewElement)
@@ -234,7 +244,7 @@ document.querySelector('#file-upload').addEventListener('change', (e) => {
 
             async function load() {
                 const upload = await handleFileUpload(file, updateUploadProgressBar);
-                if (DEVMODE) console.log( upload)
+                if (DEVMODE) console.log(upload)
                 if (upload.rslt != 'e') {
                     const fileFuncIndex = uploadList.indexOf(upload)
                     if (fileFuncIndex != -1) {

@@ -33,6 +33,32 @@ module.exports = (filePath, sessionData) => {
                 return;
             }
 
+            if (['.mp3', '.ogg', '.wav', '.flac'].includes(ext)) {
+                const mm = require('music-metadata');
+                const metadata = await mm.parseFile(filePath);
+                const stats = fs.statSync(filePath);
+
+                const fileInfo = {
+                    duration: metadata.format.duration,
+                    bitrate: metadata.format.bitrate,
+                    weight: stats.size
+                };
+
+                const dbuser = (await dbinteract.getUserBySessionData(sessionData.type, sessionData.key)).user.login;
+                const result = await dbinteract.createPost(save_file_name + ext, fileInfo, dbuser);
+
+                const systemTags = ['audio'];
+                if (fileInfo.bitrate >= 192000) systemTags.push('high_quality');
+                if (metadata.common.genre) systemTags.push(...metadata.common.genre.split(/\s*,\s*/));
+
+                await dbinteract.updateTags(result.id, systemTags);
+                resolve(result.rslt === 's'
+                    ? new Response('s', `Audio Post #${result.id} created`, { postID: result.id })
+                    : { rslt: 's', msg: `Error: ${result.msg}` });
+
+                return;
+            }
+
             if (!['.mp4', '.mov', '.avi', '.mkv'].includes(ext)) {
                 resolve({ rslt: 'e', msg: `Unsupported filetype [${ext}]!` });
                 return;

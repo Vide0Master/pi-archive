@@ -27,11 +27,14 @@ const fileFilter = (req, file, cb) => {
     const ext = path.extname(file.originalname).toLowerCase();
     const allowedImageExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
     const allowedVideoExtensions = ['.mp4', '.mov', '.avi', '.mkv'];
+    const allowedAudioExtensions = ['.mp3', '.ogg', '.wav', '.flac']
 
     if (allowedImageExtensions.includes(ext)) {
         req.fileSizeLimit = 50 * 1024 * 1024;
     } else if (allowedVideoExtensions.includes(ext)) {
-        req.fileSizeLimit = 1 * 1024 * 1024 * 1024;
+        req.fileSizeLimit = 5 * 1024 * 1024 * 1024;
+    } else if (allowedAudioExtensions.includes(ext)) {
+        req.fileSizeLimit = 25 * 1024 * 1024
     } else {
         return cb(new Error('Unsupported filetype'), false);
     }
@@ -111,6 +114,9 @@ app.post('/upload', checkUserPermissionUpload, (req, res, next) => {
         }
 
         const fileResult = await sysController.fileProcessor(req.file.path, { type: "WEB", key: req.headers['user-key'] })
+        if(fileResult.rslt=='e'){
+            cmd(`${fileResult.rslt}/${fileResult.msg}`)
+        }
         res.send(JSON.stringify(fileResult));
     })
 })
@@ -190,6 +196,7 @@ app.get('/file', async (req, res) => {
 
     const isImage = mimeType.startsWith('image/');
     const isVideo = mimeType.startsWith('video/');
+    const isAudio = mimeType.startsWith('audio/');
     const originalHeight = JSON.parse(postData.post.size).y;
 
     if (sysController.fileCacheController.checkAvailabilty(fileCacheKey)) {
@@ -197,7 +204,7 @@ app.get('/file', async (req, res) => {
         const fileSize = cachedFile.length;
 
         const isThumbnail = fileCacheKey.startsWith('thumb@');
-        const isResized = fileCacheKey.startsWith('h')
+        const isResized = fileCacheKey.startsWith('h');
         const responseMimeType = isThumbnail || isResized ? 'image/jpeg' : mimeType
 
         const range = req.headers.range;
@@ -299,6 +306,8 @@ app.get('/file', async (req, res) => {
                 });
 
                 mimeType = 'image/jpeg';
+            }else if(isAudio){
+                return res.status(405).send('<h1>405</h1>Cant make preview for sound')
             }
         } catch (e) {
             const errorType = isImage ? 'image' : 'video';

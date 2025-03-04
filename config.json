@@ -2,9 +2,9 @@
     "DEVMODE": false,
     "AUDITCONTROL": "MOVE",
     "version": {
-        "Server": "b0.2.2",
+        "Server": "b0.3.1",
         "DB": "b1.5",
-        "Webpage": "b0.4.14",
+        "Webpage": "b0.5.1",
         "TGbot": "b0.2.4"
     },
     "user_status": {

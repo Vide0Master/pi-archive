@@ -63,7 +63,8 @@
                 "CC": "Comments count",
                 "newPost": "NEW",
                 "video": "Video",
-                "duration":"s",
+                "audio": "Audio",
+                "duration": "s",
                 "LTA": [
                     "NO TAGS",
                     "NOT ENOUGH TAGS"
@@ -279,7 +280,7 @@
                         "present": "Source(s)"
                     },
                     "size": "Size",
-                    "duration":"Duration",
+                    "duration": "Duration",
                     "fileFormat": {
                         "filetype": "File type",
                         "tgAudioWarn": "This video can be displayed without sound because of how Telegram processes GIFs that are downloaded.\n(they all are be downloaded as MP4 without sound)"

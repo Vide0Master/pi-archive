@@ -216,7 +216,7 @@ async function processCollection(id) {
     for (const post of post_list) {
         let page
         if (['MP4', 'MOV', 'AVI', 'MKV'].includes(post.file.split('.').pop().toUpperCase())) {
-            page = createVideoPlayer(`/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${post.id}`, pages_container)
+            page = createMeadiaPlayer(`/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${post.id}`, pages_container)
             pages.push(page)
             pageInitiators.push(() => { })
             continue
