@@ -384,6 +384,7 @@ img {
         gap: 0.5em;
         align-items: center;
         justify-content: center;
+        z-index: 2;
 
         .slider-container {
             position: relative;
@@ -429,7 +430,7 @@ img {
 
                 .timing-control {
                     position: absolute;
-                    bottom: calc(100% + 0.25em);
+                    top: calc(100% + 0.25em);
                     left: 50%;
                     transform: translateX(-50%);
                     background-color: rgba(0, 0, 0, 0.7);
@@ -512,7 +513,7 @@ img {
 
                     .volume-val-overly {
                         position: absolute;
-                        bottom: calc(100% + 0.25em);
+                        top: calc(100% + 0.25em);
                         left: 50%;
                         transform: translateX(-50%);
                         background-color: rgba(0, 0, 0, 0.7);
@@ -577,11 +578,11 @@ img {
 
     &.slim {
         .control-bar {
-            grid-template-columns: auto auto 1fr auto auto;
+            grid-template-columns: auto auto 1fr auto;
             grid-template-rows: auto;
             grid-template-areas:
-                "play-pause volume progress timer fullscreen";
-            padding: 0.5em;
+                "play-pause volume progress timer close";
+            padding: 0.15em 0.25em;
             //gap: 0.25em;
         }
     }

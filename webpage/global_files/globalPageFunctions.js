@@ -360,6 +360,15 @@ function createPostCard(postData, noClickReaction) {
         lnkElem.className = 'link'
         const sTags = new URLSearchParams(window.location.search).get('tags')
         lnkElem.href = `/view?id=${postData.id}${sTags ? `&tags=${sTags}` : ''}`
+
+        if (['mp3', 'ogg', 'wav', 'flac'].includes(fileExt)) {
+            lnkElem.addEventListener('click', (e) => {
+                if (e.target === lnkElem && e.shiftKey) {
+                    e.preventDefault()
+                    musicController.startPlayerInHeader(`/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${postData.id}`)
+                }
+            })
+        }
     }
 
     if (['mp3', 'ogg', 'wav', 'flac'].includes(fileExt)) {
@@ -585,13 +594,21 @@ function createMeadiaPlayer(url, parent, type = 'video', slim = false) {
     const playPauseButton = createDiv('play-pause', controlBar);
     playPauseButton.attributeStyleMap.set('--lnk', 'url(video-play.svg)')
 
+    mediaElem.addEventListener('play', () => {
+        playPauseButton.attributeStyleMap.set('--lnk', 'url(video-pause.svg)')
+    })
+    mediaElem.addEventListener('pause', () => {
+        playPauseButton.attributeStyleMap.set('--lnk', 'url(video-play.svg)')
+    })
+
     function videoPlayPause() {
         if (mediaElem.paused) {
             mediaElem.play();
-            playPauseButton.attributeStyleMap.set('--lnk', 'url(video-pause.svg)')
+            if (type == 'audio') {
+                musicController.listenTo(mediaElem, url)
+            }
         } else {
             mediaElem.pause();
-            playPauseButton.attributeStyleMap.set('--lnk', 'url(video-play.svg)')
         }
     }
 
@@ -735,8 +752,91 @@ function createMeadiaPlayer(url, parent, type = 'video', slim = false) {
         rstAnim()
     })
 
-    return mediaCont;
+    if (musicController.link == url) {
+        musicController.tryToResume(mediaElem)
+
+        musicController.playerRemove()
+
+        musicController.listenTo(mediaElem, url)
+    }
+
+    return { cont: mediaCont, player: mediaElem, controls: controlBar };
 }
+
+//region music controller
+class musicController {
+    static startPlayerInHeader(link) {
+        if (this.player) {
+            this.playerRemove()
+        }
+
+        const header = document.querySelector('header')
+        this.player = createMeadiaPlayer(link, header, 'audio', true)
+        this.link = link
+        const close = createDiv('close', this.player.controls)
+        close.innerText = '✖'
+        close.addEventListener('click', () => {
+            this.playerRemove()
+        })
+
+        this.listenTo(this.player.player, link)
+    }
+
+    static listenTo(player, link) {
+        sessionStorage.setItem('currentHeaderMusic', link)
+        player.addEventListener('timeupdate', () => {
+            sessionStorage.setItem('currentHeaderMusicTiming', player.currentTime)
+            sessionStorage.setItem('currentHeaderMusicState', 'play')
+        })
+        player.addEventListener('play', () => { sessionStorage.setItem('currentHeaderMusicState', 'play') })
+        player.addEventListener('pause', () => { sessionStorage.setItem('currentHeaderMusicState', 'pause') })
+    }
+
+    static tryToResume(elem) {
+        const link = sessionStorage.getItem('currentHeaderMusic')
+        const time = sessionStorage.getItem('currentHeaderMusicTiming')
+        const state = sessionStorage.getItem('currentHeaderMusicState')
+
+        if (!!link) {
+            this.startPlayerInHeader(link)
+
+            if (!!time) {
+                if (elem) {
+                    elem.currentTime = time
+                } else {
+                    this.player.player.currentTime = time
+                }
+            }
+
+            if (!!state) {
+                // if (elem) {
+                //     if (state == 'pause') {
+                //         elem.pause()
+                //     } else {
+                //         elem.play()
+                //     }
+                // } else {
+                //     if (state == 'pause') {
+                //         this.player.player.pause()
+                //     } else {
+                //         this.player.player.play()
+                //     }
+                // }
+            }
+        }
+    }
+
+    static playerRemove() {
+        this.player.cont.remove()
+        delete this.player
+        delete this.link
+        sessionStorage.removeItem('currentHeaderMusic')
+        sessionStorage.removeItem('currentHeaderMusicTiming')
+        sessionStorage.removeItem('currentHeaderMusicState')
+    }
+}
+
+musicController.tryToResume()
 
 try {
     setFooterText()
