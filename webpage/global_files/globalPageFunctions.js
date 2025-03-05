@@ -41,10 +41,6 @@ if (localStorage.getItem('userKey') || sessionStorage.getItem('userKey')) setHea
 if (localStorage.getItem('showIntro') == null) localStorage.setItem('showIntro', true)
 
 function tryIntro() {
-    if (parseInt(localStorage.getItem('introComplete')) > Date.now() - 1000 * 60 * 60 * 6) {
-        localStorage.setItem('introComplete', Date.now())
-        return
-    }
     if (['/welcome/', '/login/', '/register/'].includes(window.location.pathname)) return
 
     const html = document.querySelector('html')
@@ -81,11 +77,20 @@ function tryIntro() {
         html.removeAttribute('style')
         container.remove()
         localStorage.setItem('introComplete', Date.now())
+
+        tryCelebration()
     })
 }
 
 if (localStorage.getItem('showIntro') === 'true') {
-    tryIntro()
+    if (parseInt(localStorage.getItem('introComplete')) > Date.now() - 1000 * 60 * 60 * 6) {
+        localStorage.setItem('introComplete', Date.now())
+        tryCelebration()
+    } else {
+        tryIntro()
+    }
+} else {
+    tryCelebration()
 }
 
 //region head buttons
@@ -1975,6 +1980,62 @@ function createChristmasSnowflakes() {
 
 if ([11, 0, 1].includes(new Date().getMonth())) {
     createChristmasSnowflakes();
+}
+
+function celebration(text, color) {
+    const celebContainer = createDiv('celebration', document.querySelector('body'));
+    celebContainer.style.setProperty("--outline-clr", color);
+    const html = document.querySelector('html')
+    html.style.overflow = 'hidden'
+
+    for (i = 0; i < 300; i++) {
+        const confetti = createDiv('confetti', celebContainer)
+
+        const colors = ["red", "blue", "yellow", "green", "purple", "orange"];
+        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+        const randomX = (Math.random() - 0.5) * 100;
+        const randomY = (Math.random() - 0.5) * 100;
+        const randomRotate = Math.random() * 360;
+        const randomDuration = Math.random() * 4 + 2;
+
+        confetti.style.setProperty("--confetti-color", randomColor);
+        confetti.style.setProperty("--random-x", randomX + "vw");
+        confetti.style.setProperty("--random-y", randomY + "vh");
+        confetti.style.setProperty("--random-rotate", randomRotate + "deg");
+        confetti.style.setProperty("--duration", randomDuration + "s");
+    }
+
+    const celebText = createDiv('celeb-text', celebContainer)
+    celebText.innerText = text.toUpperCase()
+
+    celebContainer.addEventListener('animationend', (e) => {
+        if (e.target == celebContainer) {
+            html.removeAttribute('style')
+            celebContainer.remove()
+        }
+    })
+}
+
+function tryCelebration() {
+    const celebrations = {
+        '03-08': ['happy 8th march!', 'pink'],
+        '03-10': ['happy birthday, videomaster!', 'gold'],
+        '06-28': ['happy birthday, pi-archive!', 'gold']
+    };
+
+    const today = new Date();
+    const formattedDate = today.toLocaleDateString('en-CA', { month: '2-digit', day: '2-digit' });
+    const storedDate = localStorage.getItem('lastCelebrationDate');
+    
+    if (storedDate !== formattedDate) {
+        localStorage.removeItem('lastCelebrationShown');
+    }
+    
+    if (celebrations[formattedDate] && !localStorage.getItem('lastCelebrationShown')) {
+        celebration(...celebrations[formattedDate]);
+        localStorage.setItem('lastCelebrationShown', 'true');
+        localStorage.setItem('lastCelebrationDate', formattedDate);
+    }
 }
 
 //region RIP

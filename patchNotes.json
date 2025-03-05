@@ -1,6 +1,24 @@
 [
     {
         "versions": {
+            "Server": "",
+            "DB": "",
+            "Webpage": "b0.5.2",
+            "TGbot": ""
+        },
+        "date": "06.03.2025",
+        "updates": [
+            {
+                "text": "Celebrations for some occasions",
+                "tag": "new",
+                "services": [
+                    "Webpage"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
             "Server": "b0.3.1",
             "DB": "",
             "Webpage": "b0.5.1",
