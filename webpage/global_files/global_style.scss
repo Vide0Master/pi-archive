@@ -384,6 +384,7 @@ img {
         gap: 0.5em;
         align-items: center;
         justify-content: center;
+        z-index: 2;
 
         .slider-container {
             position: relative;
@@ -429,7 +430,7 @@ img {
 
                 .timing-control {
                     position: absolute;
-                    bottom: calc(100% + 0.25em);
+                    top: calc(100% + 0.25em);
                     left: 50%;
                     transform: translateX(-50%);
                     background-color: rgba(0, 0, 0, 0.7);
@@ -512,7 +513,7 @@ img {
 
                     .volume-val-overly {
                         position: absolute;
-                        bottom: calc(100% + 0.25em);
+                        top: calc(100% + 0.25em);
                         left: 50%;
                         transform: translateX(-50%);
                         background-color: rgba(0, 0, 0, 0.7);
@@ -555,13 +556,13 @@ img {
         .control-bar {
             opacity: 0;
 
-            .full-screen{
+            .full-screen {
                 display: none;
             }
         }
     }
 
-    &.audio-player{
+    &.audio-player {
 
         .control-bar {
             position: relative;
@@ -569,19 +570,19 @@ img {
             padding: 0.75em;
             border-radius: 0.5em;
 
-            .full-screen{
+            .full-screen {
                 display: none;
             }
         }
     }
 
-    &.slim{
+    &.slim {
         .control-bar {
-            grid-template-columns: auto auto 1fr auto auto;
+            grid-template-columns: auto auto 1fr auto;
             grid-template-rows: auto;
             grid-template-areas:
-                "play-pause volume progress timer fullscreen";
-                padding: 0.5em;
+                "play-pause volume progress timer close";
+            padding: 0.15em 0.25em;
             //gap: 0.25em;
         }
     }
@@ -2354,6 +2355,106 @@ input[type=checkbox] {
                 transform: translateX(var(--pos-x-10)) scale(var(--SF-size));
                 opacity: 0;
             }
+        }
+    }
+}
+
+.celebration {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    user-select: none;
+    overflow: hidden;
+    z-index: 10;
+
+    backdrop-filter: blur(10px);
+    background-color: rgba(0, 0, 0, 0.9);
+
+    animation: celebIn 10s linear forwards;
+
+    .celeb-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: var(--outline-clr);
+        font-size: 3em;
+        background-color: #000;
+
+        padding: 0.5em;
+        border-radius: 0.3em;
+        opacity: 0;
+
+        text-align: center;
+
+        animation: textIn 2s 1s ease-in-out forwards;
+
+        @keyframes textIn {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -200%);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+                border: solid 0.1em var(--outline-clr);
+            }
+        }
+    }
+
+    .confetti {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        background-color: var(--confetti-color, red);
+        opacity: 0.8;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(0deg);
+        animation: confetti-fall var(--duration) 4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        opacity: 0;
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg);
+                opacity: 1;
+            }
+
+            20% {
+                transform: translate(calc(-50% + (var(--random-x))), calc(-50% + var(--random-y))) rotate(var(--random-rotate));
+                opacity: 1;
+            }
+
+            70% {
+                transform: translate(calc(-50% + (var(--random-x))), calc(-50% + var(--random-y))) rotate(var(--random-rotate));
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(calc(-50% + (var(--random-x) * 1.25)), calc(-50% + 50vh)) rotate(var(--random-rotate));
+                opacity: 0;
+            }
+        }
+    }
+
+    @keyframes celebIn {
+        0% {
+            opacity: 0;
+        }
+
+        10% {
+            opacity: 1;
+        }
+
+        90% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
         }
     }
 }
