@@ -3,6 +3,24 @@
         "versions": {
             "Server": "",
             "DB": "",
+            "Webpage": "b0.5.3",
+            "TGbot": ""
+        },
+        "date": "17.03.2025",
+        "updates": [
+            {
+                "text": "Broken dms",
+                "tag": "fix",
+                "services": [
+                    "Webpage"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
+            "Server": "",
+            "DB": "",
             "Webpage": "b0.5.2",
             "TGbot": ""
         },

@@ -6,6 +6,10 @@ html {
     scroll-behavior: smooth;
 }
 
+body {
+    margin: 0;
+}
+
 .intro-overlay {
     user-select: none;
     position: absolute;
