@@ -1630,6 +1630,9 @@ function createTagline(tag, params = { s: true, tedit: true }) {
     });
     linkElems.push(tagElem);
 
+    if (tag.group) tagElem.title = tag.group.name
+    console.log(tag)
+
     tagElem.style.color = originalColor
 
     if (tag.count > 0) {
