@@ -4,7 +4,7 @@
     "version": {
         "Server": "b0.3.1",
         "DB": "b1.5",
-        "Webpage": "b0.5.2",
+        "Webpage": "b0.5.3",
         "TGbot": "b0.2.4"
     },
     "user_status": {
@@ -82,6 +82,7 @@
             "post": 1,
             "addTags": 1,
             "setDesc": 1,
+            "group": 1,
             "testCommand": 4
         },
         "sessionTimeLimit": 604800000

@@ -416,7 +416,7 @@ async function MessageProcessor() {
 
             if (msgData.read != 1) {
                 if (msgData.to != DM.login) {
-                    onElementFullyVisible(msgCont, () => {
+                    onElementVisible(msgCont, () => {
                         WSSend('messageRead', { id: msgData.messageid, user: DM.login, status: 1 })
                     })
                 }

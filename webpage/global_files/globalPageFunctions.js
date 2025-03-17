@@ -361,14 +361,14 @@ function createPostCard(postData, noClickReaction) {
         const sTags = new URLSearchParams(window.location.search).get('tags')
         lnkElem.href = `/view?id=${postData.id}${sTags ? `&tags=${sTags}` : ''}`
 
-        if (['mp3', 'ogg', 'wav', 'flac'].includes(fileExt)) {
-            lnkElem.addEventListener('click', (e) => {
-                if (e.target === lnkElem && e.shiftKey) {
-                    e.preventDefault()
-                    musicController.startPlayerInHeader(`/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${postData.id}`)
-                }
-            })
-        }
+        // if (['mp3', 'ogg', 'wav', 'flac'].includes(fileExt)) {
+        //     lnkElem.addEventListener('click', (e) => {
+        //         if (e.target === lnkElem && e.shiftKey) {
+        //             e.preventDefault()
+        //             musicController.startPlayerInHeader(`/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${postData.id}`)
+        //         }
+        //     })
+        // }
     }
 
     if (['mp3', 'ogg', 'wav', 'flac'].includes(fileExt)) {
@@ -752,91 +752,8 @@ function createMeadiaPlayer(url, parent, type = 'video', slim = false) {
         rstAnim()
     })
 
-    if (musicController.link == url) {
-        musicController.tryToResume(mediaElem)
-
-        musicController.playerRemove()
-
-        musicController.listenTo(mediaElem, url)
-    }
-
     return { cont: mediaCont, player: mediaElem, controls: controlBar };
 }
-
-//region music controller
-class musicController {
-    static startPlayerInHeader(link) {
-        if (this.player) {
-            this.playerRemove()
-        }
-
-        const header = document.querySelector('header')
-        this.player = createMeadiaPlayer(link, header, 'audio', true)
-        this.link = link
-        const close = createDiv('close', this.player.controls)
-        close.innerText = '✖'
-        close.addEventListener('click', () => {
-            this.playerRemove()
-        })
-
-        this.listenTo(this.player.player, link)
-    }
-
-    static listenTo(player, link) {
-        sessionStorage.setItem('currentHeaderMusic', link)
-        player.addEventListener('timeupdate', () => {
-            sessionStorage.setItem('currentHeaderMusicTiming', player.currentTime)
-            sessionStorage.setItem('currentHeaderMusicState', 'play')
-        })
-        player.addEventListener('play', () => { sessionStorage.setItem('currentHeaderMusicState', 'play') })
-        player.addEventListener('pause', () => { sessionStorage.setItem('currentHeaderMusicState', 'pause') })
-    }
-
-    static tryToResume(elem) {
-        const link = sessionStorage.getItem('currentHeaderMusic')
-        const time = sessionStorage.getItem('currentHeaderMusicTiming')
-        const state = sessionStorage.getItem('currentHeaderMusicState')
-
-        if (!!link) {
-            this.startPlayerInHeader(link)
-
-            if (!!time) {
-                if (elem) {
-                    elem.currentTime = time
-                } else {
-                    this.player.player.currentTime = time
-                }
-            }
-
-            if (!!state) {
-                // if (elem) {
-                //     if (state == 'pause') {
-                //         elem.pause()
-                //     } else {
-                //         elem.play()
-                //     }
-                // } else {
-                //     if (state == 'pause') {
-                //         this.player.player.pause()
-                //     } else {
-                //         this.player.player.play()
-                //     }
-                // }
-            }
-        }
-    }
-
-    static playerRemove() {
-        this.player.cont.remove()
-        delete this.player
-        delete this.link
-        sessionStorage.removeItem('currentHeaderMusic')
-        sessionStorage.removeItem('currentHeaderMusicTiming')
-        sessionStorage.removeItem('currentHeaderMusicState')
-    }
-}
-
-musicController.tryToResume()
 
 try {
     setFooterText()
@@ -1982,6 +1899,7 @@ if ([11, 0, 1].includes(new Date().getMonth())) {
     createChristmasSnowflakes();
 }
 
+//region celebration
 function celebration(text, color) {
     const celebContainer = createDiv('celebration', document.querySelector('body'));
     celebContainer.style.setProperty("--outline-clr", color);
@@ -2016,21 +1934,22 @@ function celebration(text, color) {
     })
 }
 
+//region try celebrate
 function tryCelebration() {
     const celebrations = {
         '03-08': ['happy 8th march!', 'pink'],
-        '03-10': ['happy birthday, videomaster!', 'gold'],
-        '06-28': ['happy birthday, pi-archive!', 'gold']
+        '03-10': ['happy birthday to videomaster!', 'gold'],
+        '06-28': ['happy birthday to pi-archive!', 'gold']
     };
 
     const today = new Date();
     const formattedDate = today.toLocaleDateString('en-CA', { month: '2-digit', day: '2-digit' });
     const storedDate = localStorage.getItem('lastCelebrationDate');
-    
+
     if (storedDate !== formattedDate) {
         localStorage.removeItem('lastCelebrationShown');
     }
-    
+
     if (celebrations[formattedDate] && !localStorage.getItem('lastCelebrationShown')) {
         celebration(...celebrations[formattedDate]);
         localStorage.setItem('lastCelebrationShown', 'true');

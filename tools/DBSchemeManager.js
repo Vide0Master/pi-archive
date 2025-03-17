@@ -3,7 +3,6 @@ const db = new sqlite3.Database('./storage/data.db');
 const fs = require('fs').promises;
 const cmd = (txt) => { require('../core/consoleLogger')(txt, [{ txt: 'DB', txtc: 'red', txtb: 'white' }]) };
 
-// Helper function to execute SQL queries and handle errors
 async function dbRun(sql) {
     return new Promise((resolve, reject) => {
         db.run(sql, (err) => {
@@ -13,7 +12,6 @@ async function dbRun(sql) {
     });
 }
 
-// Generate CREATE TABLE SQL from schema definition
 function generateCreateTableSQL(tableName, tableDef) {
     const columns = [];
     for (const [colName, colDef] of Object.entries(tableDef.columns)) {
@@ -31,7 +29,6 @@ function generateCreateTableSQL(tableName, tableDef) {
     return `CREATE TABLE ${tableName} (${columns.join(', ')}) ${options.join(', ')}`.trim();
 }
 
-// Generate INSERT statement for migrating data during table alteration
 function generateInsertSQL(newTableName, tempTableName, newColumns, oldColumns) {
     const insertColumns = [];
     const selectColumns = [];
@@ -46,7 +43,6 @@ function generateInsertSQL(newTableName, tempTableName, newColumns, oldColumns) 
     return `INSERT INTO ${newTableName} (${insertColumns.join(', ')}) SELECT ${selectColumns.join(', ')} FROM ${tempTableName};`;
 }
 
-// Alter table by recreating it with new schema and migrating data
 async function alterTable(tableName, newTableDef, currentTableDef) {
     const tempTableName = `sqlitestudio_temp_${tableName}`;
     const statements = [
@@ -63,7 +59,6 @@ async function alterTable(tableName, newTableDef, currentTableDef) {
     }
 }
 
-// Retrieve current schema from the database
 async function getCurrentSchema() {
     const currentSchema = {
         DBversion: '',
@@ -91,7 +86,6 @@ async function getCurrentSchema() {
         }
     }
 
-    // Retrieve tables
     const tables = await new Promise(resolve => {
         db.all(`SELECT name, sql FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'`, (err, rows) => {
             if (!err) resolve(rows);
@@ -106,7 +100,6 @@ async function getCurrentSchema() {
         cmd(`s/Got data of ${tables.length} tables`);
     }
 
-    // Process tables
     for (const table of tables) {
         cmd(`i/Processing table "${table.name}"`);
         const tableData = await new Promise(resolve => {
@@ -153,7 +146,6 @@ async function getCurrentSchema() {
         };
     }
 
-    // Retrieve triggers
     const triggers = await new Promise(resolve => {
         db.all(`SELECT name, sql, tbl_name as tableName FROM sqlite_master WHERE type = 'trigger'`, (err, rows) => {
             if (!err) resolve(rows);
@@ -168,7 +160,6 @@ async function getCurrentSchema() {
         cmd(`s/Got ${triggers.length} triggers`);
     }
 
-    // Process triggers
     for (const trigger of triggers) {
         currentSchema.triggers[trigger.name] = {
             sql: trigger.sql,
@@ -180,7 +171,6 @@ async function getCurrentSchema() {
     return currentSchema;
 }
 
-// Update DBSCHEMA.json with the current database schema
 async function updateSchema() {
     const currentSchema = await getCurrentSchema();
     const jsonData = JSON.stringify(currentSchema, null, 4);
@@ -188,12 +178,9 @@ async function updateSchema() {
     cmd('s/Schema saved to DBSCHEMA.json file!');
 }
 
-// Set the database schema based on DBSCHEMA.json
 async function setDBSchema() {
     const newSchema = JSON.parse(await fs.readFile('./DBSCHEMA.json', 'utf8'));
     const currentSchema = await getCurrentSchema();
-
-
 
     const isSameVersion = currentSchema.DBversion === newSchema.DBversion;
     if (isSameVersion) {
@@ -204,7 +191,6 @@ async function setDBSchema() {
         await fs.copyFile('./storage/data.db', `./storage/DBCOPY-VER[${currentSchema.DBversion}].db`)
     }
 
-    // Process tables
     for (const [tableName, newTableDef] of Object.entries(newSchema.tables)) {
         if (!currentSchema.tables[tableName]) {
             cmd(`w/TABLE ${tableName} is missing!`);
@@ -216,7 +202,6 @@ async function setDBSchema() {
             const currentTableDef = currentSchema.tables[tableName];
             let needsAlter = false;
 
-            // Check columns
             for (const [colName, newColDef] of Object.entries(newTableDef.columns)) {
                 if (!currentTableDef.columns[colName]) {
                     cmd(`w/COLUMN ${tableName}.${colName} is missing!`);
@@ -232,7 +217,6 @@ async function setDBSchema() {
                 }
             }
 
-            // Check for extra parameters in the current schema
             for (const [colName, currentColDef] of Object.entries(currentTableDef.columns)) {
                 if (!newTableDef.columns[colName]) {
                     cmd(`w/COLUMN ${tableName}.${colName} is extra!`);
@@ -248,7 +232,6 @@ async function setDBSchema() {
                 }
             }
 
-            // Check table options
             if (newTableDef.strict !== currentTableDef.strict || newTableDef.withoutRowID !== currentTableDef.withoutRowID) {
                 cmd(`w/TABLE ${tableName} options differ!`);
                 needsAlter = true;
@@ -261,7 +244,6 @@ async function setDBSchema() {
         }
     }
 
-    // Drop extra tables
     for (const tableName of Object.keys(currentSchema.tables)) {
         if (!newSchema.tables[tableName]) {
             cmd(`w/TABLE ${tableName} is extra!`);
@@ -272,7 +254,6 @@ async function setDBSchema() {
         }
     }
 
-    // Handle triggers
     for (const [triggerName, newTrigger] of Object.entries(newSchema.triggers)) {
         if (!currentSchema.triggers[triggerName] || currentSchema.triggers[triggerName].sql !== newTrigger.sql) {
             cmd(`i/Updating trigger ${triggerName}...`);
@@ -305,8 +286,6 @@ async function setDBSchema() {
     db.close()
 }
 
-
-// Command-line execution
 if (require.main === module) {
     const args = process.argv.slice(2);
     if (args.includes('-updateSchema')) {
@@ -317,6 +296,5 @@ if (require.main === module) {
         console.log('Usage: node filename.js -updateSchema | -setDBSchema');
     }
 }
-
 
 module.exports = setDBSchema;
