@@ -3,9 +3,10 @@ const path = require('path');
 
 const directoryPath = __dirname; // Замените на путь к вашей директории
 const excludedFiles = ['package-lock.json', 'package.json', 'countAllLines.js', 'template.db']; // Замените на файлы, которые хотите исключить
-const excludedDirs = ['storage', 'node_modules','.git']; // Замените на папки, которые хотите исключить
+const excludedDirs = ['storage', 'node_modules', '.git']; // Замените на папки, которые хотите исключить
 
 let totalLines = 0;
+let totalFiles = 0;
 
 const countLinesInFile = (filePath) => {
     return new Promise((resolve, reject) => {
@@ -53,6 +54,7 @@ const processDirectory = async (dirPath) => {
                     const lines = await countLinesInFile(filePath);
                     console.log('Processed ' + filePath + ' Lines: ' + lines)
                     totalLines += lines;
+                    totalFiles += 1;
                 }
             }
         }
@@ -63,6 +65,7 @@ const processDirectory = async (dirPath) => {
 
 processDirectory(directoryPath).then(() => {
     console.log(`Total number of lines: ${totalLines}`);
+    console.log(`Total number of files: ${totalFiles}`)
 }).catch(err => {
     console.error('Error:', err);
 });

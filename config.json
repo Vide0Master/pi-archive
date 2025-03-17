@@ -1,6 +1,7 @@
 {
     "DEVMODE": false,
     "AUDITCONTROL": "MOVE",
+    "WEBAUTOREGISTERKEY":"I got invited by VMTech SEO VideoMaster, please let me in.",
     "version": {
         "Server": "b0.3.1",
         "DB": "b1.5",
