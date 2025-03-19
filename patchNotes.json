@@ -3,6 +3,24 @@
         "versions": {
             "Server": "",
             "DB": "",
+            "Webpage": "b0.5.4",
+            "TGbot": ""
+        },
+        "date": "19.03.2025",
+        "updates": [
+            {
+                "text": "Custom themes (availble profile page in theme change dropdown)",
+                "tag": "new",
+                "services": [
+                    "Webpage"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
+            "Server": "",
+            "DB": "",
             "Webpage": "b0.5.3",
             "TGbot": ""
         },

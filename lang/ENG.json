@@ -442,7 +442,23 @@
                             "dark": "Dark",
                             "egypt": "Egypt",
                             "nature": "Nature",
-                            "pony": "Pony"
+                            "pony": "Pony",
+                            "custom": "Custom"
+                        },
+                        "editor":{
+                            "label":"Custom theme editor",
+                            "colors":{
+                                "color1":"Background",
+                                "color2":"Background accent",
+                                "color3":"Bright accent",
+                                "font-color1":"Main font",
+                                "font-color2":"Secondary font",
+                                "font-color3":"Additional font",
+                                "font-hover":"Font highlight",
+                                "interact-passive":"Interact passive",
+                                "interact-active":"Interact active",
+                                "interact-focus":"Interact focus"
+                            }
                         }
                     },
                     "PPP": "Posts per page",

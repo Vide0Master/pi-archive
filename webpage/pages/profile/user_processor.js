@@ -248,13 +248,95 @@ async function showActions(userData, activeUser) {
         let themelist = []
         themelist = themelist.concat(colorSchemesList)
         for (const i in themelist) {
-            themelist[i].name = profileLang.actions.theme.themes[themelist[i].value]
+            themelist[i].name = profileLang.actions.theme.themes[themelist[i].value] || themelist[i].value
         }
         container.appendChild(
-            createSelect(themelist, profileLang.actions.theme.sel + `: ${profileLang.actions.theme.themes[localStorage.getItem('theme')]}`, async (sel) => {
-                request('controlUserSettings', { type: 'update', update: { theme: sel } })
-                localStorage.setItem('theme', sel)
-                setTheme()
+            createSelect(themelist, profileLang.actions.theme.sel + `: ${profileLang.actions.theme.themes[localStorage.getItem('theme')] || profileLang.actions.theme.themes.custom}`, async (sel) => {
+                if (sel == 'custom') {
+                    const notfCont = new Notify('', '', 'var(--color3)', 'custom')
+
+                    const colorTable = [
+                        { name: profileLang.actions.theme.editor.colors['color1'], value: '--color1' },
+                        { name: profileLang.actions.theme.editor.colors['color2'],value: '--color2' },
+                        { name: profileLang.actions.theme.editor.colors['color3'],value: '--color3' },
+                        { name: profileLang.actions.theme.editor.colors['font-color1'], value: '--font-color1' },
+                        { name: profileLang.actions.theme.editor.colors['font-color2'], value: '--font-color2' },
+                        { name: profileLang.actions.theme.editor.colors['font-color3'], value: '--font-color3' },
+                        { name: profileLang.actions.theme.editor.colors['font-hover'], value: '--font-hover' },
+                        { name: profileLang.actions.theme.editor.colors['interact-passive'], value: '--interact-passive' },
+                        { name: profileLang.actions.theme.editor.colors['interact-active'], value: '--interact-active' },
+                        { name: profileLang.actions.theme.editor.colors['interact-focus'], value: '--interact-focus' },
+                    ]
+
+                    const elemsContainer = createDiv('alert-theme-editor', notfCont.notificationElem)
+
+                    const headLabel = createDiv('label',elemsContainer)
+                    headLabel.innerText=profileLang.actions.theme.editor.label
+
+                    const colorsList = createDiv('custom-theme-container', elemsContainer)
+
+                    const currentStyles = getComputedStyle(document.documentElement);
+
+                    let customStyleElem = document.getElementById('custom-style-elem')
+                    if (!customStyleElem) {
+                        customStyleElem = document.createElement('style')
+                        customStyleElem.id = 'custom-style-elem'
+                        const link = document.getElementById("theme-style")
+                        link.insertAdjacentElement('afterend', customStyleElem)
+                    }
+
+                    function updateCustomStyles() {
+                        customStyleElem.innerText = ':root{'
+                        for (const color of colorTable) {
+                            customStyleElem.innerText += `${color.value}: ${color.elem.value};`
+                        }
+                        customStyleElem.innerText += '}'
+                    }
+
+                    for (const colorID in colorTable) {
+                        const color = colorTable[colorID]
+                        const listElem = createDiv('colorListElem', colorsList)
+
+                        const label = createDiv('label', listElem)
+                        label.innerText = color.name
+
+                        const colorSelector = document.createElement('input')
+                        colorSelector.type = 'color'
+                        listElem.appendChild(colorSelector)
+
+                        colorSelector.value = currentStyles.getPropertyValue(color.value)
+
+                        colorTable[colorID].elem = colorSelector
+
+                        colorSelector.addEventListener('input', updateCustomStyles)
+                    }
+
+                    const controlField = createDiv('button-row', elemsContainer)
+
+                    const reject = createDiv('cancel-button', controlField)
+                    reject.innerText = '✖'
+                    reject.addEventListener('click', () => {
+                        notfCont.remove()
+                        customStyleElem.remove()
+                    })
+
+                    const accept = createDiv('confirm-button', controlField)
+                    accept.innerText = '✔'
+                    accept.addEventListener('click', () => {
+                        const stylesMap = {}
+                        for (const color of colorTable) {
+                            stylesMap[color.value] = color.elem.value
+                        }
+                        request('controlUserSettings', { type: 'update', update: { theme: JSON.stringify(stylesMap) } })
+                        localStorage.setItem('theme', JSON.stringify(stylesMap))
+                        notfCont.remove()
+                    })
+
+                } else {
+                    request('controlUserSettings', { type: 'update', update: { theme: sel } })
+                    localStorage.setItem('theme', sel)
+                    setTheme()
+                }
             })
         )
 
