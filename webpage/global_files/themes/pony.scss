@@ -1,21 +1,19 @@
 :root {
-    // Цветовая палитра
-    --color1: #521c61; // Светлый пастельный розовый
-    --color2: #67288e; // Легкий сиреневый
-    --color3: #c04278; // Пастельный розовый акцент
-    --color4: #ffffff; // Белый
+    --color1: #521c61;
+    --color2: #67288e;
+    --color3: #c04278;
+    --color4: #ffffff;
 
-    --font-color1: #ffffff; // Основной цвет текста
-    --font-color2: #000000; // Розовый хайлайт
-    --font-color3: #a6a6a6; // Для второстепенного текста
-    --font-hover: #d1238b;  // Мягкий розовый для наведения
+    --font-color1: #ffffff;
+    --font-color2: #000000;
+    --font-color3: #a6a6a6;
+    --font-hover: #d1238b;
 
-    --interact-passive: var(--color2); // Пассивные элементы
-    --interact-active: #ffacd3;       // Активные элементы
-    --interact-focus: var(--color3);  // Фокус
+    --interact-passive: var(--color2);
+    --interact-active: #ffacd3;
+    --interact-focus: var(--color3);
 }
 
-// Специальные стили
 .norma-page-container {
     background-color: var(--color1);
 

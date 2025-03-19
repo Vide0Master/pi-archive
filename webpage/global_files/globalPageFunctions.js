@@ -1762,7 +1762,8 @@ const colorSchemesList = [
     { name: 'dark', value: 'dark' },
     { name: 'egypt', value: 'egypt' },
     { name: 'nature', value: 'nature' },
-    { name: 'pony', value: 'pony' }
+    { name: 'pony', value: 'pony' },
+    { name: 'custom', value: 'custom' },
 ]
 
 function setTheme() {
@@ -1774,6 +1775,22 @@ function setTheme() {
     }
 
     const link = document.getElementById("theme-style");
+
+    try {
+        const themeList = JSON.parse(theme)
+        const styleElem = document.createElement('style')
+        styleElem.id = 'custom-style-elem'
+        link.insertAdjacentElement('afterend', styleElem)
+        styleElem.innerText = ':root{'
+        for (const ID in themeList) {
+            styleElem.innerText += `${ID}: ${themeList[ID]};`
+        }
+        styleElem.innerText += '}'
+        return
+    } catch { }
+
+    const customStyle = document.getElementById('custom-style-elem')
+    if(customStyle) customStyle.remove()
 
     if (link) {
         link.href = `themes/${theme}.css`;

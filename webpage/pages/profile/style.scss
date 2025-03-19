@@ -39,6 +39,7 @@
             padding: 0.5em;
             background-color: color-mix(in srgb, var(--color1), transparent 30%);
             height: fit-content;
+            backdrop-filter: blur(7px);
 
             .label {
                 font-size: 1.4em;
@@ -107,6 +108,7 @@
         background-color: color-mix(in srgb, var(--color1), transparent 30%);
         width: fit-content;
         gap: 0.3em;
+        backdrop-filter: blur(7px);
 
         .label {
             font-size: 1.4em;
@@ -146,5 +148,30 @@ main {
             mask-image: linear-gradient(to bottom, rgba(255, 255, 255, 1) 80%, rgba(255, 255, 255, 0));
             pointer-events: none;
         }
+    }
+}
+
+.alert-theme-editor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5em;
+
+    .custom-theme-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25em;
+        .colorListElem {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 0.5em;
+        }
+    }
+
+    .button-row {
+        display: flex;
+        flex-direction: row;
+        gap: 0.5em;
     }
 }
