@@ -281,8 +281,8 @@ select {
     border-radius: 0.2em;
     cursor: pointer;
     transition: background-color 0.2s, border 0.2s;
-    appearance: none; // Убирает стандартный стиль браузера
-    width: 100%; // Чтобы занимал всю ширину контейнера
+    appearance: none;
+    width: 100%;
     box-sizing: border-box;
 
     width: fit-content;
@@ -587,7 +587,6 @@ img {
             grid-template-areas:
                 "play-pause volume progress timer close";
             padding: 0.15em 0.25em;
-            //gap: 0.25em;
         }
     }
 
@@ -1885,7 +1884,7 @@ input[type=color] {
                 cursor: help;
                 opacity: 1;
                 color: var(--font-color1);
-                white-space: nowrap; // Предотвращает перенос текста
+                white-space: nowrap;
                 font-weight: bold;
             }
 

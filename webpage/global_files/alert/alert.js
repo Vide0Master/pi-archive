@@ -344,10 +344,6 @@ class Notify {
     }
 }
 
-// new Notify('Hello World', 5000, '#fff', 'inputLong', (result) => {
-//     new Notify(result, 5000, '#fff')
-// }, { placeholder: 'pass' })
-
 window.alert = (msg, time) => {
     let type = "";
     let message = msg;

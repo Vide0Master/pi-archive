@@ -1,5 +1,4 @@
 
-//создание сообщения
 const sysController = require('../systemController.js')
 
 module.exports = (db, messageData) => {

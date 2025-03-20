@@ -12,7 +12,7 @@ module.exports = (filePath, sessionData) => {
         try {
             const ext = path.extname(filePath).toLowerCase();
             const save_file_name = path.parse(filePath).name;
-            let finalVideoPath = filePath; // Исходный путь (может измениться после конвертации)
+            let finalVideoPath = filePath;
 
             if (['.jpg', '.jpeg', '.png', '.webp', '.gif'].includes(ext)) {
                 const metadata = await sharp(filePath).metadata();

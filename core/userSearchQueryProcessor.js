@@ -92,7 +92,6 @@ WHERE (row_num <= 5 OR row_num IS NULL)`;
         DBquery += ' ORDER BY id DESC';
     }
 
-    // Ограничения на количество постов и смещение
     if (count) {
         DBquery += ' LIMIT ?';
         params.push(count);

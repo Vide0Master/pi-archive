@@ -64,7 +64,6 @@ function setMediaSource(url, contentType) {
 
 //region Fetch and disp
 async function fetchAndDisplayFile(file_link, contentType) {
-    // Поскольку мы просто привязываем ссылку, нет необходимости в fetch
     setMediaSource(file_link, contentType);
 }
 

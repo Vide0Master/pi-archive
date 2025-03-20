@@ -30,7 +30,7 @@ function syncStructure(reference, target) {
             updated = true;
         } else if (typeof reference[key] === 'object' && reference[key] !== null && !Array.isArray(reference[key])) {
             if (typeof target[key] !== 'object' || target[key] === null) {
-                target[key] = {};  // Инициализируем как пустой объект, если target[key] не объект или null
+                target[key] = {};
                 updated = true;
             }
             if (syncStructure(reference[key], target[key])) {

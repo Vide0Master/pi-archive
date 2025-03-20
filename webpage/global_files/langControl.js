@@ -16,11 +16,11 @@ function setLang(lang) {
 
 function loadJSONSync(url) {
     const xhr = new XMLHttpRequest();
-    xhr.open("GET", url, false); // `false` делает запрос синхронным
+    xhr.open("GET", url, false);
     xhr.send(null);
 
     if (xhr.status === 200) {
-        return JSON.parse(xhr.responseText); // Преобразование JSON в объект
+        return JSON.parse(xhr.responseText);
     } else {
         console.error(`Ошибка загрузки JSON: ${xhr.statusText}`);
         return null;

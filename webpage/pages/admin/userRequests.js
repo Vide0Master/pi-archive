@@ -32,11 +32,11 @@ async function updateRequestList() {
                         <div class="main-data">
                             <div class="data">
                                 <div>ID#${user_request.messageid}</div>
-                                <div>Дата: ${user_request.timestamp}</div>
-                                <div>Тип запроса: ${user_request.msgtype}</div>
-                                <div>От: ${user_request.from}</div>
+                                <div>Date: ${user_request.timestamp}</div>
+                                <div>Request type: ${user_request.msgtype}</div>
+                                <div>From: ${user_request.from}</div>
                             </div>
-                            <div class="message">Сообщение: ${user_request.message}</div>
+                            <div class="message">Message: ${user_request.message}</div>
                         </div>`
 
         const action_row = document.createElement('div')

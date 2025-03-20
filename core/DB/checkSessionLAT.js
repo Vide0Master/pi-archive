@@ -40,6 +40,5 @@ module.exports = (db, type, key) => {
                         ))
                     })
             })
-
     })
 }

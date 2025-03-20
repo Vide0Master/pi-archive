@@ -1,4 +1,3 @@
-// utils/sendMessage.js
 module.exports = async (bot, chatId, text, replyToMessageId = null, reply_markup = null) => {
     try {
         const options = {
@@ -9,7 +8,6 @@ module.exports = async (bot, chatId, text, replyToMessageId = null, reply_markup
         };
         const sentMessage = await bot.sendMessage(chatId, text, options);
 
-        // Возвращает ID отправленного сообщения
         return sentMessage.message_id;
     } catch (error) {
         console.error('Error sending message:', error);

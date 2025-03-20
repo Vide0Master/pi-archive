@@ -2,7 +2,6 @@ const tgBotController = require('../tgBotController');
 const sysController = require('../../core/systemController')
 const path = require('path');
 
-// Функция для определения типа файла на основе его расширения
 const getFileType = (filename) => {
     const ext = path.extname(filename).toLowerCase();
     const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
