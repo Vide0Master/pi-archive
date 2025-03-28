@@ -3,6 +3,38 @@
         "versions": {
             "Server": "",
             "DB": "",
+            "Webpage": "b0.5.5",
+            "TGbot": ""
+        },
+        "date": "28.03.2025",
+        "updates": [
+            {
+                "text": "Changed appearence of tags",
+                "tag": "rework",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Removed + and - from /serach popular tags when no tags are present in search field",
+                "tag": "rework",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Name assinged tag group, when hovered on tag showed \"[object Object]\"",
+                "tag": "fix",
+                "services": [
+                    "Webpage"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
+            "Server": "",
+            "DB": "",
             "Webpage": "b0.5.4",
             "TGbot": ""
         },

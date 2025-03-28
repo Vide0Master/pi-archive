@@ -191,7 +191,7 @@ async function getGlobalTags(lim) {
 async function createTagSelector() {
     const taglist = await getGlobalTags(100)
 
-    const tagcol = document.querySelector('.tags')
+    const tagcol = document.querySelector('.tags-container .tags-list')
 
     for (const tag of taglist) {
         tagcol.appendChild(createTagline(tag))

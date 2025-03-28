@@ -1597,29 +1597,31 @@ function createTagline(tag, params = { s: true, tedit: true }) {
     if (tag.group) {
         originalColor = tag.group.color;
     }
+    tagline.attributeStyleMap.set('--tagColor', originalColor)
     const searchElem = document.getElementById('taglist')
-    if (params.tedit) {
-        const plusElem = createAction('+', tagline, () => {
-            const tagsList = searchElem.value.trim().split(/\s/).filter(val => val !== '')
-            tagsList.push(tag.tag)
-            searchElem.value = tagsList.join(' ')
-            if (params.s)
-                search(searchElem.value);
-        });
-        plusElem.style.color = originalColor
-        linkElems.push(plusElem);
-    }
 
-    if (params.tedit) {
-        const minusElem = createAction('-', tagline, () => {
-            const tagsList = searchElem.value.trim().split(/\s/).filter(val => val !== '')
-            tagsList.push("-" + tag.tag)
-            searchElem.value = tagsList.join(' ')
-            if (params.s)
-                search(searchElem.value);
-        });
-        linkElems.push(minusElem);
-        minusElem.style.color = originalColor
+    if (searchElem && searchElem.value != '') {
+        if (params.tedit) {
+            const plusElem = createAction('+', tagline, () => {
+                const tagsList = searchElem.value.trim().split(/\s/).filter(val => val !== '')
+                tagsList.push(tag.tag)
+                searchElem.value = tagsList.join(' ')
+                if (params.s)
+                    search(searchElem.value);
+            });
+            linkElems.push(plusElem);
+        }
+
+        if (params.tedit) {
+            const minusElem = createAction('−', tagline, () => {
+                const tagsList = searchElem.value.trim().split(/\s/).filter(val => val !== '')
+                tagsList.push("−" + tag.tag)
+                searchElem.value = tagsList.join(' ')
+                if (params.s)
+                    search(searchElem.value);
+            });
+            linkElems.push(minusElem);
+        }
     }
 
     const tagElem = createAction(tag.tag, tagline, () => {
@@ -1630,10 +1632,7 @@ function createTagline(tag, params = { s: true, tedit: true }) {
     });
     linkElems.push(tagElem);
 
-    if (tag.group) tagElem.title = tag.group.name
-    console.log(tag)
-
-    tagElem.style.color = originalColor
+    if (tag.group) tagElem.title = tag.group.name[CURRENTLANG]
 
     if (tag.count > 0) {
         const tagquantitty = document.createElement('div');
@@ -1790,7 +1789,7 @@ function setTheme() {
     } catch { }
 
     const customStyle = document.getElementById('custom-style-elem')
-    if(customStyle) customStyle.remove()
+    if (customStyle) customStyle.remove()
 
     if (link) {
         link.href = `themes/${theme}.css`;

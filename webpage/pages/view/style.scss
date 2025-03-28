@@ -345,21 +345,6 @@ main {
             .label {
                 font-size: 1.3em;
             }
-
-            .tagline {
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                gap: 0.25em;
-
-                a {
-                    text-decoration: none;
-                }
-
-                .tag-quantity {
-                    color: #808080;
-                }
-            }
         }
     }
 
