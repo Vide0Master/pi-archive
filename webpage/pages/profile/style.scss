@@ -2,12 +2,21 @@
     color: var(--font-color1);
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 1.2em;
     z-index: 2;
     position: relative;
 
-    .welcome_message_block {
+    .welcome-message-block {
         font-size: 2em;
+
+        background-color: color-mix(in srgb, var(--color1), transparent 30%);
+        backdrop-filter: blur(7px);
+
+        width: fit-content;
+
+        padding: 0.5em;
+        border-radius: 0.25em;
 
         .hello {
             display: inline-block;
@@ -22,79 +31,99 @@
 
     .user-card {
         display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: center;
         gap: 1em;
         width: 100%;
 
-        @media (max-width:700px) {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        .list-container {
-            display: flex;
-            flex-direction: column;
-            gap: 0.3em;
-            padding: 0.5em;
+        .user-avatar-container {
             background-color: color-mix(in srgb, var(--color1), transparent 30%);
-            height: fit-content;
             backdrop-filter: blur(7px);
 
-            .label {
-                font-size: 1.4em;
-            }
+            padding: 0.7em;
+            border-radius: 200px;
+            overflow: hidden;
+            max-width: 200px;
+            max-height: 200px;
 
-            .avatar-block {
-                max-height: 200px;
+            aspect-ratio: 1/1;
 
-                img,
-                video {
-                    max-height: 200px;
-                    max-width: 200px;
-                    cursor: pointer;
-                }
-            }
-
-            select {
+            .user-avatar-wrapper {
                 width: 100%;
-            }
+                height: 100%;
+                border-radius: 200px;
+                overflow: hidden;
 
-            .session-card {
-                border: 0.1em solid var(--color3);
-                padding: 0.3em;
-                border-radius: 0.3em;
-                display: flex;
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.2em;
+                .avatar-elem {
+                    width: 100%;
+                    height: 100%;
+                    overflow: hidden;
+                    display: grid;
+                    place-items: center;
 
-                &.current {
-                    border-color: greenyellow;
-                }
-
-                &.TG {
-                    border-color: deepskyblue;
-                }
-
-                .action-bar {
-                    display: flex;
-                    flex-direction: row;
-                    align-items: center;
+                    img,
+                    video {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        max-width: unset;
+                        max-height: unset;
+                    }
                 }
             }
         }
 
-        .experiments {
-            animation: expFadeIn 0.5s;
+        .user-nickname-container {
+            background-color: color-mix(in srgb, var(--color1), transparent 30%);
+            backdrop-filter: blur(7px);
 
-            @keyframes expFadeIn {
-                0% {
-                    opacity: 0;
+            padding: 0.5em 0.75em;
+            border-radius: 3em;
+
+            font-size: 1.5em;
+        }
+
+        .user-info-row {
+            display: flex;
+            flex-direction: row;
+            align-items: start;
+            gap: 1em;
+
+            @media (max-width:700px) {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .list-container {
+                display: flex;
+                flex-direction: column;
+                gap: 0.5em;
+                padding: 0.75em;
+                border-radius: 0.5em;
+                background-color: color-mix(in srgb, var(--color1), transparent 30%);
+                height: fit-content;
+                backdrop-filter: blur(7px);
+
+                .label {
+                    font-size: 1.4em;
                 }
 
-                100% {
-                    opacity: 1;
+                select {
+                    width: 100%;
+                }
+            }
+
+            .experiments {
+                animation: expFadeIn 0.5s;
+
+                @keyframes expFadeIn {
+                    0% {
+                        opacity: 0;
+                    }
+
+                    100% {
+                        opacity: 1;
+                    }
                 }
             }
         }
@@ -104,10 +133,11 @@
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        padding: 0.5em;
-        background-color: color-mix(in srgb, var(--color1), transparent 30%);
+        gap: 0.5em;
+        padding: 0.75em;
+        border-radius: 0.5em;
         width: fit-content;
-        gap: 0.3em;
+        background-color: color-mix(in srgb, var(--color1), transparent 30%);
         backdrop-filter: blur(7px);
 
         .label {
@@ -161,6 +191,7 @@ main {
         display: flex;
         flex-direction: column;
         gap: 0.25em;
+
         .colorListElem {
             display: flex;
             flex-direction: row;
@@ -173,5 +204,64 @@ main {
         display: flex;
         flex-direction: row;
         gap: 0.5em;
+    }
+}
+
+.sessions-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5em;
+
+    .label-row{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.5em;
+    }
+
+    .session-card {
+        border: 0.1em solid var(--color3);
+        padding: 0.3em;
+        border-radius: 0.3em;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5em;
+
+        background-color: var(--color2);
+        color: var(--font-color1);
+
+        width: 100%;
+        box-sizing: border-box;
+
+        .session-type{
+            mask-image: var(--session-type-img);
+            mask-repeat: no-repeat;
+            mask-size: contain;
+            height: 1.3em;
+            width: 1.3em;
+            background-color: var(--font-color1);
+            transition: 0.2s;
+
+            &:hover {
+                background-color: var(--font-hover);
+            }
+        }
+
+        &.current {
+            border-color: greenyellow;
+        }
+
+        &.TG {
+            border-color: deepskyblue;
+        }
+
+        .action-bar {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
     }
 }

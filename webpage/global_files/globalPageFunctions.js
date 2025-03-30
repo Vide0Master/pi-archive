@@ -1805,7 +1805,7 @@ function setTheme() {
 setTheme()
 
 //region create avatar element
-function createUserAvatarElem(postID, parent, isLinkToPost) {
+function createUserAvatarElem(postID, parent, isLinkToPost, Hquery) {
     if (postID) {
         const avatar_block = createDiv('avatar-elem')
         if (parent) parent.appendChild(avatar_block)
@@ -1818,7 +1818,7 @@ function createUserAvatarElem(postID, parent, isLinkToPost) {
                     case ['.jpg', '.jpeg', '.png', '.webp', '.gif'].some(end => avatarPostData.post.file.endsWith(end)): {
                         avatar = document.createElement('img')
                         avatar_block.appendChild(avatar)
-                        avatar.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${postID}${avatarPostData.post.file.endsWith('.gif') ? '' : "&thumb=true"}`
+                        avatar.src = `/file?userKey=${localStorage.getItem('userKey') || sessionStorage.getItem('userKey')}&id=${postID}${avatarPostData.post.file.endsWith('.gif') ? '' : Hquery ? '' : "&thumb=true"}${Hquery && !avatarPostData.post.file.endsWith('.gif') ? `&h=${Hquery}` : ''}`
                     }; break;
                     case ['.mp4', '.mov', '.avi', '.mkv'].some(end => avatarPostData.post.file.endsWith(end)): {
                         avatar = document.createElement('video');

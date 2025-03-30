@@ -32,15 +32,13 @@ async function processPage(userData, isActiveUser) {
         showActions(userData, activeUser)
     }
     if (userData.data.favs.length > 0) getFavs(userData.data.favs, !isActiveUser)
-    if (isActiveUser) showSessionControl()
     if (isActiveUser) addHiddenExperiments()
 }
 
 //region welcome txt
 async function showWelcomeText(login, isOwner) {
     const container = document.querySelector('.user-page-container')
-
-    const welcomeMessageContainer = container.querySelector('.welcome_message_block')
+    const welcomeMessageContainer = createDiv('welcome-message-block', container)
 
     const hello = createDiv("hello")
     welcomeMessageContainer.appendChild(hello)
@@ -50,7 +48,7 @@ async function showWelcomeText(login, isOwner) {
 
     welcomeMessageContainer.innerHTML += `, `
     if (isOwner) {
-        createUserName(login, welcomeMessageContainer, { link: false, popup: false, status: false })
+        createUserName(login, welcomeMessageContainer, { link: false, popup: false, status: true })
     } else {
         welcomeMessageContainer.innerHTML += profileLang.visitor
     }
@@ -58,19 +56,6 @@ async function showWelcomeText(login, isOwner) {
 
 //region user data
 function showUserData(userData) {
-    const user_card_block = document.querySelector('.user-card')
-
-    const container = createDiv('list-container')
-    user_card_block.appendChild(container)
-
-    if (!userData.isOwner) {
-        const label = createDiv('label')
-        container.appendChild(label)
-        label.innerText = `${profileLang.userData.label[0]} ${userData.data.login}`
-    }
-
-    createUserAvatarElem(userData.data.usersettings.ProfileAvatarPostID, container, true)
-
     if (userData.data.usersettings.ProfileBackgroundPostID) {
         const imgContainer = createDiv('imgContainer')
         const img = document.createElement('img')
@@ -80,32 +65,40 @@ function showUserData(userData) {
         document.querySelector('main').insertBefore(imgContainer, document.querySelector('.user-page-container'))
     }
 
-    const status = createDiv('status', container)
-    WSListener('userStatusUpdate', userData.data.login, (data) => {
-        status.innerHTML = Language.userActivityState[data.state]
-    })
-    WSSend('getUserActivity', { user: userData.data.login })
+    const contentContainer = document.querySelector('.user-page-container')
+    const user_card_block = createDiv('user-card', contentContainer)
+
+    const userAvatarContainer = createDiv('user-avatar-container', user_card_block)
+    const userAvatarWrapper = createDiv('user-avatar-wrapper', userAvatarContainer)
+    createUserAvatarElem(userData.data.usersettings.ProfileAvatarPostID, userAvatarWrapper, true, 500)
+
+    if (!userData.isOwner) {
+        const nickNameContainer = createDiv('user-nickname-container', user_card_block)
+        createUserName(userData.data.login, nickNameContainer, { link: false, popup: false, status: true })
+    }
+
+
+
+    // const status = createDiv('status', container)
+    // WSListener('userStatusUpdate', userData.data.login, (data) => {
+    //     status.innerHTML = Language.userActivityState[data.state]
+    // })
+    // WSSend('getUserActivity', { user: userData.data.login })
 
     const usr_data_list = {
-        username: `${profileLang.userData.username}: `,
         login: `${profileLang.userData.login}: `,
         creationdate: `${profileLang.userData.creationdate}: `,
         postsCount: `${profileLang.userData.postsCount}: `
     }
 
+    const userInfoRow = createDiv('user-info-row', user_card_block)
+
+    const container = createDiv('list-container', userInfoRow)
 
     for (const line in usr_data_list) {
         const ln = createDiv('data-line')
         container.appendChild(ln)
         switch (line) {
-            case 'username': {
-                if (!userData.isOwner) {
-                    ln.innerHTML = usr_data_list[line]
-                    createUserName(userData.data.login, ln, { link: false, popup: false, status: false })
-                } else {
-                    ln.remove()
-                }
-            }; break;
             case 'login': {
                 if (userData.isOwner) {
                     ln.innerHTML = usr_data_list[line] + userData.data[line]
@@ -118,9 +111,8 @@ function showUserData(userData) {
             }; break;
             case 'postsCount': {
                 ln.innerHTML = usr_data_list[line]
-                const act = createAction(userData.data[line], ln, () => {
-                    window.location.href = `/search?tags=author:${userData.data.login}`
-                })
+                const act = createAction(userData.data[line], ln)
+                act.href = `/search?tags=author:${userData.data.login}`
                 act.title = profileLang.userData.viewUserPosts
             }; break;
             default: {
@@ -132,10 +124,9 @@ function showUserData(userData) {
 
 //region actions
 async function showActions(userData, activeUser) {
-    const user_card_block = document.querySelector('.user-card')
+    const userInfoRow = document.querySelector('.user-info-row')
 
-    const container = createDiv('list-container')
-    user_card_block.appendChild(container)
+    const container = createDiv('list-container', userInfoRow)
 
     const label = createDiv('label')
     container.appendChild(label)
@@ -257,8 +248,8 @@ async function showActions(userData, activeUser) {
 
                     const colorTable = [
                         { name: profileLang.actions.theme.editor.colors['color1'], value: '--color1' },
-                        { name: profileLang.actions.theme.editor.colors['color2'],value: '--color2' },
-                        { name: profileLang.actions.theme.editor.colors['color3'],value: '--color3' },
+                        { name: profileLang.actions.theme.editor.colors['color2'], value: '--color2' },
+                        { name: profileLang.actions.theme.editor.colors['color3'], value: '--color3' },
                         { name: profileLang.actions.theme.editor.colors['font-color1'], value: '--font-color1' },
                         { name: profileLang.actions.theme.editor.colors['font-color2'], value: '--font-color2' },
                         { name: profileLang.actions.theme.editor.colors['font-color3'], value: '--font-color3' },
@@ -270,8 +261,8 @@ async function showActions(userData, activeUser) {
 
                     const elemsContainer = createDiv('alert-theme-editor', notfCont.notificationElem)
 
-                    const headLabel = createDiv('label',elemsContainer)
-                    headLabel.innerText=profileLang.actions.theme.editor.label
+                    const headLabel = createDiv('label', elemsContainer)
+                    headLabel.innerText = profileLang.actions.theme.editor.label
 
                     const colorsList = createDiv('custom-theme-container', elemsContainer)
 
@@ -349,6 +340,68 @@ async function showActions(userData, activeUser) {
                 ],
                 Language.view.fit.userSetsLabel, (result) => localStorage.setItem('imageFit', result)))
 
+        //region sessions
+        createAction('Sessions', container, async () => {
+            const notification = new Notify('', '', 'var(--color3)', 'custom')
+
+            const notfWindow = createDiv('sessions-container', notification.notificationElem)
+
+            const labelRow = createDiv('label-row', notfWindow)
+
+            const sessionLang = Language.profile.sessions
+            const label = createDiv('label', labelRow)
+            label.innerHTML = sessionLang.label
+
+            const complete = createDiv('confirm-button', labelRow)
+            complete.innerHTML = '✔'
+            complete.addEventListener('click', notification.remove)
+
+            const sessionRslt = await request('getUserSessionList')
+
+            const currentKey = localStorage.getItem('userKey') || sessionStorage.getItem('userKey')
+
+            for (const session of sessionRslt.sessions.sort((a, b) => b.tslac - a.tslac)) {
+                const sessionCard = createDiv('session-card', notfWindow)
+
+                if (session.key == currentKey) {
+                    sessionCard.classList.add('current')
+                    sessionCard.title=sessionLang.current
+                }
+
+                if (session.type == 'TGBOT') {
+                    sessionCard.classList.add('TG')
+                }
+
+                const sessionType = createDiv('session-type', sessionCard)
+                switch (session.type) {
+                    case 'TGBOT': sessionType.attributeStyleMap.set('--session-type-img', `url(TGBotClient.svg)`); break;
+                    case 'WEB': sessionType.attributeStyleMap.set('--session-type-img', `url(BrowserClient.svg)`); break;
+                }
+                sessionType.title=session.key
+
+                const sessionDate = createDiv('last-activity', sessionCard)
+                sessionDate.innerHTML = parseTimestamp(session.tslac)
+
+                const actionBar = createDiv('action-bar', sessionCard)
+                const revokeBtn = createDiv('cancel-button', actionBar)
+                revokeBtn.classList.add('cancel-button')
+                revokeBtn.innerHTML = '✖'
+                revokeBtn.title=sessionLang.revoke
+                revokeBtn.addEventListener('click', async () => {
+                    const rslt = await request('sessionController', {
+                        type: 'removeSession',
+                        stype: session.type,
+                        skey: session.key
+                    })
+                    if (rslt.rslt == 's') {
+                        alert(`s/${sessionLang.revokeSucc}`, 3000)
+                        sessionCard.remove()
+                    } else {
+                        alert(rslt.rslt + "/" + rslt.msg)
+                    }
+                })
+            }
+        })
     } else {
         //region wr msg
         createAction(profileLang.actions.sendDM.btn, container, async () => {
@@ -400,8 +453,7 @@ async function getFavs(favs, isActiveUser) {
 
 //region experiments
 function addHiddenExperiments() {
-    const user_card_block = document.querySelector('.user-card')
-    const container = createDiv('list-container', user_card_block)
+    const container = createDiv('list-container', document.querySelector('.user-info-row'))
     container.classList.add('experiments')
 
     const label = createDiv('label', container)
@@ -430,53 +482,5 @@ function addHiddenExperiments() {
             }
 
         }, localStorage.getItem(expName))
-    }
-}
-
-//region sessions
-
-async function showSessionControl() {
-    const sessionLang = Language.profile.sessions
-    const user_card_block = document.querySelector('.user-card')
-    const container = createDiv('list-container', user_card_block)
-    const label = createDiv('label', container)
-    label.innerHTML = sessionLang.label
-    const sessionRslt = await request('getUserSessionList')
-
-    const currentKey = localStorage.getItem('userKey') || sessionStorage.getItem('userKey')
-
-    for (const session of sessionRslt.sessions.sort((a, b) => b.tslac - a.tslac)) {
-        const sessionCard = createDiv('session-card', container)
-
-        if (session.key == currentKey) {
-            sessionCard.classList.add('current')
-            createDiv('current-session', sessionCard).innerHTML = sessionLang.current
-        }
-
-        if (session.type == 'TGBOT') {
-            sessionCard.classList.add('TG')
-        }
-
-        const sessionType = createDiv('session-type', sessionCard)
-        sessionType.innerHTML = sessionLang.type + ": " + session.type
-
-        const sessionDate = createDiv('last-activity', sessionCard)
-        sessionDate.innerHTML = sessionLang.lastActive + ': ' + parseTimestamp(session.tslac)
-
-        const actionBar = createDiv('action-bar', sessionCard)
-        const revokeBtn = createButton(sessionLang.revoke, actionBar)
-        revokeBtn.addEventListener('click', async () => {
-            const rslt = await request('sessionController', {
-                type: 'removeSession',
-                stype: session.type,
-                skey: session.key
-            })
-            if (rslt.rslt == 's') {
-                alert(`s/${sessionLang.revokeSucc}`, 3000)
-                sessionCard.remove()
-            } else {
-                alert(rslt.rslt + "/" + rslt.msg)
-            }
-        })
     }
 }

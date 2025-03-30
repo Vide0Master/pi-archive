@@ -329,7 +329,7 @@
                     "viewUserPosts": "Переглянути пости користувача"
                 },
                 "actions": {
-                    "label": "Дії та налаштунки",
+                    "label": "Дії",
                     "unlogin": "Вийти",
                     "changeUserName": {
                         "btn": "Змінити нік",
@@ -393,8 +393,6 @@
                 "sessions": {
                     "label": "Сеанси",
                     "current": "Поточний сеанс",
-                    "type": "Тип",
-                    "lastActive": "Остання активність",
                     "revoke": "Відізвати",
                     "revokeSucc": "Сессія відізвана"
                 }

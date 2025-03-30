@@ -3,6 +3,38 @@
         "versions": {
             "Server": "",
             "DB": "",
+            "Webpage": "b0.5.6",
+            "TGbot": ""
+        },
+        "date": "30.03.2025",
+        "updates": [
+            {
+                "text": "Changed appearence of profile page",
+                "tag": "rework",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Changed appearence of sessions (now accessible with button)",
+                "tag": "rework",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Edited scroll appearence",
+                "tag": "rework",
+                "services": [
+                    "Webpage"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
+            "Server": "",
+            "DB": "",
             "Webpage": "b0.5.5",
             "TGbot": ""
         },
