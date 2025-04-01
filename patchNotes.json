@@ -6,6 +6,80 @@
             "Webpage": "b0.5.6",
             "TGbot": ""
         },
+        "date": "1.04.2025",
+        "updates": [
+            {
+                "text": "Changed appearence of header and footer bar",
+                "tag": "rework",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "User avatar in header bar",
+                "tag": "new",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "New message counter",
+                "tag": "rework",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Changed appearence of search field autocomplete",
+                "tag": "rework",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Icons for most of links",
+                "tag": "new",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Different colors for DM messages based on theme",
+                "tag": "new",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Search field in header bar",
+                "tag": "new",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Search fields on /view, /collection (when viewing collection), /search (on the side above popular tags) pages",
+                "tag": "removed",
+                "services": [
+                    "Webpage"
+                ]
+            },
+            {
+                "text": "Patch notes positioning",
+                "tag": "fix",
+                "services": [
+                    "Webpage"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
+            "Server": "",
+            "DB": "",
+            "Webpage": "b0.5.6",
+            "TGbot": ""
+        },
         "date": "30.03.2025",
         "updates": [
             {

@@ -2,7 +2,6 @@ let post_data;
 const viewLang = Language.view
 document.querySelector('.post-info .label').innerHTML = viewLang.postInfo
 document.querySelector('.post-actions .label').innerHTML = viewLang.postActions
-document.querySelector('.search-row #taglist').placeholder = Language.defaultTags
 
 //region get F link
 function get_file_link(id) {
@@ -54,7 +53,7 @@ function setMediaSource(url, contentType) {
             break;
         case 'video':
         case 'audio':
-            createMeadiaPlayer(url, document.querySelector('.view-container .file'),contentType)
+            createMeadiaPlayer(url, document.querySelector('.view-container .file'), contentType)
             break
         default:
             console.error('Unsupported file type:', contentType);
@@ -158,7 +157,7 @@ async function handleAdminActions() {
                 }
             }, { value: tagline });
             addTagsAutofill(notf.inputField, notf.textInputContainer, true)
-        });
+        }, 'icons/tag-icon.svg');
 
         //region edit desc
         createAction(viewLang.actions.editDesc.btn, document.querySelector('.post-actions'), async () => {
@@ -177,7 +176,7 @@ async function handleAdminActions() {
                     }
                 }
             }, { value: post_data.description })
-        })
+        }, 'icons/text-icon.svg')
 
         if (post_data.postGroupData) {
             //region rm from group
@@ -194,8 +193,7 @@ async function handleAdminActions() {
                             })
                         alert(`${removeResult.rslt}/${removeResult.msg}`, 5000)
                     }
-                })
-            )
+                }), 'icons/collections-icon.svg')
 
             //region edit group
             createAction(
@@ -291,7 +289,7 @@ async function handleAdminActions() {
                         }
                     })
                     container.appendChild(reord_over)
-                }
+                }, 'icons/collections-icon.svg'
             )
 
             //region conv to coll
@@ -309,8 +307,7 @@ async function handleAdminActions() {
                                 })
                             alert(`${convResult.rslt}/${convResult.msg}`)
                         }
-                    })
-                )
+                    }), 'icons/collections-icon.svg')
             } else {
                 //region conv to grp
                 createAction(
@@ -326,12 +323,11 @@ async function handleAdminActions() {
                                 })
                             alert(`${convResult.rslt}/${convResult.msg}`)
                         }
-                    })
-                )
+                    }), 'icons/collections-icon.svg')
             }
         } else {
             //region add to group
-            createAction(viewLang.actions.editGroup.addToGroup, document.querySelector('.post-actions'), groupControl)
+            createAction(viewLang.actions.editGroup.addToGroup, document.querySelector('.post-actions'), groupControl, 'icons/collections-icon.svg')
         }
 
         //region remove post
@@ -346,7 +342,7 @@ async function handleAdminActions() {
                     alert(rslt.msg, 5000);
                 }
             })
-        });
+        }, 'icons/delete-file.svg');
     }
 }
 
@@ -419,7 +415,7 @@ async function initialize() {
         displayPostData(post_data)
 
         createTagSelector(post_data.tags, document.querySelector('.tags'));
-        createAction(viewLang.actions.download, document.querySelector('.post-actions'), () => save_file(file_link, post_data.id));
+        createAction(viewLang.actions.download, document.querySelector('.post-actions'), () => save_file(file_link, post_data.id), 'icons/download-icon.svg');
         createAction(viewLang.actions.tempLink.btn,
             document.querySelector('.post-actions'),
             () => {
@@ -454,21 +450,20 @@ async function initialize() {
                         { name: `${viewLang.actions.tempLink.times[6]}`, value: 'infinite' }
                     ]
                 })
-            }
-        )
+            }, 'icons/link-icon.svg')
 
         //region set avatar
         createAction(viewLang.actions.setPostAsAvatar, document.querySelector('.post-actions'), async () => {
             const rslt = await request('controlUserSettings', { type: 'update', update: { ProfileAvatarPostID: post_data.id } })
             alert(rslt.msg, 5000)
-        })
+        }, 'icons/image-square.svg')
 
         //region set background
         if (contentType != 'video') {
             createAction(viewLang.actions.setPostAsProfileBackground, document.querySelector('.post-actions'), async () => {
                 const rslt = await request('controlUserSettings', { type: 'update', update: { ProfileBackgroundPostID: post_data.id } })
                 alert(rslt.msg, 5000)
-            })
+            }, 'icons/image-rectangle.svg')
         }
 
         //region send post to tg
@@ -477,7 +472,7 @@ async function initialize() {
             const rslt = await request('TGSendPostDM', { postID: post_data.id, isFile: event.shiftKey })
 
             alert(`${rslt.rslt}/${rslt.msg}`, 5000)
-        })
+        }, 'icons/TGBotClient.svg')
 
         const appealLang = viewLang.actions.appeal
         //region reports
@@ -835,7 +830,7 @@ async function process_LDF() {
 
     const bmark = document.createElement('img')
     favourite.appendChild(bmark)
-    bmark.src = 'fav.svg'
+    bmark.src = 'icons/fav.svg'
     bmark.className = 'bookmark-img'
 
     async function updateFavs() {
@@ -1068,13 +1063,6 @@ function addOpenFullScreenView(file_link) {
         image.addEventListener('wheel', zoom);
     })
 }
-
-//region P S T SF
-function passSearchTagsToSearchField() {
-    document.getElementById('taglist').value = new URLSearchParams(window.location.search).get('tags')
-}
-
-passSearchTagsToSearchField()
 
 function processGroupData(postGroup) {
     const container = document.querySelector('.group-info')

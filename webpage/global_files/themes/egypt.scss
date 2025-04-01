@@ -13,6 +13,10 @@
     --interact-passive: var(--color2);
     --interact-active: #9b991e;
     --interact-focus: var(--color2);
+
+    --main-message-color: transparent;
+    --secondary-message-color: transparent;
+    --message-font-color: var(--font-color1);
 }
 
 //special styling
@@ -30,4 +34,11 @@
         border: 1px solid gold;
         border-bottom: none;
     }
+}
+
+.msg-cont.in, .messages .counter{
+    border: 1px solid var(--color3);
+}
+.msg-cont.out{
+    border: 1px solid var(--font-hover);
 }

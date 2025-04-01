@@ -50,7 +50,7 @@ async function MessageProcessor() {
     const sysPFPCont = createDiv('pfp-cont', systemUserCont)
     const sysPFPimg = document.createElement('img')
     sysPFPCont.appendChild(sysPFPimg)
-    sysPFPimg.src = 'Pi-symbol.svg'
+    sysPFPimg.src = 'icons/Pi-symbol.svg'
     sysPFPimg.className = 'PI'
     const nameCol = createDiv('NnLMC', systemUserCont)
     const userName = createDiv('user-name', nameCol)
@@ -318,7 +318,6 @@ async function MessageProcessor() {
 
         if (userData.data.usersettings.ProfileAvatarPostID) {
             const avatar_block = createDiv('pfp-cont', userRow)
-            avatar_block.style.borderRadius = '1.5em'
             createUserAvatarElem(userData.data.usersettings.ProfileAvatarPostID, avatar_block)
         } else {
             const avatar_block = createDiv('pfp-cont', userRow)
@@ -397,9 +396,6 @@ async function MessageProcessor() {
             created.innerHTML = parseTimestamp(msgData.timestamp)
 
             const read = createDiv('readIndicator', dataRow)
-            const imgelem = document.createElement('img')
-            read.appendChild(imgelem)
-            imgelem.src = 'read.svg'
             if (msgData.read == 1) {
                 read.removeAttribute('style')
             } else {

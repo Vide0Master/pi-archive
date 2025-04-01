@@ -3,8 +3,6 @@ const urlTags = urlParams.get('tags');
 
 const pageButtonsLimit = 6
 
-document.querySelector('.search-row #taglist').placeholder = Language.defaultTags
-
 //region Page links
 async function update_pages(query, currentPage) {
     const page_count = await request(`getPageCount`, { query })
@@ -112,15 +110,15 @@ async function update_pages(query, currentPage) {
     }
 }
 
-//region P S T SF
-function passSearchTagsToSearchField() {
-    document.getElementById('taglist').value = new URLSearchParams(window.location.search).get('tags')
-}
-
 //region tags from url
 function get_tags() {
+    const taglist = document.getElementById('taglist')
     if (!urlTags) {
-        return document.getElementById('taglist').value
+        if(taglist){
+            return taglist.value
+        }else{
+            return ''
+        }
     } else {
         return urlTags
     }
@@ -170,13 +168,11 @@ async function get_posts(page) {
         }
     }
 
-    document.querySelector('header').scrollIntoView({
+    document.querySelector('.norma-page-container').scrollIntoView({
         behavior: 'smooth',
         block: 'start'
     })
 }
-
-passSearchTagsToSearchField()
 
 const searchParams = new URL(window.location.href).searchParams
 const pageN = searchParams.get('p')

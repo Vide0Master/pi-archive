@@ -308,8 +308,21 @@ a {
     text-decoration: none;
     position: relative;
 
+    .action-icon {
+        mask-image: var(--action-icon-link);
+        mask-repeat: no-repeat;
+        mask-size: contain;
+        height: 1em;
+        width: 1em;
+        background-color: var(--font-color1);
+    }
+
     &:hover {
         color: var(--font-hover);
+
+        .action-icon {
+            background-color: var(--font-hover);
+        }
     }
 
     display: inline-flex;
@@ -323,6 +336,15 @@ a {
     flex-direction: row;
     align-items: center;
     gap: 0.5em;
+
+    .sw-icon {
+        mask-image: var(--sw-icon-link);
+        mask-repeat: no-repeat;
+        mask-size: contain;
+        width: 1em;
+        height: 1em;
+        background-color: var(--color3);
+    }
 
     .sw-label {
         color: var(--font-color1);
@@ -345,6 +367,7 @@ a {
     background-clip: padding-box;
 
     transition: 0.2s;
+
     &:hover {
         background-color: var(--font-hover);
     }
@@ -537,7 +560,7 @@ img {
             vertical-align: middle;
             justify-self: end;
 
-            mask-image: url(video-fullscreen.svg);
+            mask-image: url(icons/video-fullscreen.svg);
             mask-repeat: no-repeat;
             mask-size: contain;
             height: 1em;
@@ -625,7 +648,11 @@ img {
         color: var(--font-color3);
     }
 
-    &:hover{
+    &:hover {
+        border-color: var(--tagColor);
+    }
+
+    &.active {
         border-color: var(--tagColor);
     }
 }
@@ -638,34 +665,43 @@ img {
     justify-content: stretch;
     gap: 0.1em;
     background-color: #fff;
-    border-radius: 1em;
+    border-radius: 0.75em;
     width: 100%;
     box-sizing: border-box;
     height: 1.4em;
+    width: 200px;
+    transition: 0.2s;
 
     #taglist {
         color: var(--alternative-text-color);
         padding: 0;
         border-radius: 0;
+        border: none;
         background-color: transparent;
         outline: none;
         width: auto;
         padding: 0.2em 0.5em;
         padding-right: 0.1em;
         flex: 1;
+        min-width: 0;
 
         &::placeholder {
             color: var(--alternative-text-color);
         }
     }
 
-    #search-button {
-        background-image: url("search.svg");
+    .search-button {
+        background-image: url("icons/search.svg");
         background-size: contain;
         background-repeat: no-repeat;
         height: 1em;
         width: 1.4em;
         cursor: pointer;
+    }
+
+    &.autocompleting {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
     }
 }
 
@@ -673,23 +709,18 @@ img {
     position: absolute;
     box-sizing: border-box;
     top: calc(100% + 0.5em);
-    width: 100%;
+    width: fit-content;
+    left: 50%;
+    transform: translateX(-50%);
     background-color: var(--color2);
     border-radius: 0.5em;
     overflow: hidden;
     z-index: 10;
+    outline: 0.1em solid var(--color3);
+    box-shadow: 0 0 15px black;
 
     .tagContainer {
         padding: 0.3em;
-        transition: 0.05s;
-
-        &:hover {
-            background-color: var(--interact-active);
-        }
-
-        &.active {
-            background-color: var(--interact-active);
-        }
     }
 }
 
@@ -712,7 +743,7 @@ img {
 }
 
 .norma-page-container {
-    padding: 0 0.5em;
+    padding: 0.5em;
     display: flex;
     flex-direction: column;
 
@@ -728,8 +759,7 @@ img {
         flex-direction: row;
         align-items: center;
         gap: 0.5em;
-        border-bottom-left-radius: 1em;
-        border-bottom-right-radius: 1em;
+        border-radius: 0.5em;
 
         @media (max-width:700px) {
             flex-direction: column;
@@ -737,7 +767,7 @@ img {
         }
 
         .pi-nav {
-            mask-image: url(Pi-symbol.svg);
+            mask-image: url(icons/Pi-symbol.svg);
             mask-repeat: no-repeat;
             mask-size: contain;
             height: 1em;
@@ -766,7 +796,7 @@ img {
             align-items: center;
             flex-wrap: wrap;
             justify-content: space-around;
-            gap: 0.75em;
+            gap: 0.5em;
 
             .messages {
                 position: relative;
@@ -780,14 +810,62 @@ img {
                     flex-direction: row;
                     align-items: center;
                     gap: 0.1em;
-                    color: var(--font-color1);
-                    background-color: var(--color1);
+                    background-color: var(--main-message-color);
                     padding: 0.1em 0.5em;
-                    border-radius: 1em;
+                    border-radius: 0.5em;
+                    border-bottom-right-radius: 0;
                     text-align: center;
+                    color: transparent;
+                    transition: 0.2s;
 
                     div {
                         display: inline;
+                    }
+
+                    &.visible {
+                        color: var(--font-color1);
+                    }
+                }
+            }
+
+            .profile {
+                .avatar-cont {
+                    overflow: hidden;
+                    border-radius: 0.2em;
+                    outline: 1px solid var(--color3);
+                    transition: 0.2s;
+
+                    .avatar-elem {
+
+                        img,
+                        video {
+                            height: 1.2em;
+                            width: 1.2em;
+                        }
+                    }
+                }
+
+                &:hover {
+                    .avatar-cont {
+                        outline: 1px solid var(--font-hover);
+                    }
+                }
+            }
+
+            a {
+                .nav-icon {
+                    mask-image: var(--icon-link);
+                    mask-repeat: no-repeat;
+                    mask-size: contain;
+                    height: 1em;
+                    width: 1em;
+                    background-color: var(--font-color1);
+                    transition: 0.2s;
+                }
+
+                &:hover {
+                    .nav-icon {
+                        background-color: var(--font-hover);
                     }
                 }
             }
@@ -807,8 +885,7 @@ img {
         width: fit-content;
         height: fit-content;
         padding: 0.5em;
-        border-top-left-radius: 1em;
-        border-top-right-radius: 1em;
+        border-radius: 0.5em;
         align-self: center;
         color: var(--font-color1);
 
@@ -1201,6 +1278,9 @@ img {
     justify-content: center;
     align-items: center;
     overflow: auto;
+    box-sizing: border-box;
+
+    padding: 1em;
 
     @media (max-width:700px) {
         overflow: auto;

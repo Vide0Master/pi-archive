@@ -3,7 +3,6 @@ const collectionLang = Language.collection
 const postInfoCont = document.querySelector('.post-info')
 postInfoCont.querySelector('.label').innerHTML = collectionLang.postInfoLabel
 document.querySelector('.post-actions .label').innerHTML = collectionLang.postActionsLabel
-document.querySelector('.search-row #taglist').placeholder = Language.defaultTags
 
 //region process collection
 async function processCollection(id) {
@@ -426,7 +425,7 @@ async function processCollection(id) {
                     localStorage.removeItem('fitCollectionPages')
                 }
             }
-        }, localStorage.getItem('fitCollectionPages'))
+        }, localStorage.getItem('fitCollectionPages'), 'icons/stretch-icon.svg')
 
         if (await ownerVerify(collectionInfo.owner) || await adminVerify()) {
 
@@ -484,7 +483,6 @@ async function processCollection(id) {
                             })
                         }; break;
                         case 'reorder': {
-
                             const reorderResult = await request('controlGroup',
                                 {
                                     type: 'reorderGroup',
@@ -522,14 +520,13 @@ async function processCollection(id) {
                     }
                 })
                 container.appendChild(reord_over)
-            })
+            }, 'icons/collections-icon.svg')
 
             //region add to group
             createAction(
                 collectionLang.actions.toGroup.btn,
                 document.querySelector('.post-actions'),
                 async () => {
-
                     new Notify(`${collectionLang.actions.toGroup.btn} "${collectionInfo.name}"`, null, '#f00', 'inputConfirm', async (result) => {
                         if (result) {
                             const convResult = await request('controlGroup',
@@ -541,8 +538,7 @@ async function processCollection(id) {
                             alert(`${convResult.rslt}/${convResult.msg}`)
                         }
                     })
-                }
-            )
+                }, 'icons/collections-icon.svg')
 
             //region add tags
             createAction(collectionLang.actions.tags.add.btn, actionCol, async () => {
@@ -610,7 +606,7 @@ async function processCollection(id) {
                     }
                 })
                 addTagsAutofill(notf.inputField, notf.textInputContainer, true)
-            })
+            },'icons/tag-icon.svg')
 
             //region remove tags
             createAction(collectionLang.actions.tags.remove.btn, actionCol, async () => {
@@ -677,7 +673,7 @@ async function processCollection(id) {
                     }
                 })
                 addTagsAutofill(notf.inputField, notf.textInputContainer, true)
-            })
+            },'icons/tag-icon.svg')
         }
     }
     await setActions()
@@ -697,7 +693,7 @@ async function showCollections() {
             state ? elem.removeAttribute('style') : elem.style.display = 'none'
         }
         localStorage.setItem('displayGroupsInCollectionsPage', state)
-    }, localStorage.getItem('displayGroupsInCollectionsPage') == 'true')
+    }, localStorage.getItem('displayGroupsInCollectionsPage') == 'true', 'icons/collections-icon.svg')
 
     for (const collection of collectionsList.groups) {
         const hoverCont = createDiv('hover-cont', collectionsElem)
@@ -778,11 +774,6 @@ async function showCollections() {
             hoverCont.classList.remove('anim-prevent')
         })
     }
-}
-
-//region P S T SF
-function passSearchTagsToSearchField() {
-    document.getElementById('taglist').value = new URLSearchParams(window.location.search).get('tags')
 }
 
 const params = new URLSearchParams(window.location.search)

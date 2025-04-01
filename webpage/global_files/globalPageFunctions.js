@@ -36,7 +36,7 @@ function WSSend(type, data) {
     webSocket.send(JSON.stringify(request));
 }
 
-if (localStorage.getItem('userKey') || sessionStorage.getItem('userKey')) setHeaderButtrons()
+if (localStorage.getItem('userKey') || sessionStorage.getItem('userKey')) setHeaderButtons()
 
 if (localStorage.getItem('showIntro') == null) localStorage.setItem('showIntro', true)
 
@@ -50,7 +50,7 @@ function tryIntro() {
     const mainLabelCont = createDiv('main-label-cont', container)
 
     const piImg = document.createElement('img')
-    piImg.src = 'Pi-symbol.svg'
+    piImg.src = 'icons/Pi-symbol.svg'
     piImg.className = 'pi-logo'
     mainLabelCont.appendChild(piImg)
 
@@ -94,32 +94,66 @@ if (localStorage.getItem('showIntro') === 'true') {
 }
 
 //region head buttons
-async function setHeaderButtrons() {
+async function setHeaderButtons() {
     const headerLang = Language.header
     const user_acc = await request('AuthyPageAccessCheck', {
         page: window.location.pathname.replace(/\//g, ''),
         userKey: localStorage.getItem('userKey') || sessionStorage.getItem('userKey')
     })
+
+    createSearchField(document.querySelector('header'))
+
     const pages = [
-        { name: headerLang[0], link: '/search', restr: 1 },
-        { name: headerLang[5], link: '/collection', restr: 1 },
-        { name: headerLang[1], link: '/post', restr: 1 },
+        { name: headerLang[5], link: '/collection', restr: 1, icon: `icons/collections-icon.svg` },
+        { name: headerLang[1], link: '/post', restr: 1, icon: `icons/upload-icon.svg` },
         { name: headerLang[3], link: '/messages', restr: 1 },
         { name: headerLang[2], link: '/profile', restr: 1 },
-        { name: headerLang[4], link: '/admin', restr: 2 }
+        { name: headerLang[4], link: '/admin', restr: 2, icon: `icons/admin-wrench.svg` }
     ]
 
-    const navigator = document.querySelector('header .nav-row')
+    const navigator = createDiv('nav-row', document.querySelector('header'))
 
     for (const page of pages) {
         if (page.restr <= user_acc.perm_level) {
-            const link = createAction(page.name, navigator, () => { })
+            const link = createAction(page.name, navigator, null, page.icon)
             link.className = page.link.substring(1)
             link.href = page.link
         }
     }
 
     getMessageCount()
+
+    setUserAvatarInHeader()
+}
+
+async function setUserAvatarInHeader() {
+    const userData = await request('getUserProfileData', {})
+    if (userData.data.usersettings.ProfileAvatarPostID) {
+        const avatarContainer = createDiv('avatar-cont')
+        document.querySelector('.nav-row .profile').insertAdjacentElement('afterbegin', avatarContainer)
+        createUserAvatarElem(userData.data.usersettings.ProfileAvatarPostID, avatarContainer, false, 50)
+    }
+}
+
+function createSearchField(parent) {
+    const rowCont = createDiv('search-row', parent)
+
+    const inputElem = document.createElement('input')
+    inputElem.id = 'taglist'
+    inputElem.setAttribute('autocomplete', 'off')
+    rowCont.appendChild(inputElem)
+    inputElem.placeholder = Language.header[0]
+
+    inputElem.value = new URLSearchParams(window.location.search).get('tags')
+
+    const searchBtn = createDiv('search-button', rowCont)
+    searchBtn.addEventListener('click', () => {
+        search(inputElem.value)
+    })
+
+    addTagsAutofill(inputElem, rowCont)
+
+    return rowCont
 }
 
 if (localStorage.getItem('EXPERIMENT_invertHeaderBar') == 'true') {
@@ -239,10 +273,9 @@ async function addTagsAutofill(field, parent, preventSearch = false) {
                 tagContainer.appendChild(tagElem)
                 selector.push({
                     tag: tag.tag,
-                    elem: tagContainer
+                    elem: tagElem
                 })
                 tagElem.addEventListener('mousedown', () => {
-
                     selPos = i++
                     setField()
                 })
@@ -272,26 +305,19 @@ async function addTagsAutofill(field, parent, preventSearch = false) {
     })
 }
 
-function tryInsertSearchActions() {
-    const sfield = document.querySelector('.search-row')
-    if (sfield) {
-        const taglist = sfield.querySelector('#taglist')
-        taglist.setAttribute('autocomplete', 'off')
-        const searchBtn = sfield.querySelector('#search-button')
-        searchBtn.addEventListener('click', () => {
-            search(taglist.value)
-        })
-        addTagsAutofill(taglist, sfield)
-    }
-}
-tryInsertSearchActions()
-
 //region cr action
-function createAction(name, parentElement, cb) {
+function createAction(name, parentElement, cb, iconLink) {
     const action = document.createElement('a');
-    parentElement.appendChild(action);
-    action.innerText = name;
-    action.addEventListener('click', cb);
+    if (parentElement) parentElement.appendChild(action);
+    if (cb) action.addEventListener('click', cb);
+
+    if (iconLink) {
+        const icon = createDiv('action-icon', action)
+        icon.attributeStyleMap.set('--action-icon-link', `url(${iconLink})`)
+    }
+
+    createDiv('action-label', action).innerText = name;
+
     return action
 }
 
@@ -349,7 +375,7 @@ function createPostCard(postData, noClickReaction) {
 
         const favImg = document.createElement('img')
         fav.appendChild(favImg)
-        favImg.src = 'fav.svg'
+        favImg.src = 'icons/fav.svg'
     }
 
     const imageContainer = createDiv('image-container', postCard)
@@ -592,13 +618,13 @@ function createMeadiaPlayer(url, parent, type = 'video', slim = false) {
     mediaElem.addEventListener('timeupdate', updateSlider);
 
     const playPauseButton = createDiv('play-pause', controlBar);
-    playPauseButton.attributeStyleMap.set('--lnk', 'url(video-play.svg)')
+    playPauseButton.attributeStyleMap.set('--lnk', 'url(icons/video-play.svg)')
 
     mediaElem.addEventListener('play', () => {
-        playPauseButton.attributeStyleMap.set('--lnk', 'url(video-pause.svg)')
+        playPauseButton.attributeStyleMap.set('--lnk', 'url(icons/video-pause.svg)')
     })
     mediaElem.addEventListener('pause', () => {
-        playPauseButton.attributeStyleMap.set('--lnk', 'url(video-play.svg)')
+        playPauseButton.attributeStyleMap.set('--lnk', 'url(icons/video-play.svg)')
     })
 
     function videoPlayPause() {
@@ -793,9 +819,8 @@ function setFooterText() {
 
         const vcont = createDiv('patchNotesContainer', overlay)
         const closeCont = createDiv('closeCont', vcont)
-        const xSymb = document.createElement('img')
-        closeCont.appendChild(xSymb)
-        xSymb.src = 'x-mark.svg'
+        const xSymb = createDiv('close', closeCont)
+        xSymb.innerHTML = '✖'
         closeCont.addEventListener('click', (e) => {
             overlay.remove()
         })
@@ -929,8 +954,14 @@ function createButton(name, parentElem) {
 }
 
 //region cr switch
-function createSwitch(name, parent, cb, checked = false) {
+function createSwitch(name, parent, cb, checked = false, iconLink) {
     const swLine = createDiv('switch-line', parent)
+    
+    if (iconLink) {
+        const icon = createDiv('sw-icon', swLine)
+        icon.attributeStyleMap.set('--sw-icon-link', `url(${iconLink})`)
+    }
+
     createDiv('sw-label', swLine).innerHTML = name
     const sw = document.createElement('input')
     sw.type = 'checkbox'
@@ -953,10 +984,13 @@ async function getMessageCount() {
     const countRslt = await request('controlUserDM', { type: 'getUserMessagesCount' })
 
     const messages_link = document.querySelector('.nav-row').querySelector('.messages')
-    const counter = createDiv('counter', messages_link)
+    const counter = createDiv('counter')
+    messages_link.insertAdjacentElement('afterbegin', counter)
+    counter.innerHTML = '0'
 
     async function updateState(count) {
         if (count.unread > 0 || count.requiredAction) {
+            counter.classList.add('visible')
             counter.removeAttribute('style')
             if (count.requiredAction) {
                 counter.style.backgroundColor = '#a53030'
@@ -974,7 +1008,7 @@ async function getMessageCount() {
                 }
             }
         } else {
-            counter.style.display = 'none'
+            counter.classList.remove('visible')
         }
     }
 

@@ -20,7 +20,7 @@
                 "user": "user",
                 "moderator": "moderator",
                 "admin": "admin",
-                "owner": "developer"
+                "owner": "owner"
             },
             "alert": {
                 "remove": "Click alert to remove it"
@@ -291,7 +291,7 @@
                 "actions": {
                     "download": "Download file",
                     "tempLink": {
-                        "btn": "Create temporary file link",
+                        "btn": "Temporary link",
                         "times": [
                             "Minutes",
                             "Minutes",
@@ -304,9 +304,9 @@
                         "timeLabel": "Time",
                         "TLCopied": "Temporary link copied to clipboard"
                     },
-                    "setPostAsAvatar": "Set post as profile avatar",
-                    "setPostAsProfileBackground": "Set post as profile background",
-                    "sendPostToTg": "Send post through TG bot to DM",
+                    "setPostAsAvatar": "Set as avatar",
+                    "setPostAsProfileBackground": "Set as profile background",
+                    "sendPostToTg": "Get via TG",
                     "editTags": {
                         "btn": "Edit tags",
                         "poptext": "Edit tags list"
