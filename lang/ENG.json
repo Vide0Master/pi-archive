@@ -71,7 +71,7 @@
                 ]
             },
             "group": {
-                "colView": "View as collection",
+                "colView": "Read",
                 "VAP": [
                     "View all",
                     "posts"

@@ -3,6 +3,24 @@
         "versions": {
             "Server": "",
             "DB": "",
+            "Webpage": "b0.6.2",
+            "TGbot": ""
+        },
+        "date": "7.04.2025",
+        "updates": [
+            {
+                "text": "Changed appearence of collection view button",
+                "tag": "rework",
+                "services": [
+                    "Webpage"
+                ]
+            }
+        ]
+    },
+    {
+        "versions": {
+            "Server": "",
+            "DB": "",
             "Webpage": "b0.6.1",
             "TGbot": ""
         },

@@ -307,6 +307,7 @@ a {
     cursor: pointer;
     text-decoration: none;
     position: relative;
+    width: fit-content;
 
     .action-icon {
         mask-image: var(--action-icon-link);

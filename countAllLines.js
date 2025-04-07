@@ -3,7 +3,7 @@ const path = require('path');
 
 const directoryPath = __dirname; // Замените на путь к вашей директории
 const excludedFiles = ['package-lock.json', 'package.json', 'countAllLines.js', 'template.db']; // Замените на файлы, которые хотите исключить
-const excludedDirs = ['storage', 'node_modules', '.git']; // Замените на папки, которые хотите исключить
+const excludedDirs = ['storage', 'node_modules', '.git', 'webpage', 'lang']; // Замените на папки, которые хотите исключить
 
 let totalLines = 0;
 let totalFiles = 0;

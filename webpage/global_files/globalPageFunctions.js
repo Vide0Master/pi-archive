@@ -956,7 +956,7 @@ function createButton(name, parentElem) {
 //region cr switch
 function createSwitch(name, parent, cb, checked = false, iconLink) {
     const swLine = createDiv('switch-line', parent)
-    
+
     if (iconLink) {
         const icon = createDiv('sw-icon', swLine)
         icon.attributeStyleMap.set('--sw-icon-link', `url(${iconLink})`)
@@ -1320,7 +1320,7 @@ function createGroup(groupData) {
         })
 
         if (groupData.type == 'collection') {
-            const colview = createButton(Language.group.colView, infoContainer)
+            const colview = createAction(Language.group.colView, infoContainer, null, 'icons/collections-icon.svg')
             colview.addEventListener('mousedown', (event) => {
                 const sTags = new URLSearchParams(window.location.search).get('tags')
                 const Link = `/collection?id=${groupData.id}${sTags ? `&tags=${sTags}` : ''}`
