@@ -78,7 +78,6 @@
             "collection": {
                 "postInfoLabel": "Інформація",
                 "postActionsLabel": "Дії",
-                "viewFrom": "Переглянути на<br>цій сторінці",
                 "data": {
                     "name": "Ім'я",
                     "id": "ID",

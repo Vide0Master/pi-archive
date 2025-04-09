@@ -125,20 +125,13 @@
                 justify-content: center;
                 gap: 0.2em;
 
-                transition: 0.4s;
+                transition: 0.2s;
 
                 .page-number-counter {
                     font-weight: bold;
                     color: var(--font-color1);
-                    transition: 0.4s;
+                    transition: 0.2s;
                     user-select: none;
-                }
-
-                .view-from-page {
-                    overflow: hidden;
-                    text-wrap: nowrap;
-                    user-select: none;
-                    width: 0;
                 }
             }
 
@@ -152,11 +145,6 @@
 
                     .page-number-counter {
                         font-size: 3em;
-                    }
-
-                    .view-from-page {
-                        color: var(--font-color1);
-                        width: auto;
                     }
                 }
             }

@@ -374,9 +374,6 @@ async function processCollection(id) {
         const page_num = createDiv('page-number-counter', page_num_cont)
         page_num.innerHTML = counter++
 
-        const view_from_page = createDiv('view-from-page', page_num_cont)
-        view_from_page.innerHTML = collectionLang.viewFrom
-
         for (const tag of post.tags) {
             if (tags.indexOf(tag) < 0) {
                 tags.push(tag)
