@@ -1,4 +1,4 @@
-const webSocket = new WebSocket(`ws://${window.location.host}`);
+const webSocket = new WebSocket(`wss://${window.location.host}`);
 
 webSocket.addEventListener('open', () => {
     if (DEVMODE) {
