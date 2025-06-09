@@ -754,8 +754,7 @@ async function showCollections() {
             percentagePos.x = -((e.clientX - size.left) / size.width - 0.5) * 2 * 60;
             percentagePos.y = ((e.clientY - size.top) / size.height - 0.5) * 2 * 30;
 
-            hoverCont.attributeStyleMap.set('--rotation', percentagePos.y + "deg")
-            hoverCont.attributeStyleMap.set('--tilt', percentagePos.x + "deg")
+            hoverCont.style='--rotation:'+ percentagePos.y + "deg" + '--tilt:'+ percentagePos.x + "deg"
         })
 
         hoverCont.addEventListener('mouseenter', () => {
@@ -764,7 +763,7 @@ async function showCollections() {
 
         hoverCont.addEventListener('mouseleave', () => {
             hoverCont.classList.add('anim-prevent')
-            hoverCont.attributeStyleMap.delete('z-index')
+            hoverCont.style.zIndex='none'
         })
 
         hoverCont.addEventListener('animationend', () => {

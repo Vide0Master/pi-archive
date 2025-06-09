@@ -313,7 +313,7 @@ function createAction(name, parentElement, cb, iconLink) {
 
     if (iconLink) {
         const icon = createDiv('action-icon', action)
-        icon.attributeStyleMap.set('--action-icon-link', `url(${iconLink})`)
+        icon.style = `--action-icon-link:url(${iconLink})`
     }
 
     createDiv('action-label', action).innerText = name;
@@ -618,13 +618,13 @@ function createMeadiaPlayer(url, parent, type = 'video', slim = false) {
     mediaElem.addEventListener('timeupdate', updateSlider);
 
     const playPauseButton = createDiv('play-pause', controlBar);
-    playPauseButton.attributeStyleMap.set('--lnk', 'url(icons/video-play.svg)')
+    playPauseButton.style = '--lnk:url(icons/video-play.svg)'
 
     mediaElem.addEventListener('play', () => {
-        playPauseButton.attributeStyleMap.set('--lnk', 'url(icons/video-pause.svg)')
+        playPauseButton.style = '--lnk:url(icons/video-pause.svg)'
     })
     mediaElem.addEventListener('pause', () => {
-        playPauseButton.attributeStyleMap.set('--lnk', 'url(icons/video-play.svg)')
+        playPauseButton.style = '--lnk:url(icons/video-play.svg)'
     })
 
     function videoPlayPause() {
@@ -959,7 +959,7 @@ function createSwitch(name, parent, cb, checked = false, iconLink) {
 
     if (iconLink) {
         const icon = createDiv('sw-icon', swLine)
-        icon.attributeStyleMap.set('--sw-icon-link', `url(${iconLink})`)
+        icon.style = `--sw-icon-link:url(${iconLink})`
     }
 
     createDiv('sw-label', swLine).innerHTML = name
@@ -1068,7 +1068,7 @@ function createUserName(login, elem, params = { link: true, popup: true, status:
             }
 
             container.addEventListener('mouseenter', () => {
-                popUp.attributeStyleMap.delete('display')
+                popUp.style = ''
 
                 if (state.open || !state.anend) return
                 state.open = true
@@ -1631,7 +1631,7 @@ function createTagline(tag, params = { s: true, tedit: true }) {
     if (tag.group) {
         originalColor = tag.group.color;
     }
-    tagline.attributeStyleMap.set('--tagColor', originalColor)
+    tagline.style = `--tagColor:${originalColor}`
     const searchElem = document.getElementById('taglist')
 
     if (searchElem && searchElem.value != '') {

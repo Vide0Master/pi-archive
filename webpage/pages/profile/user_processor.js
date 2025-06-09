@@ -68,7 +68,7 @@ function showUserData(userData) {
     const contentContainer = document.querySelector('.user-page-container')
     const user_card_block = createDiv('user-card', contentContainer)
 
-    if(userData.data.usersettings.ProfileAvatarPostID){
+    if (userData.data.usersettings.ProfileAvatarPostID) {
         const userAvatarContainer = createDiv('user-avatar-container', user_card_block)
         const userAvatarWrapper = createDiv('user-avatar-wrapper', userAvatarContainer)
         createUserAvatarElem(userData.data.usersettings.ProfileAvatarPostID, userAvatarWrapper, true, 500)
@@ -138,7 +138,7 @@ async function showActions(userData, activeUser) {
     if (userData.isOwner) {
 
         //region unlog
-        createAction(profileLang.actions.unlogin, container, () => Authy.unlogin(),'icons/user.svg')
+        createAction(profileLang.actions.unlogin, container, () => Authy.unlogin(), 'icons/user.svg')
 
         //region ch username
         createAction(profileLang.actions.changeUserName.btn, container,
@@ -152,7 +152,7 @@ async function showActions(userData, activeUser) {
                         alert(rslt.rslt + '/' + rslt.msg, 5000)
                     }
                 }
-            }),'icons/edit.svg')
+            }), 'icons/edit.svg')
 
         //region ch pass
         createAction(profileLang.actions.changePass.btn, container,
@@ -167,7 +167,7 @@ async function showActions(userData, activeUser) {
                         }
                     })
                 }
-            }),'icons/edit.svg')
+            }), 'icons/edit.svg')
 
         //region ch blklist
         createAction(profileLang.actions.changeBl.btn, container, async () => {
@@ -181,7 +181,7 @@ async function showActions(userData, activeUser) {
                     alert(result.msg)
                 }
             }, { value: blacklist })
-        },'icons/delete-file.svg')
+        }, 'icons/delete-file.svg')
 
         // region set avatar
         createAction(profileLang.actions.resetAvatar, container, async () => {
@@ -190,7 +190,7 @@ async function showActions(userData, activeUser) {
             if (rslt.rslt == 's') {
                 window.location.href = window.location.href
             }
-        },'icons/image-square.svg')
+        }, 'icons/image-square.svg')
 
         // region set background
         createAction(profileLang.actions.resetProfileBackground, container, async () => {
@@ -199,12 +199,12 @@ async function showActions(userData, activeUser) {
             if (rslt.rslt == 's') {
                 window.location.href = window.location.href
             }
-        },'icons/image-rectangle.svg')
+        }, 'icons/image-rectangle.svg')
 
         //region show intro
         createSwitch(profileLang.actions.showIntro, container, (state) => {
             localStorage.setItem('showIntro', state)
-        }, localStorage.getItem('showIntro') == 'true','icons/video-play.svg')
+        }, localStorage.getItem('showIntro') == 'true', 'icons/video-play.svg')
 
         //region set PPP
         const postsPerPages = [
@@ -366,7 +366,7 @@ async function showActions(userData, activeUser) {
 
                 if (session.key == currentKey) {
                     sessionCard.classList.add('current')
-                    sessionCard.title=sessionLang.current
+                    sessionCard.title = sessionLang.current
                 }
 
                 if (session.type == 'TGBOT') {
@@ -375,10 +375,10 @@ async function showActions(userData, activeUser) {
 
                 const sessionType = createDiv('session-type', sessionCard)
                 switch (session.type) {
-                    case 'TGBOT': sessionType.attributeStyleMap.set('--session-type-img', `url(icons/TGBotClient.svg)`); break;
-                    case 'WEB': sessionType.attributeStyleMap.set('--session-type-img', `url(icons/BrowserClient.svg)`); break;
+                    case 'TGBOT': sessionType.style = '--session-type-img:' + `url(icons/TGBotClient.svg)`; break;
+                    case 'WEB': sessionType.style = '--session-type-img:' + `url(icons/BrowserClient.svg)`; break;
                 }
-                sessionType.title=session.key
+                sessionType.title = session.key
 
                 const sessionDate = createDiv('last-activity', sessionCard)
                 sessionDate.innerHTML = parseTimestamp(session.tslac)
@@ -387,7 +387,7 @@ async function showActions(userData, activeUser) {
                 const revokeBtn = createDiv('cancel-button', actionBar)
                 revokeBtn.classList.add('cancel-button')
                 revokeBtn.innerHTML = '✖'
-                revokeBtn.title=sessionLang.revoke
+                revokeBtn.title = sessionLang.revoke
                 revokeBtn.addEventListener('click', async () => {
                     const rslt = await request('sessionController', {
                         type: 'removeSession',
@@ -402,7 +402,7 @@ async function showActions(userData, activeUser) {
                     }
                 })
             }
-        },'icons/session-list.svg')
+        }, 'icons/session-list.svg')
     } else {
         //region wr msg
         createAction(profileLang.actions.sendDM.btn, container, async () => {
