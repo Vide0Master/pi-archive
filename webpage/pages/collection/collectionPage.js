@@ -754,7 +754,7 @@ async function showCollections() {
             percentagePos.x = -((e.clientX - size.left) / size.width - 0.5) * 2 * 60;
             percentagePos.y = ((e.clientY - size.top) / size.height - 0.5) * 2 * 30;
 
-            hoverCont.style='--rotation:'+ percentagePos.y + "deg" + '--tilt:'+ percentagePos.x + "deg"
+            hoverCont.style='--rotation: '+ percentagePos.y + "deg; " + '--tilt: '+ percentagePos.x + "deg;"
         })
 
         hoverCont.addEventListener('mouseenter', () => {
